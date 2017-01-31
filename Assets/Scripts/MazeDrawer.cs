@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MazeGenerator : MonoBehaviour {
+public class MazeDrawer : MonoBehaviour {
 
     [Tooltip("Object to be spawned as maze blocks")]
     public GameObject prefab;
