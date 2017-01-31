@@ -6,7 +6,12 @@ public class Maze
 
 	public Maze (int width = 10, int height = 10)
 	{
-		tiles = new Tile[width, height];
+        if (width < 5)
+            width = 5;
+        if (height < 5)
+            height = 5;
+
+        tiles = new Tile[width, height];
 	}
 
 	public Tile[,] Tiles 

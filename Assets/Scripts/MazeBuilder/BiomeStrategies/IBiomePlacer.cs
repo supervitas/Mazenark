@@ -2,6 +2,6 @@
 
 public interface IBiomePlacer
 {
-	Maze placeBiomes(Maze emptyMaze);
+	Maze PlaceBiomes(Maze emptyMaze);
 }
 

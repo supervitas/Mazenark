@@ -2,7 +2,7 @@
 
 public interface IRoomPlacer
 {
-	Maze placeRooms(Maze biomedMaze);
+	Maze PlaceRooms(Maze biomedMaze);
 }
 
 

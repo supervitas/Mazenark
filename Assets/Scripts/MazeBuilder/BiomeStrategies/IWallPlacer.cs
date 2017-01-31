@@ -2,7 +2,7 @@
 
 public interface IWallPlacer
 {
-	Maze placeWalls(Maze roomedMaze);
+	Maze PlaceWalls(Maze roomedMaze);
 }
 
 

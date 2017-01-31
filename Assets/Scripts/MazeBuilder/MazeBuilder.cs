@@ -18,24 +18,24 @@ public class MazeBuilder
 	{
 		get 
 		{
-			return (maze != null) ? maze : createNewMaze();
+			return (maze != null) ? maze : CreateNewMaze();
 		}
 	}
 
-	private Maze createNewMaze()
+	private Maze CreateNewMaze()
 	{
 		maze = new Maze(width, height);
-		biomePlacer.placeBiomes(maze);
+		biomePlacer.PlaceBiomes(maze);
 
 		return maze;
 	}
 
-	private void generateRooms()
+	private void GenerateRooms()
 	{
 		// split maze into 16x16 chunks and roll a dice to spawn room somewhere in it
 	}
 
-	private void generateWalls()
+	private void GenerateWalls()
 	{
 		// generate walls somehow
 	}

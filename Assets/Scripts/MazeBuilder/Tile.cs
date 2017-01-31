@@ -2,7 +2,7 @@
 
 public class Tile
 {
-	public Biome type = null;
+	public Biome biome = null;
 
 	public Tile ()
 	{
