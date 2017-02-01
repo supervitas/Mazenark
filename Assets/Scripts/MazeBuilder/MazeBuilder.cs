@@ -32,8 +32,25 @@ public class MazeBuilder
 
 	private void GenerateRooms()
 	{
+        int chunkSize = Constants.Maze.ROOM_CHUNK_SIZE;
+        Random random = new Random();
 		// split maze into 16x16 chunks and roll a dice to spawn room somewhere in it
-	}
+        for (int i = 0; i <= width - chunkSize; i += chunkSize)   // if maze size is not a multiple of ROOM_CHUNK_SIZE, ignore things left.
+            for (int j = 0; j <= height - chunkSize; j += chunkSize) 
+            {
+                int xWithinChunk = random.Next(0, chunkSize);
+                int yWithinChunk = random.Next(0, chunkSize);
+
+                int x = i * chunkSize + xWithinChunk;
+                int y = j * chunkSize + yWithinChunk;
+
+                Biome biome = maze.Tiles[x, y].biome;
+
+                float spawnChance = Constants.Biome.ROOM_SPAWN_CHANCE * biome.RoomSpawnChanceModifier;
+                if (random.NextDouble() > spawnChance)
+                    biome.RoomPlacer.PlaceRoom(x, y, i * chunkSize, j * chunkSize, i * chunkSize + chunkSize, j * chunkSize + chunkSize);
+            }
+    }
 
 	private void GenerateWalls()
 	{

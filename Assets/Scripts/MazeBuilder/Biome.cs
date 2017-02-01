@@ -5,12 +5,14 @@ public class Biome
 {
 	private static int ID_COUNTER = 0;
 	private int id = ID_COUNTER++;
+
     private static float totalRandom = 0;
     private static List<RandomRange> randomRanges = new List<RandomRange>();
     private static Random random = new Random();
 
-	public IRoomPlacer roomPlacer;
-	public IWallPlacer wallPlacer;
+	private IRoomPlacer roomPlacer;
+	private IWallPlacer wallPlacer;
+    private float roomSpawnChanceModifier;
 
     public static Biome getRandomBiome()
     {
@@ -26,9 +28,10 @@ public class Biome
         return selectedBiome;
     }
 
-	public Biome(IRoomPlacer roomPlacer, IWallPlacer wallPlacer, float chanceToSpawnModifier = 1.0f, float sizeModifier = 1.0f, float roomCountModifier = 1.0f, float roomSizeModifier = 1.0f, bool isManuallyPlaced = false) {
+	public Biome(IRoomPlacer roomPlacer, IWallPlacer wallPlacer, float chanceToSpawnModifier = 1.0f, float sizeModifier = 1.0f, float roomSpawnChanceModifier = 1.0f, float roomSizeModifier = 1.0f, bool isManuallyPlaced = false) {
         this.roomPlacer = roomPlacer;
         this.wallPlacer = wallPlacer;
+        this.roomSpawnChanceModifier = roomSpawnChanceModifier;
 
         if (!isManuallyPlaced)
         {
@@ -36,6 +39,30 @@ public class Biome
             randomRanges.Add(new RandomRange(this, chanceToSpawnModifier));
         }
 	}
+
+    public IRoomPlacer RoomPlacer
+    {
+        get
+        {
+            return roomPlacer;
+        }
+    }
+
+    public IWallPlacer WallPlacer
+    {
+        get
+        {
+            return wallPlacer;
+        }
+    }
+
+    public float RoomSpawnChanceModifier
+    {
+        get
+        {
+            return roomSpawnChanceModifier;
+        }
+    }
 
     private class RandomRange
     {
