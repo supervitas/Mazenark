@@ -13,6 +13,7 @@ public class Biome
 	private IRoomPlacer roomPlacer;
 	private IWallPlacer wallPlacer;
     private float roomSpawnChanceModifier;
+    private float roomSizeModifier;
 
     public static Biome getRandomBiome()
     {
@@ -32,6 +33,7 @@ public class Biome
         this.roomPlacer = roomPlacer;
         this.wallPlacer = wallPlacer;
         this.roomSpawnChanceModifier = roomSpawnChanceModifier;
+        this.roomSizeModifier = roomSizeModifier;
 
         if (!isManuallyPlaced)
         {
@@ -64,6 +66,14 @@ public class Biome
         }
     }
 
+    public float RoomSizeModifier
+    {
+        get
+        {
+            return roomSizeModifier;
+        }
+    }
+
     private class RandomRange
     {
         public Biome type;
@@ -75,12 +85,12 @@ public class Biome
         }
     }
 
-	public static Biome Spawn = new Biome(null, null, isManuallyPlaced: true);
-	public static Biome Safehouse = new Biome(null, null, isManuallyPlaced: true);
-	public static Biome Water = new Biome(null, null);
-    public static Biome Earth = new Biome(null, null);
-    public static Biome Fire = new Biome(null, null);
-    public static Biome Wind = new Biome(null, null);
+	public static Biome Spawn = new Biome(EmptyRoomPlacer.Instance, null, isManuallyPlaced: true);
+	public static Biome Safehouse = new Biome(EmptyRoomPlacer.Instance, null, isManuallyPlaced: true);
+	public static Biome Water = new Biome(DefaultRoomPlacer.Instance, null);
+    public static Biome Earth = new Biome(DefaultRoomPlacer.Instance, null);
+    public static Biome Fire = new Biome(DefaultRoomPlacer.Instance, null);
+    public static Biome Wind = new Biome(DefaultRoomPlacer.Instance, null);
 }
 
 

@@ -2,7 +2,9 @@
 
 public interface IRoomPlacer
 {
-	Maze PlaceRoom(int x, int y, int chunkLeftBoundary, int chunkRightBoundary, int chunkTopBoundary, int chunkBottomBoundary);
+    // stateless!
+    // Boundaries are inclusive
+    Maze PlaceRoom(Maze maze, int x, int y, int chunkLeftBoundary, int chunkRightBoundary, int chunkTopBoundary, int chunkBottomBoundary);
 }
 
 

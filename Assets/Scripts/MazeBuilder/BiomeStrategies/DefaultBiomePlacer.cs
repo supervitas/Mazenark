@@ -51,7 +51,9 @@ public class DefaultBiomePlacer : IBiomePlacer
             for (int j = height / 2 - safehouseSize / 2; j <= height / 2 + safehouseSize / 2; j++)
                 maze.Tiles[i, j].biome = Biome.Safehouse;
 
-        unaffectedTiles -= safehouseSize * safehouseSize ;
+        maze.ImportantPlaces.Add(new Maze.Coordinate(width / 2, height / 2));
+
+        unaffectedTiles -= safehouseSize * safehouseSize;
     }
 
     private void PlantSpawns()
@@ -61,6 +63,11 @@ public class DefaultBiomePlacer : IBiomePlacer
         maze.Tiles[0, height - 1].biome = Biome.Spawn;
         maze.Tiles[width - 1, 0].biome = Biome.Spawn;
         maze.Tiles[width - 1, height - 1].biome = Biome.Spawn;
+
+        maze.ImportantPlaces.Add(new Maze.Coordinate(0, 0));
+        maze.ImportantPlaces.Add(new Maze.Coordinate(0, height - 1));
+        maze.ImportantPlaces.Add(new Maze.Coordinate(width - 1, 0));
+        maze.ImportantPlaces.Add(new Maze.Coordinate(width - 1, height - 1));
 
         unaffectedTiles -= 4;
     }

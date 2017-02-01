@@ -48,7 +48,7 @@ public class MazeBuilder
 
                 float spawnChance = Constants.Biome.ROOM_SPAWN_CHANCE * biome.RoomSpawnChanceModifier;
                 if (random.NextDouble() > spawnChance)
-                    biome.RoomPlacer.PlaceRoom(x, y, i * chunkSize, j * chunkSize, i * chunkSize + chunkSize, j * chunkSize + chunkSize);
+                    biome.RoomPlacer.PlaceRoom(maze, x, y, i * chunkSize, j * chunkSize, i * chunkSize + chunkSize - 1, j * chunkSize + chunkSize - 1);
             }
     }
 

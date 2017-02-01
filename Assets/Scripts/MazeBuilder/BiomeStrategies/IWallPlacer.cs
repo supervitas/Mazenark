@@ -2,7 +2,8 @@
 
 public interface IWallPlacer
 {
-	Maze PlaceWalls(Maze roomedMaze);
+    // stateless!
+    Maze PlaceWalls(Maze roomedMaze);
 }
 
 
