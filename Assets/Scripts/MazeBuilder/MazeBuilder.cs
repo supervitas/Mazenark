@@ -4,7 +4,7 @@ public class MazeBuilder
 {
 	public int width;
 	public int height;
-	public IBiomePlacer biomePlacer;
+	public IBiomePlacer biomePlacer = new DefaultBiomePlacer();
 
 	private Maze maze;
 

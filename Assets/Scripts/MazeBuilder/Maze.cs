@@ -14,7 +14,12 @@ public class Maze
             height = 5;
 
         tiles = new Tile[width, height];
-	}
+
+        for (int i = 0; i < width; i++)
+            for (int j = 0; j < height; j++)
+                tiles[i, j] = new Tile();
+
+    }
 
 	public Tile[,] Tiles 
 	{
