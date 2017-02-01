@@ -26,13 +26,15 @@ public class DefaultRoomPlacer : IRoomPlacer
         int height = (int)Math.Round(random.Next(Constants.Biome.ROOM_MIN_SIZE, Constants.Biome.ROOM_MAX_SIZE + 1) * targetBiome.RoomSizeModifier);
 
         if (x + width >= chunkRightBoundary)
-            x -= chunkRightBoundary - (x + width) - 1;
+            return maze;
         if (y + height >= chunkBottomBoundary)
-            y -= chunkBottomBoundary - (y + height) - 1;
+            return maze;
 
         for (int i = 0; i < width; i++)
             for (int j = 0; j < height; j++)
             {
+                if (x + i > 63 || y + j > 63)
+                    System.Console.WriteLine("x: {0}, y: {1}, x + i: {2}, y + j: {3}", x, y, x + i, y + j);
                 maze.Tiles[x + i, y + j].type = Tile.Type.Empty;
                 maze.Tiles[x + i, y + j].biome = targetBiome;
             }
