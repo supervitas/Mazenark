@@ -94,9 +94,10 @@ public class DefaultBiomePlacer : IBiomePlacer
 
     private void GrowBiomeSeeds()
     {
-        while (unaffectedTiles > 0)
+        int prevUT = unaffectedTiles;
+        // iteration is manhattan-distanced radius at which check tiles.
+        for (int iteration = 0; unaffectedTiles > 0; iteration++)
         {
-            int iteration = 0;  // Manhattan-distanced radius at which check tiles.
             foreach (BiomeSeed point in startingPoints)
             {
                 int x = point.x;
@@ -105,8 +106,8 @@ public class DefaultBiomePlacer : IBiomePlacer
                 // Very bad quality of code.
                 for (int i = x - iteration; i <= x + iteration; i++)
                     for (int j = y - iteration; j <= y + iteration; j++)
-                        if (i > 0 && i < width && j > 0 && j < height)  // Check if we are still within boundaries
-                            if (maze.Tiles[i, j].biome != null)  // Here comes O(n^2)
+                        if (i >= 0 && i < width && j >= 0 && j < height)  // Check if we are still within boundaries
+                            if (maze.Tiles[i, j].biome == null)  // Here comes O(n^2)
                             {
                                 int dx = Math.Abs(x - i);
                                 int dy = Math.Abs(y - j);
@@ -117,8 +118,15 @@ public class DefaultBiomePlacer : IBiomePlacer
                                 }
                             }
             }
-            iteration++;
-                    
+            // For debug purposes!
+            if (unaffectedTiles == prevUT)
+            {
+                /*System.Console.WriteLine("Critical Error!");
+                DebugPrintBiomes();*/
+                return;
+            }
+            prevUT = unaffectedTiles;
+            //System.Console.WriteLine("Iteration {0}. {1} unaffected tiles left.", iteration, unaffectedTiles);
         }
     }
 
@@ -149,4 +157,30 @@ public class DefaultBiomePlacer : IBiomePlacer
         }
     }
 
+    /*private void DebugPrintBiomes()
+    {
+        for (int i = 0; i < maze.Tiles.GetLength(0); i++)
+        {
+            String biomes = "";
+            for (int j = 0; j < maze.Tiles.GetLength(1); j++)
+            {
+                if (maze.Tiles[i, j].biome == Biome.Spawn)
+                    biomes += 'S';
+                if (maze.Tiles[i, j].biome == Biome.Safehouse)
+                    biomes += 'H';
+                if (maze.Tiles[i, j].biome == Biome.Water)
+                    biomes += 'W';
+                if (maze.Tiles[i, j].biome == Biome.Earth)
+                    biomes += 'E';
+                if (maze.Tiles[i, j].biome == Biome.Fire)
+                    biomes += 'F';
+                if (maze.Tiles[i, j].biome == Biome.Wind)
+                    biomes += 'W';
+                if (maze.Tiles[i, j].biome == null)
+                    biomes += ' ';
+            }
+            System.Console.WriteLine(biomes);
+        }
+            
+    }*/
 }
