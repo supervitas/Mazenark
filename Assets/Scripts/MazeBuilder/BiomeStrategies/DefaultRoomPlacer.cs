@@ -17,6 +17,8 @@ public class DefaultRoomPlacer : IRoomPlacer
         }
     }
 
+
+    // This code can accidently spawn rooms in safehouse! It shan't be! 
     public Maze PlaceRoom(Maze maze, int x, int y, int chunkLeftBoundary, int chunkRightBoundary, int chunkTopBoundary, int chunkBottomBoundary)
     {
         Random random = new Random();
