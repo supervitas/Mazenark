@@ -17,20 +17,16 @@ public class DefaultBiomePlacer : IBiomePlacer
     private Maze maze;
     private int width;
     private int height;
-    private int unaffectedTiles;
-    private List<BiomeSeed> startingPoints = new List<BiomeSeed>();
 
     public Maze PlaceBiomes(Maze emptyMaze)
     {
         maze = emptyMaze;
         width = maze.Tiles.GetLength(0);
         height = maze.Tiles.GetLength(1);
-        unaffectedTiles = width * height;
 
         PlantSafehouse();
         PlantSpawns();
-        PlantBiomeSeeds();
-        GrowBiomeSeeds();
+        PlaceBiomes();
 
         return emptyMaze;
     }
@@ -52,8 +48,6 @@ public class DefaultBiomePlacer : IBiomePlacer
                 maze.Tiles[i, j].biome = Biome.Safehouse;
 
         maze.ImportantPlaces.Add(new Maze.Coordinate(width / 2, height / 2));
-
-        unaffectedTiles -= safehouseSize * safehouseSize;
     }
 
     private void PlantSpawns()
@@ -68,119 +62,33 @@ public class DefaultBiomePlacer : IBiomePlacer
         maze.ImportantPlaces.Add(new Maze.Coordinate(0, height - 1));
         maze.ImportantPlaces.Add(new Maze.Coordinate(width - 1, 0));
         maze.ImportantPlaces.Add(new Maze.Coordinate(width - 1, height - 1));
-
-        unaffectedTiles -= 4;
     }
 
-    private void PlantBiomeSeeds()
+    private void PlaceBiomes()
     {
-        Random random = new Random();
-        int numOfBiomes = random.Next(MIN_BIOMES, MAX_BIOMES + 1);
-        int degreesPerBiome = 360 / numOfBiomes;
-        int firstBiomeOffset = random.Next(0, 360);
-        int smallestDistance = (width < height) ? width / 2 : height / 2;
+        Biome biome1 = Biome.getRandomBiome();   // No check if some biomes are the same.
+        Biome biome2 = Biome.getRandomBiome();   
+        Biome biome3 = Biome.getRandomBiome();   
+        Biome biome4 = Biome.getRandomBiome();   
 
-        for (int i = 0; i < numOfBiomes; i++)
-        {
-            Biome biome = Biome.getRandomBiome();   // No check if some biomes are the same.
-            int randomDistance = random.Next(smallestDistance);
-
-            int x = smallestDistance + GetRotatedX(randomDistance, (firstBiomeOffset + degreesPerBiome) % 360);
-            int y = smallestDistance + GetRotatedY(randomDistance, (firstBiomeOffset + degreesPerBiome) % 360);
-
-            startingPoints.Add(new BiomeSeed(x, y, biome));
-        }
-    }
-
-    private void GrowBiomeSeeds()
-    {
-        int prevUT = unaffectedTiles;
-        // iteration is manhattan-distanced radius at which check tiles.
-        for (int iteration = 0; unaffectedTiles > 0; iteration++)
-        {
-            foreach (BiomeSeed point in startingPoints)
-            {
-                int x = point.x;
-                int y = point.y;
-
-                // Very bad quality of code.
-                for (int i = x - iteration; i <= x + iteration; i++)
-                    for (int j = y - iteration; j <= y + iteration; j++)
-                        if (i >= 0 && i < width && j >= 0 && j < height)  // Check if we are still within boundaries
-                            if (maze.Tiles[i, j].biome == null)  // Here comes O(n^2)
-                            {
-                                int dx = Math.Abs(x - i);
-                                int dy = Math.Abs(y - j);
-                                if (dx + dy <= iteration)
-                                {
-                                    maze.Tiles[i, j].biome = point.biome;
-                                    unaffectedTiles--;
-                                }
-                            }
-            }
-            // For debug purposes!
-            if (unaffectedTiles == prevUT)
-            {
-                /*System.Console.WriteLine("Critical Error!");
-                DebugPrintBiomes();*/
-                return;
-            }
-            prevUT = unaffectedTiles;
-            //System.Console.WriteLine("Iteration {0}. {1} unaffected tiles left.", iteration, unaffectedTiles);
-        }
-    }
-
-    private int GetRotatedX(int distance, int angleDegrees)
-    {
-        double angle = Math.PI * angleDegrees / 180;
-        return (int) Math.Round(Math.Cos(angle) * distance) - 1;    // -1 is for safety. Otherwise there may be out-of-bounds access to array.
-
-    }
-
-    private int GetRotatedY(int distance, int angleDegrees)
-    {
-        double angle = Math.PI * angleDegrees / 180;
-        return (int)Math.Round(Math.Sin(angle) * distance) - 1;    // -1 is for safety. Otherwise there may be out-of-bounds access to array.
-    }
-
-    private class BiomeSeed
-    {
-        public int x;
-        public int y;
-        public Biome biome;
-
-        public BiomeSeed(int x, int y, Biome type)
-        {
-            this.x = x;
-            this.y = y;
-            this.biome = type;
-        }
-    }
-
-    /*private void DebugPrintBiomes()
-    {
-        for (int i = 0; i < maze.Tiles.GetLength(0); i++)
-        {
-            String biomes = "";
-            for (int j = 0; j < maze.Tiles.GetLength(1); j++)
-            {
-                if (maze.Tiles[i, j].biome == Biome.Spawn)
-                    biomes += 'S';
-                if (maze.Tiles[i, j].biome == Biome.Safehouse)
-                    biomes += 'H';
-                if (maze.Tiles[i, j].biome == Biome.Water)
-                    biomes += 'W';
-                if (maze.Tiles[i, j].biome == Biome.Earth)
-                    biomes += 'E';
-                if (maze.Tiles[i, j].biome == Biome.Fire)
-                    biomes += 'F';
-                if (maze.Tiles[i, j].biome == Biome.Wind)
-                    biomes += 'W';
+        for (int i = 0; i < width / 2; i++)
+            for (int j = 0; j < height / 2; j++)
                 if (maze.Tiles[i, j].biome == null)
-                    biomes += ' ';
-            }
-            System.Console.WriteLine(biomes);
-        }
-            
-    }*/
+                    maze.Tiles[i, j].biome = biome1;
+
+        for (int i = 0; i < width / 2; i++)
+            for (int j = height / 2; j < height; j++)
+                if (maze.Tiles[i, j].biome == null)
+                    maze.Tiles[i, j].biome = biome2;
+
+        for (int i = width / 2; i < width; i++)
+            for (int j = 0; j < height / 2; j++)
+                if (maze.Tiles[i, j].biome == null)
+                    maze.Tiles[i, j].biome = biome3;
+
+        for (int i = width / 2; i < width; i++)
+            for (int j = height / 2; j < height; j++)
+                if (maze.Tiles[i, j].biome == null)
+                    maze.Tiles[i, j].biome = biome4;
+    }
 }
