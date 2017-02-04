@@ -14,7 +14,7 @@ public class Movement : MonoBehaviour {
 		var x = Input.GetAxis("Horizontal") * Time.deltaTime * 15000.0f;
 		var z = Input.GetAxis("Vertical") * Time.deltaTime * 15000.0f;
 
-        GetComponent<Rigidbody>().AddTorque(new Vector3(0, x, 0));
-//        GetComponent<Rigidbody>().AddForce(new Vector3(x, 0, z));
+//        GetComponent<Rigidbody>().AddTorque(new Vector3(x, 0, z));
+        GetComponent<Rigidbody>().AddForce(new Vector3(x, 0, z));
 	}
 }
