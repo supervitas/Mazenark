@@ -25,20 +25,19 @@ public class MazeDrawer : MonoBehaviour {
                     TransformToWorldCoordinate(j)), Quaternion.identity);
                 var renderer = cube.GetComponent<Renderer>();
 
-                if (renderer != null) {
-                    if (maze.Tiles[i, j].Biome == Biome.Spawn)
-                        renderer.material.color = SPAWN_BIOME_COLOR;
-                    if (maze.Tiles[i, j].Biome == Biome.Safehouse)
-                        renderer.material.color = SAFEHOUSE_BIOME_COLOR;
-                    if (maze.Tiles[i, j].Biome == Biome.Water)
-                        renderer.material.color = WATER_BIOME_COLOR;
-                    if (maze.Tiles[i, j].Biome == Biome.Earth)
-                        renderer.material.color = EARTH_BIOME_COLOR;
-                    if (maze.Tiles[i, j].Biome == Biome.Fire)
-                        renderer.material.color = FIRE_BIOME_COLOR;
-                    if (maze.Tiles[i, j].Biome == Biome.Wind)
-                        renderer.material.color = WIND_BIOME_COLOR;
-                }
+                if (renderer == null) continue;
+                if (maze.Tiles[i, j].Biome == Biome.Spawn)
+                    renderer.material.color = SPAWN_BIOME_COLOR;
+                if (maze.Tiles[i, j].Biome == Biome.Safehouse)
+                    renderer.material.color = SAFEHOUSE_BIOME_COLOR;
+                if (maze.Tiles[i, j].Biome == Biome.Water)
+                    renderer.material.color = WATER_BIOME_COLOR;
+                if (maze.Tiles[i, j].Biome == Biome.Earth)
+                    renderer.material.color = EARTH_BIOME_COLOR;
+                if (maze.Tiles[i, j].Biome == Biome.Fire)
+                    renderer.material.color = FIRE_BIOME_COLOR;
+                if (maze.Tiles[i, j].Biome == Biome.Wind)
+                    renderer.material.color = WIND_BIOME_COLOR;
             }
     }
 
