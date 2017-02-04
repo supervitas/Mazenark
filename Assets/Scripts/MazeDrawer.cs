@@ -19,7 +19,7 @@ public class MazeDrawer : MonoBehaviour {
         var maze = new MazeBuilder(64, 64).Maze;
         for (var i = 0; i < maze.Tiles.GetLength(0); i++)
             for (var j = 0; j < maze.Tiles.GetLength(1); j++) {
-                var y = (maze.Tiles[i, j].type == Tile.Type.Wall) ? 0 : -TILE_SIZE;
+                var y = maze.Tiles[i, j].type == Tile.Type.Wall ? 0 : -TILE_SIZE;
                 
                 var cube = Instantiate(prefab, new Vector3(TransformToWorldCoordinate(i), y,
                     TransformToWorldCoordinate(j)), Quaternion.identity);
