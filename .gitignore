@@ -31,3 +31,5 @@ sysinfo.txt
 
 #OS_X
 *.DS_Store
+
+.idea/
