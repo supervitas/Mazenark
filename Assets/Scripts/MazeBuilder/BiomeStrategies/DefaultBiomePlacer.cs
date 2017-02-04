@@ -45,7 +45,7 @@ public class DefaultBiomePlacer : IBiomePlacer
         // Fill rect safehouseSize X safehouseSize exactly at the center of the maze.
         for (int i = width / 2 - safehouseSize / 2; i <= width / 2 + safehouseSize / 2; i++)
             for (int j = height / 2 - safehouseSize / 2; j <= height / 2 + safehouseSize / 2; j++)
-                maze.Tiles[i, j].biome = Biome.Safehouse;
+                maze.Tiles[i, j].Biome = Biome.Safehouse;
 
         maze.ImportantPlaces.Add(new Maze.Coordinate(width / 2, height / 2));
     }
@@ -53,10 +53,10 @@ public class DefaultBiomePlacer : IBiomePlacer
     private void PlantSpawns()
     {
         // Should depend on size too.
-        maze.Tiles[0, 0].biome = Biome.Spawn;
-        maze.Tiles[0, height - 1].biome = Biome.Spawn;
-        maze.Tiles[width - 1, 0].biome = Biome.Spawn;
-        maze.Tiles[width - 1, height - 1].biome = Biome.Spawn;
+        maze.Tiles[0, 0].Biome = Biome.Spawn;
+        maze.Tiles[0, height - 1].Biome = Biome.Spawn;
+        maze.Tiles[width - 1, 0].Biome = Biome.Spawn;
+        maze.Tiles[width - 1, height - 1].Biome = Biome.Spawn;
 
         maze.ImportantPlaces.Add(new Maze.Coordinate(0, 0));
         maze.ImportantPlaces.Add(new Maze.Coordinate(0, height - 1));
@@ -66,29 +66,29 @@ public class DefaultBiomePlacer : IBiomePlacer
 
     private void PlaceBiomes()
     {
-        Biome biome1 = Biome.getRandomBiome();   // No check if some biomes are the same.
-        Biome biome2 = Biome.getRandomBiome();   
-        Biome biome3 = Biome.getRandomBiome();   
-        Biome biome4 = Biome.getRandomBiome();   
+        Biome biome1 = Biome.GetRandomBiome();   // No check if some biomes are the same.
+        Biome biome2 = Biome.GetRandomBiome();
+        Biome biome3 = Biome.GetRandomBiome();
+        Biome biome4 = Biome.GetRandomBiome();
 
         for (int i = 0; i < width / 2; i++)
             for (int j = 0; j < height / 2; j++)
-                if (maze.Tiles[i, j].biome == null)
-                    maze.Tiles[i, j].biome = biome1;
+                if (maze.Tiles[i, j].Biome == null)
+                    maze.Tiles[i, j].Biome = biome1;
 
         for (int i = 0; i < width / 2; i++)
             for (int j = height / 2; j < height; j++)
-                if (maze.Tiles[i, j].biome == null)
-                    maze.Tiles[i, j].biome = biome2;
+                if (maze.Tiles[i, j].Biome == null)
+                    maze.Tiles[i, j].Biome = biome2;
 
         for (int i = width / 2; i < width; i++)
             for (int j = 0; j < height / 2; j++)
-                if (maze.Tiles[i, j].biome == null)
-                    maze.Tiles[i, j].biome = biome3;
+                if (maze.Tiles[i, j].Biome == null)
+                    maze.Tiles[i, j].Biome = biome3;
 
         for (int i = width / 2; i < width; i++)
             for (int j = height / 2; j < height; j++)
-                if (maze.Tiles[i, j].biome == null)
-                    maze.Tiles[i, j].biome = biome4;
+                if (maze.Tiles[i, j].Biome == null)
+                    maze.Tiles[i, j].Biome = biome4;
     }
 }

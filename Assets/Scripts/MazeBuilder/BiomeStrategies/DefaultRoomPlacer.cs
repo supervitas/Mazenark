@@ -23,7 +23,7 @@ public class DefaultRoomPlacer : IRoomPlacer
     {
         Random random = new Random();
 
-        Biome targetBiome = maze.Tiles[x, y].biome;
+        Biome targetBiome = maze.Tiles[x, y].Biome;
         int width = (int) Math.Round(random.Next(Constants.Biome.ROOM_MIN_SIZE, Constants.Biome.ROOM_MAX_SIZE + 1) * targetBiome.RoomSizeModifier);
         int height = (int)Math.Round(random.Next(Constants.Biome.ROOM_MIN_SIZE, Constants.Biome.ROOM_MAX_SIZE + 1) * targetBiome.RoomSizeModifier);
 
@@ -36,7 +36,7 @@ public class DefaultRoomPlacer : IRoomPlacer
             for (int j = 0; j < height; j++)
             {
                 maze.Tiles[x + i, y + j].type = Tile.Type.Empty;
-                maze.Tiles[x + i, y + j].biome = targetBiome;
+                maze.Tiles[x + i, y + j].Biome = targetBiome;
             }
 
         maze.ImportantPlaces.Add(new Maze.Coordinate(x, y));

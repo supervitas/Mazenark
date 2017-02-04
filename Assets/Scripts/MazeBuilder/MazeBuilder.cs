@@ -8,22 +8,18 @@ public class MazeBuilder
 
 	private Maze maze;
 
-	public MazeBuilder (int width = 10, int height = 10)
-	{
+	public MazeBuilder (int width = 10, int height = 10) {
 		this.width = width;
 		this.height = height;
 	}
 
-	public Maze Maze 
-	{
-		get 
-		{
-			return (maze != null) ? maze : CreateNewMaze();
+	public Maze Maze {
+		get {
+			return maze ?? CreateNewMaze();
 		}
 	}
 
-	private Maze CreateNewMaze()
-	{
+	private Maze CreateNewMaze() {
 		maze = new Maze(width, height);
 		biomePlacer.PlaceBiomes(maze);
         GenerateRooms();
@@ -32,33 +28,30 @@ public class MazeBuilder
 		return maze;
 	}
 
-	private void GenerateRooms()
-	{
-        int chunkSize = Constants.Maze.ROOM_CHUNK_SIZE;
-        Random random = new Random();
+	private void GenerateRooms() {
+        var chunkSize = Constants.Maze.ROOM_CHUNK_SIZE;
+        var random = new Random();
 		// split maze into 16x16 chunks and roll a dice to spawn room somewhere in it
-        for (int i = 0; i <= width - chunkSize; i += chunkSize)   // if maze size is not a multiple of ROOM_CHUNK_SIZE, ignore things left.
-            for (int j = 0; j <= height - chunkSize; j += chunkSize) 
-            {
-                int xWithinChunk = random.Next(0, chunkSize);
-                int yWithinChunk = random.Next(0, chunkSize);
+        for (var i = 0; i <= width - chunkSize; i += chunkSize)   // if maze size is not a multiple of ROOM_CHUNK_SIZE, ignore things left.
+            for (var j = 0; j <= height - chunkSize; j += chunkSize) {
+                var xWithinChunk = random.Next(0, chunkSize);
+                var yWithinChunk = random.Next(0, chunkSize);
 
-                int x = i + xWithinChunk;
-                int y = j + yWithinChunk;
+                var x = i + xWithinChunk;
+                var y = j + yWithinChunk;
 
                 if (x > 64 || y > 64)
                     System.Console.WriteLine("x: {0}, y: {1}", x, y);
 
-                Biome biome = maze.Tiles[x, y].biome;
+                var biome = maze.Tiles[x, y].Biome;
 
-                float spawnChance = Constants.Biome.ROOM_SPAWN_CHANCE * biome.RoomSpawnChanceModifier;
+                var spawnChance = Constants.Biome.ROOM_SPAWN_CHANCE * biome.RoomSpawnChanceModifier;
                 if (random.NextDouble() < spawnChance)
                     biome.RoomPlacer.PlaceRoom(maze, x, y, i, j, i + chunkSize - 1, j + chunkSize - 1);
             }
     }
 
-	private void GenerateWalls()
-	{
+	private void GenerateWalls() {
         // It should be per-biome strategy, not global!
         DefaultWallPlacer.Instance.PlaceWalls(maze);
 	}

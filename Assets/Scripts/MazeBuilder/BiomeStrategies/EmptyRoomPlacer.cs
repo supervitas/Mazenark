@@ -1,18 +1,12 @@
 ﻿using System.Collections;
 using System;
 
-public class EmptyRoomPlacer : IRoomPlacer
-{
+public class EmptyRoomPlacer : IRoomPlacer{
     private static EmptyRoomPlacer instance = new EmptyRoomPlacer();
 
-    private EmptyRoomPlacer()
-    {
-
-    }
-    static public IRoomPlacer Instance
-    {
-        get
-        {
+    private EmptyRoomPlacer(){}
+    public static IRoomPlacer Instance{
+        get{
             return instance;
         }
     }

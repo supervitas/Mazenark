@@ -15,30 +15,28 @@ public class MazeDrawer : MonoBehaviour {
     [Tooltip("Object to be spawned as maze blocks")]
     public GameObject prefab;
     // Use this for initialization
-    void Start()
-    {
-        Maze maze = new MazeBuilder(64, 64).Maze;
-        for (int i = 0; i < maze.Tiles.GetLength(0); i++)
-            for (int j = 0; j < maze.Tiles.GetLength(1); j++)
-            {
-                int y = (maze.Tiles[i, j].type == Tile.Type.Wall) ? 0 : -TILE_SIZE;
+    void Start() {
+        var maze = new MazeBuilder(64, 64).Maze;
+        for (var i = 0; i < maze.Tiles.GetLength(0); i++)
+            for (var j = 0; j < maze.Tiles.GetLength(1); j++) {
+                var y = (maze.Tiles[i, j].type == Tile.Type.Wall) ? 0 : -TILE_SIZE;
                 
-                GameObject cube = Instantiate(prefab, new Vector3(TransformToWorldCoordinate(i), y, TransformToWorldCoordinate(j)), Quaternion.identity);
-                Renderer renderer = cube.GetComponent<Renderer>();
+                var cube = Instantiate(prefab, new Vector3(TransformToWorldCoordinate(i), y,
+                    TransformToWorldCoordinate(j)), Quaternion.identity);
+                var renderer = cube.GetComponent<Renderer>();
 
-                if (renderer != null)
-                {
-                    if (maze.Tiles[i, j].biome == Biome.Spawn)
+                if (renderer != null) {
+                    if (maze.Tiles[i, j].Biome == Biome.Spawn)
                         renderer.material.color = SPAWN_BIOME_COLOR;
-                    if (maze.Tiles[i, j].biome == Biome.Safehouse)
+                    if (maze.Tiles[i, j].Biome == Biome.Safehouse)
                         renderer.material.color = SAFEHOUSE_BIOME_COLOR;
-                    if (maze.Tiles[i, j].biome == Biome.Water)
+                    if (maze.Tiles[i, j].Biome == Biome.Water)
                         renderer.material.color = WATER_BIOME_COLOR;
-                    if (maze.Tiles[i, j].biome == Biome.Earth)
+                    if (maze.Tiles[i, j].Biome == Biome.Earth)
                         renderer.material.color = EARTH_BIOME_COLOR;
-                    if (maze.Tiles[i, j].biome == Biome.Fire)
+                    if (maze.Tiles[i, j].Biome == Biome.Fire)
                         renderer.material.color = FIRE_BIOME_COLOR;
-                    if (maze.Tiles[i, j].biome == Biome.Wind)
+                    if (maze.Tiles[i, j].Biome == Biome.Wind)
                         renderer.material.color = WIND_BIOME_COLOR;
                 }
             }
