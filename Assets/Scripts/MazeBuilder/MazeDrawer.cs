@@ -42,13 +42,12 @@ public class MazeDrawer : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
-		
-	}
+    void Update(){
+
+    }
 
     // E.g. 0 → 4.5, 3 → 3*9 + 4.5
-    private float TransformToWorldCoordinate(int absoluteCoordinate)
-    {
+    private float TransformToWorldCoordinate(int absoluteCoordinate) {
         return absoluteCoordinate * TILE_SIZE + TILE_SIZE / 2.0f;
     }
 }
