@@ -1,7 +1,6 @@
 ﻿using System;
 
-public interface IBiomePlacer
-{
+public interface IBiomePlacer {
 	Maze PlaceBiomes(Maze emptyMaze);
 }
 

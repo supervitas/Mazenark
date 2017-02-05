@@ -1,8 +1,7 @@
 ﻿using System;
 using UnityEngine.PlaymodeTests;
 
-public class MazeBuilder
-{
+public class MazeBuilder {
 	public int width;
 	public int height;
 	public IBiomePlacer biomePlacer = new DefaultBiomePlacer();
@@ -13,8 +12,6 @@ public class MazeBuilder
 		this.width = width;
 		this.height = height;
 	}
-
-
 
 	public Maze Maze {
 		get {
@@ -50,7 +47,8 @@ public class MazeBuilder
 
                 var spawnChance = Constants.Biome.ROOM_SPAWN_CHANCE * biome.RoomSpawnChanceModifier;
                 if (random.NextDouble() < spawnChance)
-                    biome.RoomPlacer.PlaceRoom(maze, x, y, i, j, i + chunkSize - 1, j + chunkSize - 1);
+                    biome.RoomPlacer.PlaceRoom(x: x, y: y, chunkLeftBoundary: i, chunkRightBoundary: j,
+                        chunkTopBoundary: i + chunkSize - 1, chunkBottomBoundary: j + chunkSize - 1, maze: maze);
             }
     }
 

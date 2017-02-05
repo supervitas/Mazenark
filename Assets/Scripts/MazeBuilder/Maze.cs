@@ -13,8 +13,8 @@ public class Maze {
 
         tiles = new Tile[width, height];
 
-        for (int i = 0; i < width; i++)
-            for (int j = 0; j < height; j++)
+        for (var i = 0; i < width; i++)
+            for (var j = 0; j < height; j++)
                 tiles[i, j] = new Tile();
 
     }

@@ -11,8 +11,8 @@ public class EmptyRoomPlacer : IRoomPlacer{
         }
     }
 
-    public Maze PlaceRoom(Maze maze, int x, int y, int chunkLeftBoundary, int chunkRightBoundary, int chunkTopBoundary, int chunkBottomBoundary)
-    {
+    public Maze PlaceRoom(Maze maze, int x, int y, int chunkLeftBoundary,
+        int chunkRightBoundary, int chunkTopBoundary, int chunkBottomBoundary) {
         return maze;
     }
 }
