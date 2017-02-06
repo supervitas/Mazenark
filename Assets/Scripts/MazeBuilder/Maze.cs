@@ -32,25 +32,14 @@ public class Maze {
     }
 
     public class Coordinate{
-        private int x;
-        private int y;
-
         public Coordinate(int x, int y){
-            this.x = x;
-            this.y = y;
+            X = x;
+            Y = y;
         }
 
-        public int X{
-            get{
-                return x;
-            }
-        }
+        public int X { get; private set; }
 
-        public int Y{
-            get{
-                return y;
-            }
-        }
+        public int Y { get; private set; }
     }
 }
 

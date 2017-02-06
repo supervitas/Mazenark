@@ -25,6 +25,7 @@ public class MazeBuilder {
         GenerateRooms();
         GenerateWalls();
 
+
 		return maze;
 	}
 
@@ -56,6 +57,10 @@ public class MazeBuilder {
         // It should be per-biome strategy, not global!
         DefaultWallPlacer.Instance.PlaceWalls(maze);
 	}
+
+    private void MakeSpawnPoints() {
+        //Todo
+    }
 }
 
 
