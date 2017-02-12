@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Walls;
 using UnityEngine;
 
 public class MazeDrawer : MonoBehaviour {
@@ -15,7 +16,7 @@ public class MazeDrawer : MonoBehaviour {
     [Tooltip("Object to be spawned as maze blocks")]
     public GameObject prefab;
     // Use this for initialization
-    void Start() {
+    private void Start() {
         var maze = new MazeBuilder(64, 64).Maze;
         for (var i = 0; i < maze.Tiles.GetLength(0); i++)
             for (var j = 0; j < maze.Tiles.GetLength(1); j++) {
@@ -42,9 +43,7 @@ public class MazeDrawer : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update(){
-
-    }
+    private void Update(){}
 
     // E.g. 0 → 4.5, 3 → 3*9 + 4.5
     private float TransformToWorldCoordinate(int absoluteCoordinate) {
