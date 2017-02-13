@@ -18,9 +18,9 @@ public class MazeDrawer : MonoBehaviour {
     public GameObject prefab;
     // Use this for initialization
     private void Start() {
-        var mazeSize = MazeSizeGenerator.Instance; // TODO move initilize to class of application?
+        var mazeSize = MazeSizeGenerator.Instance; // TODO move initilize to class of application? Google script execution order
         mazeSize.generateFixedSize();
-        var maze = new MazeBuilder(mazeSize._x, mazeSize._y).Maze;
+        var maze = new MazeBuilder(mazeSize.X, mazeSize.Y).Maze;
         for (var i = 0; i < maze.Tiles.GetLength(0); i++)
             for (var j = 0; j < maze.Tiles.GetLength(1); j++) {
                 var y = maze.Tiles[i, j].type == Tile.Type.Wall ? 0 : -TILE_SIZE;
