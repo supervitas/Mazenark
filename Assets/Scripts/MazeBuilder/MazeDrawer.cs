@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Constants;
 using Walls;
 using UnityEngine;
 
@@ -17,7 +18,9 @@ public class MazeDrawer : MonoBehaviour {
     public GameObject prefab;
     // Use this for initialization
     private void Start() {
-        var maze = new MazeBuilder(64, 64).Maze;
+        var mazeSize = MazeSizeGenerator.Instance; // TODO move initilize to class of application?
+        mazeSize.generateFixedSize();
+        var maze = new MazeBuilder(mazeSize._x, mazeSize._y).Maze;
         for (var i = 0; i < maze.Tiles.GetLength(0); i++)
             for (var j = 0; j < maze.Tiles.GetLength(1); j++) {
                 var y = maze.Tiles[i, j].type == Tile.Type.Wall ? 0 : -TILE_SIZE;

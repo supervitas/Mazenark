@@ -25,7 +25,6 @@ public class MazeBuilder {
         GenerateRooms();
         GenerateWalls();
 
-
 		return maze;
 	}
 
@@ -42,7 +41,7 @@ public class MazeBuilder {
                 var y = j + yWithinChunk;
 
                 if (x > 64 || y > 64)
-                    System.Console.WriteLine("x: {0}, y: {1}", x, y);
+                   Console.WriteLine("x: {0}, y: {1}", x, y);
 
                 var biome = maze.Tiles[x, y].Biome;
 

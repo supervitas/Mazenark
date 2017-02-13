@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Constants;
+using UnityEngine;
 
 namespace Walls {
 
@@ -7,10 +8,13 @@ namespace Walls {
         public GameObject walls;
 
         private void Start() {
-            for (var i = 0; i < 3; i++) {
-                var wall = Instantiate(walls, new Vector3(10, i,
-                    20), Quaternion.identity);
-//                var renderer = wall.GetComponent<Renderer>();
+            var mazeSize = MazeSizeGenerator.Instance;
+            for (var i = 0; i < 1; i++) {
+                var wall = Instantiate(walls, new Vector3(0, 10,
+                    20), Quaternion.Euler(0, 0, 0));
+                wall.transform.localScale = new Vector3(mazeSize._x, mazeSize._y, 64);
+                var renderer = wall.GetComponent<Renderer>();
+
             }
 
         }
