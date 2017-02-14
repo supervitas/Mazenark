@@ -1,42 +1,80 @@
 ﻿using System.Collections;
 using System;
 
-public class DefaultRoomPlacer : IRoomPlacer{
+public class DefaultRoomPlacer : IRoomPlacer {
     private static DefaultRoomPlacer instance = new DefaultRoomPlacer();
+	private const int MAX_PLACEMENT_ATTEMPTS = 10;
+	private static Random random = new Random();
 
-    private DefaultRoomPlacer()
-    {
+    private DefaultRoomPlacer() {
 
     }
-    public static IRoomPlacer Instance{
-        get{
+
+    public static IRoomPlacer Instance {
+        get {
             return instance;
         }
     }
 
 
     // This code can accidently spawn rooms in safehouse! It shan't be! 
-    public Maze PlaceRoom(Maze maze, int x, int y, int chunkLeftBoundary,
-        int chunkRightBoundary, int chunkTopBoundary, int chunkBottomBoundary) {
-        Random random = new Random();
-
+    public Maze PlaceRoom(Maze maze, int x, int y, int chunkLeftBoundary, int chunkRightBoundary, int chunkTopBoundary, int chunkBottomBoundary) {
         Biome targetBiome = maze.Tiles[x, y].Biome;
-        var width = (int) Math.Round(random.Next(Constants.Biome.ROOM_MIN_SIZE, Constants.Biome.ROOM_MAX_SIZE + 1) * targetBiome.RoomSizeModifier);
-        var height = (int)Math.Round(random.Next(Constants.Biome.ROOM_MIN_SIZE, Constants.Biome.ROOM_MAX_SIZE + 1) * targetBiome.RoomSizeModifier);
 
-        if (x + width >= maze.Tiles.GetLength(0))
-            return maze;
-        if (y + height >= maze.Tiles.GetLength(1))
-            return maze;
+		var width = GetRandomRoomDimension(targetBiome);
+        var height = GetRandomRoomDimension(targetBiome);
 
-        for (var i = 0; i < width; i++)
-            for (var j = 0; j < height; j++){
-                maze.Tiles[x + i, y + j].type = Tile.Type.Empty;
-                maze.Tiles[x + i, y + j].Biome = targetBiome;
-            }
+		var attempt = 0;
+		var room = new Maze.Room(x, y, x + width - 1, y + height - 1);
 
-        maze.ImportantPlaces.Add(new Maze.Coordinate(x, y));
+		while (!CanPlaceRoomHere(maze, chunkLeftBoundary, chunkRightBoundary, chunkTopBoundary, chunkBottomBoundary, room) && (attempt < MAX_PLACEMENT_ATTEMPTS)) {
+			attempt++;
+
+			width = GetRandomRoomDimension(targetBiome);
+			height = GetRandomRoomDimension(targetBiome);
+			x = random.Next(chunkLeftBoundary, chunkRightBoundary + 1);
+			y = random.Next(chunkTopBoundary, chunkBottomBoundary + 1);
+
+			room = new Maze.Room(x, y, x + width - 1, y + height - 1);
+		}
+
+		if (attempt >= MAX_PLACEMENT_ATTEMPTS)
+			return maze;
+		// else:
+
+		maze.Rooms.Add(room);
+        maze.ImportantPlaces.Add(room.Center);
+		// targetBiome has not changed when room re-generates? Okay...
+		maze.CutWalls(room, targetBiome);
 
         return maze;
     }
+
+	private int GetRandomRoomDimension(Biome biome) {
+		return (int) Math.Round(random.Next(Constants.Biome.ROOM_MIN_SIZE, Constants.Biome.ROOM_MAX_SIZE + 1) * biome.RoomSizeModifier);
+	}
+
+	private bool CanPlaceRoomHere(Maze maze, int chunkLeftBoundary, int chunkRightBoundary, int chunkTopBoundary, int chunkBottomBoundary, Maze.Room roomToTest) {
+		int x = roomToTest.TopLeftCorner.X;
+		int y = roomToTest.TopLeftCorner.Y;
+		int xRight = roomToTest.BottomRightCorner.X;
+		int yBottom = roomToTest.BottomRightCorner.Y;
+
+		// Check if we are still within boundaries:
+		// Boundaries are inclusive. At least so was said in IRoomPlacer on 14.02.2017
+		if (xRight > chunkRightBoundary || yBottom > chunkBottomBoundary || /*unlikely*/ x < chunkLeftBoundary || y < chunkTopBoundary)
+			return false;
+
+		// Check if we are still within world:
+		if (xRight > maze.Width - 1 || yBottom > maze.Height - 1 || /*unlikely*/ x < 0 || y < 0)
+			return false;
+
+		// Assume safehouse and spawns are rooms too...
+		// Check if we are not intersecting other rooms AND safe zone of 1 tile around them:
+		foreach (Maze.Room anotherRoom in maze.Rooms)
+			if (roomToTest.IntersectsRoomAndOneTileMargin(anotherRoom))
+				return false;
+
+		return true;
+	}
 }
