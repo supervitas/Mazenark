@@ -11,9 +11,9 @@ namespace Walls {
             var mazeSize = MazeSizeGenerator.Instance;
             for (var i = 0; i < 1; i++) {
                 var wall = Instantiate(walls, new Vector3(-10, 32,
-                    32), Quaternion.Euler(0, 0, 0));
-                wall.transform.localScale = new Vector3(10, mazeSize.Y, 64);
-                var renderer = wall.GetComponent<Renderer>();
+                    (float) (mazeSize.Y * 4.5)), Quaternion.Euler(0, 0, 0));
+                wall.transform.localScale = new Vector3(10, mazeSize.Y, mazeSize.Y * 10);
+                wall.GetComponent<Renderer>();
 
             }
 
