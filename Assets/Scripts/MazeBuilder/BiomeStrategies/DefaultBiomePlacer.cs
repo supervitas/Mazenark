@@ -42,12 +42,15 @@ public class DefaultBiomePlacer : IBiomePlacer
         else
             safehouseSize = LARGE_SIZE_SAFEHOUSE;
 
-        // Fill rect safehouseSize X safehouseSize exactly at the center of the maze.
-        for (int i = width / 2 - safehouseSize / 2; i <= width / 2 + safehouseSize / 2; i++)
-            for (int j = height / 2 - safehouseSize / 2; j <= height / 2 + safehouseSize / 2; j++)
-                maze.Tiles[i, j].Biome = Biome.Safehouse;
+		int leftX = width / 2 - safehouseSize / 2;
+		int rightX = width / 2 + safehouseSize / 2;
+		int topY = height / 2 - safehouseSize / 2;
+		int bottomY = height / 2 + safehouseSize / 2;
 
-        maze.ImportantPlaces.Add(new Maze.Coordinate(width / 2, height / 2));
+		var room = new Maze.Room(new Maze.Coordinate(leftX, topY), new Maze.Coordinate(rightX, bottomY));
+		maze.CutWalls(room, Biome.Safehouse);
+		maze.Rooms.Add(room);
+        maze.ImportantPlaces.Add(room.Center);
     }
 
     private void PlantSpawns()
