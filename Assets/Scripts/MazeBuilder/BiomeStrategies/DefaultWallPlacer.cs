@@ -1,57 +1,81 @@
 ﻿using System.Collections;
 using System;
+using System.Collections.Generic;
 
 public class DefaultWallPlacer : IWallPlacer{
     private static DefaultWallPlacer instance = new DefaultWallPlacer();
+	private static Random random = new Random();
+	// For 1 way, 2 ways, 3 ways and 4 ways accordingly.
+	private static double[] chanceOfWays = { 1.0, 0.4, 0.1, 0.03 };
 
-    private DefaultWallPlacer()
-    {
-
-    }
-    public static IWallPlacer Instance{
-        get{
+	private DefaultWallPlacer() { }
+    public static IWallPlacer Instance {
+        get {
             return instance;
         }
     }
 
 
     // Fully connected pois.
-    public Maze PlaceWalls(Maze maze){
-        var random = new Random();
+    public Maze PlaceWalls(Maze maze) {
+        for (var i = 0; i < maze.Width; i += 2)
+			for (var j = 0; j < maze.Height; j += 2)
+				MakeRandomPassagesAt(maze, i, j);
 
-        // poi == place of interest.
-        foreach (var poiFrom in maze.ImportantPlaces) {
-            foreach (var poiTo in maze.ImportantPlaces) {
-                var shouldCorridorGoUpFirst = random.Next(2) == 0;
-                var xFrom = poiFrom.X;
-                var yFrom = poiFrom.Y;
-                var xTo = poiTo.X;
-                var yTo = poiTo.Y;
-
-                if (shouldCorridorGoUpFirst) {
-                    makeVerticalCorridor(maze, yFrom, yTo, xFrom);
-                    makeHorizontalCorridor(maze, xFrom, xTo, yTo);
-                } else {
-                    makeHorizontalCorridor(maze, xFrom, xTo, yFrom);
-                    makeVerticalCorridor(maze, yFrom, yTo, xTo);
-                }
-            }
-        }
-
-        return maze;
+		return maze;
     }
 
-    private void makeVerticalCorridor(Maze maze, int yFrom, int yTo, int x) {
-        var lesserY = yFrom < yTo ? yFrom: yTo;
-        var greaterY = yFrom > yTo ? yFrom : yTo;
-        for (var j = lesserY; j <= greaterY; j++)
-            maze.Tiles[x, j].type = Tile.Type.Empty;
-    }
+	private void MakeRandomPassagesAt(Maze maze, int x, int y) {
+		maze.Tiles[x, y].type = Tile.Type.Empty;
+		var numOfWays = random.NextDouble() < chanceOfWays[0] ? 1 : 0;
+		numOfWays = random.NextDouble() < chanceOfWays[1] ? 2 : numOfWays;
+		numOfWays = random.NextDouble() < chanceOfWays[2] ? 3 : numOfWays;
+		numOfWays = random.NextDouble() < chanceOfWays[3] ? 4 : numOfWays;
 
-    private void makeHorizontalCorridor(Maze maze, int xFrom, int xTo, int y) {
-        var lesserX = (xFrom < xTo) ? xFrom : xTo;
-        var greaterX = (xFrom > xTo) ? xFrom : xTo;
-        for (var i = lesserX; i <= greaterX; i++)
-            maze.Tiles[i, y].type = Tile.Type.Empty;
-    }
+		var directions = new HashSet<Direction>();
+		for (; directions.Count != numOfWays; ) {
+			var direction = Direction.Directions[random.Next(0, 4)];
+			directions.Add(direction);
+		}
+
+		foreach (Direction direction in directions)
+			if (IsPointWithinMaze(maze, direction.ApplyToPoint(x, y).X, direction.ApplyToPoint(x, y).Y))
+				maze.Tiles[direction.ApplyToPoint(x, y).X, direction.ApplyToPoint(x, y).Y].type = Tile.Type.Empty;
+	}
+
+	private bool IsPointWithinMaze(Maze maze, int x, int y) {
+		return x >= 0 && x < maze.Width && y >= 0 && y < maze.Height;
+	}
+
+	private class Direction {
+		public static List<Direction> Directions = new List<Direction>();
+		public int DeltaX {
+			get; private set;
+		}
+		public int DeltaY {
+			get; private set;
+		}
+		public double ChanceToSpawn {
+			get; private set;
+		}
+		private Direction(int dx, int dy, double chance) {
+			DeltaX = dx;
+			DeltaY = dy;
+			ChanceToSpawn = chance;
+			Directions.Add(this);
+		}
+
+		public Maze.Coordinate ApplyToPoint(int x, int y) {
+			return new Maze.Coordinate(x + DeltaX, y + DeltaY);
+		}
+
+		public Maze.Coordinate ApplyToPoint(Maze.Coordinate point) {
+			return new Maze.Coordinate(point.X + DeltaX, point.Y + DeltaY);
+		}
+
+		public static Direction Up    = new Direction(0, -1, 0.15);
+		public static Direction Left  = new Direction(-1, 0, 0.01);	// Never go left!
+		public static Direction Down  = new Direction(0, +1, 0.1);
+		public static Direction Right = new Direction(+1, 0, 0.4);
+	}
 }
