@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class MazeDrawer : MonoBehaviour {
 
-    public const int TILE_SIZE = 9; // should be 8, but I want some gaps between cubes.
+    public const int TILE_SIZE = 8; // make it 9, for some gaps between cubes.
     public static Color SPAWN_BIOME_COLOR = new Color(1, 1, 1, 0.25f);
     public static Color SAFEHOUSE_BIOME_COLOR = new Color(1, 1, 1, 0.75f);
     public static Color WATER_BIOME_COLOR = new Color(0, 0.1f, 1);
@@ -23,7 +23,7 @@ public class MazeDrawer : MonoBehaviour {
         var maze = new MazeBuilder(mazeSize.X, mazeSize.Y).Maze;
         for (var i = 0; i < maze.Tiles.GetLength(0); i++)
             for (var j = 0; j < maze.Tiles.GetLength(1); j++) {
-                var y = maze.Tiles[i, j].type == Tile.Type.Wall ? 0 : -TILE_SIZE;
+                var y = maze.Tiles[i, j].type == Tile.Type.Wall ? 0 : -TILE_SIZE + 0.1f;
                 
                 var cube = Instantiate(prefab, new Vector3(TransformToWorldCoordinate(i), y,
                     TransformToWorldCoordinate(j)), Quaternion.identity);
