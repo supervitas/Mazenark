@@ -16,18 +16,23 @@ public class MazeDrawer : MonoBehaviour {
 
     [Tooltip("Object to be spawned as maze blocks")]
     public GameObject prefab;
-    // Use this for initialization
-    private void Start() {
+	public GameObject prefab_floor;
+	// Use this for initialization
+	private void Start() {
         var mazeSize = MazeSizeGenerator.Instance; // TODO move initilize to class of application? Google script execution order
         mazeSize.generateFixedSize();
         var maze = new MazeBuilder(mazeSize.X, mazeSize.Y).Maze;
         for (var i = 0; i < maze.Tiles.GetLength(0); i++)
             for (var j = 0; j < maze.Tiles.GetLength(1); j++) {
-                var y = maze.Tiles[i, j].type == Tile.Type.Wall ? 0 : -TILE_SIZE + 0.1f;
-                
-                var cube = Instantiate(prefab, new Vector3(TransformToWorldCoordinate(i), y,
-                    TransformToWorldCoordinate(j)), Quaternion.identity);
-                var renderer = cube.GetComponent<Renderer>();
+                var y = maze.Tiles[i, j].type == Tile.Type.Wall ? 0 : -TILE_SIZE / 2 + 0.1f;
+
+				GameObject cube;
+				if (maze.Tiles[i, j].type == Tile.Type.Wall)
+					cube = Instantiate(prefab, new Vector3(TransformToWorldCoordinate(i), y, TransformToWorldCoordinate(j)), Quaternion.identity);
+				else
+					cube = Instantiate(prefab_floor, new Vector3(TransformToWorldCoordinate(i), y, TransformToWorldCoordinate(j)), Quaternion.identity);
+
+				var renderer = cube.GetComponent<Renderer>();
 
                 if (renderer == null) continue;
                 if (maze.Tiles[i, j].biome == Biome.Spawn)
