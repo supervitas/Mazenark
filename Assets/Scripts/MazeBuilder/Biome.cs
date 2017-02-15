@@ -10,15 +10,7 @@ public class Biome{
     private static Random random = new Random();
 
     public static Biome GetRandomBiome() {
-        var randomValue = (float) random.NextDouble() * totalRandom;
-        var selectedBiome = randomRanges[0].type;
-        // Are you sure it traverses from 0.0f to totalRnadom, not backwards?..
-        foreach (var t in randomRanges) {
-            selectedBiome = t.type;
-            if (t.range > randomValue)
-                break;
-        }
-        return selectedBiome;
+        return randomRanges[random.Next(0, randomRanges.Count)].type;
     }
 
 	public Biome(IRoomPlacer roomPlacer, IWallPlacer wallPlacer,
