@@ -1,7 +1,7 @@
 ﻿using System;
 
 public class Tile {
-	public Biome Biome = null;
+	public Biome biome = null;
     public Type type = Type.Wall;
 
 	public Tile (){}

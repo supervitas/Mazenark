@@ -19,7 +19,7 @@ public class DefaultRoomPlacer : IRoomPlacer {
 
     // This code can accidently spawn rooms in safehouse! It shan't be! 
     public Maze PlaceRoom(Maze maze, int x, int y, int chunkLeftBoundary, int chunkRightBoundary, int chunkTopBoundary, int chunkBottomBoundary) {
-        Biome targetBiome = maze.Tiles[x, y].Biome;
+        Biome targetBiome = maze.Tiles[x, y].biome;
 
 		var width = GetRandomRoomDimension(targetBiome);
         var height = GetRandomRoomDimension(targetBiome);

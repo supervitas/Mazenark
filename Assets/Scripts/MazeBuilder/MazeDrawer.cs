@@ -30,17 +30,17 @@ public class MazeDrawer : MonoBehaviour {
                 var renderer = cube.GetComponent<Renderer>();
 
                 if (renderer == null) continue;
-                if (maze.Tiles[i, j].Biome == Biome.Spawn)
+                if (maze.Tiles[i, j].biome == Biome.Spawn)
                     renderer.material.color = SPAWN_BIOME_COLOR;
-                if (maze.Tiles[i, j].Biome == Biome.Safehouse)
+                if (maze.Tiles[i, j].biome == Biome.Safehouse)
                     renderer.material.color = SAFEHOUSE_BIOME_COLOR;
-                if (maze.Tiles[i, j].Biome == Biome.Water)
+                if (maze.Tiles[i, j].biome == Biome.Water)
                     renderer.material.color = WATER_BIOME_COLOR;
-                if (maze.Tiles[i, j].Biome == Biome.Earth)
+                if (maze.Tiles[i, j].biome == Biome.Earth)
                     renderer.material.color = EARTH_BIOME_COLOR;
-                if (maze.Tiles[i, j].Biome == Biome.Fire)
+                if (maze.Tiles[i, j].biome == Biome.Fire)
                     renderer.material.color = FIRE_BIOME_COLOR;
-                if (maze.Tiles[i, j].Biome == Biome.Wind)
+                if (maze.Tiles[i, j].biome == Biome.Wind)
                     renderer.material.color = WIND_BIOME_COLOR;
             }
     }
