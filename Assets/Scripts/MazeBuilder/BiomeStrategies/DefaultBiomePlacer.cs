@@ -65,28 +65,28 @@ public class DefaultBiomePlacer : IBiomePlacer
     }
 
     private void PlaceBiomes() {
-        Biome biome1 = Biome.GetRandomBiome();   // No check if some biomes are the same.
-        Biome biome2 = Biome.GetRandomBiome();
-        Biome biome3 = Biome.GetRandomBiome();
-        Biome biome4 = Biome.GetRandomBiome();
+        var biome1 = Biome.GetRandomBiome();   // No check if some biomes are the same.
+        var biome2 = Biome.GetRandomBiome();
+        var biome3 = Biome.GetRandomBiome();
+        var biome4 = Biome.GetRandomBiome();
 
-        for (int i = 0; i < width / 2; i++)
-            for (int j = 0; j < height / 2; j++)
+        for (var i = 0; i < width / 2; i++)
+            for (var j = 0; j < height / 2; j++)
                 if (maze.Tiles[i, j].biome == null)
                     maze.Tiles[i, j].biome = biome1;
 
-        for (int i = 0; i < width / 2; i++)
-            for (int j = height / 2; j < height; j++)
+        for (var i = 0; i < width / 2; i++)
+            for (var j = height / 2; j < height; j++)
                 if (maze.Tiles[i, j].biome == null)
                     maze.Tiles[i, j].biome = biome2;
 
-        for (int i = width / 2; i < width; i++)
-            for (int j = 0; j < height / 2; j++)
+        for (var i = width / 2; i < width; i++)
+            for (var j = 0; j < height / 2; j++)
                 if (maze.Tiles[i, j].biome == null)
                     maze.Tiles[i, j].biome = biome3;
 
-        for (int i = width / 2; i < width; i++)
-            for (int j = height / 2; j < height; j++)
+        for (var i = width / 2; i < width; i++)
+            for (var j = height / 2; j < height; j++)
                 if (maze.Tiles[i, j].biome == null)
                     maze.Tiles[i, j].biome = biome4;
     }

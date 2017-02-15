@@ -99,7 +99,7 @@ public class Maze {
 		public Coordinate TopLeftCorner {
 			get {
 				return topLeft;
-				}
+			}
 		}
 
 		public Coordinate TopRightCorner {

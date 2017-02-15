@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class Biome{
 	private static int ID_COUNTER = 0;
@@ -7,10 +7,10 @@ public class Biome{
 
     private static float totalRandom = 0;
     private static List<RandomRange> randomRanges = new List<RandomRange>();
-    private static Random random = new Random();
+
 
     public static Biome GetRandomBiome() {
-        return randomRanges[random.Next(0, randomRanges.Count)].type;
+        return randomRanges[Random.Range(0, randomRanges.Count)].type;
     }
 
 	public Biome(IRoomPlacer roomPlacer, IWallPlacer wallPlacer,
