@@ -20,10 +20,14 @@ namespace Walls {
         private void Start() {
             for (var i = 0; i < _mazeSize.X ; i++) {
                 var wall = Instantiate(defaultBiomeWalls[Random.Range(0, defaultBiomeWalls.Length)], new Vector3(-20, 0,
-                    i * 8), Quaternion.Euler(Random.Range(0, 45), 90, Random.Range(0, 45)));
+                    i * 8), Quaternion.Euler(Random.Range(0, 45), 90, 0));
                 wall.transform.localScale = new Vector3(8, 8, 8);
                 wall.GetComponent<Renderer>();
-            }
+        }
+
+
+
+
 
 //            generateWall(x: -10, y: 32, z: (float) (_mazeSize.Y * 4.5), rotation: 0);
 //            generateWall(x: (float) (_mazeSize.X * 5), y: _mazeSize.Y / 2, z: -(_mazeSize.Y / 2), rotation: 90);
@@ -34,5 +38,6 @@ namespace Walls {
         private void Update() {
 
         }
+
     }
 }
