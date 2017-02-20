@@ -18,12 +18,21 @@ namespace Walls {
         }
 
         private void Start() {
-            for (var i = 0; i < _mazeSize.X / 8; i++) {
-                var wall = Instantiate(defaultBiomeWalls[Random.Range(0, defaultBiomeWalls.Length)], new Vector3(-20, 0,
-                    i * 59), Quaternion.Euler(0, 90, 0));
+            for (var i = 0; i < _mazeSize.X ; i++) {
+                var randomWall = defaultBiomeWalls[Random.Range(0, defaultBiomeWalls.Length)];
+                var wall = Instantiate(randomWall, new Vector3(-30, 0, i * 90), Quaternion.Euler(0, 90, 0));
                 var renderer = wall.GetComponent<Renderer>();
-               Debug.Log(123);
-        }
+                Bounds bounds = new Bounds(renderer.transform.position, Vector3.zero);
+
+                foreach (Renderer rend in GetComponentsInChildren<Renderer>()) {
+
+                    bounds.Encapsulate(rend.bounds);
+                }
+
+
+                Debug.Log(bounds);
+
+            }
 
 //            generateWall(x: -10, y: 32, z: (float) (_mazeSize.Y * 4.5), rotation: 0);
 //            generateWall(x: (float) (_mazeSize.X * 5), y: _mazeSize.Y / 2, z: -(_mazeSize.Y / 2), rotation: 90);

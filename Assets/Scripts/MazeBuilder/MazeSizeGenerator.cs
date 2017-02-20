@@ -1,4 +1,6 @@
-﻿namespace Constants {
+﻿using UnityEngine;
+
+namespace Constants {
     public  class MazeSizeGenerator {
         private static MazeSizeGenerator instance;
 
@@ -12,8 +14,8 @@
         public int Y { get; private set; }
 
         public  void generateFixedSize() {
-            X = 64;
-            Y = 64;
+            X = 96;
+            Y = 96;
         }
 
     }
