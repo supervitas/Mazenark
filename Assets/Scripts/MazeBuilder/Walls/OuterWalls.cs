@@ -1,6 +1,7 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
 using Constants;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Walls {
 
@@ -10,34 +11,28 @@ namespace Walls {
         public GameObject [] LavaBiomeWalls;
         private readonly MazeSizeGenerator _mazeSize = MazeSizeGenerator.Instance;
 
-        private void generateWall(float x, int y, float z, int rotation) {
-            var wall = Instantiate(defaultBiomeWalls[Random.Range(0, defaultBiomeWalls.Length)], new Vector3(x, y,
-                z), Quaternion.Euler(0, rotation, 0));
-//            wall.transform.localScale = new Vector3(20, _mazeSize.Y, _mazeSize.Y * 10);
-            wall.GetComponent<Renderer>();
-        }
-
+		private void generateWall(int size, Quaternion rotationQuaternion,
+		    Func<int, Vector3> getPosition, Func<Vector3, int> increment) {
+			for (int i = 0; i < size;) {
+				var randomWall = defaultBiomeWalls[Random.Range(0, defaultBiomeWalls.Length)];
+				var wall = Instantiate(randomWall, getPosition(i), rotationQuaternion);
+				var render = wall.GetComponent<Renderer> ();
+			    i += increment(render.bounds.size);
+			}
+		}
         private void Start() {
-            for (var i = 0; i < _mazeSize.X ; i++) {
-                var randomWall = defaultBiomeWalls[Random.Range(0, defaultBiomeWalls.Length)];
-                var wall = Instantiate(randomWall, new Vector3(-30, 0, i * 90), Quaternion.Euler(0, 90, 0));
-                var renderer = wall.GetComponent<Renderer>();
-                Bounds bounds = new Bounds(renderer.transform.position, Vector3.zero);
+			generateWall(_mazeSize.X * 8, Quaternion.Euler(0, 90, 0),
+			    getPosition: index => new Vector3(-25, 0, index), increment: bounds => (int) bounds.z); // Left
 
-                foreach (Renderer rend in GetComponentsInChildren<Renderer>()) {
+			generateWall(_mazeSize.Y * 8, Quaternion.identity,
+			    getPosition: index => new Vector3(index, 0, -25), increment: bounds => (int) bounds.x); // Bottom
 
-                    bounds.Encapsulate(rend.bounds);
-                }
+            generateWall(_mazeSize.X * 8, Quaternion.Euler(0, 270, 0),
+                getPosition: index => new Vector3(_mazeSize.X * 8 +25, 0, index), increment: bounds => (int) bounds.z); // Right
 
+            generateWall(_mazeSize.Y * 8, Quaternion.Euler(0, 180, 0),
+                getPosition: index => new Vector3(index, 0, _mazeSize.Y * 8 + 25), increment: bounds => (int) bounds.x); // Top
 
-                Debug.Log(bounds);
-
-            }
-
-//            generateWall(x: -10, y: 32, z: (float) (_mazeSize.Y * 4.5), rotation: 0);
-//            generateWall(x: (float) (_mazeSize.X * 5), y: _mazeSize.Y / 2, z: -(_mazeSize.Y / 2), rotation: 90);
-//            generateWall(x: _mazeSize.X * 10, y: 32, z: (float) (_mazeSize.Y * 4.5), rotation: 0);
-//            generateWall(x: (float) (_mazeSize.X * 5), y: _mazeSize.Y / 2, z: (_mazeSize.Y * 10) - 20 , rotation: 90);
         }
 
         private void Update() {
