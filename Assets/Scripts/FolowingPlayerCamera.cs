@@ -15,11 +15,7 @@ public class FolowingPlayerCamera : MonoBehaviour {
     [SerializeField] private float bumperCameraHeight = 1.0f; // adjust camera height while bumping
     [SerializeField] private Vector3 bumperRayOffset; // allows offset of the bumper ray from target origin
 
-    /// <Summary>
-    /// If the target moves, the camera should child the target to allow for smoother movement. DR
-    /// </Summary>
-    private void Awake()
-    {
+    private void Awake() {
         GetComponent<Camera>().transform.parent = target;
     }
 
