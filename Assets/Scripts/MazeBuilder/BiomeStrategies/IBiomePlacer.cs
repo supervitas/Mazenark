@@ -1,6 +1,6 @@
-﻿using System;
-
-public interface IBiomePlacer {
-	Maze PlaceBiomes(Maze emptyMaze);
+﻿namespace MazeBuilder.BiomeStrategies {
+    public interface IBiomePlacer {
+        Maze PlaceBiomes(Maze emptyMaze);
+    }
 }
 

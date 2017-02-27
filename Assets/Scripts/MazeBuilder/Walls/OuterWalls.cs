@@ -1,9 +1,8 @@
 ﻿using System;
-using Constants;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Walls {
+namespace MazeBuilder.Walls {
 
     public class OuterWalls : MonoBehaviour {
         [Tooltip("Maze Walls prefab")]
