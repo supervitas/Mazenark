@@ -6,14 +6,14 @@ namespace MazeBuilder.Walls {
 
     public class OuterWalls : MonoBehaviour {
         [Tooltip("Maze Walls prefab")]
-        public GameObject [] defaultBiomeWalls;
+        public GameObject [] DefaultBiomeWalls;
         public GameObject [] LavaBiomeWalls;
         private readonly MazeSizeGenerator _mazeSize = MazeSizeGenerator.Instance;
 
 		private void generateWall(int size, Quaternion rotationQuaternion,
 		    Func<float, Vector3> getPosition, Func<Vector3, float> increment) {
 			for (float i = 0; i < size;) {
-				var randomWall = defaultBiomeWalls[Random.Range(0, defaultBiomeWalls.Length)];
+				var randomWall = DefaultBiomeWalls[Random.Range(0, DefaultBiomeWalls.Length)];
 				var wall = Instantiate(randomWall, getPosition(i), rotationQuaternion);
 				var render = wall.GetComponent<Renderer> ();
 			    i += increment(render.bounds.size);
