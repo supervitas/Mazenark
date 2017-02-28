@@ -28,7 +28,7 @@ namespace Cameras {
 
             // cast the bumper ray out from rear and check to see if there is anything behind
             if (Physics.Raycast(_target.TransformPoint(_bumperRayOffset), back, out hit, _bumperDistanceCheck)
-                && hit.transform != _target && !hit.transform.gameObject.CompareTag("no_colide_camera")){
+                && !hit.transform.gameObject.CompareTag("no_colide_camera") && hit.transform != _target) {
                 wantedPosition.x = hit.point.x;
                 wantedPosition.z = hit.point.z;
                 wantedPosition.y = Mathf.Lerp(hit.point.y + _bumperCameraHeight, wantedPosition.y, Time.deltaTime * _damping);

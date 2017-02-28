@@ -9,6 +9,7 @@
     public static class Maze {
         public const int MIN_SIZE = 16;
         public const int ROOM_CHUNK_SIZE = 16;
+        public const int TILE_SIZE = 8; // make it 9, for some gaps between cubes.
     }
 }
 

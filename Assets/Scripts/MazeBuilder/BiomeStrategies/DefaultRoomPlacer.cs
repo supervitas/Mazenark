@@ -1,4 +1,6 @@
 ﻿using System;
+using UnityEngine;
+using Random = System.Random;
 
 namespace MazeBuilder.BiomeStrategies {
     public class DefaultRoomPlacer : IRoomPlacer {
@@ -17,8 +19,9 @@ namespace MazeBuilder.BiomeStrategies {
         }
 
 
-        // This code can accidently spawn rooms in safehouse! It shan't be!
-        public Maze PlaceRoom(Maze maze, int x, int y, int chunkLeftBoundary, int chunkRightBoundary, int chunkTopBoundary, int chunkBottomBoundary) {
+        //TODO This code can accidently spawn rooms in safehouse! It shan't be!
+        public Maze PlaceRoom(Maze maze, int x, int y, int chunkLeftBoundary,
+            int chunkRightBoundary, int chunkTopBoundary, int chunkBottomBoundary) {
             Biome targetBiome = maze.Tiles[x, y].biome;
 
             var width = GetRandomRoomDimension(targetBiome);
@@ -27,7 +30,8 @@ namespace MazeBuilder.BiomeStrategies {
             var attempt = 0;
             var room = new Maze.Room(x, y, x + width - 1, y + height - 1);
 
-            while (!CanPlaceRoomHere(maze, chunkLeftBoundary, chunkRightBoundary, chunkTopBoundary, chunkBottomBoundary, room) && (attempt < MAX_PLACEMENT_ATTEMPTS)) {
+            while (!CanPlaceRoomHere(maze, chunkLeftBoundary, chunkRightBoundary, chunkTopBoundary, chunkBottomBoundary, room)
+                   && (attempt < MAX_PLACEMENT_ATTEMPTS)) {
                 attempt++;
 
                 width = GetRandomRoomDimension(targetBiome);
@@ -51,7 +55,7 @@ namespace MazeBuilder.BiomeStrategies {
         }
 
         private int GetRandomRoomDimension(Biome biome) {
-            return (int) Math.Round(random.Next(global::MazeBuilder.Constants.Biome.ROOM_MIN_SIZE, global::MazeBuilder.Constants.Biome.ROOM_MAX_SIZE + 1) * biome.RoomSizeModifier);
+            return (int) Math.Round(random.Next(Constants.Biome.ROOM_MIN_SIZE, Constants.Biome.ROOM_MAX_SIZE + 1) * biome.RoomSizeModifier);
         }
 
         private bool CanPlaceRoomHere(Maze maze, int chunkLeftBoundary, int chunkRightBoundary, int chunkTopBoundary, int chunkBottomBoundary, Maze.Room roomToTest) {
@@ -71,10 +75,10 @@ namespace MazeBuilder.BiomeStrategies {
 
             // Assume safehouse and spawns are rooms too...
             // Check if we are not intersecting other rooms AND safe zone of 1 tile around them:
-            foreach (Maze.Room anotherRoom in maze.Rooms)
+            foreach (Maze.Room anotherRoom in maze.Rooms) {
                 if (roomToTest.IntersectsRoomAndOneTileMargin(anotherRoom))
                     return false;
-
+            }
             return true;
         }
     }

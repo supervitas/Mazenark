@@ -7,7 +7,7 @@ namespace MazeBuilder {
         private static int ID_COUNTER = 0;
         private int id = ID_COUNTER++;
 
-        private static float totalRandom = 0;
+        private static float totalRandom;
         private static List<RandomRange> randomRanges = new List<RandomRange>();
 
 
@@ -19,10 +19,10 @@ namespace MazeBuilder {
             float chanceToSpawnModifier = 1.0f, float sizeModifier = 1.0f,
             float roomSpawnChanceModifier = 1.0f, float roomSizeModifier = 1.0f, bool isManuallyPlaced = false) {
 
-            this.RoomPlacer = roomPlacer;
-            this.WallPlacer = wallPlacer;
-            this.RoomSpawnChanceModifier = roomSpawnChanceModifier;
-            this.RoomSizeModifier = roomSizeModifier;
+            RoomPlacer = roomPlacer;
+            WallPlacer = wallPlacer;
+            RoomSpawnChanceModifier = roomSpawnChanceModifier;
+            RoomSizeModifier = roomSizeModifier;
 
             if (isManuallyPlaced) return;
             totalRandom += chanceToSpawnModifier;

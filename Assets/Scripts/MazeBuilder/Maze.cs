@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace MazeBuilder {
     public class Maze {
@@ -156,7 +157,8 @@ namespace MazeBuilder {
                 int yBottom = bottomRight.Y + 1;
 
                 // if one of the points above lies within another room, they intersect each other.
-                doIntersect = IsCoordinateLiesWithin(x, y) || IsCoordinateLiesWithin(x, yBottom) || IsCoordinateLiesWithin(xRight, y) || IsCoordinateLiesWithin(xRight, yBottom);
+                doIntersect = IsCoordinateLiesWithin(x, y) || IsCoordinateLiesWithin(x, yBottom)
+                              || IsCoordinateLiesWithin(xRight, y) || IsCoordinateLiesWithin(xRight, yBottom);
 
                 return doIntersect;
             }
