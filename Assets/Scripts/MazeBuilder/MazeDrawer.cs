@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MazeBuilder {
@@ -12,7 +13,13 @@ namespace MazeBuilder {
         public static Color WindBiomeColor = new Color(0.5f, 0.5f, 0.5f, 0.9f);
 
         [Tooltip("Object to be spawned as maze blocks")]
-        public GameObject prefab;
+        public GameObject Spawn;
+        public GameObject SafeHouse;
+        public GameObject Water;
+        public GameObject Earth;
+        public GameObject Fire;
+        public GameObject Wind;
+
         public GameObject prefab_floor;
         // Use this for initialization
 
@@ -20,38 +27,55 @@ namespace MazeBuilder {
         private void Start() {
             var mazeSize = MazeSizeGenerator.Instance; // TODO move initilize to class of application? Google script execution order
             mazeSize.GenerateFixedSize();
+            MakeSharedMaterialColors();
             var maze = new MazeBuilder(mazeSize.X, mazeSize.Y).Maze;
+
             for (var i = 0; i < maze.Tiles.GetLength(0); i++) {
+//                var rootObjForMaze = new GameObject {name = "CubeBatch", isStatic = true};
                 for (var j = 0; j < maze.Tiles.GetLength(1); j++) {
                     var y = maze.Tiles[i, j].type == Tile.Type.Wall ? 0 : -Constants.Maze.TILE_SIZE / 2 + 0.1f;
-                    GameObject cube;
-                    if (maze.Tiles[i, j].type == Tile.Type.Wall)
-                        cube = Instantiate(prefab,
-                            new Vector3(TransformToWorldCoordinate(i), y, TransformToWorldCoordinate(j)),
-                            Quaternion.identity);
-                    else
-                        cube = Instantiate(prefab_floor,
-                            new Vector3(TransformToWorldCoordinate(i), y, TransformToWorldCoordinate(j)),
-                            Quaternion.identity);
 
+                    var cube = Instantiate(maze.Tiles[i, j].type == Tile.Type.Wall ?
+                        GetCubeByType(maze.Tiles[i, j].biome) : prefab_floor, new Vector3(TransformToWorldCoordinate(i), y, TransformToWorldCoordinate(j)), Quaternion.identity);
                     var renderer = cube.GetComponent<Renderer>();
 
-                    if (renderer == null) continue;
-                    if (maze.Tiles[i, j].biome == Biome.Spawn)
-                        renderer.material.color = SpawnBiomeColor;
-                    if (maze.Tiles[i, j].biome == Biome.Safehouse)
-                        renderer.material.color = SafehouseBiomeColor;
-                    if (maze.Tiles[i, j].biome == Biome.Water)
-                        renderer.material.color = WaterBiomeColor;
-                    if (maze.Tiles[i, j].biome == Biome.Earth)
-                        renderer.material.color = EarthBiomeColor;
-                    if (maze.Tiles[i, j].biome == Biome.Fire)
-                        renderer.material.color = FireBiomeColor;
-                    if (maze.Tiles[i, j].biome == Biome.Wind)
-                        renderer.material.color = WindBiomeColor;
+
+//                    cube.transform.parent = rootObjForMaze.transform;
                 }
+//                StaticBatchingUtility.Combine(rootObjForMaze.gameObject);
             }
-//            StaticBatchingUtility.Combine(gos, Root);
+        }
+
+        private GameObject GetCubeByType(Biome biome) {
+            if (biome == Biome.Spawn) {
+                return Spawn;
+            }
+            if (biome == Biome.Safehouse) {
+                return SafeHouse;
+            }
+            if (biome == Biome.Water) {
+                return Water;
+            }
+            if (biome == Biome.Earth) {
+                return Earth;
+            }
+            if (biome == Biome.Fire) {
+                return Fire;
+            }
+            if (biome == Biome.Wind) {
+                return Wind;
+            }
+
+            return Earth; //default return
+        }
+
+        private void MakeSharedMaterialColors() {
+            Spawn.GetComponent<Renderer>().sharedMaterial.color = SpawnBiomeColor;
+            SafeHouse.GetComponent<Renderer>().sharedMaterial.color = SafehouseBiomeColor;
+            Water.GetComponent<Renderer>().sharedMaterial.color = WaterBiomeColor;
+            Earth.GetComponent<Renderer>().sharedMaterial.color = EarthBiomeColor;
+            Fire.GetComponent<Renderer>().sharedMaterial.color = FireBiomeColor;
+            Wind.GetComponent<Renderer>().sharedMaterial.color = WindBiomeColor;
         }
 
         private void Update(){}
@@ -60,5 +84,6 @@ namespace MazeBuilder {
         private float TransformToWorldCoordinate(int absoluteCoordinate) {
             return absoluteCoordinate * Constants.Maze.TILE_SIZE + Constants.Maze.TILE_SIZE / 2.0f;
         }
+
     }
 }
