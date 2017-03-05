@@ -64,7 +64,7 @@ namespace MazeBuilder {
                     }
                 }
                 foreach (var batch in biomeBatches.Values) {
-                    StaticBatchingUtility.Combine(batch.gameObject);
+//                    StaticBatchingUtility.Combine(batch.gameObject);
 
                 }
 
