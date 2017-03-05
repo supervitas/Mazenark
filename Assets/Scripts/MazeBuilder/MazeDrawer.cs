@@ -31,7 +31,7 @@ namespace MazeBuilder {
             var maze = new MazeBuilder(mazeSize.X, mazeSize.Y).Maze;
 
             for (var i = 0; i < maze.Tiles.GetLength(0); i++) {
-//                var rootObjForMaze = new GameObject {name = "CubeBatch", isStatic = true};
+                var biomeBatches = new Dictionary<Biome, GameObject>();
                 for (var j = 0; j < maze.Tiles.GetLength(1); j++) {
                     var y = maze.Tiles[i, j].type == Tile.Type.Wall ? 0 : -Constants.Maze.TILE_SIZE / 2 + 0.1f;
 
@@ -40,25 +40,33 @@ namespace MazeBuilder {
                     var renderer = cube.GetComponent<Renderer>();
 
                     if (maze.Tiles[i, j].type != Tile.Type.Wall) { // temp fix while no gameobects to floor
-
-                    if (maze.Tiles[i, j].biome == Biome.Spawn)
-                        renderer.material.color = SpawnBiomeColor;
-                    if (maze.Tiles[i, j].biome == Biome.Safehouse)
-                        renderer.material.color = SafehouseBiomeColor;
-                    if (maze.Tiles[i, j].biome == Biome.Water)
-                        renderer.material.color = WaterBiomeColor;
-                     if (maze.Tiles[i, j].biome == Biome.Earth)
-                         renderer.material.color = EarthBiomeColor;
-                     if (maze.Tiles[i, j].biome == Biome.Fire)
-                         renderer.material.color = FireBiomeColor;
-                     if (maze.Tiles[i, j].biome == Biome.Wind)
-                         renderer.material.color = WindBiomeColor;
-
+                        if (maze.Tiles[i, j].biome == Biome.Spawn)
+                            renderer.material.color = SpawnBiomeColor;
+                        if (maze.Tiles[i, j].biome == Biome.Safehouse)
+                            renderer.material.color = SafehouseBiomeColor;
+                        if (maze.Tiles[i, j].biome == Biome.Water)
+                            renderer.material.color = WaterBiomeColor;
+                         if (maze.Tiles[i, j].biome == Biome.Earth)
+                             renderer.material.color = EarthBiomeColor;
+                         if (maze.Tiles[i, j].biome == Biome.Fire)
+                             renderer.material.color = FireBiomeColor;
+                         if (maze.Tiles[i, j].biome == Biome.Wind)
+                             renderer.material.color = WindBiomeColor;
                     }
 
-//                    cube.transform.parent = rootObjForMaze.transform;
+                    if (maze.Tiles[i, j].type == Tile.Type.Wall) {
+                        if (!biomeBatches.ContainsKey(maze.Tiles[i, j].biome)) {
+                            biomeBatches.Add(maze.Tiles[i, j].biome,
+                                new GameObject {name = "Grouped Biomes", isStatic = true});
+                        }
+                        cube.transform.parent = biomeBatches[maze.Tiles[i, j].biome].transform;
+
+                    }
                 }
-//                StaticBatchingUtility.Combine(rootObjForMaze.gameObject);
+                foreach (var batch in biomeBatches.Values) {
+                    StaticBatchingUtility.Combine(batch.gameObject);
+                }
+
             }
         }
 
