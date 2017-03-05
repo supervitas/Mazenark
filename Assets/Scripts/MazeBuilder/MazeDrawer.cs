@@ -37,22 +37,22 @@ namespace MazeBuilder {
 
                     var cube = Instantiate(maze.Tiles[i, j].type == Tile.Type.Wall ?
                         GetCubeByType(maze.Tiles[i, j].biome) : prefab_floor, new Vector3(TransformToWorldCoordinate(i), y, TransformToWorldCoordinate(j)), Quaternion.identity);
-                    var renderer = cube.GetComponent<Renderer>();
 
-                    if (maze.Tiles[i, j].type != Tile.Type.Wall) { // temp fix while no gameobects to floor
-                        if (maze.Tiles[i, j].biome == Biome.Spawn)
-                            renderer.material.color = SpawnBiomeColor;
-                        if (maze.Tiles[i, j].biome == Biome.Safehouse)
-                            renderer.material.color = SafehouseBiomeColor;
-                        if (maze.Tiles[i, j].biome == Biome.Water)
-                            renderer.material.color = WaterBiomeColor;
-                         if (maze.Tiles[i, j].biome == Biome.Earth)
-                             renderer.material.color = EarthBiomeColor;
-                         if (maze.Tiles[i, j].biome == Biome.Fire)
-                             renderer.material.color = FireBiomeColor;
-                         if (maze.Tiles[i, j].biome == Biome.Wind)
-                             renderer.material.color = WindBiomeColor;
-                    }
+
+//                    if (maze.Tiles[i, j].type != Tile.Type.Wall) { // temp fix while no gameobects to floor
+//                        if (maze.Tiles[i, j].biome == Biome.Spawn)
+//                            renderer.material.color = SpawnBiomeColor;
+//                        if (maze.Tiles[i, j].biome == Biome.Safehouse)
+//                            renderer.material.color = SafehouseBiomeColor;
+//                        if (maze.Tiles[i, j].biome == Biome.Water)
+//                            renderer.material.color = WaterBiomeColor;
+//                         if (maze.Tiles[i, j].biome == Biome.Earth)
+//                             renderer.material.color = EarthBiomeColor;
+//                         if (maze.Tiles[i, j].biome == Biome.Fire)
+//                             renderer.material.color = FireBiomeColor;
+//                         if (maze.Tiles[i, j].biome == Biome.Wind)
+//                             renderer.material.color = WindBiomeColor;
+//                    }
 
                     if (maze.Tiles[i, j].type == Tile.Type.Wall) {
                         if (!biomeBatches.ContainsKey(maze.Tiles[i, j].biome)) {
@@ -65,6 +65,7 @@ namespace MazeBuilder {
                 }
                 foreach (var batch in biomeBatches.Values) {
                     StaticBatchingUtility.Combine(batch.gameObject);
+
                 }
 
             }
