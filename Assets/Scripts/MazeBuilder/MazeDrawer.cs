@@ -20,14 +20,14 @@ namespace MazeBuilder {
         public GameObject Fire;
         public GameObject Wind;
 
-        public GameObject prefab_floor;
+        public GameObject prefab_floor; //also need to do something to floor
         // Use this for initialization
 
         // Update is called once per frame
         private void Start() {
             var mazeSize = MazeSizeGenerator.Instance; // TODO move initilize to class of application? Google script execution order
             mazeSize.GenerateFixedSize();
-            MakeSharedMaterialColors();
+//            MakeSharedMaterialColors(); // This will set up Colors to materials forever
             var maze = new MazeBuilder(mazeSize.X, mazeSize.Y).Maze;
 
             for (var i = 0; i < maze.Tiles.GetLength(0); i++) {
@@ -39,6 +39,22 @@ namespace MazeBuilder {
                         GetCubeByType(maze.Tiles[i, j].biome) : prefab_floor, new Vector3(TransformToWorldCoordinate(i), y, TransformToWorldCoordinate(j)), Quaternion.identity);
                     var renderer = cube.GetComponent<Renderer>();
 
+                    if (maze.Tiles[i, j].type != Tile.Type.Wall) { // temp fix while no gameobects to floor
+
+                    if (maze.Tiles[i, j].biome == Biome.Spawn)
+                        renderer.material.color = SpawnBiomeColor;
+                    if (maze.Tiles[i, j].biome == Biome.Safehouse)
+                        renderer.material.color = SafehouseBiomeColor;
+                    if (maze.Tiles[i, j].biome == Biome.Water)
+                        renderer.material.color = WaterBiomeColor;
+                     if (maze.Tiles[i, j].biome == Biome.Earth)
+                         renderer.material.color = EarthBiomeColor;
+                     if (maze.Tiles[i, j].biome == Biome.Fire)
+                         renderer.material.color = FireBiomeColor;
+                     if (maze.Tiles[i, j].biome == Biome.Wind)
+                         renderer.material.color = WindBiomeColor;
+
+                    }
 
 //                    cube.transform.parent = rootObjForMaze.transform;
                 }
@@ -77,6 +93,7 @@ namespace MazeBuilder {
             Fire.GetComponent<Renderer>().sharedMaterial.color = FireBiomeColor;
             Wind.GetComponent<Renderer>().sharedMaterial.color = WindBiomeColor;
         }
+
 
         private void Update(){}
 
