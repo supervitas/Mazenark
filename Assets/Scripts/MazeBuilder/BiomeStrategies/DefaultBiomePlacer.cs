@@ -1,4 +1,6 @@
-﻿namespace MazeBuilder.BiomeStrategies {
+﻿using MazeBuilder.Utility;
+
+namespace MazeBuilder.BiomeStrategies {
     public class DefaultBiomePlacer : IBiomePlacer {
         private const int SMALL_SIZE = 32;
         private const int MEDIUM_SIZE = 64;
@@ -42,7 +44,7 @@
             int topY = height / 2 - safehouseSize / 2;
             int bottomY = height / 2 + safehouseSize / 2;
 
-            var room = new Maze.Room(new Maze.Coordinate(leftX, topY), new Maze.Coordinate(rightX, bottomY));
+            var room = new Room(new Coordinate(leftX, topY), new Coordinate(rightX, bottomY));
             maze.CutWalls(room, Biome.Safehouse);
             maze.Rooms.Add(room);
             maze.ImportantPlaces.Add(room.Center);
@@ -55,10 +57,10 @@
             maze.Tiles[width - 1, 0].biome = Biome.Spawn;
             maze.Tiles[width - 1, height - 1].biome = Biome.Spawn;
 
-            maze.ImportantPlaces.Add(new Maze.Coordinate(0, 0));
-            maze.ImportantPlaces.Add(new Maze.Coordinate(0, height - 1));
-            maze.ImportantPlaces.Add(new Maze.Coordinate(width - 1, 0));
-            maze.ImportantPlaces.Add(new Maze.Coordinate(width - 1, height - 1));
+            maze.ImportantPlaces.Add(new Coordinate(0, 0));
+            maze.ImportantPlaces.Add(new Coordinate(0, height - 1));
+            maze.ImportantPlaces.Add(new Coordinate(width - 1, 0));
+            maze.ImportantPlaces.Add(new Coordinate(width - 1, height - 1));
         }
 
         private void PlaceBiomes() {
