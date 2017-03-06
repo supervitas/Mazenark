@@ -6,8 +6,8 @@ using System.Text;
 namespace MazeBuilder.Utility {
 	public class Room {
 	    public Room(Coordinate topLeft, Coordinate bottomRight) {
-			this.TopLeftCorner = topLeft;
-			this.BottomRightCorner = bottomRight;
+			TopLeftCorner = topLeft;
+			BottomRightCorner = bottomRight;
 		}
 
 		public Room(int topLeftXCoordinate, int topLeftYCoordinate, int bottomRightXCoordinate, int bottomRightYCoordinate) {
