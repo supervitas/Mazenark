@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MazeBuilder.Utility;
 
 namespace MazeBuilder.BiomeStrategies {
     public class DefaultWallPlacer : IWallPlacer{
@@ -65,12 +66,12 @@ namespace MazeBuilder.BiomeStrategies {
                 Directions.Add(this);
             }
 
-            public Maze.Coordinate ApplyToPoint(int x, int y) {
-                return new Maze.Coordinate(x + DeltaX, y + DeltaY);
+            public Coordinate ApplyToPoint(int x, int y) {
+                return new Coordinate(x + DeltaX, y + DeltaY);
             }
 
-            public Maze.Coordinate ApplyToPoint(Maze.Coordinate point) {
-                return new Maze.Coordinate(point.X + DeltaX, point.Y + DeltaY);
+            public Coordinate ApplyToPoint(Coordinate point) {
+                return new Coordinate(point.X + DeltaX, point.Y + DeltaY);
             }
 
             public static Direction Up    = new Direction(0, -1, 0.15);

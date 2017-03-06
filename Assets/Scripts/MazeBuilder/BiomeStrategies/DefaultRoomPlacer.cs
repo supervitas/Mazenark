@@ -1,6 +1,5 @@
 ﻿using System;
-using UnityEngine;
-using Random = System.Random;
+using MazeBuilder.Utility;
 
 namespace MazeBuilder.BiomeStrategies {
     public class DefaultRoomPlacer : IRoomPlacer {
@@ -28,7 +27,7 @@ namespace MazeBuilder.BiomeStrategies {
             var height = GetRandomRoomDimension(targetBiome);
 
             var attempt = 0;
-            var room = new Maze.Room(x, y, x + width - 1, y + height - 1);
+            var room = new Room(x, y, x + width - 1, y + height - 1);
 
             while (!CanPlaceRoomHere(maze, chunkLeftBoundary, chunkRightBoundary, chunkTopBoundary, chunkBottomBoundary, room)
                    && (attempt < MAX_PLACEMENT_ATTEMPTS)) {
@@ -39,7 +38,7 @@ namespace MazeBuilder.BiomeStrategies {
                 x = random.Next(chunkLeftBoundary, chunkRightBoundary + 1);
                 y = random.Next(chunkTopBoundary, chunkBottomBoundary + 1);
 
-                room = new Maze.Room(x, y, x + width - 1, y + height - 1);
+                room = new Room(x, y, x + width - 1, y + height - 1);
             }
 
             if (attempt >= MAX_PLACEMENT_ATTEMPTS)
@@ -58,7 +57,7 @@ namespace MazeBuilder.BiomeStrategies {
             return (int) Math.Round(random.Next(Constants.Biome.ROOM_MIN_SIZE, Constants.Biome.ROOM_MAX_SIZE + 1) * biome.RoomSizeModifier);
         }
 
-        private bool CanPlaceRoomHere(Maze maze, int chunkLeftBoundary, int chunkRightBoundary, int chunkTopBoundary, int chunkBottomBoundary, Maze.Room roomToTest) {
+        private bool CanPlaceRoomHere(Maze maze, int chunkLeftBoundary, int chunkRightBoundary, int chunkTopBoundary, int chunkBottomBoundary, Room roomToTest) {
             int x = roomToTest.TopLeftCorner.X;
             int y = roomToTest.TopLeftCorner.Y;
             int xRight = roomToTest.BottomRightCorner.X;
@@ -75,7 +74,7 @@ namespace MazeBuilder.BiomeStrategies {
 
             // Assume safehouse and spawns are rooms too...
             // Check if we are not intersecting other rooms AND safe zone of 1 tile around them:
-            foreach (Maze.Room anotherRoom in maze.Rooms) {
+            foreach (Room anotherRoom in maze.Rooms) {
                 if (roomToTest.IntersectsRoomAndOneTileMargin(anotherRoom))
                     return false;
             }
