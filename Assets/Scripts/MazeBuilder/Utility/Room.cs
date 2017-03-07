@@ -5,12 +5,9 @@ using System.Text;
 
 namespace MazeBuilder.Utility {
 	public class Room {
-		private Coordinate topLeft;
-		private Coordinate bottomRight;
-
-		public Room(Coordinate topLeft, Coordinate bottomRight) {
-			this.topLeft = topLeft;
-			this.bottomRight = bottomRight;
+	    public Room(Coordinate topLeft, Coordinate bottomRight) {
+			TopLeftCorner = topLeft;
+			BottomRightCorner = bottomRight;
 		}
 
 		public Room(int topLeftXCoordinate, int topLeftYCoordinate, int bottomRightXCoordinate, int bottomRightYCoordinate) {
@@ -19,50 +16,42 @@ namespace MazeBuilder.Utility {
 			int lesserY = topLeftYCoordinate < bottomRightYCoordinate ? topLeftYCoordinate : bottomRightYCoordinate;
 			int greaterY = topLeftYCoordinate < bottomRightYCoordinate ? bottomRightYCoordinate : topLeftYCoordinate;
 
-			topLeft = new Coordinate(lesserX, lesserY);
-			bottomRight = new Coordinate(greaterX, greaterY);
+			TopLeftCorner = new Coordinate(lesserX, lesserY);
+			BottomRightCorner = new Coordinate(greaterX, greaterY);
 		}
 
-		public Coordinate TopLeftCorner {
+		public Coordinate TopLeftCorner { get; private set; }
+
+	    public Coordinate TopRightCorner {
 			get {
-				return topLeft;
+				return new Coordinate(BottomRightCorner.X, TopLeftCorner.Y);
 			}
 		}
 
-		public Coordinate TopRightCorner {
-			get {
-				return new Coordinate(bottomRight.X, topLeft.Y);
-			}
-		}
+		public Coordinate BottomRightCorner { get; private set; }
 
-		public Coordinate BottomRightCorner {
+	    public Coordinate BottomLeftCorner {
 			get {
-				return bottomRight;
-			}
-		}
-
-		public Coordinate BottomLeftCorner {
-			get {
-				return new Coordinate(topLeft.X, bottomRight.Y);
+				return new Coordinate(TopLeftCorner.X, BottomRightCorner.Y);
 			}
 		}
 
 		// Will return top-left coordinate of four center squares if room has even sides.
 		public Coordinate Center {
 			get {
-				return new Coordinate((topLeft.X + bottomRight.X) / 2, (topLeft.Y + bottomRight.Y) / 2);
+				return new Coordinate((TopLeftCorner.X + BottomRightCorner.X) / 2, (TopLeftCorner.Y + BottomRightCorner.Y) / 2);
 			}
 		}
 
 		public int Width {
 			get {
-				return bottomRight.X - topLeft.X;
+				return BottomRightCorner.X - TopLeftCorner.X;
 			}
 		}
 
 		public int Height {
 			get {
-				return bottomRight.Y - topLeft.Y;
+				return BottomRightCorner.Y - TopLeftCorner.Y;
 			}
 		}
 
@@ -71,16 +60,16 @@ namespace MazeBuilder.Utility {
 		}
 
 		private bool IsCoordinateLiesWithin(Coordinate point) {
-			return topLeft.X <= point.X && topLeft.Y <= point.Y && bottomRight.X >= point.X && bottomRight.Y >= point.Y;
+			return TopLeftCorner.X <= point.X && TopLeftCorner.Y <= point.Y && BottomRightCorner.X >= point.X && BottomRightCorner.Y >= point.Y;
 		}
 
 		public bool IntersectsRoomAndOneTileMargin(Room anotherRoom) {
 			bool doIntersect = false;
 			// ±1 because of Minkovsky. Just provides beforementioned margin of 1 tile.
-			int x = topLeft.X - 1;
-			int y = topLeft.Y - 1;
-			int xRight = bottomRight.X + 1;
-			int yBottom = bottomRight.Y + 1;
+			int x = TopLeftCorner.X - 1;
+			int y = TopLeftCorner.Y - 1;
+			int xRight = BottomRightCorner.X + 1;
+			int yBottom = BottomRightCorner.Y + 1;
 
 			// if one of the points above lies within another room, they intersect each other.
 			doIntersect = IsCoordinateLiesWithin(x, y) || IsCoordinateLiesWithin(x, yBottom)
