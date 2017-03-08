@@ -23,6 +23,7 @@ namespace MazeBuilder.Walls {
 			}
 		    StaticBatchingUtility.Combine(rootObjForWalls.gameObject);
 		}
+
         private void Start() {
 			generateWall(_mazeSize.X * Constants.Maze.TILE_SIZE + 25, Quaternion.Euler(0, 90, 0),
 			    getPosition: index => new Vector3(-25, 0, index), increment: bounds => bounds.z); // Left
