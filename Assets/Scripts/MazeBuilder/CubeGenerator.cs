@@ -16,13 +16,13 @@ namespace MazeBuilder {
 				var edgeMesh = Instantiate(OuterEdge, whereToPlace, edge.Rotation);
 				edgeMesh.transform.parent = parent.transform;	// This should add wall as a child.
 			}
-
+		    parent.isStatic = true;
 			parent.name = string.Format("Cube at {0}:{1}", coordinate.X, coordinate.Y);
 			return parent;
 		}
 	}
 
-	class Edge {
+    internal class Edge {
 		public static List<Edge> Edges = new List<Edge>();
 		public Quaternion Rotation {
 			get; private set;
