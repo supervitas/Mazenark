@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MazeBuilder.Utility;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,23 +22,27 @@ namespace MazeBuilder {
         public GameObject Wind;
 
         public GameObject prefab_floor; //also need to do something to floor
-        // Use this for initialization
 
-        // Update is called once per frame
-        private void Start() {
+		public CubeGenerator EarthCubeGenerator;
+
+		private void Start() {
             var mazeSize = MazeSizeGenerator.Instance; // TODO move initilize to class of application? Google script execution order
             mazeSize.GenerateFixedSize();
-//            MakeSharedMaterialColors(); // This will set up Colors to materials forever
+//          MakeSharedMaterialColors(); // This will set up Colors to materials forever
             var maze = new MazeBuilder(mazeSize.X, mazeSize.Y).Maze;
 
-            for (var i = 0; i < maze.Tiles.GetLength(0); i++) {
+            for (var i = 0; i < maze.Width; i++) {
                 var biomeBatches = new Dictionary<Biome, GameObject>();
-                for (var j = 0; j < maze.Tiles.GetLength(1); j++) {
+                for (var j = 0; j < maze.Height; j++) {
                     var y = maze.Tiles[i, j].type == Tile.Type.Wall ? 0 : -Constants.Maze.TILE_SIZE / 2 + 0.1f;
+					var coordinate = new Vector3(TransformToWorldCoordinate(i), y, TransformToWorldCoordinate(j));
 
-                    var cube = Instantiate(maze.Tiles[i, j].type == Tile.Type.Wall ?
-                        GetCubeByType(maze.Tiles[i, j].biome) : prefab_floor, new Vector3(TransformToWorldCoordinate(i), y, TransformToWorldCoordinate(j)), Quaternion.identity);
-
+					GameObject cube;
+					if (HasGenerator(maze.Tiles[i, j].biome) && maze.Tiles[i, j].type == Tile.Type.Wall)
+						cube = EarthCubeGenerator.Create(maze.Tiles[i, j].biome, new Coordinate(i, j), maze, coordinate);
+					else
+						cube = Instantiate(maze.Tiles[i, j].type == Tile.Type.Wall ? GetCubeByType(maze.Tiles[i, j].biome) : prefab_floor, coordinate, Quaternion.identity);
+					/*
                     var render = cube.GetComponent<Renderer>();
 
                     if (maze.Tiles[i, j].type != Tile.Type.Wall) { // temp fix while no gameobects to floor
@@ -53,8 +58,8 @@ namespace MazeBuilder {
                              render.material.color = FireBiomeColor;
                          if (maze.Tiles[i, j].biome == Biome.Wind)
                              render.material.color = WindBiomeColor;
-                    }
-
+                    }*/
+					
                     if (maze.Tiles[i, j].type == Tile.Type.Wall) {
                         if (!biomeBatches.ContainsKey(maze.Tiles[i, j].biome)) {
                             biomeBatches.Add(maze.Tiles[i, j].biome,
@@ -64,12 +69,35 @@ namespace MazeBuilder {
 
                     }
                 }
+				
                 foreach (var batch in biomeBatches.Values) {
                     StaticBatchingUtility.Combine(batch.gameObject);
                 }
-
+			
             }
         }
+
+		private bool HasGenerator(Biome biome) {
+			if (biome == Biome.Spawn) {
+				return false;
+			}
+			if (biome == Biome.Safehouse) {
+				return false;
+			}
+			if (biome == Biome.Water) {
+				return false;
+			}
+			if (biome == Biome.Earth) {
+				return true;
+			}
+			if (biome == Biome.Fire) {
+				return false;
+			}
+			if (biome == Biome.Wind) {
+				return false;
+			}
+			return false;
+		}
 
         private GameObject GetCubeByType(Biome biome) {
             if (biome == Biome.Spawn) {
@@ -82,7 +110,7 @@ namespace MazeBuilder {
                 return Water;
             }
             if (biome == Biome.Earth) {
-                return Earth;
+				return Earth;
             }
             if (biome == Biome.Fire) {
                 return Fire;
