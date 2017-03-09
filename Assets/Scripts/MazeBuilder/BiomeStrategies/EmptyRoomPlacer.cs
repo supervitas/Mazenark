@@ -1,6 +1,6 @@
 ﻿namespace MazeBuilder.BiomeStrategies {
     public class EmptyRoomPlacer : IRoomPlacer{
-        private static EmptyRoomPlacer instance = new EmptyRoomPlacer();
+        private static readonly EmptyRoomPlacer instance = new EmptyRoomPlacer();
 
         private EmptyRoomPlacer(){}
         public static IRoomPlacer Instance{
