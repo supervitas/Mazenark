@@ -9,7 +9,7 @@ namespace MazeBuilder.Walls {
         [Tooltip("Maze Walls prefab")]
         public GameObject [] DefaultBiomeWalls;
         public GameObject [] LavaBiomeWalls;
-        private readonly MazeSizeGenerator _mazeSize = MazeSizeGenerator.Instance;
+        private MazeSizeGenerator _mazeSize;
 
 		private void GenerateWall(int size, Quaternion rotationQuaternion,
 		    Func<float, Vector3> getPosition, Func<Vector3, float> increment) {
@@ -25,6 +25,8 @@ namespace MazeBuilder.Walls {
 		}
 
         private void Start() {
+            _mazeSize = App.Instance.MazeSize;
+
 			GenerateWall(_mazeSize.X * Constants.Maze.TILE_SIZE + 25, Quaternion.Euler(0, 90, 0),
 			    getPosition: index => new Vector3(-25, 0, index), increment: bounds => bounds.z); // Left
 
