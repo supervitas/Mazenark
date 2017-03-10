@@ -20,7 +20,7 @@ public class Example_TOD_Night_Particles : MonoBehaviour
 
 			ParticleSystem.EmissionModule emission = _particleSystem.emission;
 
-			emission.enabled = TOD.IsNight ? true : false;
+			emission.enabled = TOD.IsNight;
 		}
 
 	}

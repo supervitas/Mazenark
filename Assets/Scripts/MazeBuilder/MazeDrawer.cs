@@ -70,7 +70,7 @@ namespace MazeBuilder {
                 }
 				
                 foreach (var batch in biomeBatches.Values) {
-//                    StaticBatchingUtility.Combine(batch.gameObject); //reycasting will be only with one mesh
+                    StaticBatchingUtility.Combine(batch.gameObject); //reycasting will be only with one mesh
                 }
 			
             }
