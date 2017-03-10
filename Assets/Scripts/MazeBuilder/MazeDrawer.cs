@@ -26,8 +26,7 @@ namespace MazeBuilder {
 		public CubeGenerator EarthCubeGenerator;
 
 		private void Start() {
-            var mazeSize = MazeSizeGenerator.Instance; // TODO move initilize to class of application? Google script execution order
-            mazeSize.GenerateFixedSize();
+            var mazeSize = MazeSizeGenerator.Instance;
 //          MakeSharedMaterialColors(); // This will set up Colors to materials forever
             var maze = new MazeBuilder(mazeSize.X, mazeSize.Y).Maze;
 
