@@ -13,18 +13,29 @@ namespace MazeBuilder {
         public static Color FireBiomeColor = new Color(0.7f, 1, 0);
         public static Color WindBiomeColor = new Color(0.5f, 0.5f, 0.5f, 0.9f);
 
+
         [Tooltip("Object to be spawned as maze blocks")]
+
+        #region BiomeWalls
+        [Header("Biome Walls")]
         public GameObject Spawn;
         public GameObject SafeHouse;
         public GameObject Water;
         public GameObject Earth;
         public GameObject Fire;
         public GameObject Wind;
+        #endregion
 
+        #region BiomeFloors
+        [Header("Biome Floors")]
         public GameObject prefab_floor;
         public GameObject Water_floor;
+        #endregion
 
+        #region BiomeCubeGenerators
+        [Header("Biome Cube Generators")]
 		public CubeGenerator EarthCubeGenerator;
+        #endregion
 
 		private void Start() {
             var mazeSize = MazeSizeGenerator.Instance;
