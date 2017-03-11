@@ -62,7 +62,7 @@ namespace MazeBuilder {
 				for (var j = room.TopLeftCorner.Y; j <= room.BottomLeftCorner.Y; j++) {
 					tiles[i, j].type = Tile.Type.Empty;
 					if (fillWith != null)
-						tiles[i, j].biome = fillWith;
+						tiles[i, j].Biome = fillWith;
 				}
         }      
 

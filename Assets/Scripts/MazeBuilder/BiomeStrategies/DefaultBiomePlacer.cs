@@ -52,10 +52,10 @@ namespace MazeBuilder.BiomeStrategies {
 
         private void PlantSpawns() {
             // Should depend on size too.
-            maze.Tiles[0, 0].biome = Biome.Spawn;
-            maze.Tiles[0, height - 1].biome = Biome.Spawn;
-            maze.Tiles[width - 1, 0].biome = Biome.Spawn;
-            maze.Tiles[width - 1, height - 1].biome = Biome.Spawn;
+            maze.Tiles[0, 0].Biome = Biome.Spawn;
+            maze.Tiles[0, height - 1].Biome = Biome.Spawn;
+            maze.Tiles[width - 1, 0].Biome = Biome.Spawn;
+            maze.Tiles[width - 1, height - 1].Biome = Biome.Spawn;
 
             maze.ImportantPlaces.Add(new Coordinate(0, 0));
             maze.ImportantPlaces.Add(new Coordinate(0, height - 1));
@@ -71,23 +71,23 @@ namespace MazeBuilder.BiomeStrategies {
 
             for (var i = 0; i < width / 2; i++)
             for (var j = 0; j < height / 2; j++)
-                if (maze.Tiles[i, j].biome == null)
-                    maze.Tiles[i, j].biome = biome1;
+                if (maze.Tiles[i, j].Biome == null)
+                    maze.Tiles[i, j].Biome = biome1;
 
             for (var i = 0; i < width / 2; i++)
             for (var j = height / 2; j < height; j++)
-                if (maze.Tiles[i, j].biome == null)
-                    maze.Tiles[i, j].biome = biome2;
+                if (maze.Tiles[i, j].Biome == null)
+                    maze.Tiles[i, j].Biome = biome2;
 
             for (var i = width / 2; i < width; i++)
             for (var j = 0; j < height / 2; j++)
-                if (maze.Tiles[i, j].biome == null)
-                    maze.Tiles[i, j].biome = biome3;
+                if (maze.Tiles[i, j].Biome == null)
+                    maze.Tiles[i, j].Biome = biome3;
 
             for (var i = width / 2; i < width; i++)
             for (var j = height / 2; j < height; j++)
-                if (maze.Tiles[i, j].biome == null)
-                    maze.Tiles[i, j].biome = biome4;
+                if (maze.Tiles[i, j].Biome == null)
+                    maze.Tiles[i, j].Biome = biome4;
         }
     }
 }

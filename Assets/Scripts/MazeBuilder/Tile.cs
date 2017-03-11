@@ -1,6 +1,6 @@
 ﻿namespace MazeBuilder {
     public class Tile {
-        public Biome biome = null;
+        public Biome Biome = null;
         public Type type = Type.Wall;
 
         public Tile (){}

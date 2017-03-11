@@ -39,30 +39,32 @@ namespace MazeBuilder {
 
 		private void Start() {
             var mazeSize = MazeSizeGenerator.Instance;
-//          MakeSharedMaterialColors(); // This will set up Colors to materials forever
             var maze = new MazeBuilder(mazeSize.X, mazeSize.Y).Maze;
 
             for (var i = 0; i < maze.Width; i++) {
                 var biomeBatches = new Dictionary<Biome, GameObject>();
                 for (var j = 0; j < maze.Height; j++) {
-                    var y = maze.Tiles[i, j].type == Tile.Type.Wall ? 0 : -Constants.Maze.TILE_SIZE / 2 + 0.1f;
-					var coordinate = new Vector3(TransformToWorldCoordinate(i), y, TransformToWorldCoordinate(j));
+					var coordinate = new Vector3(TransformToWorldCoordinate(i),
+					    GetYForTile(maze.Tiles[i, j].type, maze.Tiles[i, j].Biome ), TransformToWorldCoordinate(j));
 
-					GameObject cube;
-					if (HasGenerator(maze.Tiles[i, j].biome) && maze.Tiles[i, j].type == Tile.Type.Wall)
-						cube = EarthCubeGenerator.Create(maze.Tiles[i, j].biome, new Coordinate(i, j), maze, coordinate);
-					else
-						cube = Instantiate(maze.Tiles[i, j].type == Tile.Type.Wall ?
-						        GetCubeByType(maze.Tiles[i, j].biome) :
-						        GetFloorByType(maze.Tiles[i, j].biome), coordinate, Quaternion.identity);
+					GameObject tile;
+                    if (HasGenerator(maze.Tiles[i, j].Biome) && maze.Tiles[i, j].type == Tile.Type.Wall) {
+                        tile = EarthCubeGenerator.Create(maze.Tiles[i, j].Biome, new Coordinate(i, j), maze,
+                            coordinate);
+                    } else {
+                        tile = Instantiate(
+                            maze.Tiles[i, j].type == Tile.Type.Wall ?
+                                GetCubeByType(maze.Tiles[i, j].Biome) :
+                                GetFloorByType(maze.Tiles[i, j].Biome), coordinate, Quaternion.identity);
+                    }
 
-					
+
                     if (maze.Tiles[i, j].type == Tile.Type.Wall) {
-                        if (!biomeBatches.ContainsKey(maze.Tiles[i, j].biome)) {
-                            biomeBatches.Add(maze.Tiles[i, j].biome,
+                        if (!biomeBatches.ContainsKey(maze.Tiles[i, j].Biome)) {
+                            biomeBatches.Add(maze.Tiles[i, j].Biome,
                                 new GameObject {name = "Grouped Biomes", isStatic = true});
                         }
-                        cube.transform.parent = biomeBatches[maze.Tiles[i, j].biome].transform;
+                        tile.transform.parent = biomeBatches[maze.Tiles[i, j].Biome].transform;
 
                     }
                 }
@@ -119,11 +121,15 @@ namespace MazeBuilder {
              return Earth; //default return
         }
         private GameObject GetFloorByType(Biome biome) {
-//            if (biome == Biome.Water) {
-//                return Water_floor;
-//            }
+            if (biome == Biome.Water) {
+                return Water_floor;
+            }
 
             return prefab_floor; //default return
+        }
+
+        private float GetYForTile(Tile.Type type, Biome biome) {
+            return type == Tile.Type.Wall ? biome.WallYCoordinate : biome.FloorYCoordinate;
         }
 
 

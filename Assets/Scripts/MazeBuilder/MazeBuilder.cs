@@ -44,7 +44,7 @@ namespace MazeBuilder {
                 if (x > 64 || y > 64)
                     Console.WriteLine("x: {0}, y: {1}", x, y);
 
-                var biome = maze.Tiles[x, y].biome;
+                var biome = maze.Tiles[x, y].Biome;
 
                 var spawnChance = Constants.Biome.ROOM_SPAWN_CHANCE * biome.RoomSpawnChanceModifier;
                 if (random.NextDouble() < spawnChance)

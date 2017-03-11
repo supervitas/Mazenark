@@ -21,7 +21,7 @@ namespace MazeBuilder.BiomeStrategies {
         //TODO This code can accidently spawn rooms in safehouse! It shan't be!
         public Maze PlaceRoom(Maze maze, int x, int y, int chunkLeftBoundary,
             int chunkRightBoundary, int chunkTopBoundary, int chunkBottomBoundary) {
-            Biome targetBiome = maze.Tiles[x, y].biome;
+            Biome targetBiome = maze.Tiles[x, y].Biome;
 
             var width = GetRandomRoomDimension(targetBiome);
             var height = GetRandomRoomDimension(targetBiome);
