@@ -21,7 +21,8 @@ namespace MazeBuilder {
         public GameObject Fire;
         public GameObject Wind;
 
-        public GameObject prefab_floor; //also need to do something to floor
+        public GameObject prefab_floor;
+        public GameObject Water_floor;
 
 		public CubeGenerator EarthCubeGenerator;
 
@@ -40,24 +41,10 @@ namespace MazeBuilder {
 					if (HasGenerator(maze.Tiles[i, j].biome) && maze.Tiles[i, j].type == Tile.Type.Wall)
 						cube = EarthCubeGenerator.Create(maze.Tiles[i, j].biome, new Coordinate(i, j), maze, coordinate);
 					else
-						cube = Instantiate(maze.Tiles[i, j].type == Tile.Type.Wall ? GetCubeByType(maze.Tiles[i, j].biome) : prefab_floor, coordinate, Quaternion.identity);
-					/*
-                    var render = cube.GetComponent<Renderer>();
+						cube = Instantiate(maze.Tiles[i, j].type == Tile.Type.Wall ?
+						        GetCubeByType(maze.Tiles[i, j].biome) :
+						        GetFloorByType(maze.Tiles[i, j].biome), coordinate, Quaternion.identity);
 
-                    if (maze.Tiles[i, j].type != Tile.Type.Wall) { // temp fix while no gameobects to floor
-                        if (maze.Tiles[i, j].biome == Biome.Spawn)
-                            render.material.color = SpawnBiomeColor;
-                        if (maze.Tiles[i, j].biome == Biome.Safehouse)
-                            render.material.color = SafehouseBiomeColor;
-                        if (maze.Tiles[i, j].biome == Biome.Water)
-                            render.material.color = WaterBiomeColor;
-                         if (maze.Tiles[i, j].biome == Biome.Earth)
-                             render.material.color = EarthBiomeColor;
-                         if (maze.Tiles[i, j].biome == Biome.Fire)
-                             render.material.color = FireBiomeColor;
-                         if (maze.Tiles[i, j].biome == Biome.Wind)
-                             render.material.color = WindBiomeColor;
-                    }*/
 					
                     if (maze.Tiles[i, j].type == Tile.Type.Wall) {
                         if (!biomeBatches.ContainsKey(maze.Tiles[i, j].biome)) {
@@ -99,27 +86,35 @@ namespace MazeBuilder {
 		}
 
         private GameObject GetCubeByType(Biome biome) {
-            if (biome == Biome.Spawn) {
-                return Spawn;
-            }
-            if (biome == Biome.Safehouse) {
-                return SafeHouse;
-            }
-            if (biome == Biome.Water) {
-                return Water;
-            }
-            if (biome == Biome.Earth) {
-				return Earth;
-            }
-            if (biome == Biome.Fire) {
-                return Fire;
-            }
-            if (biome == Biome.Wind) {
-                return Wind;
-            }
+             if (biome == Biome.Spawn) {
+                 return Spawn;
+             }
+             if (biome == Biome.Safehouse) {
+                 return SafeHouse;
+             }
+             if (biome == Biome.Water) {
+                 return Water;
+             }
+             if (biome == Biome.Earth) {
+                return Earth;
+             }
+             if (biome == Biome.Fire) {
+                 return Fire;
+             }
+             if (biome == Biome.Wind) {
+                 return Wind;
+             }
 
-            return Earth; //default return
+             return Earth; //default return
         }
+        private GameObject GetFloorByType(Biome biome) {
+//            if (biome == Biome.Water) {
+//                return Water_floor;
+//            }
+
+            return prefab_floor; //default return
+        }
+
 
         private void MakeSharedMaterialColors() {
             Spawn.GetComponent<Renderer>().sharedMaterial.color = SpawnBiomeColor;
