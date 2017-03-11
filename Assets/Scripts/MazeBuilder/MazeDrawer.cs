@@ -46,8 +46,8 @@ namespace MazeBuilder {
                 for (var j = 0; j < maze.Height; j++) {
 					var coordinate = new Vector3(TransformToWorldCoordinate(i),
 					    GetYForTile(maze.Tiles[i, j].type, maze.Tiles[i, j].Biome ), TransformToWorldCoordinate(j));
-
 					GameObject tile;
+
                     if (HasGenerator(maze.Tiles[i, j].Biome) && maze.Tiles[i, j].type == Tile.Type.Wall) {
                         tile = EarthCubeGenerator.Create(maze.Tiles[i, j].Biome, new Coordinate(i, j), maze,
                             coordinate);
@@ -70,7 +70,7 @@ namespace MazeBuilder {
                 }
 				
                 foreach (var batch in biomeBatches.Values) {
-                    StaticBatchingUtility.Combine(batch.gameObject); //reycasting will be only with one mesh
+//                    StaticBatchingUtility.Combine(batch.gameObject); //reycasting will be only with one mesh
                 }
 			
             }
