@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 
 namespace Cameras {
     public class FolowingPlayerCamera : MonoBehaviour {
