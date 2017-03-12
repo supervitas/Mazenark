@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class App : MonoBehaviour {
     public static App Instance;
-    public MazeSizeGenerator MazeSize;
+    public MazeSizeGenerator MazeSize { get; private set; }
 
 	//Singletone which starts firstly then other scripts;
     private void Awake () {
@@ -16,7 +16,7 @@ public class App : MonoBehaviour {
     }
 
     private void SetUp() {
-        MazeSize = MazeSizeGenerator.Instance;
+        MazeSize = new MazeSizeGenerator();
         MazeSize.GenerateFixedSize();
     }
 

@@ -29,7 +29,7 @@ namespace MazeBuilder {
         #endregion
 
 		private void Start() {
-            var mazeSize = MazeSizeGenerator.Instance;
+            var mazeSize = App.Instance.MazeSize;
             var maze = new MazeBuilder(mazeSize.X, mazeSize.Y).Maze;
 
             for (var i = 0; i < maze.Width; i++) {
@@ -61,7 +61,7 @@ namespace MazeBuilder {
                 }
 				
                 foreach (var batch in biomeBatches.Values) {
-//                    StaticBatchingUtility.Combine(batch.gameObject); //reycasting will be only with one mesh
+                    StaticBatchingUtility.Combine(batch.gameObject);
                 }
 			
             }
