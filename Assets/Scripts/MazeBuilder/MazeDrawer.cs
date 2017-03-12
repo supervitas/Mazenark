@@ -5,15 +5,6 @@ using UnityEngine;
 
 namespace MazeBuilder {
     public class MazeDrawer : MonoBehaviour {
-
-        public static Color SpawnBiomeColor = new Color(1, 1, 1, 0.25f);
-        public static Color SafehouseBiomeColor = new Color(1, 1, 1, 0.75f);
-        public static Color WaterBiomeColor = new Color(0, 0.1f, 1);
-        public static Color EarthBiomeColor = new Color(1, 0.7f, 0);
-        public static Color FireBiomeColor = new Color(0.7f, 1, 0);
-        public static Color WindBiomeColor = new Color(0.5f, 0.5f, 0.5f, 0.9f);
-
-
         [Tooltip("Object to be spawned as maze blocks")]
 
         #region BiomeWalls
@@ -132,18 +123,7 @@ namespace MazeBuilder {
             return type == Tile.Type.Wall ? biome.WallYCoordinate : biome.FloorYCoordinate;
         }
 
-
-        private void MakeSharedMaterialColors() {
-            Spawn.GetComponent<Renderer>().sharedMaterial.color = SpawnBiomeColor;
-            SafeHouse.GetComponent<Renderer>().sharedMaterial.color = SafehouseBiomeColor;
-            Water.GetComponent<Renderer>().sharedMaterial.color = WaterBiomeColor;
-            Earth.GetComponent<Renderer>().sharedMaterial.color = EarthBiomeColor;
-            Fire.GetComponent<Renderer>().sharedMaterial.color = FireBiomeColor;
-            Wind.GetComponent<Renderer>().sharedMaterial.color = WindBiomeColor;
-        }
-
-
-        private void Update(){}
+        private void Update() {}
 
         // E.g. 0 → 4.5, 3 → 3*9 + 4.5
         private float TransformToWorldCoordinate(int absoluteCoordinate) {

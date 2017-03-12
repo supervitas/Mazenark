@@ -1,5 +1,7 @@
 ﻿using System;
 using MazeBuilder.Utility;
+using UnityEngine;
+using Random = System.Random;
 
 namespace MazeBuilder.BiomeStrategies {
     public class DefaultRoomPlacer : IRoomPlacer {
@@ -48,6 +50,7 @@ namespace MazeBuilder.BiomeStrategies {
             maze.Rooms.Add(room);
             maze.ImportantPlaces.Add(room.Center);
             // targetBiome has not changed when room re-generates? Okay...
+
             maze.CutWalls(room, targetBiome);
 
             return maze;
