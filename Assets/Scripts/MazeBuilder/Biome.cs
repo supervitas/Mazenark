@@ -4,11 +4,8 @@ using UnityEngine;
 using UnityStandardAssets.Water;
 
 namespace MazeBuilder {
-    public class Biome{
-        private static int ID_COUNTER = 0;
-        private int id = ID_COUNTER++;
-
-        private static float totalRandom;
+    public class Biome {
+        private static float _totalRandom;
         private static List<RandomRange> randomRanges = new List<RandomRange>();
 
 
@@ -32,7 +29,7 @@ namespace MazeBuilder {
             RoomSizeModifier = roomSizeModifier;
 
             if (isManuallyPlaced) return;
-            totalRandom += chanceToSpawnModifier;
+            _totalRandom += chanceToSpawnModifier;
             randomRanges.Add(new RandomRange(this, chanceToSpawnModifier));
         }
 
