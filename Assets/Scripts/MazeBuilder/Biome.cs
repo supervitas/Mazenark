@@ -28,7 +28,7 @@ namespace MazeBuilder {
 
         public Biome(IRoomPlacer roomPlacer, IWallPlacer wallPlacer, string name, float chanceToSpawnModifier = 1.0f, float sizeModifier = 1.0f, float roomSpawnChanceModifier = 1.0f, float roomSizeModifier = 1.0f, bool isManuallyPlaced = false) {
             WallYCoordinate = 0f;
-            FloorYCoordinate = -Constants.Maze.TILE_SIZE / 2.0f + 0.1f;
+            FloorYCoordinate = 0.1f;
 
             RoomPlacer = roomPlacer;
             WallPlacer = wallPlacer;
