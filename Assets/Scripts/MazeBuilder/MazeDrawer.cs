@@ -34,6 +34,7 @@ namespace MazeBuilder {
 
             for (var i = 0; i < maze.Width; i++) {
                 var biomeBatches = new Dictionary<Biome, GameObject>();
+                var floorBiomeBatches = new Dictionary<Biome, GameObject>();
                 for (var j = 0; j < maze.Height; j++) {
 					var coordinate = new Vector3(TransformToWorldCoordinate(i),
 					    GetYForTile(maze.Tiles[i, j].type, maze.Tiles[i, j].Biome ), TransformToWorldCoordinate(j));
@@ -56,13 +57,19 @@ namespace MazeBuilder {
                                 new GameObject {name = "Grouped Biomes", isStatic = true});
                         }
                         tile.transform.parent = biomeBatches[maze.Tiles[i, j].Biome].transform;
-
+                    } else {
+                        if (!floorBiomeBatches.ContainsKey(maze.Tiles[i, j].Biome)) {
+                            floorBiomeBatches.Add(maze.Tiles[i, j].Biome,
+                                new GameObject {name = "Floor Grouped", isStatic = true});
+                        }
+                        tile.transform.parent = floorBiomeBatches[maze.Tiles[i, j].Biome].transform;
                     }
                 }
 				
                 foreach (var batch in biomeBatches.Values) {
-                    StaticBatchingUtility.Combine(batch.gameObject);
+//                    StaticBatchingUtility.Combine(batch.gameObject);
                 }
+
 			
             }
         }
