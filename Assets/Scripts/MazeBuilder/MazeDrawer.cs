@@ -19,8 +19,8 @@ namespace MazeBuilder {
 
         #region BiomeFloors
         [Header("Biome Floors")]
-        public GameObject prefab_floor;
-        public GameObject Water_floor;
+        public GameObject PrefabFloor;
+        public GameObject WaterFloor;
         #endregion
 
         #region BiomeCubeGenerators
@@ -113,10 +113,10 @@ namespace MazeBuilder {
         }
         private GameObject GetFloorByType(Biome biome) {
             if (biome == Biome.Water) {
-                return Water_floor;
+                return WaterFloor;
             }
 
-            return prefab_floor; //default return
+            return PrefabFloor; //default return
         }
 
         private float GetYForTile(Tile.Type type, Biome biome) {
