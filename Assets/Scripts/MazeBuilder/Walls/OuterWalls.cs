@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using App;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -25,7 +26,7 @@ namespace MazeBuilder.Walls {
 		}
 
         private void Start() {
-            _mazeSize = App.Instance.MazeSize;
+            _mazeSize = App.App.Instance.MazeSize;
 
 			GenerateWall(_mazeSize.X * Constants.Maze.TILE_SIZE + 25, Quaternion.Euler(0, 90, 0),
 			    getPosition: index => new Vector3(-25, 0, index), increment: bounds => bounds.z); // Left

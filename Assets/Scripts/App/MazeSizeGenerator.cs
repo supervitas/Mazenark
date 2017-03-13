@@ -1,5 +1,5 @@
-﻿namespace MazeBuilder {
-    public  class MazeSizeGenerator {
+﻿namespace App {
+    public class MazeSizeGenerator {
 
         public int X { get; private set; }
 

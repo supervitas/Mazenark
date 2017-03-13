@@ -29,12 +29,12 @@ namespace MazeBuilder {
         #endregion
 
 		private void Start() {
-            var mazeSize = App.Instance.MazeSize;
+            var mazeSize = App.App.Instance.MazeSize;
             var maze = new MazeBuilder(mazeSize.X, mazeSize.Y).Maze;
 
             for (var i = 0; i < maze.Width; i++) {
-                var biomeBatches = new Dictionary<Biome, GameObject>();
-                var floorBiomeBatches = new Dictionary<Biome, GameObject>();
+                var biomeGroups = new Dictionary<Biome, List<GameObject>>();
+                var floorGroups = new Dictionary<Biome, List<GameObject>>();
                 for (var j = 0; j < maze.Height; j++) {
 					var coordinate = new Vector3(TransformToWorldCoordinate(i),
 					    GetYForTile(maze.Tiles[i, j].type, maze.Tiles[i, j].Biome ), TransformToWorldCoordinate(j));
@@ -50,27 +50,24 @@ namespace MazeBuilder {
                                 GetFloorByType(maze.Tiles[i, j].Biome), coordinate, Quaternion.identity);
                     }
 
-
                     if (maze.Tiles[i, j].type == Tile.Type.Wall) {
-                        if (!biomeBatches.ContainsKey(maze.Tiles[i, j].Biome)) {
-                            biomeBatches.Add(maze.Tiles[i, j].Biome,
-                                new GameObject {name = "Grouped Biomes", isStatic = true});
+                        if (!biomeGroups.ContainsKey(maze.Tiles[i, j].Biome)) {
+                            biomeGroups.Add(maze.Tiles[i, j].Biome, new List<GameObject>());
                         }
-                        tile.transform.parent = biomeBatches[maze.Tiles[i, j].Biome].transform;
+                        biomeGroups[maze.Tiles[i, j].Biome].Add(tile);
                     } else {
-                        if (!floorBiomeBatches.ContainsKey(maze.Tiles[i, j].Biome)) {
-                            floorBiomeBatches.Add(maze.Tiles[i, j].Biome,
-                                new GameObject {name = "Floor Grouped", isStatic = true});
+                        if (!floorGroups.ContainsKey(maze.Tiles[i, j].Biome)) {
+                            floorGroups.Add(maze.Tiles[i, j].Biome, new List<GameObject>());
                         }
-                        tile.transform.parent = floorBiomeBatches[maze.Tiles[i, j].Biome].transform;
+                        floorGroups[maze.Tiles[i, j].Biome].Add(tile);
                     }
                 }
-				
-                foreach (var batch in biomeBatches.Values) {
-//                    StaticBatchingUtility.Combine(batch.gameObject);
+                foreach (var biome in biomeGroups.Values) {
+//                    App.Batcher.Instance.BatchByDivider(2, biome.ToArray(), "test");
                 }
-
-			
+                foreach (var biome in floorGroups.Values) {
+//                    App.Batcher.Instance.BatchByDivider(2, biome.ToArray(), "floor");
+                }
             }
         }
 
