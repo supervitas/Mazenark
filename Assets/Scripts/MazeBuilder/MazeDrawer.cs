@@ -35,8 +35,8 @@ namespace MazeBuilder {
                 var biomeGroups = new Dictionary<Biome, List<GameObject>>();
                 var floorGroups = new Dictionary<Biome, List<GameObject>>();
                 for (var j = 0; j < maze.Height; j++) {
-					var coordinate = new Vector3(TransformToWorldCoordinate(i),
-					    GetYForTile(maze.Tiles[i, j].Type, maze.Tiles[i, j].Biome ), TransformToWorldCoordinate(j));
+					var coordinate = new Vector3(Helpers.TransformToWorldCoordinate(i),
+					    GetYForTile(maze.Tiles[i, j].Type, maze.Tiles[i, j].Biome ), Helpers.TransformToWorldCoordinate(j));
 					GameObject tile;
 
                     if (HasGenerator(maze.Tiles[i, j].Biome) && maze.Tiles[i, j].Type == Tile.Variant.Wall) {
@@ -127,11 +127,6 @@ namespace MazeBuilder {
         }
 
         private void Update() {}
-
-        // E.g. 0 → 4.5, 3 → 3*9 + 4.5
-        private float TransformToWorldCoordinate(int absoluteCoordinate) {
-            return absoluteCoordinate * Constants.Maze.TILE_SIZE + Constants.Maze.TILE_SIZE / 2.0f;
-        }
 
     }
 }
