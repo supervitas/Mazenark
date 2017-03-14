@@ -1,11 +1,16 @@
-﻿namespace MazeBuilder.Utility {
+﻿using System.Diagnostics;
+
+namespace MazeBuilder.Utility {
 	public class Room {
 	    public Room(Coordinate topLeft, Coordinate bottomRight) {
-			TopLeftCorner = topLeft;
-			BottomRightCorner = bottomRight;
+			Init(topLeft.X, topLeft.Y, bottomRight.X, bottomRight.Y);
 		}
 
 		public Room(int topLeftXCoordinate, int topLeftYCoordinate, int bottomRightXCoordinate, int bottomRightYCoordinate) {
+			Init(topLeftXCoordinate, topLeftYCoordinate, bottomRightXCoordinate, bottomRightYCoordinate);
+		}
+
+		private void Init(int topLeftXCoordinate, int topLeftYCoordinate, int bottomRightXCoordinate, int bottomRightYCoordinate) {
 			var lesserX = topLeftXCoordinate < bottomRightXCoordinate ? topLeftXCoordinate : bottomRightXCoordinate;
 			var greaterX = topLeftXCoordinate < bottomRightXCoordinate ? bottomRightXCoordinate : topLeftXCoordinate;
 			var lesserY = topLeftYCoordinate < bottomRightYCoordinate ? topLeftYCoordinate : bottomRightYCoordinate;
