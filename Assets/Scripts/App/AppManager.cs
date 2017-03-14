@@ -1,10 +1,13 @@
 ﻿using MazeBuilder;
 using UnityEngine;
 
+
+
 namespace App {
-    public class App : MonoBehaviour {
-        public static App Instance;
+    public class AppManager : MonoBehaviour {
+        public static AppManager Instance;
         public MazeSizeGenerator MazeSize { get; private set; }
+        public MazeBuilder.MazeBuilder MazeInstance { get; private set; }
 
         //Singletone which starts firstly then other scripts;
         private void Awake () {
@@ -17,6 +20,7 @@ namespace App {
         private void SetUp() {
             MazeSize = new MazeSizeGenerator();
             MazeSize.GenerateFixedSize();
+            MazeInstance = new MazeBuilder.MazeBuilder(MazeSize.X, MazeSize.Y);
         }
 
     }

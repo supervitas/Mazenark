@@ -29,8 +29,7 @@ namespace MazeBuilder {
         #endregion
 
 		private void Start() {
-            var mazeSize = App.App.Instance.MazeSize;
-            var maze = new MazeBuilder(mazeSize.X, mazeSize.Y).Maze;
+            var maze = App.AppManager.Instance.MazeInstance.Maze;
 
             for (var i = 0; i < maze.Width; i++) {
                 var biomeGroups = new Dictionary<Biome, List<GameObject>>();
@@ -63,10 +62,10 @@ namespace MazeBuilder {
                     }
                 }
                 foreach (var biome in biomeGroups.Values) {
-//                    App.Batcher.Instance.BatchByDivider(2, biome.ToArray(), "test");
+//                    AppManager.Batcher.Instance.BatchByDivider(5, biome.ToArray(), "test");
                 }
                 foreach (var biome in floorGroups.Values) {
-//                    App.Batcher.Instance.BatchByDivider(2, biome.ToArray(), "floor");
+//                    AppManager.Batcher.Instance.BatchByDivider(5, biome.ToArray(), "floor");
                 }
             }
         }
