@@ -21,24 +21,27 @@ namespace MazeBuilder.BiomeStrategies {
 			int maxIterations = roomedMaze.Width * roomedMaze.Height;
 			for (int iteration = 0; iteration < maxIterations; iteration++) {
 				bool hasSomethingChanged = false;
+				bool attemptToPlacePassage = false;	// More the random is better.
 
 				//foreach (Tile tile in roomedMaze.Tiles) {
 				for (int i = 0; i < roomedMaze.Width; i += 2) {
 					for (int j = 0; j < roomedMaze.Width; j += 2) {
 						Tile tile = roomedMaze[i, j];
 
-						if (CanGrowFromTile(roomedMaze, tile)) {
+						attemptToPlacePassage = PlaceWallIfRandomSaysSo();
+
+						if (attemptToPlacePassage && CanGrowFromTile(roomedMaze, tile)) {
 							Tile withLeastWeight = GetTileWithLeastWeight(roomedMaze, tile);
 
 							if (withLeastWeight != null) {
-								roomedMaze.CutWalls(tile.Position, withLeastWeight.Position);
+								roomedMaze.CutPassage(tile.Position, withLeastWeight.Position);
 								hasSomethingChanged = true;
 							}
 						}
 					}
 				}
 
-				if (!hasSomethingChanged) {
+				if (!hasSomethingChanged && attemptToPlacePassage) {
 					break;
 				}
 			}
@@ -91,9 +94,11 @@ namespace MazeBuilder.BiomeStrategies {
 				}
 			}
 
-			Debug.Assert(withLeastWeight.Type == Tile.Variant.Wall);
-
 			return withLeastWeight;
+		}
+
+		private bool PlaceWallIfRandomSaysSo() {
+			return random.Next(101) > 75;  // 25% chance
 		}
 	}
 }

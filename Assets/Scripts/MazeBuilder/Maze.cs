@@ -53,8 +53,8 @@ namespace MazeBuilder {
             get { return tiles.GetLength(1); }
         }
 
-        public void CutWalls(Coordinate topLeft, Coordinate bottomRight) {
-            CutWalls(new Room(topLeft, bottomRight));
+        public void CutPassage(Coordinate topLeft, Coordinate bottomRight) {
+            CutWalls(new Room(topLeft, bottomRight), type:Tile.Variant.Empty);
         }
 
 		public Tile this[Coordinate point] {
@@ -75,10 +75,10 @@ namespace MazeBuilder {
 			}
 		}
 
-		public void CutWalls(Room room, Biome fillWith = null) {
+		public void CutWalls(Room room, Biome fillWith = null, Tile.Variant type = Tile.Variant.Room) {
             for (var i = room.TopLeftCorner.X; i <= room.TopRightCorner.X; i++)
 				for (var j = room.TopLeftCorner.Y; j <= room.BottomLeftCorner.Y; j++) {
-					tiles[i, j].Type = Tile.Variant.Empty;
+					tiles[i, j].Type = type;
 					if (fillWith != null)
 						tiles[i, j].Biome = fillWith;
 				}

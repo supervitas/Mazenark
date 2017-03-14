@@ -9,7 +9,7 @@ namespace MazeBuilder.BiomeStrategies {
 		private static EuclidianTileWeighter instance = new EuclidianTileWeighter();
 		private static Random random = new Random();
 		private const int RANDOM_FROM = 0;
-		private const int RANDOM_TO = 5;
+		private const int RANDOM_TO = 20;
 
 		private EuclidianTileWeighter() { }
 		public static ITileWeighter Instance {

@@ -6,10 +6,12 @@ namespace MazeBuilder {
         public Variant Type { get; set; }
 		public int GraphWeight { get; set; }
 		public Coordinate Position { get; private set; }
+		public bool WereWallsBuilt { get; set; }
 
 		public Tile(Coordinate position) {
 			Type = Variant.Wall;
 			Position = position;
+			WereWallsBuilt = false;
 		}
 
         public enum Variant {
