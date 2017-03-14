@@ -20,10 +20,11 @@ namespace MazeBuilder.Utility {
 		}
 
 		public override bool Equals(object obj) {
-			// If parameter is null return false:
 			Coordinate other = obj as Coordinate;
 
-			// Return true if the fields match:
+			if (other == null)
+				return false;
+
 			return (X == other.X) && (Y == other.Y);
 		}
 		

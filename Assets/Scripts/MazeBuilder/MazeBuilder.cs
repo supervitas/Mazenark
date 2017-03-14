@@ -62,8 +62,8 @@ namespace MazeBuilder {
 
 
 		private void GenerateWalls() {
-            // It should be per-biome strategy, not global!
-            DefaultWallPlacer.Instance.PlaceWalls(maze);
+			// It should be per-biome strategy, not global!
+			PrimWallPlacer.Instance.PlaceWalls(maze);
         }
 
         private void MakeSpawnPoints() {

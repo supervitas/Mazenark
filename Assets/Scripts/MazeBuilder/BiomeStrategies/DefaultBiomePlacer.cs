@@ -53,11 +53,15 @@ namespace MazeBuilder.BiomeStrategies {
         private void PlantSpawns() {
             // Should depend on size too.
             maze.Tiles[0, 0].Biome = Biome.Spawn;
-            maze.Tiles[0, height - 1].Biome = Biome.Spawn;
-            maze.Tiles[width - 1, 0].Biome = Biome.Spawn;
-            maze.Tiles[width - 1, height - 1].Biome = Biome.Spawn;
+			maze.Tiles[0, 0].Type = Tile.Variant.Empty;
+			maze.Tiles[0, height - 1].Biome = Biome.Spawn;
+			maze.Tiles[0, height - 1].Type = Tile.Variant.Empty;
+			maze.Tiles[width - 1, 0].Biome = Biome.Spawn;
+			maze.Tiles[width - 1, 0].Type = Tile.Variant.Empty;
+			maze.Tiles[width - 1, height - 1].Biome = Biome.Spawn;
+			maze.Tiles[width - 1, height - 1].Type = Tile.Variant.Empty;
 
-            maze.ImportantPlaces.Add(new Coordinate(0, 0));
+			maze.ImportantPlaces.Add(new Coordinate(0, 0));
             maze.ImportantPlaces.Add(new Coordinate(0, height - 1));
             maze.ImportantPlaces.Add(new Coordinate(width - 1, 0));
             maze.ImportantPlaces.Add(new Coordinate(width - 1, height - 1));

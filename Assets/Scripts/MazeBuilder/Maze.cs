@@ -82,9 +82,16 @@ namespace MazeBuilder {
 					if (fillWith != null)
 						tiles[i, j].Biome = fillWith;
 				}
-        }      
+        }
 
-    }
+		public bool IsPointWithin(int x, int y) {
+			return x >= 0 && x < Width && y >= 0 && y < Height;
+		}
+		public bool IsPointWithin(Coordinate point) {
+			return IsPointWithin(point.X, point.Y);
+		}
+
+	}
 }
 
 

@@ -40,12 +40,8 @@ namespace MazeBuilder.BiomeStrategies {
             }
 
             foreach (Direction direction in directions)
-                if (IsPointWithinMaze(maze, direction.ApplyToPoint(x, y).X, direction.ApplyToPoint(x, y).Y))
+                if (maze.IsPointWithin(direction.ApplyToPoint(x, y).X, direction.ApplyToPoint(x, y).Y))
                     maze.Tiles[direction.ApplyToPoint(x, y).X, direction.ApplyToPoint(x, y).Y].Type = Tile.Variant.Empty;
-        }
-
-        private bool IsPointWithinMaze(Maze maze, int x, int y) {
-            return x >= 0 && x < maze.Width && y >= 0 && y < maze.Height;
         }
 
         private class Direction {

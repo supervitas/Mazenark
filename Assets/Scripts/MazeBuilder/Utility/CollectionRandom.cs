@@ -86,9 +86,12 @@ namespace MazeBuilder.Utility {
 			}
 
 			public override bool Equals(object obj) {
-				Element another = obj as Element;
+				Element other = obj as Element;
 
-				return Data == another.Data;
+				if (other == null)
+					return false;
+
+				return Data == other.Data;
 			}
 
 			public override int GetHashCode() {
