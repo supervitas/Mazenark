@@ -8,6 +8,7 @@ namespace MazeBuilder.BiomeStrategies {
     public class PrimWallPlacer : IWallPlacer {
         private static PrimWallPlacer instance = new PrimWallPlacer();
         private static Random random = new Random();
+		private const float CHANCE_TO_CUT_PASSAGE_THROUGH_DEAD_END = 1.0f / 5; // Every fifth will be cut through.
 
         private PrimWallPlacer() { }
 
@@ -46,6 +47,7 @@ namespace MazeBuilder.BiomeStrategies {
 				}
 			}
 
+			CutThroughDeadEnds(roomedMaze);
 			return roomedMaze;
 		}
 
@@ -99,6 +101,55 @@ namespace MazeBuilder.BiomeStrategies {
 
 		private bool PlaceWallIfRandomSaysSo() {
 			return random.Next(101) > 75;  // 25% chance
+		}
+
+		private void CutThroughDeadEnds(Maze maze) {
+			for (int i = 0; i < maze.Width; i += 2) {
+				for (int j = 0; j < maze.Width; j += 2) {
+					Tile tile = maze[i, j];
+
+					var deadEndDirection = IsDeadEnd(maze, tile);
+
+					if (deadEndDirection != null) {
+						Coordinate blockingWallPosition = deadEndDirection.Shift(tile.Position);
+
+						if (maze.IsPointWithin(blockingWallPosition)) {
+							bool shouldCutThrough = random.NextDouble() < CHANCE_TO_CUT_PASSAGE_THROUGH_DEAD_END;
+
+							if (shouldCutThrough) {
+								maze[blockingWallPosition].Type = Tile.Variant.Empty;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		private Direction IsDeadEnd(Maze maze, Tile fromWhich) {
+			Direction entrancePosition = null;
+			int wallsCounter = 0;
+
+			foreach (Direction dir in Direction.Directions) {
+				Coordinate whereToGo = dir.Shift(dir.Shift(fromWhich.Position)); // Double shift equals to += 2.
+
+				if (maze.IsPointWithin(whereToGo)) {
+					Tile inThatDirection = maze[whereToGo];
+					if (inThatDirection.Type == Tile.Variant.Wall) {
+						wallsCounter++;
+					}
+					if (inThatDirection.Type == Tile.Variant.Empty) {
+						entrancePosition = dir;
+					}
+				}
+			}
+
+			if (entrancePosition != null)
+				return entrancePosition.Opposite;
+			else
+				return null;
+
+			// ↓ This won't work...
+			// return entrancePosition.Opposite;
 		}
 	}
 }

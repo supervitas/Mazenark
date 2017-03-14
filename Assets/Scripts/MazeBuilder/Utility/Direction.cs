@@ -10,6 +10,7 @@ namespace MazeBuilder.Utility {
 
 		public int DeltaX { get; private set; }
 		public int DeltaY { get; private set; }
+		public Direction Opposite { get; private set; }
 
 		private Direction(int dx, int dy) {
 
@@ -43,9 +44,16 @@ namespace MazeBuilder.Utility {
 			return hash;
 		}
 
-		public static Direction Up =		new Direction(0, -1);
-		public static Direction Left =		new Direction(-1, 0);
-		public static Direction Bottom =	new Direction(0, +1);
-		public static Direction Right =		new Direction(+1, 0);
+		public static Direction Up = new Direction(0, -1);
+		public static Direction Left = new Direction(-1, 0);
+		public static Direction Bottom = new Direction(0, +1);
+		public static Direction Right = new Direction(+1, 0);
+
+		static Direction() {
+			Up.Opposite = Bottom;
+			Left.Opposite = Right;
+			Bottom.Opposite = Up;
+			Right.Opposite = Left;
+		}
 	}
 }
