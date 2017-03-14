@@ -1,10 +1,16 @@
-﻿namespace MazeBuilder {
+﻿using MazeBuilder.Utility;
+
+namespace MazeBuilder {
     public class Tile {
         public Biome Biome { get; set; }
         public Variant Type { get; set; }
 		public int GraphWeight { get; set; }
+		public Coordinate Position { get; private set; }
 
-		public Tile (){ Type = Variant.Wall; }
+		public Tile(Coordinate position) {
+			Type = Variant.Wall;
+			Position = position;
+		}
 
         public enum Variant {
             Empty,      // walkable

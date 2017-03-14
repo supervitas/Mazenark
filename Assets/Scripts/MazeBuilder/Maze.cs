@@ -24,7 +24,7 @@ namespace MazeBuilder {
 
             for (var i = 0; i < width; i++)
 				for (var j = 0; j < height; j++)
-					tiles[i, j] = new Tile();
+					tiles[i, j] = new Tile(new Coordinate(i, j));
 		}
 
         public Tile[,] Tiles {
@@ -57,7 +57,25 @@ namespace MazeBuilder {
             CutWalls(new Room(topLeft, bottomRight));
         }
 
-        public void CutWalls(Room room, Biome fillWith = null) {
+		public Tile this[Coordinate point] {
+			get {
+				return Tiles[point.X, point.Y];
+			}
+			private set {
+				Tiles[point.X, point.Y] = value;
+			}
+		}
+
+		public Tile this[int x, int y] {
+			get {
+				return Tiles[x, y];
+			}
+			private set {
+				Tiles[x, y] = value;
+			}
+		}
+
+		public void CutWalls(Room room, Biome fillWith = null) {
             for (var i = room.TopLeftCorner.X; i <= room.TopRightCorner.X; i++)
 				for (var j = room.TopLeftCorner.Y; j <= room.BottomLeftCorner.Y; j++) {
 					tiles[i, j].Type = Tile.Variant.Empty;
