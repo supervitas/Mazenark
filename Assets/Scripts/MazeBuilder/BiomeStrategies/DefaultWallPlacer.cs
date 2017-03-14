@@ -27,7 +27,7 @@ namespace MazeBuilder.BiomeStrategies {
         }
 
         private void MakeRandomPassagesAt(Maze maze, int x, int y) {
-            maze.Tiles[x, y].type = Tile.Type.Empty;
+            maze.Tiles[x, y].Type = Tile.Variant.Empty;
             var numOfWays = random.NextDouble() < chanceOfWays[0] ? 1 : 0;
             numOfWays = random.NextDouble() < chanceOfWays[1] ? 2 : numOfWays;
             numOfWays = random.NextDouble() < chanceOfWays[2] ? 3 : numOfWays;
@@ -41,7 +41,7 @@ namespace MazeBuilder.BiomeStrategies {
 
             foreach (Direction direction in directions)
                 if (IsPointWithinMaze(maze, direction.ApplyToPoint(x, y).X, direction.ApplyToPoint(x, y).Y))
-                    maze.Tiles[direction.ApplyToPoint(x, y).X, direction.ApplyToPoint(x, y).Y].type = Tile.Type.Empty;
+                    maze.Tiles[direction.ApplyToPoint(x, y).X, direction.ApplyToPoint(x, y).Y].Type = Tile.Variant.Empty;
         }
 
         private bool IsPointWithinMaze(Maze maze, int x, int y) {

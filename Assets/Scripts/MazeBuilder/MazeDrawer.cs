@@ -36,20 +36,20 @@ namespace MazeBuilder {
                 var floorGroups = new Dictionary<Biome, List<GameObject>>();
                 for (var j = 0; j < maze.Height; j++) {
 					var coordinate = new Vector3(TransformToWorldCoordinate(i),
-					    GetYForTile(maze.Tiles[i, j].type, maze.Tiles[i, j].Biome ), TransformToWorldCoordinate(j));
+					    GetYForTile(maze.Tiles[i, j].Type, maze.Tiles[i, j].Biome ), TransformToWorldCoordinate(j));
 					GameObject tile;
 
-                    if (HasGenerator(maze.Tiles[i, j].Biome) && maze.Tiles[i, j].type == Tile.Type.Wall) {
+                    if (HasGenerator(maze.Tiles[i, j].Biome) && maze.Tiles[i, j].Type == Tile.Variant.Wall) {
                         tile = EarthCubeGenerator.Create(maze.Tiles[i, j].Biome, new Coordinate(i, j), maze,
                             coordinate);
                     } else {
                         tile = Instantiate(
-                            maze.Tiles[i, j].type == Tile.Type.Wall ?
+                            maze.Tiles[i, j].Type == Tile.Variant.Wall ?
                                 GetCubeByType(maze.Tiles[i, j].Biome) :
                                 GetFloorByType(maze.Tiles[i, j].Biome), coordinate, Quaternion.identity);
                     }
 
-                    if (maze.Tiles[i, j].type == Tile.Type.Wall) {
+                    if (maze.Tiles[i, j].Type == Tile.Variant.Wall) {
                         if (!biomeGroups.ContainsKey(maze.Tiles[i, j].Biome)) {
                             biomeGroups.Add(maze.Tiles[i, j].Biome, new List<GameObject>());
                         }
@@ -122,8 +122,8 @@ namespace MazeBuilder {
             return PrefabFloor; //default return
         }
 
-        private float GetYForTile(Tile.Type type, Biome biome) {
-            return type == Tile.Type.Wall ? biome.WallYCoordinate : biome.FloorYCoordinate;
+        private float GetYForTile(Tile.Variant type, Biome biome) {
+            return type == Tile.Variant.Wall ? biome.WallYCoordinate : biome.FloorYCoordinate;
         }
 
         private void Update() {}

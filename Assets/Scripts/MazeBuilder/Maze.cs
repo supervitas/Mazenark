@@ -60,7 +60,7 @@ namespace MazeBuilder {
         public void CutWalls(Room room, Biome fillWith = null) {
             for (var i = room.TopLeftCorner.X; i <= room.TopRightCorner.X; i++)
 				for (var j = room.TopLeftCorner.Y; j <= room.BottomLeftCorner.Y; j++) {
-					tiles[i, j].type = Tile.Type.Empty;
+					tiles[i, j].Type = Tile.Variant.Empty;
 					if (fillWith != null)
 						tiles[i, j].Biome = fillWith;
 				}

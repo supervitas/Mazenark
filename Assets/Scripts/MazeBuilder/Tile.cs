@@ -1,14 +1,15 @@
 ﻿namespace MazeBuilder {
     public class Tile {
-        public Biome Biome = null;
-        public Type type = Type.Wall;
+        public Biome Biome { get; set; }
+        public Variant Type { get; set; }
+		public int GraphWeight { get; set; }
 
-        public Tile (){}
+		public Tile (){ Type = Variant.Wall; }
 
-        public enum Type {
+        public enum Variant {
             Empty,      // walkable
             Wall,       // non-passable
-            Structure   // others. :)     I.e. teleporters, shops, safehouses, etc.     Not sure if needed. May be replaced with Empty type instead...
+            Room   // others. :)     I.e. teleporters, shops, safehouses, etc.     Not sure if needed. May be replaced with Empty type instead...
         }
     }
 }
