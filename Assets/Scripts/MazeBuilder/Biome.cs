@@ -36,6 +36,9 @@ namespace MazeBuilder {
             RoomSpawnChanceModifier = roomSpawnChanceModifier;
             RoomSizeModifier = roomSizeModifier;
 			Name = name;
+			IsManuallyPlaced = isManuallyPlaced;
+			ChanceToSpawnModifier = chanceToSpawnModifier;
+			SizeModifier = sizeModifier;
 
 			if (!isManuallyPlaced) {
 				allBiomes.Add(new CollectionRandom.Element(this, name, typeof(Biome), chanceToSpawnModifier));
@@ -52,7 +55,13 @@ namespace MazeBuilder {
 
         public float RoomSizeModifier { get; private set; }
 
-        private class RandomRange {
+		public float ChanceToSpawnModifier { get; private set; }
+
+		public float SizeModifier { get; private set; }
+
+		public bool IsManuallyPlaced { get; private set; }
+
+		private class RandomRange {
             public Biome type;
             public float range;
             public RandomRange(Biome type, float range) {
@@ -66,7 +75,7 @@ namespace MazeBuilder {
         public static Biome Safehouse = new Biome(EmptyRoomPlacer.Instance, null, EmptyTileWeighter.Instance, "Safehouse Biome", isManuallyPlaced: true);
         public static Biome Water = new Biome(DefaultRoomPlacer.Instance, null, EuclidianTileWeighter.Instance, "Water Biome") {FloorYCoordinate = 0.1f};
         public static Biome Earth = new Biome(DefaultRoomPlacer.Instance, null, EuclidianTileWeighter.Instance, "Earth Biome");
-        public static Biome Fire = new Biome(DefaultRoomPlacer.Instance, null, EuclidianTileWeighter.Instance, "Fire Biome");
+        public static Biome Fire = new Biome(DefaultRoomPlacer.Instance, null, EuclidianTileWeighter.Instance, "Fire Biome", chanceToSpawnModifier:100.0f, sizeModifier:0.5f);
         public static Biome Wind = new Biome(DefaultRoomPlacer.Instance, null, EuclidianTileWeighter.Instance, "Wind Biome");
     }
 }

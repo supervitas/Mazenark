@@ -27,6 +27,8 @@ namespace MazeBuilder {
             for (var i = 0; i < width; i++)
 				for (var j = 0; j < height; j++)
 					tiles[i, j] = new Tile(new Coordinate(i, j));
+
+			AsRoom = new Room(new Coordinate(0, 0), new Coordinate(width - 1, height - 1));
 		}
 
         public Tile[,] Tiles {
@@ -54,6 +56,10 @@ namespace MazeBuilder {
         public int Height {
             get { return tiles.GetLength(1); }
         }
+
+		public Room AsRoom {
+			get;  private set;
+		}
 
         public void CutPassage(Coordinate topLeft, Coordinate bottomRight) {
             CutWalls(new Room(topLeft, bottomRight), type:Tile.Variant.Empty);

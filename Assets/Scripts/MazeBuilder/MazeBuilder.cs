@@ -5,7 +5,7 @@ namespace MazeBuilder {
     public class MazeBuilder {
         public int Width;
         public int Height;
-        public IBiomePlacer BiomePlacer = new DefaultBiomePlacer();
+        public IBiomePlacer BiomePlacer = new AdvancedBiomePlacer();
 
         private Maze _maze;
 
@@ -51,6 +51,7 @@ namespace MazeBuilder {
                 if (random.NextDouble() < spawnChance)
                     biome.RoomPlacer.PlaceRoom(x: x, y: y, chunkLeftBoundary: i, chunkRightBoundary: i + chunkSize - 1,
                         chunkTopBoundary: j, chunkBottomBoundary: j + chunkSize - 1, maze: _maze);
+
             }
         }
 

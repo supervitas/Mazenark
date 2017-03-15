@@ -17,7 +17,7 @@ namespace MazeBuilder.Utility {
 		}
 
 		public int EuclidianDistanceTo(Coordinate other) {
-			return (int) Math.Round(Math.Sqrt( Math.Abs(X - other.X) + Math.Abs(Y - other.Y) ));
+			return (int) Math.Round(Math.Sqrt( Math.Abs(X - other.X) * Math.Abs(X - other.X) + Math.Abs(Y - other.Y) * Math.Abs(Y - other.Y)));
 		}
 
 		public override bool Equals(object obj) {
