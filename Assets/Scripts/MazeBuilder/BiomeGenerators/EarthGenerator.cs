@@ -1,23 +1,38 @@
-﻿using MazeBuilder.Utility;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using MazeBuilder.Utility;
 using UnityEngine;
 
-namespace MazeBuilder.CubeGenerators {
-    public class EarthGenerator : DefaultCubeGenerator {
+namespace MazeBuilder.BiomeGenerators {
+    public class EarthGenerator : AbstractBiomeGenerator {
+        #region BiomeWalls
+        [Header("Biome Walls")]
         public GameObject FlatWall;
         public GameObject OuterEdge;
         public GameObject InnerEdge;
+        #endregion
 
-        public override GameObject Create(Biome biome, Coordinate coordinate, Maze maze, Vector3 whereToPlace) {
+        #region BiomeFloor
+        [Header("Biome Floor")]
+        public GameObject floor;
+        #endregion
+
+
+
+        public override GameObject CreateWall(Biome biome, Coordinate coordinate, Maze maze, Vector3 whereToPlace) {
             GameObject parent = new GameObject();
 
             foreach (Edge edge in Edge.Edges) {
                 var edgeMesh = Instantiate(OuterEdge, whereToPlace, edge.Rotation);
-                edgeMesh.transform.parent = parent.transform;	// This should add wall as a child.
+                edgeMesh.transform.parent = parent.transform;
             }
             parent.isStatic = true;
             parent.name = string.Format("Cube at {0}:{1}", coordinate.X, coordinate.Y);
             return parent;
+        }
+
+        public override GameObject CreateFloor(Biome biome, Coordinate coordinate, Maze maze, Vector3 whereToPlace) {
+            var go = Instantiate(floor, whereToPlace, Quaternion.identity);
+            return go;
         }
     }
 
