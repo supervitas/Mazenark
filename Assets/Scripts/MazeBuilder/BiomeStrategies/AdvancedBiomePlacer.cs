@@ -6,8 +6,8 @@ namespace MazeBuilder.BiomeStrategies {
         private const float SAFEHOUSE_FRACTION = 0.08f;
 		private const int SPAWN_LENGTH = 3;
 
-		private const int MIN_BIOMES = 3;
-        private const int MAX_BIOMES = 7;
+		private const int MIN_BIOMES = 6;
+        private const int MAX_BIOMES = 12;
 
         private Maze maze;
 		private Biome[,] drawLayer;
