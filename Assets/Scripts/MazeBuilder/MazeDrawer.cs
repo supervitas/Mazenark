@@ -33,8 +33,8 @@ namespace MazeBuilder {
             var worldCoordinates = new Vector3();
 
             for (var i = 0; i < maze.Width; i++) {
-                var biomeGroups = new Dictionary<Biome, List<GameObject>>();
-                var floorGroups = new Dictionary<Biome, List<GameObject>>();
+//                var biomeGroups = new Dictionary<Biome, List<GameObject>>();
+//                var floorGroups = new Dictionary<Biome, List<GameObject>>();
                 for (var j = 0; j < maze.Height; j++) {
 					worldCoordinates.x = Utils.TransformToWorldCoordinate(i);
 					worldCoordinates.y = GetYForTile(maze.Tiles[i, j].Type, maze.Tiles[i, j].Biome);
@@ -52,24 +52,24 @@ namespace MazeBuilder {
                                 GetFloorByType(maze.Tiles[i, j].Biome), worldCoordinates, Quaternion.identity);
                     }
 
-                    if (maze.Tiles[i, j].Type == Tile.Variant.Wall) {
-                        if (!biomeGroups.ContainsKey(maze.Tiles[i, j].Biome)) {
-                            biomeGroups.Add(maze.Tiles[i, j].Biome, new List<GameObject>());
-                        }
-                        biomeGroups[maze.Tiles[i, j].Biome].Add(tile);
-                    } else {
-                        if (!floorGroups.ContainsKey(maze.Tiles[i, j].Biome)) {
-                            floorGroups.Add(maze.Tiles[i, j].Biome, new List<GameObject>());
-                        }
-                        floorGroups[maze.Tiles[i, j].Biome].Add(tile);
-                    }
+//                    if (maze.Tiles[i, j].Type == Tile.Variant.Wall) {
+//                        if (!biomeGroups.ContainsKey(maze.Tiles[i, j].Biome)) {
+//                            biomeGroups.Add(maze.Tiles[i, j].Biome, new List<GameObject>());
+//                        }
+//                        biomeGroups[maze.Tiles[i, j].Biome].Add(tile);
+//                    } else {
+//                        if (!floorGroups.ContainsKey(maze.Tiles[i, j].Biome)) {
+//                            floorGroups.Add(maze.Tiles[i, j].Biome, new List<GameObject>());
+//                        }
+//                        floorGroups[maze.Tiles[i, j].Biome].Add(tile);
+//                    }
                 }
-                foreach (var biome in biomeGroups.Values) {
-//                    AppManager.Batcher.Instance.BatchByDivider(5, biome.ToArray(), "test");
-                }
-                foreach (var biome in floorGroups.Values) {
-//                    AppManager.Batcher.Instance.BatchByDivider(5, biome.ToArray(), "floor");
-                }
+//                foreach (var biome in biomeGroups.Values) {
+////                    AppManager.Batcher.Instance.BatchByDivider(5, biome.ToArray(), "test");
+//                }
+//                foreach (var biome in floorGroups.Values) {
+////                    AppManager.Batcher.Instance.BatchByDivider(5, biome.ToArray(), "floor");
+//                }
             }
         }
 

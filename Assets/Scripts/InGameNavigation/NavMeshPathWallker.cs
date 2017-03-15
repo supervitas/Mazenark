@@ -6,11 +6,15 @@ namespace InGameNavigation {
 
         public Transform goal;
 
-        void Start() {
+        void Start () {
             NavMeshAgent agent = GetComponent<NavMeshAgent>();
             agent.destination = goal.position;
         }
 
+        private void Update() {
+            NavMeshAgent agent = GetComponent<NavMeshAgent>();
+            agent.destination = goal.position;
 
+        }
     }
 }
