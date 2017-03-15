@@ -127,7 +127,7 @@ namespace MazeBuilder.BiomeStrategies {
 			if (maze.IsPointWithin(where) && maze[where].Biome == null) {
 				maze[where].Biome = toWhich;
 				maze[where].BiomeID = biomeID;
-				if (toWhich == Biome.Spawn) {
+				if (toWhich == Biome.Spawn || toWhich == Biome.Safehouse) {
 					maze[where].Type = Tile.Variant.Empty;
 				}
 				tilesLeftEmpty--;
