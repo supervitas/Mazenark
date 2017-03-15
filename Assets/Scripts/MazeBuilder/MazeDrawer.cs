@@ -1,6 +1,7 @@
 ﻿using MazeBuilder.Utility;
 using System;
 using System.Collections.Generic;
+using MazeBuilder.CubeGenerators;
 using UnityEngine;
 
 namespace MazeBuilder {
@@ -25,7 +26,8 @@ namespace MazeBuilder {
 
         #region BiomeCubeGenerators
         [Header("Biome Cube Generators")]
-		public CubeGenerator EarthCubeGenerator;
+		public EarthGenerator EarthCubeGenerator;
+
         #endregion
 
 		private void Start() {
@@ -51,6 +53,8 @@ namespace MazeBuilder {
                                 GetCubeByType(maze.Tiles[i, j].Biome) :
                                 GetFloorByType(maze.Tiles[i, j].Biome), worldCoordinates, Quaternion.identity);
                     }
+
+
 
 //                    if (maze.Tiles[i, j].Type == Tile.Variant.Wall) {
 //                        if (!biomeGroups.ContainsKey(maze.Tiles[i, j].Biome)) {

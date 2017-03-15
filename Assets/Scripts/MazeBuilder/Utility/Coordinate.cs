@@ -7,9 +7,10 @@ namespace MazeBuilder.Utility {
 			Y = y;
 		}
 
-		public int X { get; private set; }
 
-		public int Y { get; private set; }
+		public int X { get; set; }
+
+		public int Y { get; set; }
 
 		public int ManhattanDistanceTo(Coordinate other) {
 			return Math.Abs(X - other.X) + Math.Abs(Y - other.Y);

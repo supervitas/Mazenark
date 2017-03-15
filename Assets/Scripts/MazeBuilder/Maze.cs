@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using MazeBuilder.Utility;
+using UnityEngine;
 
 namespace MazeBuilder {
     public class Maze {
@@ -13,6 +14,7 @@ namespace MazeBuilder {
         private Tile[,] tiles;
 		private List<Coordinate> importantPlaces = new List<Coordinate>();  // Should have at least one path leading to them.
         private List<Room> rooms = new List<Room>();
+        public Dictionary<Biome, Coordinate> BiomesSize = new Dictionary<Biome, Coordinate>();
 
         public Maze (int width = 10, int height = 10) {
             if (width < 5)
@@ -76,11 +78,15 @@ namespace MazeBuilder {
 		}
 
 		public void CutWalls(Room room, Biome fillWith = null, Tile.Variant type = Tile.Variant.Room) {
+		    if (fillWith != null && !BiomesSize.ContainsKey(fillWith)) {
+		        BiomesSize.Add(fillWith, new Coordinate(0, 0));
+		    }
             for (var i = room.TopLeftCorner.X; i <= room.TopRightCorner.X; i++)
 				for (var j = room.TopLeftCorner.Y; j <= room.BottomLeftCorner.Y; j++) {
 					tiles[i, j].Type = type;
-					if (fillWith != null)
-						tiles[i, j].Biome = fillWith;
+				    if (fillWith != null) {
+				        tiles[i, j].Biome = fillWith;
+				    }
 				}
         }
 
@@ -90,10 +96,5 @@ namespace MazeBuilder {
 		public bool IsPointWithin(Coordinate point) {
 			return IsPointWithin(point.X, point.Y);
 		}
-
 	}
 }
-
-
-
-
