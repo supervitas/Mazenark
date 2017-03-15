@@ -8,22 +8,6 @@ namespace MazeBuilder {
     public class MazeDrawer : MonoBehaviour {
         [Tooltip("Object to be spawned as maze blocks")]
 
-        #region BiomeWalls
-        [Header("Biome Walls")]
-        public GameObject Spawn;
-        public GameObject SafeHouse;
-        public GameObject Water;
-        public GameObject Earth;
-        public GameObject Fire;
-        public GameObject Wind;
-        #endregion
-
-        #region BiomeFloors
-        [Header("Biome Floors")]
-        public GameObject PrefabFloor;
-        public GameObject WaterFloor;
-        #endregion
-
         #region BiomeCubeGenerators
         [Header("Biome Cube Generators")]
         public SpawnGenerator SpawnBiomeGenerator;
