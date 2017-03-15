@@ -11,11 +11,15 @@ namespace MazeBuilder.BiomeStrategies {
 
         private Maze maze;
 		private Biome[,] drawLayer;
+		private int[,] biomeIDLayer;
 		private int tilesLeftEmpty;
+
+		private int biomeIDCounter = 0;
 
 		public Maze PlaceBiomes(Maze emptyMaze) {
             maze = emptyMaze;
 			drawLayer = new Biome[maze.Width, maze.Height];
+			biomeIDLayer = new int[maze.Width, maze.Height];
 			tilesLeftEmpty = maze.Width * maze.Height;
 
             PlantSafehouse();
@@ -31,7 +35,7 @@ namespace MazeBuilder.BiomeStrategies {
 				for (int j = 0; j < maze.Height; j++) {
 					if (drawLayer[i, j] != null) {
 
-						ChangeMazeTileBiome(new Coordinate(i, j), drawLayer[i, j]);
+						ChangeMazeTileBiome(new Coordinate(i, j), drawLayer[i, j], biomeIDLayer[i, j]);
 						drawLayer[i, j] = null;
 					}
 				}
@@ -47,6 +51,7 @@ namespace MazeBuilder.BiomeStrategies {
 
 						if (maze.IsPointWithin(neighbor) && maze[neighbor].Biome == null) {
 							drawLayer[neighbor.X, neighbor.Y] = tile.Biome;
+							biomeIDLayer[neighbor.X, neighbor.Y] = tile.BiomeID;
 						}
 					}
 				}
@@ -68,13 +73,13 @@ namespace MazeBuilder.BiomeStrategies {
 
 			foreach (Tile tile in maze.Tiles) {
 				if (tile.Position.EuclidianDistanceTo(maze.AsRoom.Center) < radius) {
-					ChangeMazeTileBiome(tile.Position, Biome.Safehouse);
+					ChangeMazeTileBiome(tile.Position, Biome.Safehouse, biomeIDCounter);
 				}
 			}
 		}
 
 		private void PlantSpawn(Coordinate where) {
-			ChangeMazeTileBiome(where, Biome.Spawn);
+			ChangeMazeTileBiome(where, Biome.Spawn, biomeIDCounter);
 
 			for (int offset = 1; offset < SPAWN_LENGTH; offset++) {
 				foreach (Direction dir in Direction.Directions) {
@@ -83,15 +88,19 @@ namespace MazeBuilder.BiomeStrategies {
 					for (int i = 0; i < offset; i++) {
 						sleeve = dir.Shift(sleeve);
 					}
-					ChangeMazeTileBiome(sleeve, Biome.Spawn);
+					ChangeMazeTileBiome(sleeve, Biome.Spawn, biomeIDCounter);
 				}
 			}
 		}
 
         private void PlantSpawns() {
+			biomeIDCounter++;
 			PlantSpawn(maze.AsRoom.TopLeftCorner);
+			biomeIDCounter++;
 			PlantSpawn(maze.AsRoom.TopRightCorner);
+			biomeIDCounter++;
 			PlantSpawn(maze.AsRoom.BottomLeftCorner);
+			biomeIDCounter++;
 			PlantSpawn(maze.AsRoom.BottomRightCorner);
 		}
 
@@ -103,7 +112,8 @@ namespace MazeBuilder.BiomeStrategies {
 				Coordinate randomPoint = new Coordinate(random.Next(0, maze.Width), random.Next(0, maze.Height));
 
 				if (maze[randomPoint].Biome == null) {
-					ChangeMazeTileBiome(randomPoint, Biome.GetRandomBiome());
+					biomeIDCounter++;
+					ChangeMazeTileBiome(randomPoint, Biome.GetRandomBiome(), biomeIDCounter);
 					numOfBiomesLeft--;
 				}
 			}
@@ -111,9 +121,10 @@ namespace MazeBuilder.BiomeStrategies {
 
 
 		// Beacuse I forgot `tilesLeftEmpty--;` several times...
-		private void ChangeMazeTileBiome(Coordinate where, Biome toWhich) {
+		private void ChangeMazeTileBiome(Coordinate where, Biome toWhich, int biomeID) {
 			if (maze.IsPointWithin(where) && maze[where].Biome == null) {
 				maze[where].Biome = toWhich;
+				maze[where].BiomeID = biomeID;
 				if (toWhich == Biome.Spawn) {
 					maze[where].Type = Tile.Variant.Empty;
 				}

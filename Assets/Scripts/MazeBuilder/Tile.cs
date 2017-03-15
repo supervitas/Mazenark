@@ -7,6 +7,7 @@ namespace MazeBuilder {
 		public int GraphWeight { get; set; }
 		public Coordinate Position { get; private set; }
 		public bool WereWallsBuilt { get; set; }
+		public int BiomeID { get; set; }
 
 		public Tile(Coordinate position) {
 			Type = Variant.Wall;
