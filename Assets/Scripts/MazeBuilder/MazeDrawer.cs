@@ -30,23 +30,26 @@ namespace MazeBuilder {
 
 		private void Start() {
             var maze = App.AppManager.Instance.MazeInstance.Maze;
+            var worldCoordinates = new Vector3();
 
             for (var i = 0; i < maze.Width; i++) {
                 var biomeGroups = new Dictionary<Biome, List<GameObject>>();
                 var floorGroups = new Dictionary<Biome, List<GameObject>>();
                 for (var j = 0; j < maze.Height; j++) {
-					var coordinate = new Vector3(Helpers.TransformToWorldCoordinate(i),
-					    GetYForTile(maze.Tiles[i, j].Type, maze.Tiles[i, j].Biome ), Helpers.TransformToWorldCoordinate(j));
+					worldCoordinates.x = Utils.TransformToWorldCoordinate(i);
+					worldCoordinates.y = GetYForTile(maze.Tiles[i, j].Type, maze.Tiles[i, j].Biome);
+                    worldCoordinates.z = Utils.TransformToWorldCoordinate(j);
+
 					GameObject tile;
 
                     if (HasGenerator(maze.Tiles[i, j].Biome) && maze.Tiles[i, j].Type == Tile.Variant.Wall) {
                         tile = EarthCubeGenerator.Create(maze.Tiles[i, j].Biome, new Coordinate(i, j), maze,
-                            coordinate);
+                            worldCoordinates);
                     } else {
                         tile = Instantiate(
                             maze.Tiles[i, j].Type == Tile.Variant.Wall ?
                                 GetCubeByType(maze.Tiles[i, j].Biome) :
-                                GetFloorByType(maze.Tiles[i, j].Biome), coordinate, Quaternion.identity);
+                                GetFloorByType(maze.Tiles[i, j].Biome), worldCoordinates, Quaternion.identity);
                     }
 
                     if (maze.Tiles[i, j].Type == Tile.Variant.Wall) {

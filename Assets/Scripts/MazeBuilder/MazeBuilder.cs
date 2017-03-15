@@ -7,7 +7,7 @@ namespace MazeBuilder {
         public int Height;
         public IBiomePlacer BiomePlacer = new DefaultBiomePlacer();
 
-        private Maze maze;
+        private Maze _maze;
 
         public MazeBuilder (int width = 10, int height = 10) {
             Width = width;
@@ -16,18 +16,18 @@ namespace MazeBuilder {
 
         public Maze Maze {
             get {
-                return maze ?? CreateNewMaze();
+                return _maze ?? CreateNewMaze();
             }
         }
 
         private Maze CreateNewMaze() {
-            maze = new Maze(Width, Height);
-            BiomePlacer.PlaceBiomes(maze);
+            _maze = new Maze(Width, Height);
+            BiomePlacer.PlaceBiomes(_maze);
             GenerateRooms();
 			PlaceTileWeights();
             GenerateWalls();
 
-            return maze;
+            return _maze;
         }
 
         private void GenerateRooms() {
@@ -45,25 +45,25 @@ namespace MazeBuilder {
                 if (x > 64 || y > 64)
                     Console.WriteLine("x: {0}, y: {1}", x, y);
 
-                var biome = maze.Tiles[x, y].Biome;
+                var biome = _maze.Tiles[x, y].Biome;
 
                 var spawnChance = Constants.Biome.ROOM_SPAWN_CHANCE * biome.RoomSpawnChanceModifier;
                 if (random.NextDouble() < spawnChance)
                     biome.RoomPlacer.PlaceRoom(x: x, y: y, chunkLeftBoundary: i, chunkRightBoundary: i + chunkSize - 1,
-                        chunkTopBoundary: j, chunkBottomBoundary: j + chunkSize - 1, maze: maze);
+                        chunkTopBoundary: j, chunkBottomBoundary: j + chunkSize - 1, maze: _maze);
             }
         }
 
 		private void PlaceTileWeights() {
-			foreach (Tile tile in maze.Tiles) {
-				tile.Biome.TileWeighter.SetTileWeight(maze, tile.Position);
+			foreach (Tile tile in _maze.Tiles) {
+				tile.Biome.TileWeighter.SetTileWeight(_maze, tile.Position);
 			}
 		}
 
 
 		private void GenerateWalls() {
 			// It should be per-biome strategy, not global!
-			PrimWallPlacer.Instance.PlaceWalls(maze);
+			PrimWallPlacer.Instance.PlaceWalls(_maze);
         }
 
         private void MakeSpawnPoints() {

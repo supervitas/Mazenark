@@ -1,9 +1,4 @@
-﻿using MazeBuilder;
-using MazeBuilder.Utility;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using MazeBuilder.Utility;
 
 namespace MazeBuilder.BiomeStrategies {
 	public interface ITileWeighter {
