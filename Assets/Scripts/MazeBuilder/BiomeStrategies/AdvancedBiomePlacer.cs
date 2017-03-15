@@ -27,6 +27,8 @@ namespace MazeBuilder.BiomeStrategies {
             PlantBiomes();
 			GrowBiomes();
 
+			WriteBiomesListIntoMaze();
+
             return emptyMaze;
         }
 
@@ -131,5 +133,21 @@ namespace MazeBuilder.BiomeStrategies {
 				tilesLeftEmpty--;
 			}
 		}
-    }
+
+		private void WriteBiomesListIntoMaze() {
+			for (int i = 0; i < biomeIDCounter; i++) {
+				Maze.TileCollection biome = null;
+
+				foreach (Tile tile in maze.Tiles) {
+					if (tile.BiomeID == i) {
+						if (biome == null) {
+							biome = new Maze.TileCollection(tile.Biome);
+							maze.Biomes.Add(biome);
+						}
+						biome.tiles.Add(tile);
+					}
+				}
+			}
+		}
+	}
 }

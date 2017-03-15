@@ -15,6 +15,7 @@ namespace MazeBuilder {
 		private List<Coordinate> importantPlaces = new List<Coordinate>();  // Should have at least one path leading to them.
         private List<Room> rooms = new List<Room>();
         public Dictionary<Biome, Coordinate> BiomesSize = new Dictionary<Biome, Coordinate>();
+		private List<TileCollection> biomeList = new List<TileCollection>();
 
         public Maze (int width = 10, int height = 10) {
             if (width < 5)
@@ -61,7 +62,11 @@ namespace MazeBuilder {
 			get;  private set;
 		}
 
-        public void CutPassage(Coordinate topLeft, Coordinate bottomRight) {
+		public List<TileCollection> Biomes {
+			get { return biomeList; }
+		}
+
+		public void CutPassage(Coordinate topLeft, Coordinate bottomRight) {
             CutWalls(new Room(topLeft, bottomRight), type:Tile.Variant.Empty);
         }
 
@@ -101,6 +106,15 @@ namespace MazeBuilder {
 		}
 		public bool IsPointWithin(Coordinate point) {
 			return IsPointWithin(point.X, point.Y);
+		}
+
+		public class TileCollection {
+			public readonly Biome biome;
+			public readonly List<Tile> tiles = new List<Tile>();
+
+			public TileCollection(Biome biome) {
+				this.biome = biome;
+			}
 		}
 	}
 }
