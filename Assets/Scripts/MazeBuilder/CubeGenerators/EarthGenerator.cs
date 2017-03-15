@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace MazeBuilder.CubeGenerators {
-    public class EarthGenerator : MonoBehaviour {
+    public class EarthGenerator : DefaultCubeGenerator {
         public GameObject FlatWall;
         public GameObject OuterEdge;
         public GameObject InnerEdge;
 
-        public  GameObject Create(Biome biome, Coordinate coordinate, Maze maze, Vector3 whereToPlace) {
+        public override GameObject Create(Biome biome, Coordinate coordinate, Maze maze, Vector3 whereToPlace) {
             GameObject parent = new GameObject();
 
             foreach (Edge edge in Edge.Edges) {
