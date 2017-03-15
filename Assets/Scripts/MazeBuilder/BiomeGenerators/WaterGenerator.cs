@@ -10,7 +10,7 @@ namespace MazeBuilder.BiomeGenerators {
 
         #region BiomeFloor
         [Header("Biome Floor")]
-        public GameObject floor;
+        public GameObject Floor;
         #endregion
 
         public override GameObject CreateWall(Biome biome, Coordinate coordinate, Maze maze, Vector3 whereToPlace) {
@@ -18,7 +18,7 @@ namespace MazeBuilder.BiomeGenerators {
             return go;
         }
         public override GameObject CreateFloor(Biome biome, Coordinate coordinate, Maze maze, Vector3 whereToPlace) {
-            var go = Instantiate(floor, whereToPlace, Quaternion.identity);
+            var go = Instantiate(Floor, whereToPlace, Quaternion.identity);
             return go;
         }
     }
