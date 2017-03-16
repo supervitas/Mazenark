@@ -44,16 +44,29 @@ namespace MazeBuilder.BiomeStrategies {
 			}
 		}
 
-		private void GrowBiomesOnce() {
+		private bool ShouldGrowBiome(int iteration, float growthDeceleration) {
+			float howMuchItHasGrownAlready = iteration * growthDeceleration;
+			float howMuchItHasGrownOnPreviousIteration = (iteration - 1) * growthDeceleration;
+			// E.g. floor(3.75) - floor(3.5) will yield 0, and floor(4.01) - floor(3.75) will yield 1.
+			bool wasTransistionOverPoint = Math.Floor(howMuchItHasGrownAlready) - Math.Floor(howMuchItHasGrownOnPreviousIteration) > 1.0f - 10e-6;  // 1.0f - 10e-6 looks like 0.9, but closer to 1.0f
+
+			return wasTransistionOverPoint;
+		}
+
+		private void GrowBiomesOnce(int iteration) {
 
 			foreach (Tile tile in maze.Tiles) {
 				if (tile.Biome != null && !tile.Biome.IsManuallyPlaced) {
-					foreach (Direction dir in Direction.Directions) {
-						Coordinate neighbor = dir.Shift(tile.Position);
+					bool shouldGrow = ShouldGrowBiome(iteration, tile.Biome.SizeModifier);
 
-						if (maze.IsPointWithin(neighbor) && maze[neighbor].Biome == null) {
-							drawLayer[neighbor.X, neighbor.Y] = tile.Biome;
-							biomeIDLayer[neighbor.X, neighbor.Y] = tile.BiomeID;
+					if (shouldGrow) {
+						foreach (Direction dir in Direction.Directions) {
+							Coordinate neighbor = dir.Shift(tile.Position);
+
+							if (maze.IsPointWithin(neighbor) && maze[neighbor].Biome == null) {
+								drawLayer[neighbor.X, neighbor.Y] = tile.Biome;
+								biomeIDLayer[neighbor.X, neighbor.Y] = tile.BiomeID;
+							}
 						}
 					}
 				}
@@ -62,11 +75,11 @@ namespace MazeBuilder.BiomeStrategies {
 		}
 
 		private void GrowBiomes() {
-			for (int i = 0; i < 3000; i++) {
+			for (int i = 1; i < 3000; i++) {
 				if (tilesLeftEmpty == 0) {
 					return;
 				}
-				GrowBiomesOnce();
+				GrowBiomesOnce(i);
 			}
 		}
 
