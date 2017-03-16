@@ -6,8 +6,6 @@ using MazeBuilder.Utility;
 
 namespace MazeBuilder {
     public class Biome {
-        public float FloorYCoordinate { get; private set; }
-        public float WallYCoordinate { get; private set; }
 		public string Name { get; private set; }
 
 		public static CollectionRandom allBiomes = new CollectionRandom();
@@ -26,10 +24,9 @@ namespace MazeBuilder {
 			return randomBiome;
         }
 
-        public Biome(IRoomPlacer roomPlacer, IWallPlacer wallPlacer, ITileWeighter tileWeighter, string name, float chanceToSpawnModifier = 1.0f, float sizeModifier = 1.0f, float roomSpawnChanceModifier = 1.0f, float roomSizeModifier = 1.0f, bool isManuallyPlaced = false) {
-            WallYCoordinate = 0f;
-            FloorYCoordinate = 0.1f;
-
+        public Biome(IRoomPlacer roomPlacer, IWallPlacer wallPlacer, ITileWeighter tileWeighter,
+            string name, float chanceToSpawnModifier = 1.0f, float sizeModifier = 1.0f,
+            float roomSpawnChanceModifier = 1.0f, float roomSizeModifier = 1.0f, bool isManuallyPlaced = false) {
             RoomPlacer = roomPlacer;
             WallPlacer = wallPlacer;
 			TileWeighter = tileWeighter;
@@ -71,11 +68,21 @@ namespace MazeBuilder {
         }
 
 
-        public static Biome Spawn = new Biome(EmptyRoomPlacer.Instance, null, EmptyTileWeighter.Instance, "Spawn Biome", isManuallyPlaced: true);
-        public static Biome Safehouse = new Biome(EmptyRoomPlacer.Instance, null, EmptyTileWeighter.Instance, "Safehouse Biome", isManuallyPlaced: true);
-        public static Biome Water = new Biome(DefaultRoomPlacer.Instance, null, EuclidianTileWeighter.Instance, "Water Biome") {FloorYCoordinate = 0.1f};
-        public static Biome Earth = new Biome(DefaultRoomPlacer.Instance, null, EuclidianTileWeighter.Instance, "Earth Biome");
-        public static Biome Fire = new Biome(DefaultRoomPlacer.Instance, null, EuclidianTileWeighter.Instance, "Fire Biome", chanceToSpawnModifier:100.0f, sizeModifier:0.5f);
+        public static Biome Spawn = new Biome(EmptyRoomPlacer.Instance, null,
+            EmptyTileWeighter.Instance, "Spawn Biome", isManuallyPlaced: true);
+
+        public static Biome Safehouse = new Biome(EmptyRoomPlacer.Instance, null,
+            EmptyTileWeighter.Instance, "Safehouse Biome", isManuallyPlaced: true);
+
+        public static Biome Water = new Biome(DefaultRoomPlacer.Instance, null,
+            EuclidianTileWeighter.Instance, "Water Biome");
+
+        public static Biome Earth = new Biome(DefaultRoomPlacer.Instance, null,
+            EuclidianTileWeighter.Instance, "Earth Biome");
+
+        public static Biome Fire = new Biome(DefaultRoomPlacer.Instance, null,
+            EuclidianTileWeighter.Instance, "Fire Biome", chanceToSpawnModifier:100.0f, sizeModifier:0.5f);
+
         public static Biome Wind = new Biome(DefaultRoomPlacer.Instance, null, EuclidianTileWeighter.Instance, "Wind Biome");
     }
 }

@@ -24,17 +24,11 @@ namespace MazeBuilder {
 
             for (var i = 0; i < maze.Width; i++) {
                 for (var j = 0; j < maze.Height; j++) {
-                    worldCoordinates.x = Utils.TransformToWorldCoordinate(i);
-                    worldCoordinates.y = GetYForTile(maze.Tiles[i, j].Type, maze.Tiles[i, j].Biome);
-                    worldCoordinates.z = Utils.TransformToWorldCoordinate(j);
-
                     var generator = GetGenerator(maze.Tiles[i, j].Biome);
 
                     var go = maze.Tiles[i, j].Type == Tile.Variant.Wall
-                        ? generator.CreateWall(maze.Tiles[i, j].Biome, new Coordinate(i, j),
-                            maze, worldCoordinates)
-                        : generator.CreateFloor(maze.Tiles[i, j].Biome, new Coordinate(i, j),
-                            maze, worldCoordinates);
+                        ? generator.CreateWall(maze.Tiles[i, j].Biome, new Coordinate(i, j), maze)
+                        : generator.CreateFloor(maze.Tiles[i, j].Biome, new Coordinate(i, j), maze);
                 }
             }
         }
@@ -60,10 +54,6 @@ namespace MazeBuilder {
 			}
 			return EarthBiomeGenerator; //default is Earth
 		}
-
-        private float GetYForTile(Tile.Variant type, Biome biome) {
-            return type == Tile.Variant.Wall ? biome.WallYCoordinate : biome.FloorYCoordinate;
-        }
 
         private void Update() {}
 
