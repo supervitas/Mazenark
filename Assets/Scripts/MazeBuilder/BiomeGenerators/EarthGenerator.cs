@@ -18,11 +18,11 @@ namespace MazeBuilder.BiomeGenerators {
 
 
 
-        public override GameObject CreateWall(Biome biome, Coordinate coordinate, Maze maze, Vector3 whereToPlace) {
+        public override GameObject CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
             GameObject parent = new GameObject();
 
             foreach (Edge edge in Edge.Edges) {
-                var edgeMesh = Instantiate(OuterEdge, whereToPlace, edge.Rotation);
+                var edgeMesh = Instantiate(OuterEdge, GetDefaultPositionVector(coordinate, true), edge.Rotation);
                 edgeMesh.transform.parent = parent.transform;
             }
             parent.isStatic = true;
@@ -30,10 +30,11 @@ namespace MazeBuilder.BiomeGenerators {
             return parent;
         }
 
-        public override GameObject CreateFloor(Biome biome, Coordinate coordinate, Maze maze, Vector3 whereToPlace) {
-            var go = Instantiate(Floor, whereToPlace, Quaternion.identity);
+        public override GameObject CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
+            var go = Instantiate(Floor, GetDefaultPositionVector(coordinate, false), Quaternion.identity);
             return go;
         }
+
     }
 
     internal class Edge {

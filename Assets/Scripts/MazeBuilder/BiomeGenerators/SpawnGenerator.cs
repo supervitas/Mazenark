@@ -13,12 +13,12 @@ namespace MazeBuilder.BiomeGenerators {
         public GameObject Floor;
         #endregion
 
-        public override GameObject CreateWall(Biome biome, Coordinate coordinate, Maze maze, Vector3 whereToPlace) {
-            var go = Instantiate(FlatWall, whereToPlace, Quaternion.identity);
+        public override GameObject CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
+            var go = Instantiate(FlatWall, GetDefaultPositionVector(coordinate, true), Quaternion.identity);
             return go;
         }
-        public override GameObject CreateFloor(Biome biome, Coordinate coordinate, Maze maze, Vector3 whereToPlace) {
-            var go = Instantiate(Floor, whereToPlace, Quaternion.identity);
+        public override GameObject CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
+            var go = Instantiate(Floor, GetDefaultPositionVector(coordinate, false), Quaternion.identity);
             return go;
         }
     }
