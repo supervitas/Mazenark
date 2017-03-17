@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using MazeBuilder.Utility;
 using UnityEngine;
 
@@ -14,6 +15,11 @@ namespace MazeBuilder.BiomeGenerators {
         #region BiomeFloor
         [Header("Biome Floor")]
         public GameObject Floor;
+        #endregion
+
+        #region BiomeFloor
+        [Header("Biome Lighting Objetcs")]
+        public GameObject NightParticles;
         #endregion
 
 
@@ -35,6 +41,11 @@ namespace MazeBuilder.BiomeGenerators {
             return go;
         }
 
+        public void PlaceLightingObjects() {
+            var x = GetTileCollectionForBiome(Biome.Earth);
+            Debug.Log(x.GetEnumerator().Current.tiles.Capacity);
+
+        }
     }
 
     internal class Edge {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MazeBuilder.Utility;
+﻿using MazeBuilder.Utility;
 
 namespace MazeBuilder.BiomeStrategies {
 	public class EmptyTileWeighter : ITileWeighter {

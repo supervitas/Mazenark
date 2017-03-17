@@ -35,11 +35,9 @@ namespace MazeBuilder.BiomeStrategies {
 		private void TransferDrawLayerToMaze() {
 			for (int i = 0; i < maze.Width; i++) {
 				for (int j = 0; j < maze.Height; j++) {
-					if (drawLayer[i, j] != null) {
-
-						ChangeMazeTileBiome(new Coordinate(i, j), drawLayer[i, j], biomeIDLayer[i, j]);
-						drawLayer[i, j] = null;
-					}
+				    if (drawLayer[i, j] == null) continue;
+				    ChangeMazeTileBiome(new Coordinate(i, j), drawLayer[i, j], biomeIDLayer[i, j]);
+				    drawLayer[i, j] = null;
 				}
 			}
 		}

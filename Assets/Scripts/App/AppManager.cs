@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
 
-
-
 namespace App {
     public class AppManager : MonoBehaviour {
         public static AppManager Instance;

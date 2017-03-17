@@ -67,9 +67,6 @@ namespace MazeBuilder {
 			PrimWallPlacer.Instance.PlaceWalls(_maze);
         }
 
-        private void MakeSpawnPoints() {
-            //Todo
-        }
     }
 }
 
