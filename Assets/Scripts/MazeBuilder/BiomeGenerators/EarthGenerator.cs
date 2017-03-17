@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using App.EventSystem;
 using MazeBuilder.Utility;
 using UnityEngine;
 
@@ -22,7 +24,14 @@ namespace MazeBuilder.BiomeGenerators {
         public GameObject NightParticles;
         #endregion
 
+        void Awake() {
+            base.Awake();
+            Eventhub.RaiseCustomEvent += HandleCustomEvent;
+        }
 
+        void HandleCustomEvent(object sender, EventArguments e) {
+            Debug.Log( " received this message: "+ e.Message);
+        }
 
         public override GameObject CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
             GameObject parent = new GameObject();

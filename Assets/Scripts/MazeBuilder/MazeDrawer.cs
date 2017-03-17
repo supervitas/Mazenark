@@ -20,8 +20,6 @@ namespace MazeBuilder {
 
         private void Start() {
             var maze = App.AppManager.Instance.MazeInstance.Maze;
-            var worldCoordinates = new Vector3();
-
             for (var i = 0; i < maze.Width; i++) {
                 for (var j = 0; j < maze.Height; j++) {
                     var generator = GetGenerator(maze.Tiles[i, j].Biome);
@@ -31,6 +29,7 @@ namespace MazeBuilder {
                         : generator.CreateFloor(maze.Tiles[i, j].Biome, new Coordinate(i, j), maze);
                 }
             }
+            App.AppManager.Instance.EventHub.DoSomething("test");
         }
 
         private AbstractBiomeGenerator GetGenerator(Biome biome) {
