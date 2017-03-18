@@ -8,7 +8,7 @@ namespace MazeBuilder.BiomeGenerators {
 	public abstract class AbstractBiomeGenerator : MonoBehaviour {
 	    public abstract GameObject CreateWall(Biome biome, Coordinate coordinate, Maze maze);
 	    public abstract GameObject CreateFloor(Biome biome, Coordinate coordinate, Maze maze);
-	    protected List<Maze.TileCollection> biomesCollecton;
+	    protected List<Maze.TileCollection> BiomesCollecton;
 	    protected Publisher Eventhub;
 
 	    protected Vector3 GetDefaultPositionVector(Coordinate coords, bool isWall) {
@@ -20,12 +20,12 @@ namespace MazeBuilder.BiomeGenerators {
 	    }
 
 	    protected void Awake() {
-	        biomesCollecton = App.AppManager.Instance.MazeInstance.Maze.Biomes;
+	        BiomesCollecton = App.AppManager.Instance.MazeInstance.Maze.Biomes;
 	        Eventhub = App.AppManager.Instance.EventHub;
 	    }
 
 	    protected IEnumerable<Maze.TileCollection> GetTileCollectionForBiome(Biome type) {
-	        return from biome in biomesCollecton where biome.biome == type select biome;
+	        return from biome in BiomesCollecton where biome.biome == type select biome;
 	    }
 
 	}

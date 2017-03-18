@@ -1,4 +1,5 @@
-﻿using MazeBuilder.Utility;
+﻿using App.EventSystem;
+using MazeBuilder.Utility;
 using UnityEngine;
 
 namespace MazeBuilder.BiomeGenerators {
@@ -12,6 +13,15 @@ namespace MazeBuilder.BiomeGenerators {
         [Header("Biome Floor")]
         public GameObject Floor;
         #endregion
+
+        private void Awake() {
+            base.Awake();
+            Eventhub.Subscribe("lol", HandleCustomEvent);
+        }
+        void HandleCustomEvent(object sender, EventArguments e) {
+            Debug.Log( " received this message: "+ e.Message);
+//            Eventhub.Unsubscribe("lol", HandleCustomEvent);
+        }
 
 
         public override GameObject CreateWall(Biome biome, Coordinate coordinate, Maze maze) {

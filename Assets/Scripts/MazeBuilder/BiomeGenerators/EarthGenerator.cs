@@ -24,9 +24,9 @@ namespace MazeBuilder.BiomeGenerators {
         public GameObject NightParticles;
         #endregion
 
-        void Awake() {
+        private void Awake() {
             base.Awake();
-            Eventhub.RaiseCustomEvent += HandleCustomEvent;
+            Eventhub.Subscribe("lol1", HandleCustomEvent);
         }
 
         void HandleCustomEvent(object sender, EventArguments e) {
@@ -53,7 +53,6 @@ namespace MazeBuilder.BiomeGenerators {
         public void PlaceLightingObjects() {
             var x = GetTileCollectionForBiome(Biome.Earth);
             Debug.Log(x.GetEnumerator().Current.tiles.Capacity);
-
         }
     }
 

@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using App.EventSystem;
+﻿using App.EventSystem;
 using UnityEngine;
 
 namespace App {
     public class AppManager : MonoBehaviour {
-        public static AppManager Instance;
+        public static AppManager Instance { get; private set; }
         public MazeSizeGenerator MazeSize { get; private set; }
         public MazeBuilder.MazeBuilder MazeInstance { get; private set; }
-        public Publisher EventHub;
+        public Publisher EventHub { get; private set; }
 
         //Singletone which starts firstly then other scripts;
         private void Awake() {
