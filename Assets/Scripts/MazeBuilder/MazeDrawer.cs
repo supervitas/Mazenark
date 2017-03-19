@@ -24,9 +24,11 @@ namespace MazeBuilder {
                 for (var j = 0; j < maze.Height; j++) {
                     var generator = GetGenerator(maze.Tiles[i, j].Biome);
 
-                    var go = maze.Tiles[i, j].Type == Tile.Variant.Wall
-                        ? generator.CreateWall(maze.Tiles[i, j].Biome, new Coordinate(i, j), maze)
-                        : generator.CreateFloor(maze.Tiles[i, j].Biome, new Coordinate(i, j), maze);
+                    if (maze.Tiles[i, j].Type == Tile.Variant.Wall) {
+                        generator.CreateWall(maze.Tiles[i, j].Biome, new Coordinate(i, j), maze);
+                    } else {
+                        generator.CreateFloor(maze.Tiles[i, j].Biome, new Coordinate(i, j), maze);
+                    }
                 }
             }
             App.AppManager.Instance.EventHub.CreateEvent("mazedrawer:placement_finished");

@@ -8,7 +8,7 @@ namespace MazeBuilder.Utility {
 		private HashSet<Element> objects = new HashSet<Element>();
 		private HashSet<CollectionRandom> anotherCollectionRandoms = new HashSet<CollectionRandom>();
 		private Random random = new Random();
-		public Object GetRandom(Type thing, bool canBrowseChildrenIfEmpty = false, bool alwaysBrowseChildren = false) {
+		public object GetRandom(Type thing, bool canBrowseChildrenIfEmpty = false, bool alwaysBrowseChildren = false) {
 			var collectionOfThisType = GetAllOfType(thing);
 			if (alwaysBrowseChildren || canBrowseChildrenIfEmpty && collectionOfThisType.Count == 0) {
 				foreach (CollectionRandom collection in anotherCollectionRandoms) {

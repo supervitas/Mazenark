@@ -14,6 +14,11 @@ namespace MazeBuilder.BiomeGenerators {
         public GameObject Floor;
         #endregion
 
+        #region BiomeFloor
+        [Header("Biome Lighting Objetcs")]
+        public GameObject NightParticles;
+        #endregion
+
         private void Awake() {
             base.Awake();
             Eventhub.Subscribe("lol1", HandleCustomEvent, this);
@@ -23,13 +28,12 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
 
-        public override GameObject CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
+        public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
             var go = Instantiate(FlatWall, GetDefaultPositionVector(coordinate, true), Quaternion.identity);
-            return go;
         }
-        public override GameObject CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
+        public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
             var go = Instantiate(Floor, GetDefaultPositionVector(coordinate, false), Quaternion.identity);
-            return go;
+
         }
     }
 }

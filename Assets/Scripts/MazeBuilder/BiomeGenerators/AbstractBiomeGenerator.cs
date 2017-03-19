@@ -6,8 +6,8 @@ using UnityEngine;
 
 namespace MazeBuilder.BiomeGenerators {
 	public abstract class AbstractBiomeGenerator : MonoBehaviour {
-	    public abstract GameObject CreateWall(Biome biome, Coordinate coordinate, Maze maze);
-	    public abstract GameObject CreateFloor(Biome biome, Coordinate coordinate, Maze maze);
+	    public abstract void CreateWall(Biome biome, Coordinate coordinate, Maze maze);
+	    public abstract void CreateFloor(Biome biome, Coordinate coordinate, Maze maze);
 	    protected List<Maze.TileCollection> BiomesCollecton;
 	    protected Publisher Eventhub;
 

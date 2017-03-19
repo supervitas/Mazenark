@@ -22,18 +22,23 @@ namespace MazeBuilder.BiomeGenerators {
         #region BiomeFloor
         [Header("Biome Lighting Objetcs")]
         public GameObject NightParticles;
+        public GameObject Torch;
         #endregion
+
+        private readonly CollectionRandom _biomeFloors = new CollectionRandom();
 
         private void Awake() {
             base.Awake();
             Eventhub.Subscribe("mazedrawer:placement_finished", StartPostPlacement, this);
+//            _biomeFloors.Add(new CollectionRandom.Element(this, "earthFloors", typeof(GameObject), 1.0f));
+//            _biomeFloors.GetRandom(typeof(Biome));
         }
 
         void StartPostPlacement(object sender, EventArguments e) {
             PlaceLightingObjects();
         }
 
-        public override GameObject CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
+        public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
             GameObject parent = new GameObject();
 
             foreach (Edge edge in Edge.Edges) {
@@ -42,17 +47,22 @@ namespace MazeBuilder.BiomeGenerators {
             }
             parent.isStatic = true;
             parent.name = string.Format("Cube at {0}:{1}", coordinate.X, coordinate.Y);
-            return parent;
         }
 
-        public override GameObject CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
+        public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
+
             var go = Instantiate(Floor, GetDefaultPositionVector(coordinate, false), Quaternion.identity);
-            return go;
+
         }
 
-        public void PlaceLightingObjects() {
-            var x = GetTileCollectionForBiome(Biome.Earth);
-            Debug.Log(x.GetEnumerator().Current.tiles.Capacity);
+        private void PlaceLightingObjects() {
+            var biomesCollection = GetTileCollectionForBiome(Biome.Earth);
+            foreach (var biome in biomesCollection) {
+
+                foreach (var coords in biome.tiles) {
+//                    Debug.Log(coords.Position.X);
+                }
+            }
         }
     }
 
