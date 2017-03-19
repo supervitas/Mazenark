@@ -1,33 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace App.EventSystem {
     public class Publisher {
-        private readonly Dictionary <string, EventHandler<EventArguments>> _eventHandlers =
-            new Dictionary <string, EventHandler<EventArguments>>();
+        private readonly Dictionary <string, Dictionary<object, EventHandler<EventArguments>>> _eventHandlers =
+            new Dictionary <string, Dictionary<object, EventHandler<EventArguments>>>();
 
         public void CreateEvent(string customEvent) {
-            EventHandler<EventArguments> handler;
-            if (_eventHandlers.TryGetValue(customEvent, out handler)) {
-                if (handler ==  null) return;
-                handler(this, new EventArguments(customEvent));
+           Dictionary<object, EventHandler<EventArguments>> handlers;
+            if (_eventHandlers.TryGetValue(customEvent, out handlers)) {
+                List<EventHandler<EventArguments>> joints = new List<EventHandler<EventArguments>>(handlers.Values);
+
+                foreach (var handler in joints) {
+                    if (handler ==  null) return;
+                    handler(this, new EventArguments(customEvent));
+                }
             }
         }
 
-        public void Subscribe(string eventName, EventHandler<EventArguments> Event) {
+        public void Subscribe(string eventName, EventHandler<EventArguments> eventHandler, object subscriber) {
             if (!_eventHandlers.ContainsKey(eventName)) {
-                _eventHandlers.Add(eventName, Event);
-            } else {
-                 _eventHandlers[eventName] += Event;
+                _eventHandlers.Add(eventName, new Dictionary<object, EventHandler<EventArguments>>());
             }
+             _eventHandlers[eventName].Add(subscriber, eventHandler);
+
         }
 
-        public void Unsubscribe(string eventName, EventHandler<EventArguments> Event) {
-            EventHandler<EventArguments> handler;
-            if (_eventHandlers.TryGetValue(eventName, out handler)) {
-                if (handler ==  null) return;
-
+        public void Unsubscribe(string eventName, object unsubscriber) {
+            Dictionary<object, EventHandler<EventArguments>> handlers;
+            if (_eventHandlers.TryGetValue(eventName, out handlers)) {
+                handlers.Remove(unsubscriber);
             }
         }
     }

@@ -29,7 +29,7 @@ namespace MazeBuilder {
                         : generator.CreateFloor(maze.Tiles[i, j].Biome, new Coordinate(i, j), maze);
                 }
             }
-            App.AppManager.Instance.EventHub.CreateEvent("lol");
+            App.AppManager.Instance.EventHub.CreateEvent("lol1");
             App.AppManager.Instance.EventHub.CreateEvent("lol1");
         }
 

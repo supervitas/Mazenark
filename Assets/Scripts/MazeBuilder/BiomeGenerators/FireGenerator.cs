@@ -16,11 +16,10 @@ namespace MazeBuilder.BiomeGenerators {
 
         private void Awake() {
             base.Awake();
-            Eventhub.Subscribe("lol", HandleCustomEvent);
+            Eventhub.Subscribe("lol1", HandleCustomEvent, this);
         }
         void HandleCustomEvent(object sender, EventArguments e) {
             Debug.Log( " received this message: "+ e.Message);
-//            Eventhub.Unsubscribe("lol", HandleCustomEvent);
         }
 
 
