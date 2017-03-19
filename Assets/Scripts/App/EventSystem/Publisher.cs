@@ -9,9 +9,9 @@ namespace App.EventSystem {
         public void CreateEvent(string customEvent) {
            Dictionary<object, EventHandler<EventArguments>> handlers;
             if (_eventHandlers.TryGetValue(customEvent, out handlers)) {
-                List<EventHandler<EventArguments>> joints = new List<EventHandler<EventArguments>>(handlers.Values);
-
-                foreach (var handler in joints) {
+                List<EventHandler<EventArguments>> handlersList =
+                    new List<EventHandler<EventArguments>>(handlers.Values); // copy for protection if object change when event trigger
+                foreach (var handler in handlersList) {
                     if (handler ==  null) return;
                     handler(this, new EventArguments(customEvent));
                 }
@@ -20,10 +20,9 @@ namespace App.EventSystem {
 
         public void Subscribe(string eventName, EventHandler<EventArguments> eventHandler, object subscriber) {
             if (!_eventHandlers.ContainsKey(eventName)) {
-                _eventHandlers.Add(eventName, new Dictionary<object, EventHandler<EventArguments>>());
+                _eventHandlers.Add(eventName, new Dictionary <object, EventHandler<EventArguments>>());
             }
              _eventHandlers[eventName].Add(subscriber, eventHandler);
-
         }
 
         public void Unsubscribe(string eventName, object unsubscriber) {

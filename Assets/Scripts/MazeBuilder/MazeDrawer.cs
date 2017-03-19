@@ -29,8 +29,7 @@ namespace MazeBuilder {
                         : generator.CreateFloor(maze.Tiles[i, j].Biome, new Coordinate(i, j), maze);
                 }
             }
-            App.AppManager.Instance.EventHub.CreateEvent("lol1");
-            App.AppManager.Instance.EventHub.CreateEvent("lol1");
+            App.AppManager.Instance.EventHub.CreateEvent("mazedrawer:placement_finished");
         }
 
         private AbstractBiomeGenerator GetGenerator(Biome biome) {

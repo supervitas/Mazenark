@@ -26,16 +26,11 @@ namespace MazeBuilder.BiomeGenerators {
 
         private void Awake() {
             base.Awake();
-            Eventhub.Subscribe("lol1", HandleCustomEvent, this);
+            Eventhub.Subscribe("mazedrawer:placement_finished", StartPostPlacement, this);
         }
 
-        void HandleCustomEvent(object sender, EventArguments e) {
-            Debug.Log( "Earth: "+ e.Message);
-            test();
-        }
-
-        void test() {
-            Eventhub.Unsubscribe("lol1", this);
+        void StartPostPlacement(object sender, EventArguments e) {
+            PlaceLightingObjects();
         }
 
         public override GameObject CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
