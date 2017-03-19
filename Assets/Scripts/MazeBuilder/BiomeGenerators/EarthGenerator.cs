@@ -30,8 +30,8 @@ namespace MazeBuilder.BiomeGenerators {
         private void Awake() {
             base.Awake();
             Eventhub.Subscribe("mazedrawer:placement_finished", StartPostPlacement, this);
-//            _biomeFloors.Add(new CollectionRandom.Element(this, "earthFloors", typeof(GameObject), 1.0f));
-//            _biomeFloors.GetRandom(typeof(Biome));
+            _biomeFloors.Add(Floor, "earthFloors", typeof(GameObject), 1.0f);
+            _biomeFloors.Add(new GameObject(), "earthFloors", typeof(GameObject), 5.0f);
         }
 
         void StartPostPlacement(object sender, EventArguments e) {
@@ -50,9 +50,8 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
         public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
-
-            var go = Instantiate(Floor, GetDefaultPositionVector(coordinate, false), Quaternion.identity);
-
+             Instantiate((GameObject)_biomeFloors.GetRandom(typeof(GameObject)),
+                 GetDefaultPositionVector(coordinate, false), Quaternion.identity);
         }
 
         private void PlaceLightingObjects() {

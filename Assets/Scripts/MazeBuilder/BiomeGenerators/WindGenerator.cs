@@ -18,11 +18,20 @@ namespace MazeBuilder.BiomeGenerators {
         public GameObject NightParticles;
         #endregion
 
+        private readonly CollectionRandom _biomeFloors = new CollectionRandom();
+        
+        private void Awake() {
+            base.Awake();
+            _biomeFloors.Add(Floor, "earthFloors", typeof(GameObject), 1.0f);
+            _biomeFloors.Add(new GameObject(), "earthFloors", typeof(GameObject), 5.0f);
+        }
+
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
             var go = Instantiate(FlatWall, GetDefaultPositionVector(coordinate, true), Quaternion.identity);
         }
         public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
-            var go = Instantiate(Floor, GetDefaultPositionVector(coordinate, false), Quaternion.identity);
+            Instantiate((GameObject)_biomeFloors.GetRandom(typeof(GameObject)),
+                GetDefaultPositionVector(coordinate, false), Quaternion.identity);
         }
     }
 }

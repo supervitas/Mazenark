@@ -5,9 +5,9 @@ using System.Text;
 
 namespace MazeBuilder.Utility {
 	public class CollectionRandom {
-		private HashSet<Element> objects = new HashSet<Element>();
-		private HashSet<CollectionRandom> anotherCollectionRandoms = new HashSet<CollectionRandom>();
-		private Random random = new Random();
+		private readonly HashSet<Element> objects = new HashSet<Element>();
+		private readonly HashSet<CollectionRandom> anotherCollectionRandoms = new HashSet<CollectionRandom>();
+		private readonly Random random = new Random();
 		public object GetRandom(Type thing, bool canBrowseChildrenIfEmpty = false, bool alwaysBrowseChildren = false) {
 			var collectionOfThisType = GetAllOfType(thing);
 			if (alwaysBrowseChildren || canBrowseChildrenIfEmpty && collectionOfThisType.Count == 0) {
@@ -87,8 +87,8 @@ namespace MazeBuilder.Utility {
 			public string Name { get; private set; }
 			public float Weight { get; private set; }
 			public Type Class { get; private set; }
-			public Object Data { get; private set; }
-			public Element(Object data, string name, Type type, float weight = 1.0f) {
+			public object Data { get; private set; }
+			public Element(object data, string name, Type type, float weight = 1.0f) {
 				Name = name;
 				Class = type;
 				Weight = weight;

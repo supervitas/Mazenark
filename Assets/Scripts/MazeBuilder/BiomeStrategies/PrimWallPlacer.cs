@@ -8,7 +8,7 @@ namespace MazeBuilder.BiomeStrategies {
     public class PrimWallPlacer : IWallPlacer {
         private static PrimWallPlacer instance = new PrimWallPlacer();
         private static Random random = new Random();
-		private const float CHANCE_TO_CUT_PASSAGE_THROUGH_DEAD_END = 1.0f / 5; // Every fifth will be cut through.
+		private const float CHANCE_TO_CUT_PASSAGE_THROUGH_DEAD_END = 1.0f / 2; // Every fifth will be cut through.
 
         private PrimWallPlacer() { }
 
