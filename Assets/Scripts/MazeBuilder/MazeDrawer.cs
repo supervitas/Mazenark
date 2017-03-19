@@ -1,6 +1,7 @@
 ﻿using MazeBuilder.Utility;
 using System;
 using System.Collections.Generic;
+using App.EventSystem;
 using MazeBuilder.BiomeGenerators;
 using UnityEngine;
 
@@ -31,7 +32,7 @@ namespace MazeBuilder {
                     }
                 }
             }
-            App.AppManager.Instance.EventHub.CreateEvent("mazedrawer:placement_finished");
+            App.AppManager.Instance.EventHub.CreateEvent("mazedrawer:placement_finished", new EventArguments(""));
         }
 
         private AbstractBiomeGenerator GetGenerator(Biome biome) {

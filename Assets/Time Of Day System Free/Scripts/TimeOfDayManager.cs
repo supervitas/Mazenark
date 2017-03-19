@@ -425,6 +425,7 @@ namespace AC.TimeOfDaySystemFree
 		
 
 			UpdateTime ();
+            CreateTimeUpdateEvent();
 
 			Atmosphere ();
 

@@ -23,8 +23,8 @@ namespace MazeBuilder.BiomeGenerators {
         private void Awake() {
             base.Awake();
             _biomeFloors.Add(Floor, "earthFloors", typeof(GameObject), 1.0f);
-            _biomeFloors.Add(new GameObject(), "earthFloors", typeof(GameObject), 5.0f);
         }
+
         void HandleCustomEvent(object sender, EventArguments e) {
             Debug.Log( " received this message: "+ e.Message);
         }
@@ -34,8 +34,11 @@ namespace MazeBuilder.BiomeGenerators {
             var go = Instantiate(FlatWall, GetDefaultPositionVector(coordinate, true), Quaternion.identity);
         }
         public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
-            Instantiate((GameObject)_biomeFloors.GetRandom(typeof(GameObject)),
-                GetDefaultPositionVector(coordinate, false), Quaternion.identity);
+            var go = (bool) ChancesToSpawnFloors.GetRandom(typeof(bool));
+            if (go) {
+                Instantiate((GameObject) _biomeFloors.GetRandom(typeof(GameObject)),
+                    GetDefaultPositionVector(coordinate, false), Quaternion.identity);
+            }
 
         }
     }

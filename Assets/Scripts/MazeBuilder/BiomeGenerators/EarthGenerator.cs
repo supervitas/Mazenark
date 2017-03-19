@@ -21,7 +21,9 @@ namespace MazeBuilder.BiomeGenerators {
 
         #region BiomeFloor
         [Header("Biome Lighting Objetcs")]
-        public GameObject NightParticles;
+        public ParticleSystem NightParticles;
+        private readonly List<ParticleSystem> _particleList = new List<ParticleSystem>();
+
         public GameObject Torch;
         #endregion
 
@@ -30,12 +32,27 @@ namespace MazeBuilder.BiomeGenerators {
         private void Awake() {
             base.Awake();
             Eventhub.Subscribe("mazedrawer:placement_finished", StartPostPlacement, this);
+            App.AppManager.Instance.EventHub.Subscribe("TOD:nightStarted", EnableParticles, this);
+            App.AppManager.Instance.EventHub.Subscribe("TOD:dayStarted", DisableParticles, this);
             _biomeFloors.Add(Floor, "earthFloors", typeof(GameObject), 1.0f);
-            _biomeFloors.Add(new GameObject(), "earthFloors", typeof(GameObject), 5.0f);
+        }
+
+        private void EnableParticles(object caller, EventArguments args) {
+            foreach (var particles in _particleList) {
+                ParticleSystem.EmissionModule emission = particles.emission;
+                emission.enabled = true;
+            }
+
+        }
+        private void DisableParticles(object caller, EventArguments args) {
+            foreach (var particles in _particleList) {
+                ParticleSystem.EmissionModule emission = particles.emission;
+                emission.enabled = false;
+            }
         }
 
         void StartPostPlacement(object sender, EventArguments e) {
-            PlaceLightingObjects();
+//            PlaceLightingObjects();
         }
 
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
@@ -50,16 +67,20 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
         public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
-             Instantiate((GameObject)_biomeFloors.GetRandom(typeof(GameObject)),
-                 GetDefaultPositionVector(coordinate, false), Quaternion.identity);
+            var go = (bool) ChancesToSpawnFloors.GetRandom(typeof(bool));
+            if (go) {
+                Instantiate((GameObject) _biomeFloors.GetRandom(typeof(GameObject)),
+                    GetDefaultPositionVector(coordinate, false), Quaternion.identity);
+            }
         }
 
         private void PlaceLightingObjects() {
             var biomesCollection = GetTileCollectionForBiome(Biome.Earth);
             foreach (var biome in biomesCollection) {
-
-                foreach (var coords in biome.tiles) {
-//                    Debug.Log(coords.Position.X);
+                var walkableTiles = from tiles in biome.tiles where tiles.Type == Tile.Variant.Empty select tiles;
+                foreach (var tile in walkableTiles) {
+                    var particles = Instantiate(NightParticles, GetDefaultPositionVector(tile.Position, false), Quaternion.identity);
+                    _particleList.Add(particles);
                 }
             }
         }

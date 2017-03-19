@@ -6,14 +6,14 @@ namespace App.EventSystem {
         private readonly Dictionary <string, Dictionary<object, EventHandler<EventArguments>>> _eventHandlers =
             new Dictionary <string, Dictionary<object, EventHandler<EventArguments>>>();
 
-        public void CreateEvent(string customEvent) {
+        public void CreateEvent(string customEvent, EventArguments args) {
            Dictionary<object, EventHandler<EventArguments>> handlers;
             if (!_eventHandlers.TryGetValue(customEvent, out handlers)) return;
             List<EventHandler<EventArguments>> handlersList =
                 new List<EventHandler<EventArguments>>(handlers.Values); // copy for protection if object change when event trigger
             foreach (var handler in handlersList) {
                 if (handler ==  null) return;
-                handler(this, new EventArguments(customEvent));
+                handler(this, args);
             }
         }
 

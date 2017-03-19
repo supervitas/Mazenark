@@ -10,7 +10,7 @@ namespace MazeBuilder.BiomeGenerators {
 	    public abstract void CreateFloor(Biome biome, Coordinate coordinate, Maze maze);
 	    protected List<Maze.TileCollection> BiomesCollecton;
 	    protected Publisher Eventhub;
-
+	    protected readonly CollectionRandom ChancesToSpawnFloors = new CollectionRandom();
 	    protected Vector3 GetDefaultPositionVector(Coordinate coords, bool isWall) {
 	        return new Vector3 {
 	            x = Utils.TransformToWorldCoordinate(coords.X),
@@ -22,6 +22,9 @@ namespace MazeBuilder.BiomeGenerators {
 	    protected void Awake() {
 	        BiomesCollecton = App.AppManager.Instance.MazeInstance.Maze.Biomes;
 	        Eventhub = App.AppManager.Instance.EventHub;
+	        ChancesToSpawnFloors.Add(false, "chanse", typeof(bool), 5);
+	        ChancesToSpawnFloors.Add(true, "chanse", typeof(bool), 1);
+
 	    }
 
 	    protected IEnumerable<Maze.TileCollection> GetTileCollectionForBiome(Biome type) {

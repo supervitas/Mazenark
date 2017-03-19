@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using App.EventSystem;
 
 namespace AC.TimeOfDaySystemFree
 {
@@ -82,6 +83,10 @@ namespace AC.TimeOfDaySystemFree
 		// Directional light states.
 		public bool IsSunLight{ get; private set; }
 		public bool IsMoonLight{ get; private set; }
+
+	    // Event was fired
+	    private bool _isDayEventWasFired = false;
+	    private bool _isNighEventWasFired = false;
 		//----------------------------------------------------------------------------------------
 
 
@@ -452,6 +457,19 @@ namespace AC.TimeOfDaySystemFree
 				m_DirectionalLightTransform  = m_DirectionalLight.transform;
 
 		}
+
+	    public void CreateTimeUpdateEvent() {
+	        if (!_isDayEventWasFired && IsDay) {
+	            App.AppManager.Instance.EventHub.CreateEvent("TOD:dayStarted", new EventArguments(""));
+	            _isDayEventWasFired = true;
+	            _isNighEventWasFired = false;
+	        }
+	        if (!_isNighEventWasFired && IsNight) {
+	            App.AppManager.Instance.EventHub.CreateEvent("TOD:nightStarted", new EventArguments(""));
+	            _isDayEventWasFired = false;
+	            _isNighEventWasFired = true;
+	        }
+	    }
 
 
 		protected void UpdateTime()
