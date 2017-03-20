@@ -11,13 +11,14 @@ namespace MazeBuilder.BiomeGenerators {
 	    protected List<Maze.TileCollection> BiomesCollecton;
 	    protected Publisher Eventhub;
 	    protected readonly CollectionRandom ChancesToSpawnFloors = new CollectionRandom();
-	    protected Vector3 GetDefaultPositionVector(Coordinate coords, bool isWall) {
+	    protected Vector3 GetDefaultPositionVector(Coordinate coords, float y = 0f) {
 	        return new Vector3 {
 	            x = Utils.TransformToWorldCoordinate(coords.X),
-	            y = isWall ? 0f : 0.1f,
+	            y = y,
 	            z = Utils.TransformToWorldCoordinate(coords.Y)
 	        };
 	    }
+
 
 	    protected void Awake() {
 	        BiomesCollecton = App.AppManager.Instance.MazeInstance.Maze.Biomes;

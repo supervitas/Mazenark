@@ -27,13 +27,13 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
-            var go = Instantiate(FlatWall, GetDefaultPositionVector(coordinate, true), Quaternion.identity);
+            var go = Instantiate(FlatWall, GetDefaultPositionVector(coordinate), Quaternion.identity);
         }
         public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
             var go = (bool) ChancesToSpawnFloors.GetRandom(typeof(bool));
             if (go) {
                 Instantiate((GameObject) _biomeFloors.GetRandom(typeof(GameObject)),
-                    GetDefaultPositionVector(coordinate, false), Quaternion.identity);
+                    GetDefaultPositionVector(coordinate, 0.1f), Quaternion.identity);
             }
         }
     }

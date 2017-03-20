@@ -42,6 +42,7 @@ namespace MazeBuilder.BiomeGenerators {
             foreach (var particles in _particleList) {
                 ParticleSystem.EmissionModule emission = particles.emission;
                 emission.enabled = true;
+                particles.Play();
             }
 
         }
@@ -49,6 +50,7 @@ namespace MazeBuilder.BiomeGenerators {
             foreach (var particles in _particleList) {
                 ParticleSystem.EmissionModule emission = particles.emission;
                 emission.enabled = false;
+                particles.Stop();
             }
         }
 
@@ -60,7 +62,7 @@ namespace MazeBuilder.BiomeGenerators {
             GameObject parent = new GameObject();
 
             foreach (Edge edge in Edge.Edges) {
-                var edgeMesh = Instantiate(OuterEdge, GetDefaultPositionVector(coordinate, true), edge.Rotation);
+                var edgeMesh = Instantiate(OuterEdge, GetDefaultPositionVector(coordinate), edge.Rotation);
                 edgeMesh.transform.parent = parent.transform;
             }
             parent.isStatic = true;
@@ -71,7 +73,7 @@ namespace MazeBuilder.BiomeGenerators {
             var go = (bool) ChancesToSpawnFloors.GetRandom(typeof(bool));
             if (go) {
                 Instantiate((GameObject) _biomeFloors.GetRandom(typeof(GameObject)),
-                    GetDefaultPositionVector(coordinate, false), Quaternion.identity);
+                    GetDefaultPositionVector(coordinate, 0.1f), Quaternion.identity);
             }
         }
 
@@ -80,7 +82,7 @@ namespace MazeBuilder.BiomeGenerators {
             foreach (var biome in biomesCollection) {
                 var walkableTiles = from tiles in biome.tiles where tiles.Type == Tile.Variant.Empty select tiles;
                 foreach (var tile in walkableTiles) {
-                    var particles = ParticleSystem.Instantiate(NightParticles, GetDefaultPositionVector(tile.Position, false), Quaternion.identity);
+                    var particles = ParticleSystem.Instantiate(NightParticles, GetDefaultPositionVector(tile.Position, 5.5f), Quaternion.identity);
                     _particleList.Add(particles);
                 }
             }
