@@ -14,49 +14,26 @@ namespace MazeBuilder.BiomeGenerators {
         public GameObject Floor;
         #endregion
 
-        #region BiomeFloor
-        [Header("Biome Lighting Objetcs")]
-        public GameObject NightParticles;
-        #endregion
 
         private readonly CollectionRandom _biomeFloors = new CollectionRandom();
 
         private new void Awake() {
             base.Awake();
-            _biomeFloors.Add(Floor, "earthFloors", typeof(GameObject), 1.0f);
+            _biomeFloors.Add(Floor, typeof(GameObject), 1.0f);
 
         }
 
-        protected override void OnNight(object sender, EventArguments args) {
-            EnableParticles();
-        }
+        protected override void OnNight(object sender, EventArguments args) {}
+        protected override void OnDay(object sender, EventArguments args) {}
+        protected override void StartPostPlacement(object sender, EventArguments e) {}
 
-        protected override void OnDay(object sender, EventArguments args) {
-            DisableParticles();
-        }
-
-        private void EnableParticles() {
-            foreach (var particles in ParticleList) {
-                ParticleSystem.EmissionModule emission = particles.emission;
-                emission.enabled = true;
-                particles.Play();
-            }
-
-        }
-        private void DisableParticles() {
-            foreach (var particles in ParticleList) {
-                ParticleSystem.EmissionModule emission = particles.emission;
-                emission.enabled = false;
-                particles.Stop();
-            }
-        }
 
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
-            var go = Instantiate(FlatWall, GetDefaultPositionVector(coordinate), Quaternion.identity);
+            Instantiate(FlatWall, GetDefaultPositionVector(coordinate), Quaternion.identity);
         }
         public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
-            var go = (bool) ChancesToSpawnFloors.GetRandom(typeof(bool));
-            if (go) {
+            var shouldPlace = (bool) SpawnObjectsChances["floor"].GetRandom(typeof(bool));
+            if (shouldPlace) {
                 Instantiate((GameObject) _biomeFloors.GetRandom(typeof(GameObject)),
                     GetDefaultPositionVector(coordinate, 0.1f), Quaternion.identity);
             }

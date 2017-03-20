@@ -65,7 +65,7 @@ namespace MazeBuilder.Utility {
 			return true;
 		}
 
-		public bool Add(Object data, string name, Type type, float weight = 1.0f) {
+		public bool Add(Object data, Type type, float weight = 1.0f, string name = "") {
 			var thing = new Element(data, name, type, weight);
 
 			if (objects.Contains(thing))

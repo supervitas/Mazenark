@@ -10,8 +10,7 @@ namespace App.EventSystem {
         public void CreateEvent(string customEvent, EventArguments args) {
            Dictionary<object, EventHandler<EventArguments>> handlers;
             if (!_eventHandlers.TryGetValue(customEvent, out handlers)) return;
-            List<EventHandler<EventArguments>> handlersList =
-                new List<EventHandler<EventArguments>>(handlers.Values); // copy for protection if object change when event trigger
+            var handlersList = new List<EventHandler<EventArguments>>(handlers.Values); // copy for protection if object change when event trigger
             foreach (var handler in handlersList) {
                 if (handler ==  null) return;
                 handler(this, args);

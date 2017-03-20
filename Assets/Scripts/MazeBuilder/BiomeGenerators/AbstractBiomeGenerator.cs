@@ -6,28 +6,37 @@ using UnityEngine;
 
 namespace MazeBuilder.BiomeGenerators {
 	public abstract class AbstractBiomeGenerator : MonoBehaviour {
-	    public abstract void CreateWall(Biome biome, Coordinate coordinate, Maze maze);
-	    public abstract void CreateFloor(Biome biome, Coordinate coordinate, Maze maze);
 	    protected List<Maze.TileCollection> BiomesCollecton;
 	    protected Publisher Eventhub;
-	    protected readonly CollectionRandom ChancesToSpawnFloors = new CollectionRandom();
+	    protected Dictionary<string, CollectionRandom> SpawnObjectsChances = new Dictionary<string, CollectionRandom>();
 	    protected readonly List<ParticleSystem> ParticleList = new List<ParticleSystem>();
 
 
 	    protected void Awake() {
 	        BiomesCollecton = App.AppManager.Instance.MazeInstance.Maze.Biomes;
 	        Eventhub = App.AppManager.Instance.EventHub;
-	        ChancesToSpawnFloors.Add(false, "chanse", typeof(bool), 5);
-	        ChancesToSpawnFloors.Add(true, "chanse", typeof(bool), 2);
-	        App.AppManager.Instance.EventHub.Subscribe("TOD:nightStarted", OnNight, this);
-	        App.AppManager.Instance.EventHub.Subscribe("TOD:dayStarted", OnDay, this);
+	        GeneralSubscribtion();
+	        InitSpawnChances();
 	    }
 
+	    public abstract void CreateWall(Biome biome, Coordinate coordinate, Maze maze);
+	    public abstract void CreateFloor(Biome biome, Coordinate coordinate, Maze maze);
 	    protected abstract void OnNight(object sender, EventArguments args);
 	    protected abstract void OnDay(object sender, EventArguments args);
+	    protected abstract void StartPostPlacement(object sender, EventArguments e);
 
 	    protected void OnDestroy() {
 	        Eventhub.UnsubscribeFromAll(this);
+	    }
+
+	    protected void InitSpawnChances() {
+	        SpawnObjectsChances.Add("floor", new CollectionRandom());
+	        SpawnObjectsChances["floor"].Add(false, typeof(bool), 5);
+	        SpawnObjectsChances["floor"].Add(true, typeof(bool), 2);
+
+	        SpawnObjectsChances.Add("nightParticles", new CollectionRandom());
+	        SpawnObjectsChances["nightParticles"].Add(false, typeof(bool), 8);
+	        SpawnObjectsChances["nightParticles"].Add(true, typeof(bool), 2);
 	    }
 
 	    protected IEnumerable<Maze.TileCollection> GetTileCollectionForBiome(Biome type) {
@@ -48,6 +57,12 @@ namespace MazeBuilder.BiomeGenerators {
 	            y = y,
 	            z = Utils.TransformToWorldCoordinate(coords.Y)
 	        };
+	    }
+
+	    private void GeneralSubscribtion() {
+	        Eventhub.Subscribe("mazedrawer:placement_finished", StartPostPlacement, this);
+	        Eventhub.Subscribe("TOD:nightStarted", OnNight, this);
+            Eventhub.Subscribe("TOD:dayStarted", OnDay, this);
 	    }
 
 	}

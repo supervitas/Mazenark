@@ -16,14 +16,15 @@ namespace MazeBuilder.BiomeGenerators {
 
         #region BiomeFloor
         [Header("Biome Lighting Objetcs")]
-        public GameObject NightParticles;
+        public ParticleSystem NightParticles;
+        public GameObject Torch;
         #endregion
 
         private readonly CollectionRandom _biomeFloors = new CollectionRandom();
 
         private new void Awake() {
             base.Awake();
-            _biomeFloors.Add(Floor, "earthFloors", typeof(GameObject), 1.0f);
+            _biomeFloors.Add(Floor, typeof(GameObject), 1.0f);
 
         }
 
@@ -50,13 +51,25 @@ namespace MazeBuilder.BiomeGenerators {
                 particles.Stop();
             }
         }
+        protected override void StartPostPlacement(object sender, EventArguments e) {
+            PlaceLightingObjects();
+        }
+
+        private void PlaceLightingObjects() {
+            foreach (var tile in GetTilesByTypeAndBiome(Biome.Water, Tile.Variant.Empty)) {
+                var shouldPlace = (bool) SpawnObjectsChances["nightParticles"].GetRandom(typeof(bool));
+                if (!shouldPlace) continue;
+                var particles = Instantiate(NightParticles, GetDefaultPositionVector(tile.Position, 3.5f), Quaternion.identity);
+                ParticleList.Add(particles);
+            }
+        }
 
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
-            var go = Instantiate(FlatWall, GetDefaultPositionVector(coordinate), Quaternion.identity);
+            Instantiate(FlatWall, GetDefaultPositionVector(coordinate), Quaternion.identity);
         }
         public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
-            var go = (bool) ChancesToSpawnFloors.GetRandom(typeof(bool));
-            if (go) {
+            var shouldPlace = (bool) SpawnObjectsChances["floor"].GetRandom(typeof(bool));
+            if (shouldPlace) {
                 Instantiate((GameObject) _biomeFloors.GetRandom(typeof(GameObject)),
                     GetDefaultPositionVector(coordinate, 0.1f), Quaternion.identity);
             }
