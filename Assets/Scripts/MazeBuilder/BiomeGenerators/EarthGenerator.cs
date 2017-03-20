@@ -22,8 +22,6 @@ namespace MazeBuilder.BiomeGenerators {
         #region BiomeFloor
         [Header("Biome Lighting Objetcs")]
         public ParticleSystem NightParticles;
-        private readonly List<ParticleSystem> _particleList = new List<ParticleSystem>();
-
         public GameObject Torch;
         #endregion
 
@@ -32,29 +30,34 @@ namespace MazeBuilder.BiomeGenerators {
         private new void Awake() {
             base.Awake();
             Eventhub.Subscribe("mazedrawer:placement_finished", StartPostPlacement, this);
-            App.AppManager.Instance.EventHub.Subscribe("TOD:nightStarted", EnableParticles, this);
-            App.AppManager.Instance.EventHub.Subscribe("TOD:dayStarted", DisableParticles, this);
             _biomeFloors.Add(Floor, "earthFloors", typeof(GameObject), 1.0f);
         }
 
+        protected override void OnNight(object sender, EventArguments args) {
+            EnableParticles();
+        }
 
-        private void EnableParticles(object caller, EventArguments args) {
-            foreach (var particles in _particleList) {
+        protected override void OnDay(object sender, EventArguments args) {
+            DisableParticles();
+        }
+
+        private void EnableParticles() {
+            foreach (var particles in ParticleList) {
                 ParticleSystem.EmissionModule emission = particles.emission;
                 emission.enabled = true;
                 particles.Play();
             }
 
         }
-        private void DisableParticles(object caller, EventArguments args) {
-            foreach (var particles in _particleList) {
+        private void DisableParticles() {
+            foreach (var particles in ParticleList) {
                 ParticleSystem.EmissionModule emission = particles.emission;
                 emission.enabled = false;
                 particles.Stop();
             }
         }
 
-        void StartPostPlacement(object sender, EventArguments e) {
+        private void StartPostPlacement(object sender, EventArguments e) {
             PlaceLightingObjects();
         }
 
@@ -78,13 +81,9 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
         private void PlaceLightingObjects() {
-            var biomesCollection = GetTileCollectionForBiome(Biome.Earth);
-            foreach (var biome in biomesCollection) {
-                var walkableTiles = from tiles in biome.tiles where tiles.Type == Tile.Variant.Empty select tiles;
-                foreach (var tile in walkableTiles) {
-                    var particles = ParticleSystem.Instantiate(NightParticles, GetDefaultPositionVector(tile.Position, 5.5f), Quaternion.identity);
-                    _particleList.Add(particles);
-                }
+            foreach (var tile in GetTilesByTypeAndBiome(Biome.Earth, Tile.Variant.Empty)) {
+                var particles = Instantiate(NightParticles, GetDefaultPositionVector(tile.Position, 5.5f), Quaternion.identity);
+                ParticleList.Add(particles);
             }
         }
     }

@@ -17,6 +17,7 @@ namespace MazeBuilder.BiomeGenerators {
         #region BiomeFloor
         [Header("Biome Lighting Objetcs")]
         public GameObject NightParticles;
+
         #endregion
 
         private readonly CollectionRandom _biomeFloors = new CollectionRandom();
@@ -25,8 +26,28 @@ namespace MazeBuilder.BiomeGenerators {
             _biomeFloors.Add(Floor, "earthFloors", typeof(GameObject), 1.0f);
         }
 
-        void HandleCustomEvent(object sender, EventArguments e) {
-            Debug.Log( " received this message: "+ e.Message);
+        protected override void OnNight(object sender, EventArguments args) {
+            EnableParticles();
+        }
+
+        protected override void OnDay(object sender, EventArguments args) {
+            DisableParticles();
+        }
+
+        private void EnableParticles() {
+            foreach (var particles in ParticleList) {
+                ParticleSystem.EmissionModule emission = particles.emission;
+                emission.enabled = true;
+                particles.Play();
+            }
+
+        }
+        private void DisableParticles() {
+            foreach (var particles in ParticleList) {
+                ParticleSystem.EmissionModule emission = particles.emission;
+                emission.enabled = false;
+                particles.Stop();
+            }
         }
 
 

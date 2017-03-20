@@ -11,22 +11,20 @@ namespace MazeBuilder.BiomeGenerators {
 	    protected List<Maze.TileCollection> BiomesCollecton;
 	    protected Publisher Eventhub;
 	    protected readonly CollectionRandom ChancesToSpawnFloors = new CollectionRandom();
-	    protected Vector3 GetDefaultPositionVector(Coordinate coords, float y = 0f) {
-	        return new Vector3 {
-	            x = Utils.TransformToWorldCoordinate(coords.X),
-	            y = y,
-	            z = Utils.TransformToWorldCoordinate(coords.Y)
-	        };
-	    }
+	    protected readonly List<ParticleSystem> ParticleList = new List<ParticleSystem>();
 
 
 	    protected void Awake() {
 	        BiomesCollecton = App.AppManager.Instance.MazeInstance.Maze.Biomes;
 	        Eventhub = App.AppManager.Instance.EventHub;
 	        ChancesToSpawnFloors.Add(false, "chanse", typeof(bool), 5);
-	        ChancesToSpawnFloors.Add(true, "chanse", typeof(bool), 1);
-
+	        ChancesToSpawnFloors.Add(true, "chanse", typeof(bool), 2);
+	        App.AppManager.Instance.EventHub.Subscribe("TOD:nightStarted", OnNight, this);
+	        App.AppManager.Instance.EventHub.Subscribe("TOD:dayStarted", OnDay, this);
 	    }
+
+	    protected abstract void OnNight(object sender, EventArguments args);
+	    protected abstract void OnDay(object sender, EventArguments args);
 
 	    protected void OnDestroy() {
 	        Eventhub.UnsubscribeFromAll(this);
@@ -34,6 +32,22 @@ namespace MazeBuilder.BiomeGenerators {
 
 	    protected IEnumerable<Maze.TileCollection> GetTileCollectionForBiome(Biome type) {
 	        return from biome in BiomesCollecton where biome.biome == type select biome;
+	    }
+
+	    protected IEnumerable<Tile> GetTilesByTypeAndBiome(Biome type, Tile.Variant tileType) {
+	        return from biome in BiomesCollecton
+	            where biome.biome == type
+	            from tile in biome.tiles
+	            where tile.Type == tileType
+	            select tile;
+	    }
+
+	    protected Vector3 GetDefaultPositionVector(Coordinate coords, float y = 0f) {
+	        return new Vector3 {
+	            x = Utils.TransformToWorldCoordinate(coords.X),
+	            y = y,
+	            z = Utils.TransformToWorldCoordinate(coords.Y)
+	        };
 	    }
 
 	}

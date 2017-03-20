@@ -1,4 +1,5 @@
-﻿using MazeBuilder.Utility;
+﻿using App.EventSystem;
+using MazeBuilder.Utility;
 using UnityEngine;
 
 namespace MazeBuilder.BiomeGenerators {
@@ -24,6 +25,30 @@ namespace MazeBuilder.BiomeGenerators {
             base.Awake();
             _biomeFloors.Add(Floor, "earthFloors", typeof(GameObject), 1.0f);
 
+        }
+
+        protected override void OnNight(object sender, EventArguments args) {
+            EnableParticles();
+        }
+
+        protected override void OnDay(object sender, EventArguments args) {
+            DisableParticles();
+        }
+
+        private void EnableParticles() {
+            foreach (var particles in ParticleList) {
+                ParticleSystem.EmissionModule emission = particles.emission;
+                emission.enabled = true;
+                particles.Play();
+            }
+
+        }
+        private void DisableParticles() {
+            foreach (var particles in ParticleList) {
+                ParticleSystem.EmissionModule emission = particles.emission;
+                emission.enabled = false;
+                particles.Stop();
+            }
         }
 
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
