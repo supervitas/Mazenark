@@ -27,6 +27,10 @@ namespace MazeBuilder.BiomeGenerators {
 
 	    }
 
+	    protected void OnDestroy() {
+	        Eventhub.UnsubscribeFromAll(this);
+	    }
+
 	    protected IEnumerable<Maze.TileCollection> GetTileCollectionForBiome(Biome type) {
 	        return from biome in BiomesCollecton where biome.biome == type select biome;
 	    }

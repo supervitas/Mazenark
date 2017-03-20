@@ -29,13 +29,14 @@ namespace MazeBuilder.BiomeGenerators {
 
         private readonly CollectionRandom _biomeFloors = new CollectionRandom();
 
-        private void Awake() {
+        private new void Awake() {
             base.Awake();
             Eventhub.Subscribe("mazedrawer:placement_finished", StartPostPlacement, this);
             App.AppManager.Instance.EventHub.Subscribe("TOD:nightStarted", EnableParticles, this);
             App.AppManager.Instance.EventHub.Subscribe("TOD:dayStarted", DisableParticles, this);
             _biomeFloors.Add(Floor, "earthFloors", typeof(GameObject), 1.0f);
         }
+
 
         private void EnableParticles(object caller, EventArguments args) {
             foreach (var particles in _particleList) {
@@ -52,7 +53,7 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
         void StartPostPlacement(object sender, EventArguments e) {
-//            PlaceLightingObjects();
+            PlaceLightingObjects();
         }
 
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
@@ -79,7 +80,7 @@ namespace MazeBuilder.BiomeGenerators {
             foreach (var biome in biomesCollection) {
                 var walkableTiles = from tiles in biome.tiles where tiles.Type == Tile.Variant.Empty select tiles;
                 foreach (var tile in walkableTiles) {
-                    var particles = Instantiate(NightParticles, GetDefaultPositionVector(tile.Position, false), Quaternion.identity);
+                    var particles = ParticleSystem.Instantiate(NightParticles, GetDefaultPositionVector(tile.Position, false), Quaternion.identity);
                     _particleList.Add(particles);
                 }
             }

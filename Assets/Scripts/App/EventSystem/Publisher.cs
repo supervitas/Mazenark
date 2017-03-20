@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace App.EventSystem {
     public class Publisher {
@@ -28,6 +30,16 @@ namespace App.EventSystem {
             Dictionary<object, EventHandler<EventArguments>> handlers;
             if (_eventHandlers.TryGetValue(eventName, out handlers)) {
                 handlers.Remove(unsubscriber);
+            }
+        }
+
+        public void UnsubscribeFromAll(object unsubscriber) {
+            foreach (var handler in _eventHandlers.Values.ToList()) {
+                foreach (var obj in handler.Keys.ToList()) {
+                    if (obj == unsubscriber) {
+                        handler.Remove(unsubscriber);
+                    }
+                }
             }
         }
     }

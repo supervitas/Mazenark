@@ -20,7 +20,7 @@ namespace MazeBuilder.BiomeGenerators {
 
         private readonly CollectionRandom _biomeFloors = new CollectionRandom();
 
-        private void Awake() {
+        private new void Awake() {
             base.Awake();
             _biomeFloors.Add(Floor, "earthFloors", typeof(GameObject), 1.0f);
 
