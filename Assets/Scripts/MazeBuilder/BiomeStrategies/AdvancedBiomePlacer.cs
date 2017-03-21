@@ -134,6 +134,7 @@ namespace MazeBuilder.BiomeStrategies {
 				Coordinate randomPoint = new Coordinate(offsetX + maze.Width / 2, offsetY + maze.Height / 2);
 
 				ChangeMazeTileBiome(randomPoint, Biome.GetRandomBiome(), biomeIDCounter);
+				maze[randomPoint].BiomeID = biomeIDCounter++;
 			}
 		}
 
