@@ -3,11 +3,11 @@ using System;
 
 namespace MazeBuilder.BiomeStrategies {
     public class AdvancedBiomePlacer : IBiomePlacer {
-        private const float SAFEHOUSE_FRACTION = 0.08f;
+        private const float SAFEHOUSE_FRACTION = 0.16f;
 		private const int SPAWN_LENGTH = 3;
 
-		private const int MIN_BIOMES = 6;
-        private const int MAX_BIOMES = 12;
+		private const int MIN_BIOMES = 4;
+        private const int MAX_BIOMES = 8;
 
         private Maze maze;
 		private Biome[,] drawLayer;
@@ -82,7 +82,7 @@ namespace MazeBuilder.BiomeStrategies {
 		}
 
 		private void PlantSafehouse() {
-			int radius = (int) (maze.Width * SAFEHOUSE_FRACTION);
+			int radius = (int) (maze.Width * SAFEHOUSE_FRACTION / 2);
 
 			foreach (Tile tile in maze.Tiles) {
 				if (tile.Position.EuclidianDistanceTo(maze.AsRoom.Center) < radius) {
@@ -117,18 +117,23 @@ namespace MazeBuilder.BiomeStrategies {
 			PlantSpawn(maze.AsRoom.BottomRightCorner);
 		}
 
+
 		private void PlantBiomes() {
 			Random random = new Random();
-			int numOfBiomesLeft = random.Next(MIN_BIOMES, MAX_BIOMES + 1);
+			int numOfBiomes = random.Next(MIN_BIOMES, MAX_BIOMES + 1);
 
-			while (numOfBiomesLeft != 0) {
-				Coordinate randomPoint = new Coordinate(random.Next(0, maze.Width), random.Next(0, maze.Height));
+			int minimalDistanceFromCenter = (int) (maze.Width * SAFEHOUSE_FRACTION / 2) + 1;
+			int maximalDistanceFromCenter = (int) (maze.Width * 0.8f / 2);
+			double radiansBetweenSpawns = 2 * Math.PI / numOfBiomes;
 
-				if (maze[randomPoint].Biome == null) {
-					biomeIDCounter++;
-					ChangeMazeTileBiome(randomPoint, Biome.GetRandomBiome(), biomeIDCounter);
-					numOfBiomesLeft--;
-				}
+			for (int i = 0; i < numOfBiomes; i++) {
+				int randomDistance = random.Next(minimalDistanceFromCenter, maximalDistanceFromCenter + 1);
+				int offsetX = (int) Math.Round(randomDistance * Math.Cos(radiansBetweenSpawns * i));
+				int offsetY = (int) Math.Round(randomDistance * Math.Sin(radiansBetweenSpawns * i));
+
+				Coordinate randomPoint = new Coordinate(offsetX + maze.Width / 2, offsetY + maze.Height / 2);
+
+				ChangeMazeTileBiome(randomPoint, Biome.GetRandomBiome(), biomeIDCounter);
 			}
 		}
 
