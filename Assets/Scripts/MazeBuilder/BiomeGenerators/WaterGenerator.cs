@@ -39,7 +39,6 @@ namespace MazeBuilder.BiomeGenerators {
         private void EnableParticles() {
             foreach (var particles in ParticleList) {
                 ParticleSystem.EmissionModule emission = particles.emission;
-                emission.enabled = true;
                 particles.Play();
             }
 
@@ -47,7 +46,6 @@ namespace MazeBuilder.BiomeGenerators {
         private void DisableParticles() {
             foreach (var particles in ParticleList) {
                 ParticleSystem.EmissionModule emission = particles.emission;
-                emission.enabled = false;
                 particles.Stop();
             }
         }

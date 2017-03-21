@@ -37,16 +37,12 @@ namespace MazeBuilder.BiomeGenerators {
 
         private void EnableParticles() {
             foreach (var particles in ParticleList) {
-                var emission = particles.emission;
-                emission.enabled = true;
                 particles.Play();
             }
 
         }
         private void DisableParticles() {
             foreach (var particles in ParticleList) {
-                var emission = particles.emission;
-                emission.enabled = false;
                 particles.Stop();
             }
         }
