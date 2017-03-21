@@ -459,15 +459,17 @@ namespace AC.TimeOfDaySystemFree
 		}
 
 	    public void CreateTimeUpdateEvent() {
-	        if (!_isDayEventWasFired && IsDay) {
-	            App.AppManager.Instance.EventHub.CreateEvent("TOD:dayStarted", new EventArguments(""));
-	            _isDayEventWasFired = true;
-	            _isNighEventWasFired = false;
-	        }
-	        if (!_isNighEventWasFired && IsNight) {
-	            App.AppManager.Instance.EventHub.CreateEvent("TOD:nightStarted", new EventArguments(""));
-	            _isDayEventWasFired = false;
-	            _isNighEventWasFired = true;
+	        if (Application.isPlaying) {
+	            if (!_isDayEventWasFired && IsDay) {
+	                App.AppManager.Instance.EventHub.CreateEvent("TOD:dayStarted", new EventArguments(""));
+	                _isDayEventWasFired = true;
+	                _isNighEventWasFired = false;
+	            }
+	            if (!_isNighEventWasFired && IsNight) {
+	                App.AppManager.Instance.EventHub.CreateEvent("TOD:nightStarted", new EventArguments(""));
+	                _isDayEventWasFired = false;
+	                _isNighEventWasFired = true;
+	            }
 	        }
 	    }
 
