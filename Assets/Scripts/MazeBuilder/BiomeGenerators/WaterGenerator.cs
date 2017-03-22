@@ -38,14 +38,12 @@ namespace MazeBuilder.BiomeGenerators {
 
         private void EnableParticles() {
             foreach (var particles in ParticleList) {
-                ParticleSystem.EmissionModule emission = particles.emission;
                 particles.Play();
             }
 
         }
         private void DisableParticles() {
             foreach (var particles in ParticleList) {
-                ParticleSystem.EmissionModule emission = particles.emission;
                 particles.Stop();
             }
         }
@@ -54,12 +52,7 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
         private void PlaceLightingObjects() {
-            foreach (var tile in GetTilesByTypeAndBiome(Biome.Water, Tile.Variant.Empty)) {
-                var shouldPlace = (bool) SpawnObjectsChances["nightParticles"].GetRandom(typeof(bool));
-                if (!shouldPlace) continue;
-                var particles = Instantiate(NightParticles, GetDefaultPositionVector(tile.Position, 3.5f), Quaternion.identity);
-                ParticleList.Add(particles);
-            }
+            ParticleList = PlaceLightingParticles(Biome.Water, NightParticles);
         }
 
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {

@@ -50,13 +50,9 @@ namespace MazeBuilder.BiomeGenerators {
         protected override void StartPostPlacement(object sender, EventArguments e) {
             PlaceLightingObjects();
         }
+
         private void PlaceLightingObjects() {
-            foreach (var tile in GetTilesByTypeAndBiome(Biome.Safehouse, Tile.Variant.Empty)) {
-                var shouldPlace = (bool) SpawnObjectsChances["nightParticles"].GetRandom(typeof(bool));
-                if (!shouldPlace) continue;
-                var particles = Instantiate(NightParticles, GetDefaultPositionVector(tile.Position, 3.5f), Quaternion.identity);
-                ParticleList.Add(particles);
-            }
+            ParticleList = PlaceLightingParticles(Biome.Safehouse, NightParticles);
         }
 
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {

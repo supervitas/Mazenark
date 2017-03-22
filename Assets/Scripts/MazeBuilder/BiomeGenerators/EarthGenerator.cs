@@ -76,12 +76,7 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
         private void PlaceLightingObjects() {
-            foreach (var tile in GetTilesByTypeAndBiome(Biome.Earth, Tile.Variant.Empty)) {
-                var shouldPlace = (bool) SpawnObjectsChances["nightParticles"].GetRandom(typeof(bool));
-                if (!shouldPlace) continue;
-                var particles = Instantiate(NightParticles, GetDefaultPositionVector(tile.Position, 3.5f), Quaternion.identity);
-                ParticleList.Add(particles);
-            }
+            ParticleList = PlaceLightingParticles(Biome.Earth, NightParticles);
         }
     }
 

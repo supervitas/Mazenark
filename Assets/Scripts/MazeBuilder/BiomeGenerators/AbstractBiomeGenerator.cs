@@ -9,7 +9,7 @@ namespace MazeBuilder.BiomeGenerators {
 	    protected List<Maze.TileCollection> BiomesCollecton;
 	    protected Publisher Eventhub;
 	    protected Dictionary<string, CollectionRandom> SpawnObjectsChances = new Dictionary<string, CollectionRandom>();
-	    protected readonly List<ParticleSystem> ParticleList = new List<ParticleSystem>();
+	    protected List<ParticleSystem> ParticleList = new List<ParticleSystem>();
 
 
 	    protected void Awake() {
@@ -57,6 +57,12 @@ namespace MazeBuilder.BiomeGenerators {
 	            y = y,
 	            z = Utils.TransformToWorldCoordinate(coords.Y)
 	        };
+	    }
+
+	    protected List<ParticleSystem> PlaceLightingParticles(Biome biomeType, ParticleSystem particles) {
+	        return (from tile in GetTilesByTypeAndBiome(biomeType, Tile.Variant.Empty)
+	        let shouldPlace = (bool) SpawnObjectsChances["nightParticles"].GetRandom(typeof(bool))
+            where shouldPlace select Instantiate(particles, GetDefaultPositionVector(tile.Position, 3.5f), Quaternion.identity)).ToList();
 	    }
 
 	    private void GeneralSubscribtion() {
