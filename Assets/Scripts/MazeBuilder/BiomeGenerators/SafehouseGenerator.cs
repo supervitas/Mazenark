@@ -19,6 +19,11 @@ namespace MazeBuilder.BiomeGenerators {
         public ParticleSystem NightParticles;
         #endregion
 
+        #region BiomeFloor
+        [Header("Safehouse")]
+        public GameObject Safehouse;
+        #endregion
+
 
         private readonly CollectionRandom _biomeFloors = new CollectionRandom();
 
@@ -49,10 +54,16 @@ namespace MazeBuilder.BiomeGenerators {
 
         protected override void StartPostPlacement(object sender, EventArguments e) {
             PlaceLightingObjects();
+            PlaceSafeHouse();
         }
 
         private void PlaceLightingObjects() {
             ParticleList = PlaceLightingParticles(Biome.Safehouse, NightParticles);
+        }
+
+        private void PlaceSafeHouse() {
+            Instantiate(Safehouse, GetDefaultPositionVector(new Coordinate(App.AppManager.Instance.MazeInstance.Height / 2,
+                App.AppManager.Instance.MazeInstance.Width / 2), 0.1f), Quaternion.identity);
         }
 
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {

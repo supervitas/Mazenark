@@ -17,6 +17,7 @@ namespace MazeBuilder {
         public Dictionary<Biome, Coordinate> BiomesSize = new Dictionary<Biome, Coordinate>();
 		private List<TileCollection> biomeList = new List<TileCollection>();
 
+
         public Maze (int width = 10, int height = 10) {
             if (width < 5)
                 width = 5;
@@ -59,7 +60,7 @@ namespace MazeBuilder {
         }
 
 		public Room AsRoom {
-			get;  private set;
+			get; private set;
 		}
 
 		public List<TileCollection> Biomes {

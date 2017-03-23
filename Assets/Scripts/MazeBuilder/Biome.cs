@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using MazeBuilder.BiomeStrategies;
-using UnityEngine;
-using UnityStandardAssets.Water;
+﻿using MazeBuilder.BiomeStrategies;
 using MazeBuilder.Utility;
+
 
 namespace MazeBuilder {
     public class Biome {

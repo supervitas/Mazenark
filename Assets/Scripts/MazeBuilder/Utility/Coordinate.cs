@@ -37,5 +37,9 @@ namespace MazeBuilder.Utility {
 
 			return hash;
 		}
+
+	    public override string ToString() {
+	        return string.Format("x = {0}, y = {1}", X, Y);
+	    }
 	}
 }
