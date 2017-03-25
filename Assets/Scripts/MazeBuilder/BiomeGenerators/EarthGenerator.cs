@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using App.EventSystem;
 using MazeBuilder.Utility;
 using UnityEngine;
@@ -77,8 +75,39 @@ namespace MazeBuilder.BiomeGenerators {
 
         private void PlaceLightingObjects() {
             ParticleList = PlaceLightingParticles(Biome.Earth, NightParticles);
+            PlaceTorches();
         }
+
+        private void PlaceTorches() {
+            var mazeTiles = App.AppManager.Instance.MazeInstance.Maze;
+
+            for (var i = 0; i < mazeTiles.Width; i++) {
+                for (var j = 0; j < mazeTiles.Height - 1; j++) {
+                    var wall = mazeTiles[i, j];
+                    if (wall.Type == Tile.Variant.Wall && mazeTiles[i, j + 1].Type != Tile.Variant.Wall
+                                                       && mazeTiles[i, j - 1].Type != Tile.Variant.Wall) {
+                        PlaceTorch(wall);
+                    }
+                }
+            }
+        }
+
+        private void PlaceTorch(Tile tile) {
+            if (UnityEngine.Random.Range(0, 5) <= 2) return;
+            var sideOffset = UnityEngine.Random.Range(0, 2) > 0 ? -0.55f : 0.55f;
+            var rotation = sideOffset > 0 ? Quaternion.Euler(0, 90, 0) : Quaternion.Euler(0, 270, 0);
+
+            var position = new Vector3 {
+                x = Utils.TransformToWorldCoordinate(tile.Position.X),
+                y = Constants.Maze.TILE_SIZE - 3,
+                z = Utils.TransformToWorldCoordinate(tile.Position.Y - sideOffset)
+            };
+
+            Instantiate(Torch, position, rotation);
+        }
+
     }
+
 
     internal class Edge {
         public static List<Edge> Edges = new List<Edge>();

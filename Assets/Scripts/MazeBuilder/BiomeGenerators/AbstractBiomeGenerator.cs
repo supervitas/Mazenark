@@ -11,7 +11,6 @@ namespace MazeBuilder.BiomeGenerators {
 	    protected Dictionary<string, CollectionRandom> SpawnObjectsChances = new Dictionary<string, CollectionRandom>();
 	    protected List<ParticleSystem> ParticleList = new List<ParticleSystem>();
 
-
 	    protected void Awake() {
 	        BiomesCollecton = App.AppManager.Instance.MazeInstance.Maze.Biomes;
 	        Eventhub = App.AppManager.Instance.EventHub;
@@ -37,6 +36,7 @@ namespace MazeBuilder.BiomeGenerators {
 	        SpawnObjectsChances.Add("nightParticles", new CollectionRandom());
 	        SpawnObjectsChances["nightParticles"].Add(false, typeof(bool), 3);
 	        SpawnObjectsChances["nightParticles"].Add(true, typeof(bool), 1);
+
 	    }
 
 	    protected IEnumerable<Maze.TileCollection> GetTileCollectionForBiome(Biome type) {
