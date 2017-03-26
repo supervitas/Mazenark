@@ -98,7 +98,7 @@ namespace MazeBuilder.BiomeGenerators {
             var rotation = sideOffset > 0 ? Quaternion.Euler(0, 90, 0) : Quaternion.Euler(0, 270, 0);
 
             var position = new Vector3 {
-                x = Utils.TransformToWorldCoordinate(tile.Position.X),
+                x = Utils.TransformToWorldCoordinate(tile.Position.X - Random.Range(-0.3f, 0.3f)),
                 y = Constants.Maze.TILE_SIZE - 3,
                 z = Utils.TransformToWorldCoordinate(tile.Position.Y - sideOffset)
             };
