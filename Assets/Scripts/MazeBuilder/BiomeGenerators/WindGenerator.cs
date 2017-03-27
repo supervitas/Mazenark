@@ -14,12 +14,6 @@ namespace MazeBuilder.BiomeGenerators {
         public GameObject Floor;
         #endregion
 
-        #region BiomeFloor
-        [Header("Biome Lighting Objetcs")]
-        public ParticleSystem NightParticles;
-        public GameObject Torch;
-        #endregion
-
         private readonly CollectionRandom _biomeFloors = new CollectionRandom();
 
         private new void Awake() {

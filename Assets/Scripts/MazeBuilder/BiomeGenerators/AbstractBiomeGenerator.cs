@@ -6,10 +6,25 @@ using UnityEngine;
 
 namespace MazeBuilder.BiomeGenerators {
 	public abstract class AbstractBiomeGenerator : MonoBehaviour {
+	    #region BiomeLights
+	    [Header("Biome Lighting Objetcs")]
+	    public ParticleSystem NightParticles;
+	    public GameObject Torch;
+	    #endregion
+
+	    #region BiomeLightsChances
+	    [Header("Biome Spawn Chances")]
+	    [SerializeField]
+	    [Range(0, 100f)] public float TorchSpawnChance = 25f;
+	    [Range(0, 100f)] public float ParticlesSpawnChance = 25f;
+	    #endregion
+
 	    protected List<Maze.TileCollection> BiomesCollecton;
 	    protected Publisher Eventhub;
 	    protected Dictionary<string, CollectionRandom> SpawnObjectsChances = new Dictionary<string, CollectionRandom>();
 	    protected List<ParticleSystem> ParticleList = new List<ParticleSystem>();
+
+
 
 	    protected void Awake() {
 	        BiomesCollecton = App.AppManager.Instance.MazeInstance.Maze.Biomes;

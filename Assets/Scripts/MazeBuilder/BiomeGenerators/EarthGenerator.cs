@@ -17,12 +17,6 @@ namespace MazeBuilder.BiomeGenerators {
         public GameObject Floor;
         #endregion
 
-        #region BiomeParticles
-        [Header("Biome Lighting Objetcs")]
-        public ParticleSystem NightParticles;
-        public GameObject Torch;
-        #endregion
-
         private readonly CollectionRandom _biomeFloors = new CollectionRandom();
 
         private new void Awake() {
@@ -98,7 +92,7 @@ namespace MazeBuilder.BiomeGenerators {
             var rotation = sideOffset > 0 ? Quaternion.Euler(0, 90, 0) : Quaternion.Euler(0, 270, 0);
 
             var position = new Vector3 {
-                x = Utils.TransformToWorldCoordinate(tile.Position.X - Random.Range(-0.3f, 0.3f)),
+                x = Utils.TransformToWorldCoordinate(tile.Position.X - Random.Range(-0.3f, 0.4f)),
                 y = Constants.Maze.TILE_SIZE - 3,
                 z = Utils.TransformToWorldCoordinate(tile.Position.Y - sideOffset)
             };

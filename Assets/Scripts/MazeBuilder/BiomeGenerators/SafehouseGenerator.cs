@@ -14,12 +14,7 @@ namespace MazeBuilder.BiomeGenerators {
         public GameObject Floor;
         #endregion
 
-        #region BiomeParticles
-        [Header("Biome Lighting Objetcs")]
-        public ParticleSystem NightParticles;
-        #endregion
-
-        #region BiomeFloor
+        #region BiomeSafehouse
         [Header("Safehouse")]
         public GameObject Safehouse;
         #endregion
