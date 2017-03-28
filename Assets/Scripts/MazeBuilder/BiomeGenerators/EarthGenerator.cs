@@ -64,7 +64,7 @@ namespace MazeBuilder.BiomeGenerators {
             var mazeTiles = AppManager.Instance.MazeInstance.Maze;
 
             for (var i = 0; i < mazeTiles.Width; i++) {
-                for (var j = 0; j < mazeTiles.Height - 1; j++) {
+                for (var j = 1; j < mazeTiles.Height - 1; j++) {
                     var wall = mazeTiles[i, j];
                     if (wall.Type == Tile.Variant.Wall && mazeTiles[i, j + 1].Type != Tile.Variant.Wall
                                                        && mazeTiles[i, j - 1].Type != Tile.Variant.Wall) {
