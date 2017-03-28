@@ -10,7 +10,6 @@ namespace MazeBuilder.BiomeGenerators {
         public GameObject Safehouse;
         #endregion
 
-
         private readonly CollectionRandom _biomeFloors = new CollectionRandom();
 
         private new void Awake() {
