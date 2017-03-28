@@ -42,7 +42,7 @@ namespace MazeBuilder.BiomeGenerators {
             Instantiate(FlatWall, GetDefaultPositionVector(coordinate), Quaternion.identity);
         }
         public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
-            if (UnityEngine.Random.Range(0, 100) >= FloorSpawnChance) {
+            if (FloorSpawnChance >= UnityEngine.Random.Range(1, 101)) {
                 Instantiate((GameObject) _biomeFloors.GetRandom(typeof(GameObject)),
                     GetDefaultPositionVector(coordinate, 0.1f), Quaternion.identity);
             }

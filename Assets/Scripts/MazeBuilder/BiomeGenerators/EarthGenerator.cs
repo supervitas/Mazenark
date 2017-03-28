@@ -49,7 +49,7 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
         public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
-            if (Random.Range(0, 100) >= FloorSpawnChance) {
+            if (FloorSpawnChance >= UnityEngine.Random.Range(1, 101)) {
                 Instantiate((GameObject) _biomeFloors.GetRandom(typeof(GameObject)),
                     GetDefaultPositionVector(coordinate, 0.1f), Quaternion.identity);
             }
@@ -76,12 +76,12 @@ namespace MazeBuilder.BiomeGenerators {
 
         private void PlaceTorch(Tile tile) {
             if (Random.Range(0, 100) >= TorchSpawnChance) return;
-            var sideOffset = Random.Range(0, 2) > 0 ? -0.55f : 0.55f;
+            var sideOffset = Random.Range(0, 2) > 0 ? -0.53f : 0.53f;
             var rotation = sideOffset > 0 ? Quaternion.Euler(0, 90, 0) : Quaternion.Euler(0, 270, 0);
 
             var position = new Vector3 {
                 x = Utils.TransformToWorldCoordinate(tile.Position.X - Random.Range(-0.2f, 0.2f)),
-                y = Constants.Maze.TILE_SIZE - 2.8f,
+                y = Constants.Maze.TILE_SIZE - 3.5f,
                 z = Utils.TransformToWorldCoordinate(tile.Position.Y - sideOffset)
             };
 

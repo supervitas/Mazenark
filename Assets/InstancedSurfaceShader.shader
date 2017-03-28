@@ -1,65 +1,90 @@
-﻿ Shader "Instanced/InstancedSurfaceShader" {
+﻿          Shader "Instanced/InstancedShader" {
 	Properties {
 		_MainTex ("Albedo (RGB)", 2D) = "white" {}
-		_Glossiness ("Smoothness", Range(0,1)) = 0.5
-		_Metallic ("Metallic", Range(0,1)) = 0.0
 	}
 	SubShader {
-		Tags { "RenderType"="Opaque" }
-		LOD 200
-		
-		CGPROGRAM
-		// Physically based Standard lighting model
-		#pragma surface surf Standard addshadow fullforwardshadows
-		#pragma multi_compile_instancing
-		#pragma instancing_options procedural:setup
 
-		sampler2D _MainTex;
+		Pass {
 
-		struct Input {
-			float2 uv_MainTex;
-		};
+			Tags {"LightMode"="ForwardBase"}
 
-	#ifdef UNITY_PROCEDURAL_INSTANCING_ENABLED
-		StructuredBuffer<float4> positionBuffer;
-	#endif
+			CGPROGRAM
 
-		void rotate2D(inout float2 v, float r)
-		{
-			float s, c;
-			sincos(r, s, c);
-			v = float2(v.x * c - v.y * s, v.x * s + v.y * c);
-		}
+			#pragma vertex vert
+			#pragma fragment frag
+			#pragma multi_compile_fwdbase nolightmap nodirlightmap nodynlightmap novertexlight
+			#pragma target 4.5
 
-		void setup()
-		{
-		#ifdef UNITY_PROCEDURAL_INSTANCING_ENABLED
-			float4 data = positionBuffer[unity_InstanceID];
+			#include "UnityCG.cginc"
+			#include "UnityLightingCommon.cginc"
+			#include "AutoLight.cginc"
 
-			float rotation = data.w * data.w * _Time.y * 0.5f;
-			rotate2D(data.xz, rotation);
+			sampler2D _MainTex;
 
-			unity_ObjectToWorld._11_21_31_41 = float4(data.w, 0, 0, 0);
-			unity_ObjectToWorld._12_22_32_42 = float4(0, data.w, 0, 0);
-			unity_ObjectToWorld._13_23_33_43 = float4(0, 0, data.w, 0);
-			unity_ObjectToWorld._14_24_34_44 = float4(data.xyz, 1);
-			unity_WorldToObject = unity_ObjectToWorld;
-			unity_WorldToObject._14_24_34 *= -1;
-			unity_WorldToObject._11_22_33 = 1.0f / unity_WorldToObject._11_22_33;
+		#if SHADER_TARGET >= 45
+			StructuredBuffer<float4> positionBuffer;
 		#endif
-		}
 
-		half _Glossiness;
-		half _Metallic;
+			struct v2f
+			{
+				float4 pos : SV_POSITION;
+				float2 uv_MainTex : TEXCOORD0;
+				float3 ambient : TEXCOORD1;
+				float3 diffuse : TEXCOORD2;
+				float3 color : TEXCOORD3;
+				SHADOW_COORDS(4)
+			};
 
-		void surf (Input IN, inout SurfaceOutputStandard o) {
-			fixed4 c = tex2D (_MainTex, IN.uv_MainTex);
-			o.Albedo = c.rgb;
-			o.Metallic = _Metallic;
-			o.Smoothness = _Glossiness;
-			o.Alpha = c.a;
+			void rotate2D(inout float2 v, float r)
+			{
+				float s, c;
+				sincos(r, s, c);
+				v = float2(v.x * c - v.y * s, v.x * s + v.y * c);
+			}
+
+			v2f vert (appdata_full v, uint instanceID : SV_InstanceID)
+			{
+			#if SHADER_TARGET >= 45
+				float4 data = positionBuffer[instanceID];
+			#else
+				float4 data = 0;
+			#endif
+
+				float rotation = data.w * data.w * _Time.x * 0.5f;
+				rotate2D(data.xz, rotation);
+
+				float3 localPosition = v.vertex.xyz * data.w;
+				float3 worldPosition = data.xyz + localPosition;
+				float3 worldNormal = v.normal;
+
+
+
+				float3 ndotl = saturate(dot(worldNormal, _WorldSpaceLightPos0.xyz));
+				float3 ambient = ShadeSH9(float4(worldNormal, 1.0f));
+				float3 diffuse = (ndotl * _LightColor0.rgb);
+				float3 color = v.color;
+
+				v2f o;
+				o.pos = mul(UNITY_MATRIX_VP, float4(worldPosition, 1.0f));
+				o.uv_MainTex = v.texcoord;
+				o.ambient = ambient;
+				o.diffuse = diffuse;
+				o.color = color;
+				TRANSFER_SHADOW(o)
+				return o;
+			}
+
+			fixed4 frag (v2f i) : SV_Target
+			{
+				fixed shadow = SHADOW_ATTENUATION(i);
+				fixed4 albedo = tex2D(_MainTex, i.uv_MainTex);
+				float3 lighting = i.diffuse * shadow + i.ambient;
+				fixed4 output = fixed4(albedo.rgb * i.color * lighting, albedo.w);
+				UNITY_APPLY_FOG(i.fogCoord, output);
+				return output;
+			}
+
+			ENDCG
 		}
-		ENDCG
 	}
-	FallBack "Diffuse"
 }
