@@ -1,22 +1,11 @@
 ﻿using System.Collections.Generic;
+using App;
 using App.EventSystem;
 using MazeBuilder.Utility;
 using UnityEngine;
 
 namespace MazeBuilder.BiomeGenerators {
     public class EarthGenerator : AbstractBiomeGenerator {
-        #region BiomeWalls
-        [Header("Biome Walls")]
-        public GameObject FlatWall;
-        public GameObject OuterEdge;
-        public GameObject InnerEdge;
-        #endregion
-
-        #region BiomeFloor
-        [Header("Biome Floor")]
-        public GameObject Floor;
-        #endregion
-
         private readonly CollectionRandom _biomeFloors = new CollectionRandom();
 
         private new void Awake() {
@@ -60,8 +49,7 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
         public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
-            var shouldPlace = (bool) SpawnObjectsChances["floor"].GetRandom(typeof(bool));
-            if (shouldPlace) {
+            if (Random.Range(0, 100) >= FloorSpawnChance) {
                 Instantiate((GameObject) _biomeFloors.GetRandom(typeof(GameObject)),
                     GetDefaultPositionVector(coordinate, 0.1f), Quaternion.identity);
             }
@@ -73,7 +61,7 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
         private void PlaceTorches() {
-            var mazeTiles = App.AppManager.Instance.MazeInstance.Maze;
+            var mazeTiles = AppManager.Instance.MazeInstance.Maze;
 
             for (var i = 0; i < mazeTiles.Width; i++) {
                 for (var j = 0; j < mazeTiles.Height - 1; j++) {
@@ -87,13 +75,13 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
         private void PlaceTorch(Tile tile) {
-            if (UnityEngine.Random.Range(0, 5) <= 2) return;
-            var sideOffset = UnityEngine.Random.Range(0, 2) > 0 ? -0.55f : 0.55f;
+            if (Random.Range(0, 100) >= TorchSpawnChance) return;
+            var sideOffset = Random.Range(0, 2) > 0 ? -0.55f : 0.55f;
             var rotation = sideOffset > 0 ? Quaternion.Euler(0, 90, 0) : Quaternion.Euler(0, 270, 0);
 
             var position = new Vector3 {
-                x = Utils.TransformToWorldCoordinate(tile.Position.X - Random.Range(-0.3f, 0.4f)),
-                y = Constants.Maze.TILE_SIZE - 3,
+                x = Utils.TransformToWorldCoordinate(tile.Position.X - Random.Range(-0.2f, 0.2f)),
+                y = Constants.Maze.TILE_SIZE - 2.8f,
                 z = Utils.TransformToWorldCoordinate(tile.Position.Y - sideOffset)
             };
 

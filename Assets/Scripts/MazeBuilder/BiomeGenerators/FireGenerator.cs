@@ -4,16 +4,6 @@ using UnityEngine;
 
 namespace MazeBuilder.BiomeGenerators {
     public class FireGenerator : AbstractBiomeGenerator {
-        #region BiomeWalls
-        [Header("Biome Walls")]
-        public GameObject FlatWall;
-        #endregion
-
-        #region BiomeFloor
-        [Header("Biome Floor")]
-        public GameObject Floor;
-        #endregion
-
         private readonly CollectionRandom _biomeFloors = new CollectionRandom();
         private new void Awake() {
             base.Awake();
@@ -52,12 +42,10 @@ namespace MazeBuilder.BiomeGenerators {
             Instantiate(FlatWall, GetDefaultPositionVector(coordinate), Quaternion.identity);
         }
         public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
-            var shouldPlace = (bool) SpawnObjectsChances["floor"].GetRandom(typeof(bool));
-            if (shouldPlace) {
+            if (UnityEngine.Random.Range(0, 100) >= FloorSpawnChance) {
                 Instantiate((GameObject) _biomeFloors.GetRandom(typeof(GameObject)),
                     GetDefaultPositionVector(coordinate, 0.1f), Quaternion.identity);
             }
-
         }
     }
 }
