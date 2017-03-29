@@ -14,15 +14,16 @@ namespace MazeBuilder.BiomeGenerators {
 		protected GameObject mesh;
 
 		public GameObject GetMeshForPlacement(Maze maze, Coordinate where, Edge whereExactly) {
-			if (CanPlaceSomething(maze, where, whereExactly)) {
-				//return (GameObject) MeshesCanBePlaced.GetRandom(typeof(GameObject));
-				return mesh;
+			//var randomMesh = (GameObject) MeshesCanBePlaced.GetRandom(typeof(GameObject));
+			var randomMesh = mesh;
+			if (mesh != null && CanPlaceSomething(maze, where, whereExactly, true)) {
+				return randomMesh;
 			} else {
 				return null;
 			}
 		}
 
-		public abstract bool CanPlaceSomething(Maze maze, Coordinate where, Edge whereExactly);
+		public abstract bool CanPlaceSomething(Maze maze, Coordinate where, Edge whereExactly, bool occupyEdges = false);
 
 		private bool IsRequestedEdgeEmpty(Maze maze, Coordinate where, Edge whereExactly, Direction rawShift, out Tile neighbour, out Edge neighbourEdge) {
 			// rawShift is relative,
