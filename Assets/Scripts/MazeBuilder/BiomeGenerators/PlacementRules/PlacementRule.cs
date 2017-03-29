@@ -6,7 +6,7 @@ using System.Text;
 using UnityEngine;
 
 namespace MazeBuilder.BiomeGenerators {
-	abstract class PlacementRule : ScriptableObject {
+	abstract class PlacementRule : MonoBehaviour {
 		[Tooltip("List of meshes can be placed on tile edge with this placement rule")]
 		[SerializeField]
 		//public CollectionRandom MeshesCanBePlaced = new CollectionRandom();

@@ -6,6 +6,11 @@ using UnityEngine;
 
 namespace MazeBuilder.BiomeGenerators {
     public class EarthGenerator : AbstractBiomeGenerator {
+
+		// should be an array...
+		[SerializeField]
+		private PlacementRule outerEdges;
+
         private readonly CollectionRandom _biomeFloors = new CollectionRandom();
 
         private new void Awake() {
@@ -41,7 +46,8 @@ namespace MazeBuilder.BiomeGenerators {
             GameObject parent = new GameObject();
 
             foreach (Edge edge in Edge.Edges) {
-                var edgeMesh = Instantiate(OuterEdge, GetDefaultPositionVector(coordinate), edge.Rotation);
+				var edgeMeshTemplate = outerEdges.GetMeshForPlacement(maze, coordinate, edge);
+                var edgeMesh = Instantiate(edgeMeshTemplate, GetDefaultPositionVector(coordinate), edge.Rotation);
                 edgeMesh.transform.parent = parent.transform;
             }
             parent.isStatic = true;
