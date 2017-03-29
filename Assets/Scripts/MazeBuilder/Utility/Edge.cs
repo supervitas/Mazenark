@@ -44,10 +44,10 @@ namespace MazeBuilder.Utility {
 			Edges.Add(this);
 		}
 
-		public static Edge UpRight = new Edge(Quaternion.Euler(-90, 90, 0));
+		public static Edge UpRight = new Edge(Quaternion.Euler(-90, -90, 0));
 		public static Edge UpLeft = new Edge(Quaternion.Euler(-90, 180, 0));
-		public static Edge DownLeft = new Edge(Quaternion.Euler(-90, 270, 0));
-		public static Edge DownRight = new Edge(Quaternion.Euler(-90, 360, 0));
+		public static Edge DownLeft = new Edge(Quaternion.Euler(-90, 90, 0));
+		public static Edge DownRight = new Edge(Quaternion.Euler(-90, 0, 0));
 
 		static Edge() {
 			#region Rotations
