@@ -47,10 +47,16 @@ namespace MazeBuilder.BiomeGenerators {
 
             foreach (Edge edge in Edge.Edges) {
 				var edgeMeshTemplate = outerEdges.GetMeshForPlacement(maze, coordinate, edge);
-                var edgeMesh = Instantiate(edgeMeshTemplate, GetDefaultPositionVector(coordinate), edge.Rotation);
-                edgeMesh.transform.parent = parent.transform;
+				if (edgeMeshTemplate != null) {
+					var edgeMesh = Instantiate(edgeMeshTemplate, GetDefaultPositionVector(coordinate), edge.Rotation);
+					edgeMesh.name = string.Format(edge.Name);
+					edgeMesh.transform.parent = parent.transform;
+				}
             }
-            parent.isStatic = true;
+
+			Instantiate(FlatWall, GetDefaultPositionVector(coordinate), Quaternion.identity);
+
+			parent.isStatic = true;
             parent.name = string.Format("Cube at {0}:{1}", coordinate.X, coordinate.Y);
         }
 

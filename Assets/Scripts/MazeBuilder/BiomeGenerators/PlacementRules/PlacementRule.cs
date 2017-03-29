@@ -25,7 +25,7 @@ namespace MazeBuilder.BiomeGenerators {
 
 		public abstract bool CanPlaceSomething(Maze maze, Coordinate where, Edge whereExactly, bool occupyEdges = false);
 
-		private bool IsRequestedEdgeEmpty(Maze maze, Coordinate where, Edge whereExactly, Direction rawShift, out Tile neighbour, out Edge neighbourEdge) {
+		protected bool IsRequestedEdgeEmpty(Maze maze, Coordinate where, Edge whereExactly, Direction rawShift, out Tile neighbour, out Edge neighbourEdge) {
 			// rawShift is relative,
 			// actualShift is in global coordinates
 			Direction actualShift = whereExactly.RotateDirection(rawShift);

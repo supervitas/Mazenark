@@ -11,11 +11,13 @@ namespace MazeBuilder.Utility {
 		public int DeltaX { get; private set; }
 		public int DeltaY { get; private set; }
 		public Direction Opposite { get; private set; }
+		public string Name { get; private set; }
 
-		private Direction(int dx, int dy) {
+		private Direction(int dx, int dy, string name) {
 
 			DeltaX = dx;
 			DeltaY = dy;
+			Name = name;
 
 			directions.Add(this);
 		}
@@ -44,11 +46,11 @@ namespace MazeBuilder.Utility {
 			return hash;
 		}
 
-		public static Direction Up = new Direction(0, -1);
-		public static Direction Left = new Direction(-1, 0);
-		public static Direction Bottom = new Direction(0, +1);
-		public static Direction Right = new Direction(+1, 0);
-		public static Direction Nowhere = new Direction(0, 0);		// May be buggy! Maybe it should not be added into Directions list...
+		public static Direction Up = new Direction(0, -1, "Up");
+		public static Direction Left = new Direction(-1, 0, "Left");
+		public static Direction Bottom = new Direction(0, +1, "Bottom");
+		public static Direction Right = new Direction(+1, 0, "Right");
+		public static Direction Nowhere = new Direction(0, 0, "Nowhere");		// May be buggy! Maybe it should not be added into Directions list...
 
 		static Direction() {
 			Up.Opposite = Bottom;
