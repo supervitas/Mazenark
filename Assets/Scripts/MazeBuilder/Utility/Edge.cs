@@ -5,7 +5,7 @@ using System.Text;
 using UnityEngine;
 
 namespace MazeBuilder.Utility {
-	internal class Edge {
+	public class Edge {
 		public static List<Edge> Edges = new List<Edge>();
 		private Dictionary<Direction, Direction> rotatedDirections = new Dictionary<Direction, Direction>();
 		private Dictionary<Direction, Direction> shiftedDirections = new Dictionary<Direction, Direction>();
@@ -78,7 +78,7 @@ namespace MazeBuilder.Utility {
 
 			#region Shiftings
 			UpRight.shiftedEdges.Add(Direction.Up, DownRight);				UpRight.shiftedDirections.Add(Direction.Up, Direction.Up);
-			UpRight.shiftedEdges.Add(Direction.Right, UpLeft);				UpRight.shiftedDirections.Add(Direction.Up, Direction.Right);
+			UpRight.shiftedEdges.Add(Direction.Right, UpLeft);				UpRight.shiftedDirections.Add(Direction.Right, Direction.Right);
 			UpRight.shiftedEdges.Add(Direction.Left, UpLeft);				//
 			UpRight.shiftedEdges.Add(Direction.Bottom, DownRight);			//
 
