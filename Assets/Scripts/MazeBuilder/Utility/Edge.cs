@@ -44,9 +44,9 @@ namespace MazeBuilder.Utility {
 			Edges.Add(this);
 		}
 
-		public static Edge UpRight = new Edge(Quaternion.Euler(-90, -90, 0), "UpRight");
+		public static Edge UpRight = new Edge(Quaternion.Euler(-90, 90, 0), "DownLeft");
 		public static Edge UpLeft = new Edge(Quaternion.Euler(-90, 180, 0), "UpLeft");
-		public static Edge DownLeft = new Edge(Quaternion.Euler(-90, 90, 0), "DownLeft");
+		public static Edge DownLeft = new Edge(Quaternion.Euler(-90, -90, 0), "UpRight");
 		public static Edge DownRight = new Edge(Quaternion.Euler(-90, 0, 0), "DownRight");
 
 		static Edge() {
