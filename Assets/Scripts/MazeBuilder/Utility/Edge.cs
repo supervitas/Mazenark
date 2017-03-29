@@ -10,9 +10,8 @@ namespace MazeBuilder.Utility {
 		private Dictionary<Direction, Direction> rotatedDirections = new Dictionary<Direction, Direction>();
 		private Dictionary<Direction, Direction> shiftedDirections = new Dictionary<Direction, Direction>();
 		private Dictionary<Direction, Edge> shiftedEdges = new Dictionary<Direction, Edge>();
-		public Quaternion Rotation {
-			get; private set;
-		}
+		public Quaternion Rotation { get; private set; }
+		public string Name { get; private set; }
 
 		public Direction RotateDirection(Direction dir) {
 			if (rotatedDirections.ContainsKey(dir)) {
@@ -39,15 +38,16 @@ namespace MazeBuilder.Utility {
 			}
 		}
 
-		private Edge(Quaternion rotation) {
+		private Edge(Quaternion rotation, string name) {
 			Rotation = rotation;
+			Name = name;
 			Edges.Add(this);
 		}
 
-		public static Edge UpRight = new Edge(Quaternion.Euler(-90, -90, 0));
-		public static Edge UpLeft = new Edge(Quaternion.Euler(-90, 180, 0));
-		public static Edge DownLeft = new Edge(Quaternion.Euler(-90, 90, 0));
-		public static Edge DownRight = new Edge(Quaternion.Euler(-90, 0, 0));
+		public static Edge UpRight = new Edge(Quaternion.Euler(-90, -90, 0), "UpRight");
+		public static Edge UpLeft = new Edge(Quaternion.Euler(-90, 180, 0), "UpLeft");
+		public static Edge DownLeft = new Edge(Quaternion.Euler(-90, 90, 0), "DownLeft");
+		public static Edge DownRight = new Edge(Quaternion.Euler(-90, 0, 0), "DownRight");
 
 		static Edge() {
 			#region Rotations
