@@ -48,12 +48,14 @@ namespace MazeBuilder.Utility {
 		public static Direction Left = new Direction(-1, 0);
 		public static Direction Bottom = new Direction(0, +1);
 		public static Direction Right = new Direction(+1, 0);
+		public static Direction Nowhere = new Direction(0, 0);		// May be buggy! Maybe it should not be added into Directions list...
 
 		static Direction() {
 			Up.Opposite = Bottom;
 			Left.Opposite = Right;
 			Bottom.Opposite = Up;
 			Right.Opposite = Left;
+			Nowhere.Opposite = Nowhere;
 		}
 	}
 }
