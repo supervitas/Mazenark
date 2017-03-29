@@ -10,13 +10,19 @@ namespace MazeBuilder.BiomeGenerators {
 		// should be an array...
 		[SerializeField]
 		private PlacementRule outerEdges;
+		[SerializeField]
+		private PlacementRule innerEdges;
+		[SerializeField]
+		private PlacementRule straightWalls;
+		[SerializeField]
+		private GameObject floor2;
 
-        private readonly CollectionRandom _biomeFloors = new CollectionRandom();
+		private readonly CollectionRandom _biomeFloors = new CollectionRandom();
 
         private new void Awake() {
             base.Awake();
             _biomeFloors.Add(Floor, typeof(GameObject), 1.0f);
-        }
+		}
 
         protected override void OnNight(object sender, EventArguments args) {
             EnableParticles();
@@ -47,6 +53,11 @@ namespace MazeBuilder.BiomeGenerators {
 
             foreach (Edge edge in Edge.Edges) {
 				var edgeMeshTemplate = outerEdges.GetMeshForPlacement(maze, coordinate, edge);
+				if (edgeMeshTemplate == null)
+					edgeMeshTemplate = innerEdges.GetMeshForPlacement(maze, coordinate, edge);
+				if (edgeMeshTemplate == null)
+					edgeMeshTemplate = straightWalls.GetMeshForPlacement(maze, coordinate, edge);
+
 				if (edgeMeshTemplate != null) {
 					var edgeMesh = Instantiate(edgeMeshTemplate, GetDefaultPositionVector(coordinate), edge.Rotation);
 					edgeMesh.name = string.Format(edge.Name);
@@ -54,7 +65,8 @@ namespace MazeBuilder.BiomeGenerators {
 				}
             }
 
-			Instantiate(FlatWall, GetDefaultPositionVector(coordinate), Quaternion.identity);
+			// Debug walls
+			//Instantiate(FlatWall, GetDefaultPositionVector(coordinate), Quaternion.identity);
 
 			parent.isStatic = true;
             parent.name = string.Format("Cube at {0}:{1}", coordinate.X, coordinate.Y);
@@ -63,9 +75,12 @@ namespace MazeBuilder.BiomeGenerators {
         public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
             if (FloorSpawnChance >= UnityEngine.Random.Range(1, 101)) {
                 Instantiate((GameObject) _biomeFloors.GetRandom(typeof(GameObject)),
-                    GetDefaultPositionVector(coordinate, 0.1f), Quaternion.identity);
+                    GetDefaultPositionVector(coordinate, 0.2f), Quaternion.identity);
             }
-        }
+			if (maze[coordinate].Type == Tile.Variant.Empty) {
+				Instantiate(floor2, GetDefaultPositionVector(coordinate), Edge.UpRight.Rotation);
+			}
+		}
 
         private void PlaceLightingObjects() {
             ParticleList = PlaceLightingParticles(Biome.Earth, NightParticles);
