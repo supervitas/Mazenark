@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using App;
 using App.EventSystem;
+using MazeBuilder.BiomeGenerators.PlacementRules;
 using MazeBuilder.Utility;
 using UnityEngine;
 
@@ -77,9 +78,9 @@ namespace MazeBuilder.BiomeGenerators {
                 Instantiate((GameObject) _biomeFloors.GetRandom(typeof(GameObject)),
                     GetDefaultPositionVector(coordinate, 0.2f), Quaternion.identity);
             }
-			if (maze[coordinate].Type == Tile.Variant.Empty) {
-				Instantiate(floor2, GetDefaultPositionVector(coordinate), Edge.UpRight.Rotation);
-			}
+
+            Instantiate(floor2, GetDefaultPositionVector(coordinate), Edge.UpRight.Rotation);
+
 		}
 
         private void PlaceLightingObjects() {

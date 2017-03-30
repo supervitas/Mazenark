@@ -1,11 +1,7 @@
 ﻿using MazeBuilder.Utility;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
-namespace MazeBuilder.BiomeGenerators {
+namespace MazeBuilder.BiomeGenerators.PlacementRules {
 	abstract class PlacementRule : MonoBehaviour {
 		[Tooltip("List of meshes can be placed on tile edge with this placement rule")]
 		[SerializeField]

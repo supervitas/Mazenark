@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MazeBuilder.BiomeGenerators.PlacementRules;
 using MazeBuilder.Utility;
 
 namespace MazeBuilder.BiomeGenerators {
