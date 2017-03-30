@@ -14,9 +14,9 @@ namespace MazeBuilder.BiomeGenerators.PlacementRules {
 			Edge unused2;
 
 			IsRequestedEdgeEmpty(maze, where, whereExactly, Direction.Up, out tile, out unused2);
-			var isUpEmpty = (tile == null || tile.Type == Tile.Variant.Empty || tile.Biome != maze[where].Biome);
+			var isUpEmpty = (tile == null || tile.Type != Tile.Variant.Wall || tile.Biome != maze[where].Biome);
 			IsRequestedEdgeEmpty(maze, where, whereExactly, Direction.Right, out tile, out unused2);
-			var isRightEmpty = (tile == null || tile.Type == Tile.Variant.Empty || tile.Biome != maze[where].Biome);
+			var isRightEmpty = (tile == null || tile.Type != Tile.Variant.Wall || tile.Biome != maze[where].Biome);
 
 			if (isUpEmpty && isRightEmpty) {
 				if (occupyEdges) {
