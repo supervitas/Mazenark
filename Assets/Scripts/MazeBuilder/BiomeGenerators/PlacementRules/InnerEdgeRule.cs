@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using MazeBuilder.BiomeGenerators.PlacementRules;
-using MazeBuilder.Utility;
+﻿using MazeBuilder.Utility;
 
-namespace MazeBuilder.BiomeGenerators {
+namespace MazeBuilder.BiomeGenerators.PlacementRules {
 	class InnerEdgeRule : PlacementRule {
 		// Assuming mesh is outerEdge wall.
 		public override bool CanPlaceSomething(Maze maze, Coordinate where, Edge whereExactly, bool occupyEdges = false) {

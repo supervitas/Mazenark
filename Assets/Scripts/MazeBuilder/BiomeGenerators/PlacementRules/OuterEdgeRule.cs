@@ -1,7 +1,7 @@
 ﻿using MazeBuilder.Utility;
 
 namespace MazeBuilder.BiomeGenerators.PlacementRules {
-	class OuterEdgeRule : PlacementRule {
+    internal class OuterEdgeRule : PlacementRule {
 		// Assuming mesh is outerEdge wall.
 		public override bool CanPlaceSomething(Maze maze, Coordinate where, Edge whereExactly, bool occupyEdges = false) {
 			// Check if self as no meshes yet.
