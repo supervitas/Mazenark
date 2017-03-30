@@ -21,7 +21,7 @@ namespace MazeBuilder.BiomeGenerators.PlacementRules {
 
 		public abstract bool CanPlaceSomething(Maze maze, Coordinate where, Edge whereExactly, bool occupyEdges = false);
 
-		protected bool IsRequestedEdgeEmpty(Maze maze, Coordinate where, Edge whereExactly, Direction rawShift, out Tile neighbour, out Edge neighbourEdge) {
+		protected void GetShiftedTileAndEdge(Maze maze, Coordinate where, Edge whereExactly, Direction rawShift, out Tile neighbour, out Edge neighbourEdge) {
 			// rawShift is relative,
 			// actualShift is in global coordinates
 			Direction actualShift = whereExactly.RotateDirection(rawShift);
@@ -34,12 +34,20 @@ namespace MazeBuilder.BiomeGenerators.PlacementRules {
 			if (!maze.IsPointWithin(neighbourPosition)) {
 				neighbour = null;	// should not be used afterwards.
 				neighbourEdge = null;
-				return true;
+				//return true;
 			} else {
 				neighbour = maze[neighbourPosition];
 				neighbourEdge = neighboursEdge;
-				return !neighbour.EdgeOccupied(neighboursEdge);
+				//return !neighbour.EdgeOccupied(neighboursEdge);
 			}
+		}
+
+		protected bool IsEmpty(Tile target, Tile main) {
+			return target == null || target.Type != Tile.Variant.Wall || target.Biome != main.Biome;
+		}
+
+		protected bool IsWall(Tile target, Edge isOccupied, Tile main) {
+			return target != null && target.Type == Tile.Variant.Wall && !target.EdgeOccupied(isOccupied) && target.Biome == main.Biome;
 		}
 	}
 }

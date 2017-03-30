@@ -15,10 +15,10 @@ namespace MazeBuilder.BiomeGenerators.PlacementRules {
 			Tile tileRight;
 			Edge edgeRight;
 
-			IsRequestedEdgeEmpty(maze, where, whereExactly, Direction.Up, out tileUp, out edgeUp);
-			var isUpNotEmpty = (tileUp != null && tileUp.Type == Tile.Variant.Wall) && !tileUp.EdgeOccupied(edgeUp) && tileUp.Biome == maze[where].Biome;
-			IsRequestedEdgeEmpty(maze, where, whereExactly, Direction.Right, out tileRight, out edgeRight);
-			var isRightNotEmpty = (tileRight != null && tileRight.Type == Tile.Variant.Wall) && !tileRight.EdgeOccupied(edgeRight) && tileRight.Biome == maze[where].Biome;
+			GetShiftedTileAndEdge(maze, where, whereExactly, Direction.Up, out tileUp, out edgeUp);
+			var isUpNotEmpty = IsWall(tileUp, edgeUp, maze[where]);
+			GetShiftedTileAndEdge(maze, where, whereExactly, Direction.Right, out tileRight, out edgeRight);
+			var isRightNotEmpty = IsWall(tileRight, edgeRight, maze[where]);
 
 			if (isUpNotEmpty && isRightNotEmpty) {
 				if (occupyEdges) {

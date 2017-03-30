@@ -15,17 +15,17 @@ namespace MazeBuilder.BiomeGenerators.PlacementRules {
 			Tile tileRight;
 			Edge edgeRight;
 
-			IsRequestedEdgeEmpty(maze, where, whereExactly, Direction.Up, out tileUp, out edgeUp);
-			var isUpEmpty = (tileUp == null || tileUp.Type != Tile.Variant.Wall || tileUp.Biome != maze[where].Biome);
-			IsRequestedEdgeEmpty(maze, where, whereExactly, Direction.Right, out tileRight, out edgeRight);
-			var isRightNotEmpty = (tileRight != null && tileRight.Type == Tile.Variant.Wall) && !tileRight.EdgeOccupied(edgeRight) && tileRight.Biome == maze[where].Biome;
+			GetShiftedTileAndEdge(maze, where, whereExactly, Direction.Up, out tileUp, out edgeUp);
+			var isUpEmpty = IsEmpty(tileUp, maze[where]);
+			GetShiftedTileAndEdge(maze, where, whereExactly, Direction.Right, out tileRight, out edgeRight);
+			var isRightNotEmpty = IsWall(tileRight, edgeRight, maze[where]);
 
 			if (isUpEmpty && isRightNotEmpty) {
 				// Check if up right tile is empty.
 				Tile tileUpRight;
 				Edge edgeUpRight;
-				IsRequestedEdgeEmpty(maze, tileRight.Position, edgeRight, Direction.Right, out tileUpRight, out edgeUpRight);
-				var isUpRightEmpty = (tileUpRight == null || tileUpRight.Type != Tile.Variant.Wall || tileUpRight.Biome != maze[where].Biome);
+				GetShiftedTileAndEdge(maze, tileRight.Position, edgeRight, Direction.Right, out tileUpRight, out edgeUpRight);
+				var isUpRightEmpty = IsEmpty(tileUpRight, maze[where]);
 
 				if (isUpRightEmpty) {
 					if (occupyEdges) {
