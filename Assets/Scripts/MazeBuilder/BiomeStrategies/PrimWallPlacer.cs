@@ -64,6 +64,7 @@ namespace MazeBuilder.BiomeStrategies {
 
 				if (maze.IsPointWithin(whereToGo)) {
 					Tile inThatDirection = maze[whereToGo];
+					// Growth can be only towards Wall tiles.
 					results.Add(dir, inThatDirection.Type != Tile.Variant.Empty);
 				}
 			}
@@ -84,7 +85,7 @@ namespace MazeBuilder.BiomeStrategies {
 				if (maze.IsPointWithin(whereToGo)) {
 					Tile inThatDirection = maze[whereToGo];
 
-					if (inThatDirection.Type == Tile.Variant.Wall) {
+					if (inThatDirection.Type != Tile.Variant.Empty) {
 						if (withLeastWeight == null) {
 							withLeastWeight = inThatDirection;
 						}

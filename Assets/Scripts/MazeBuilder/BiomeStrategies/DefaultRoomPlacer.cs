@@ -6,7 +6,7 @@ using Random = System.Random;
 namespace MazeBuilder.BiomeStrategies {
     public class DefaultRoomPlacer : IRoomPlacer {
         private static DefaultRoomPlacer instance = new DefaultRoomPlacer();
-        private const int MAX_PLACEMENT_ATTEMPTS = 10;
+        private const int MAX_PLACEMENT_ATTEMPTS = 50;
         private static Random random = new Random();
 
         private DefaultRoomPlacer() {
@@ -28,11 +28,15 @@ namespace MazeBuilder.BiomeStrategies {
             var width = GetRandomRoomDimension(targetBiome);
             var height = GetRandomRoomDimension(targetBiome);
 
-            var attempt = 0;
+			if (x % 2 == 1)
+				x++;
+			if (y % 2 == 1)
+				y++;
+
+			var attempt = 0;
             var room = new Room(x, y, x + width - 1, y + height - 1);
 
-            while (!CanPlaceRoomHere(maze, chunkLeftBoundary, chunkRightBoundary, chunkTopBoundary, chunkBottomBoundary, room)
-                   && (attempt < MAX_PLACEMENT_ATTEMPTS)) {
+            while (!CanPlaceRoomHere(maze, chunkLeftBoundary, chunkRightBoundary, chunkTopBoundary, chunkBottomBoundary, room) && (attempt < MAX_PLACEMENT_ATTEMPTS)) {
                 attempt++;
 
                 width = GetRandomRoomDimension(targetBiome);
@@ -40,7 +44,12 @@ namespace MazeBuilder.BiomeStrategies {
                 x = random.Next(chunkLeftBoundary, chunkRightBoundary + 1);
                 y = random.Next(chunkTopBoundary, chunkBottomBoundary + 1);
 
-                room = new Room(x, y, x + width - 1, y + height - 1);
+				if (x % 2 == 1)
+					x++;
+				if (y % 2 == 1)
+					y++;
+
+				room = new Room(x, y, x + width - 1, y + height - 1);
             }
 
             if (attempt >= MAX_PLACEMENT_ATTEMPTS)
@@ -57,8 +66,11 @@ namespace MazeBuilder.BiomeStrategies {
         }
 
         private int GetRandomRoomDimension(Biome biome) {
-            return (int) Math.Round(random.Next(Constants.Biome.ROOM_MIN_SIZE, Constants.Biome.ROOM_MAX_SIZE + 1) * biome.RoomSizeModifier);
-        }
+            int dimen = (int) Math.Round(random.Next(Constants.Biome.ROOM_MIN_SIZE, Constants.Biome.ROOM_MAX_SIZE + 1) * biome.RoomSizeModifier);
+			if (dimen % 2 != 1)
+				dimen = GetRandomRoomDimension(biome);
+			return dimen;
+		}
 
         private bool CanPlaceRoomHere(Maze maze, int chunkLeftBoundary, int chunkRightBoundary, int chunkTopBoundary, int chunkBottomBoundary, Room roomToTest) {
             int x = roomToTest.TopLeftCorner.X;
