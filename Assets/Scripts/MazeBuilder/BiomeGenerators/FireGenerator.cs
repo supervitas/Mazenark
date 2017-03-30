@@ -4,10 +4,8 @@ using UnityEngine;
 
 namespace MazeBuilder.BiomeGenerators {
     public class FireGenerator : AbstractBiomeGenerator {
-        private readonly CollectionRandom _biomeFloors = new CollectionRandom();
         private new void Awake() {
             base.Awake();
-            _biomeFloors.Add(Floor, typeof(GameObject), 1.0f);
         }
 
         protected override void OnNight(object sender, EventArguments args) {
@@ -42,8 +40,8 @@ namespace MazeBuilder.BiomeGenerators {
             Instantiate(FlatWall, GetDefaultPositionVector(coordinate), Quaternion.identity);
         }
         public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
-            if (FloorSpawnChance >= UnityEngine.Random.Range(1, 101)) {
-                Instantiate((GameObject) _biomeFloors.GetRandom(typeof(GameObject)),
+            if (FloorSpawnChance >= Random.Range(1, 101)) {
+                Instantiate((GameObject) BiomeFloorsEnviroment.GetRandom(typeof(GameObject)),
                     GetDefaultPositionVector(coordinate, 0.1f), Quaternion.identity);
             }
         }

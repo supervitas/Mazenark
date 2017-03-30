@@ -9,20 +9,25 @@ namespace MazeBuilder.BiomeGenerators {
     public class EarthGenerator : AbstractBiomeGenerator {
 
 		// should be an array...
+        #region BiomeLights
+        [Header("Biome Placing Rules")]
 		[SerializeField]
 		private PlacementRule outerEdges;
 		[SerializeField]
 		private PlacementRule innerEdges;
 		[SerializeField]
 		private PlacementRule straightWalls;
+        #endregion
+
+        #region BiomeLights
+        [Header("Biome floors")]
 		[SerializeField]
 		private GameObject floor2;
+        #endregion
 
-		private readonly CollectionRandom _biomeFloors = new CollectionRandom();
 
         private new void Awake() {
             base.Awake();
-            _biomeFloors.Add(Floor, typeof(GameObject), 1.0f);
 		}
 
         protected override void OnNight(object sender, EventArguments args) {
@@ -69,18 +74,16 @@ namespace MazeBuilder.BiomeGenerators {
 			// Debug walls
 			//Instantiate(FlatWall, GetDefaultPositionVector(coordinate), Quaternion.identity);
 
-			parent.isStatic = true;
             parent.name = string.Format("Cube at {0}:{1}", coordinate.X, coordinate.Y);
         }
 
         public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
-            if (FloorSpawnChance >= UnityEngine.Random.Range(1, 101)) {
-                Instantiate((GameObject) _biomeFloors.GetRandom(typeof(GameObject)),
+            if (FloorSpawnChance >= Random.Range(1, 101)) {
+                Instantiate((GameObject) BiomeFloorsEnviroment.GetRandom(typeof(GameObject)),
                     GetDefaultPositionVector(coordinate, 0.2f), Quaternion.identity);
             }
 
             Instantiate(floor2, GetDefaultPositionVector(coordinate), Edge.UpRight.Rotation);
-
 		}
 
         private void PlaceLightingObjects() {

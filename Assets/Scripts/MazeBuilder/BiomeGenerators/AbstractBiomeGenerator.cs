@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using App;
 using App.EventSystem;
 using MazeBuilder.Utility;
 using UnityEngine;
@@ -25,8 +26,8 @@ namespace MazeBuilder.BiomeGenerators {
 	    #endregion
 
 	    #region BiomeFloor
-	    [Header("Biome Floor")]
-	    public GameObject Floor;
+	    [Header("Biome Floors Enviroment")]
+	    public GameObject[] FloorsEnviroment;
 	    #endregion
 
 	    #region BiomeLights
@@ -39,11 +40,13 @@ namespace MazeBuilder.BiomeGenerators {
 	    protected Publisher Eventhub;
 	    protected Dictionary<string, CollectionRandom> SpawnObjectsChances = new Dictionary<string, CollectionRandom>();
 	    protected List<ParticleSystem> ParticleList = new List<ParticleSystem>();
+	    protected readonly CollectionRandom BiomeFloorsEnviroment = new CollectionRandom();
 
 	    protected void Awake() {
-	        BiomesCollecton = App.AppManager.Instance.MazeInstance.Maze.Biomes;
-	        Eventhub = App.AppManager.Instance.EventHub;
+	        BiomesCollecton = AppManager.Instance.MazeInstance.Maze.Biomes;
+	        Eventhub = AppManager.Instance.EventHub;
 	        GeneralSubscribtion();
+	        AddFloorsToRandomGenerator();
 	    }
 
 	    public abstract void CreateWall(Biome biome, Coordinate coordinate, Maze maze);
@@ -86,6 +89,17 @@ namespace MazeBuilder.BiomeGenerators {
 	        Eventhub.Subscribe("mazedrawer:placement_finished", StartPostPlacement, this);
 	        Eventhub.Subscribe("TOD:nightStarted", OnNight, this);
             Eventhub.Subscribe("TOD:dayStarted", OnDay, this);
+	    }
+
+	    protected void AddFloorsToRandomGenerator() {
+	        foreach (var floor in FloorsEnviroment) {
+	            var settings = floor.GetComponent<PrefabSettings>();
+	            var chance = 1.0f;
+	            if (settings) {
+	                chance = settings.SpawnChances;
+	            }
+	            BiomeFloorsEnviroment.Add(floor, typeof(GameObject), chance);
+	        }
 	    }
 
 	}
