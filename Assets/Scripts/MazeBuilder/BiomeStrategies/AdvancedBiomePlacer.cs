@@ -84,11 +84,26 @@ namespace MazeBuilder.BiomeStrategies {
 		private void PlantSafehouse() {
 			int radius = (int) (maze.Width * SAFEHOUSE_FRACTION / 2);
 
+			int minX = int.MaxValue;
+			int minY = int.MaxValue;
+			int maxX = int.MinValue;
+			int maxY = int.MinValue;
+
 			foreach (Tile tile in maze.Tiles) {
 				if (tile.Position.EuclidianDistanceTo(maze.AsRoom.Center) < radius) {
 					ChangeMazeTileBiome(tile.Position, Biome.Safehouse, biomeIDCounter);
+
+					int x = tile.Position.X;
+					int y = tile.Position.Y;
+					if (x < minX) minX = x;
+					if (x > maxX) maxX = x;
+					if (y < minY) minY = y;
+					if (y > maxY) maxY = y;
+					
 				}
 			}
+
+			maze.Rooms.Add(new Room(minX, minY, maxX, maxY));
 		}
 
 		private void PlantSpawn(Coordinate where) {
