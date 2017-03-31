@@ -9,7 +9,6 @@ namespace MazeBuilder.BiomeGenerators {
     public class EarthGenerator : AbstractBiomeGenerator {
 
 		// should be an array...
-        #region BiomeLights
         [Header("Biome Placing Rules")]
 		[SerializeField]
 		private PlacementRule outerEdges;
@@ -17,13 +16,10 @@ namespace MazeBuilder.BiomeGenerators {
 		private PlacementRule innerEdges;
 		[SerializeField]
 		private PlacementRule straightWalls;
-        #endregion
 
-        #region BiomeLights
         [Header("Biome floors")]
 		[SerializeField]
 		private GameObject floor2;
-        #endregion
 
 
         private new void Awake() {

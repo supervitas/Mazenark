@@ -1,10 +1,25 @@
 ﻿using App.EventSystem;
 using MazeBuilder.Utility;
+using MazeBuilder.BiomeGenerators.PlacementRules;
 using UnityEngine;
 
 namespace MazeBuilder.BiomeGenerators {
     public class FireGenerator : AbstractBiomeGenerator {
-        private new void Awake() {
+
+		// should be in AbstractBiomeGenerator, maybe?
+		[Header("Biome Placing Rules")]
+		[SerializeField]
+		private PlacementRule outerEdges;
+		[SerializeField]
+		private PlacementRule innerEdges;
+		[SerializeField]
+		private PlacementRule straightWalls;
+
+		[Header("Biome floors")]
+		[SerializeField]
+		private GameObject floor2;
+
+		private new void Awake() {
             base.Awake();
         }
 
@@ -36,14 +51,35 @@ namespace MazeBuilder.BiomeGenerators {
             ParticleList = PlaceLightingParticles(Biome.Fire, NightParticles);
         }
 
-        public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
-            Instantiate(FlatWall, GetDefaultPositionVector(coordinate), Quaternion.identity);
-        }
-        public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
-            if (FloorSpawnChance >= Random.Range(1, 100)) {
-                Instantiate((GameObject) BiomeFloorsEnviroment.GetRandom(typeof(GameObject)),
-                    GetDefaultPositionVector(coordinate, 0.1f), Quaternion.identity);
-            }
-        }
+		// Copy-paste from Earth biome
+		public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
+			GameObject parent = new GameObject();
+
+			foreach (Edge edge in Edge.Edges) {
+				var edgeMeshTemplate = outerEdges.GetMeshForPlacement(maze, coordinate, edge);
+				if (edgeMeshTemplate == null)
+					edgeMeshTemplate = innerEdges.GetMeshForPlacement(maze, coordinate, edge);
+				if (edgeMeshTemplate == null)
+					edgeMeshTemplate = straightWalls.GetMeshForPlacement(maze, coordinate, edge);
+
+				if (edgeMeshTemplate != null) {
+					var edgeMesh = Instantiate(edgeMeshTemplate, GetDefaultPositionVector(coordinate), edge.Rotation);
+					edgeMesh.name = string.Format(edge.Name);
+					edgeMesh.transform.parent = parent.transform;
+				}
+			}
+
+			parent.name = string.Format("Cube at {0}:{1}", coordinate.X, coordinate.Y);
+		}
+
+		// Copy-paste from Earth biome
+		public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
+			if (FloorSpawnChance >= Random.Range(1, 100)) {
+				Instantiate((GameObject) BiomeFloorsEnviroment.GetRandom(typeof(GameObject)),
+					GetDefaultPositionVector(coordinate, 0.2f), Quaternion.identity);
+			}
+
+			Instantiate(floor2, GetDefaultPositionVector(coordinate), Edge.UpRight.Rotation);
+		}
     }
 }
