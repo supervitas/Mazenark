@@ -78,7 +78,7 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
         public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
-            if (FloorSpawnChance >= Random.Range(1, 101)) {
+            if (FloorSpawnChance >= Random.Range(1, 100)) {
                 Instantiate((GameObject) BiomeFloorsEnviroment.GetRandom(typeof(GameObject)),
                     GetDefaultPositionVector(coordinate, 0.2f), Quaternion.identity);
             }
