@@ -6,8 +6,8 @@
         public int Y { get; private set; }
 
         public  void GenerateFixedSize() {
-            X = 97;
-            Y = 97;
+            X = 65;
+            Y = 65;
         }
     }
 }
