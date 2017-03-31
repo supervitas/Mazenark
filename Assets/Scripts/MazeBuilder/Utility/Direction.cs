@@ -19,7 +19,7 @@ namespace MazeBuilder.Utility {
 			DeltaY = dy;
 			Name = name;
 
-			directions.Add(this);
+            // directions.Add(this);
 		}
 
 		public Coordinate Shift(Coordinate toBeShifted) {
@@ -58,6 +58,12 @@ namespace MazeBuilder.Utility {
 			Bottom.Opposite = Up;
 			Right.Opposite = Left;
 			Nowhere.Opposite = Nowhere;
+
+		    directions.Add(Up);
+		    directions.Add(Left);
+		    directions.Add(Right);
+		    directions.Add(Bottom);
+
 		}
 	}
 }

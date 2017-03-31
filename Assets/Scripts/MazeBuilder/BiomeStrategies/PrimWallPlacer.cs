@@ -2,13 +2,13 @@
 using MazeBuilder.Utility;
 using Random = System.Random;
 using System.Collections.Generic;
-using System.Diagnostics;
+using UnityEngine;
 
 namespace MazeBuilder.BiomeStrategies {
     public class PrimWallPlacer : IWallPlacer {
         private static PrimWallPlacer instance = new PrimWallPlacer();
         private static Random random = new Random();
-		private const float CHANCE_TO_CUT_PASSAGE_THROUGH_DEAD_END = 1.0f / 2; // Every fifth will be cut through.
+		private const float CHANCE_TO_CUT_PASSAGE_THROUGH_DEAD_END = 1.0f / 2; // Every second will be cut through.
 
         private PrimWallPlacer() { }
 
@@ -116,7 +116,6 @@ namespace MazeBuilder.BiomeStrategies {
 
 						if (maze.IsPointWithin(blockingWallPosition)) {
 							bool shouldCutThrough = random.NextDouble() < CHANCE_TO_CUT_PASSAGE_THROUGH_DEAD_END;
-
 							if (shouldCutThrough) {
 								maze[blockingWallPosition].Type = Tile.Variant.Empty;
 							}
@@ -131,6 +130,7 @@ namespace MazeBuilder.BiomeStrategies {
 			int wallsCounter = 0;
 
 			foreach (Direction dir in Direction.Directions) {
+
 				Coordinate whereToGo = dir.Shift(dir.Shift(fromWhich.Position)); // Double shift equals to += 2.
 
 				if (maze.IsPointWithin(whereToGo)) {
