@@ -3,12 +3,18 @@
 namespace Prefabs.Particles {
     public class RainFolowingPlayer : MonoBehaviour {
 
-        [SerializeField] private Transform _target;
-
+        private Transform _target;
         private Vector3 _position = new Vector3();
-        void Start () {
-//            GetComponentInChildren<ParticleSystem>().Stop();
+
+        public void StartRain(Transform target) {
+            _target = target;
+            GetComponentInChildren<ParticleSystem>().Play();
             InvokeRepeating("UpdateRainPosition", 0, 2);
+        }
+
+        public void StopRain() {
+            CancelInvoke("UpdateRainPosition");
+            GetComponentInChildren<ParticleSystem>().Stop();
         }
 
         private void UpdateRainPosition() {

@@ -1,5 +1,6 @@
 ﻿using App.EventSystem;
 using MazeBuilder.Utility;
+using Prefabs.Particles;
 using UnityEngine;
 
 namespace MazeBuilder.BiomeGenerators {
@@ -7,9 +8,18 @@ namespace MazeBuilder.BiomeGenerators {
         [Header("Rain Effect")]
         public GameObject Rain;
 
+        private GameObject _instancedRain;
+
 
         private new void Awake() {
             base.Awake();
+            Eventhub.Subscribe("WeatherShouldChange", ToggleBiomeWeather, this);
+            InstantateWeather();
+        }
+
+        private void InstantateWeather() {
+            _instancedRain = Instantiate(Rain, Vector3.back, Quaternion.identity);
+            _instancedRain.GetComponent<RainFolowingPlayer>().StopRain();
         }
 
         protected override void OnNight(object sender, EventArguments args) {
@@ -33,19 +43,20 @@ namespace MazeBuilder.BiomeGenerators {
         }
         protected override void StartPostPlacement(object sender, EventArguments e) {
             PlaceLightingObjects();
-//            PlaceRain();
         }
 
         private void PlaceLightingObjects() {
             ParticleList = PlaceLightingParticles(Biome.Water, NightParticles);
         }
 
-        private void PlaceRain() {
-            var emptyTiles = GetTilesByTypeAndBiome(Biome.Water, Tile.Variant.Empty);
-            foreach (var tile in emptyTiles) {
-                Instantiate(Rain, GetDefaultPositionVector(tile.Position, 0.1f), Quaternion.identity);
+        private void ToggleBiomeWeather(object sender, EventArguments e) {
+            if (e.BiomeName == "Water Biome") {
+                _instancedRain.GetComponent<RainFolowingPlayer>().StartRain(e.Transform);
+            } else {
+                _instancedRain.GetComponent<RainFolowingPlayer>().StopRain();
             }
         }
+
 
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
             Instantiate(FlatWall, GetDefaultPositionVector(coordinate), Quaternion.identity);
