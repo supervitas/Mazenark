@@ -15,14 +15,12 @@ namespace MazeBuilder.BiomeGenerators {
 	    [SerializeField]
 	    [Range(0, 100f)] protected float ParticlesSpawnChance = 25f;
 	    [SerializeField]
-	    [Range(0, 100f)] protected float FloorSpawnChance = 25f;
+	    [Range(0, 100f)] protected float FloorEnviromentSpawnChance = 25f;
 	    #endregion
 
 	    #region BiomeWalls
 	    [Header("Biome Walls")]
 	    public GameObject FlatWall;
-	    public GameObject OuterEdge;
-	    public GameObject InnerEdge;
 	    #endregion
 
 	    #region BiomeFloor

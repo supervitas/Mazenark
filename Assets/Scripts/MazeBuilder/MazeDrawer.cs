@@ -17,6 +17,7 @@ namespace MazeBuilder {
         public EarthGenerator EarthBiomeGenerator;
         public FireGenerator FireBiomeGenerator;
         public WindGenerator WindBiomeGenerator;
+        public NatureGenerator NatureGenerator;
         #endregion
 
         private void Start() {
@@ -54,6 +55,9 @@ namespace MazeBuilder {
 			if (biome == Biome.Wind) {
 				return WindBiomeGenerator;
 			}
+            if (biome == Biome.Nature) {
+                return NatureGenerator;
+            }
 			return EarthBiomeGenerator; //default is Earth
 		}
 

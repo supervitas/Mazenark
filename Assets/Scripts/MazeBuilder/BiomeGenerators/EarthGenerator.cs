@@ -11,15 +11,15 @@ namespace MazeBuilder.BiomeGenerators {
 		// should be an array...
         [Header("Biome Placing Rules")]
 		[SerializeField]
-		private PlacementRule outerEdges;
+		private PlacementRule _outerEdges;
 		[SerializeField]
-		private PlacementRule innerEdges;
+		private PlacementRule _innerEdges;
 		[SerializeField]
-		private PlacementRule straightWalls;
+		private PlacementRule _straightWalls;
 
         [Header("Biome floors")]
 		[SerializeField]
-		private GameObject floor2;
+		private GameObject _floor2;
 
 
         private new void Awake() {
@@ -54,11 +54,11 @@ namespace MazeBuilder.BiomeGenerators {
             GameObject parent = new GameObject();
 
             foreach (Edge edge in Edge.Edges) {
-				var edgeMeshTemplate = outerEdges.GetMeshForPlacement(maze, coordinate, edge);
+				var edgeMeshTemplate = _outerEdges.GetMeshForPlacement(maze, coordinate, edge);
 				if (edgeMeshTemplate == null)
-					edgeMeshTemplate = innerEdges.GetMeshForPlacement(maze, coordinate, edge);
+					edgeMeshTemplate = _innerEdges.GetMeshForPlacement(maze, coordinate, edge);
 				if (edgeMeshTemplate == null)
-					edgeMeshTemplate = straightWalls.GetMeshForPlacement(maze, coordinate, edge);
+					edgeMeshTemplate = _straightWalls.GetMeshForPlacement(maze, coordinate, edge);
 
 				if (edgeMeshTemplate != null) {
 					var edgeMesh = Instantiate(edgeMeshTemplate, GetDefaultPositionVector(coordinate), edge.Rotation);
@@ -67,19 +67,16 @@ namespace MazeBuilder.BiomeGenerators {
 				}
             }
 
-			// Debug walls
-			//Instantiate(FlatWall, GetDefaultPositionVector(coordinate), Quaternion.identity);
-
             parent.name = string.Format("Cube at {0}:{1}", coordinate.X, coordinate.Y);
         }
 
         public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
-            if (FloorSpawnChance >= Random.Range(1, 100)) {
+            if (FloorEnviromentSpawnChance >= Random.Range(1, 100)) {
                 Instantiate((GameObject) BiomeFloorsEnviroment.GetRandom(typeof(GameObject)),
                     GetDefaultPositionVector(coordinate, 0.2f), Quaternion.identity);
             }
 
-            Instantiate(floor2, GetDefaultPositionVector(coordinate), Edge.UpRight.Rotation);
+            Instantiate(_floor2, GetDefaultPositionVector(coordinate), Edge.UpRight.Rotation);
 		}
 
         private void PlaceLightingObjects() {

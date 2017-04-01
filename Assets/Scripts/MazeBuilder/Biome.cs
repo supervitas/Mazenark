@@ -72,6 +72,7 @@ namespace MazeBuilder {
         public static Biome Earth = new Biome(DefaultRoomPlacer.Instance, null, EuclidianTileWeighter.Instance, "Earth Biome");
         public static Biome Fire = new Biome(DefaultRoomPlacer.Instance, null, EuclidianTileWeighter.Instance, "Fire Biome", chanceToSpawnModifier:0.5f, sizeModifier:0.25f);
         public static Biome Wind = new Biome(DefaultRoomPlacer.Instance, null, EuclidianTileWeighter.Instance, "Wind Biome");
+        public static Biome Nature = new Biome(DefaultRoomPlacer.Instance, null, EuclidianTileWeighter.Instance, "Nature Biome");
     }
 }
 

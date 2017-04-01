@@ -51,7 +51,6 @@ namespace MazeBuilder.BiomeGenerators {
             ParticleList = PlaceLightingParticles(Biome.Fire, NightParticles);
         }
 
-		// Copy-paste from Earth biome
 		public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
 			GameObject parent = new GameObject();
 
@@ -72,9 +71,8 @@ namespace MazeBuilder.BiomeGenerators {
 			parent.name = string.Format("Cube at {0}:{1}", coordinate.X, coordinate.Y);
 		}
 
-		// Copy-paste from Earth biome
 		public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
-			if (FloorSpawnChance >= Random.Range(1, 100)) {
+			if (FloorEnviromentSpawnChance >= Random.Range(1, 100)) {
 				Instantiate((GameObject) BiomeFloorsEnviroment.GetRandom(typeof(GameObject)),
 					GetDefaultPositionVector(coordinate, 0.2f), Quaternion.identity);
 			}
