@@ -60,7 +60,6 @@ namespace MazeBuilder.BiomeGenerators {
 					edgeMeshTemplate = innerEdges.GetMeshForPlacement(maze, coordinate, edge);
 				if (edgeMeshTemplate == null)
 					edgeMeshTemplate = straightWalls.GetMeshForPlacement(maze, coordinate, edge);
-
 				if (edgeMeshTemplate != null) {
 					var edgeMesh = Instantiate(edgeMeshTemplate, GetDefaultPositionVector(coordinate), edge.Rotation);
 					edgeMesh.name = string.Format(edge.Name);
