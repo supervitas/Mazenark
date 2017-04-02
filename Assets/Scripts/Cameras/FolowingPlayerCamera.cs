@@ -14,7 +14,6 @@ namespace Cameras {
 
         [SerializeField] private float _bumperDistanceCheck = 2.5f; // length of bumper ray
         [SerializeField] private float _bumperCameraHeight = 1.0f; // adjust camera height while bumping
-        [SerializeField] private Vector3 _bumperRayOffset; // allows offset of the bumper ray from target origin
 
         private void Awake() {
             GetComponent<Camera>().transform.parent = _target;
@@ -26,14 +25,13 @@ namespace Cameras {
             // check to see if there is anything behind the target
             RaycastHit hit;
             Vector3 back = _target.transform.TransformDirection(-1 * Vector3.forward);
-            // cast the bumper ray out from rear and check to see if there is anything behind
-            if (Physics.Raycast(_target.TransformPoint(_bumperRayOffset), back, out hit, _bumperDistanceCheck)
-                 && hit.transform != _target) {
+            // cast the bumper Sphere out from rear and check to see if there is anything behind
+            if (Physics.SphereCast(_target.transform.position, _target.transform.position.y, back, out hit, _bumperDistanceCheck)
+                && hit.transform != _target && hit.transform.GetComponent<MeshRenderer>().bounds.size.y > 2) {
                 wantedPosition.x = hit.point.x;
                 wantedPosition.z = hit.point.z;
                 wantedPosition.y = Mathf.Lerp(hit.point.y + _bumperCameraHeight, wantedPosition.y, Time.deltaTime * _damping);
             }
-
             transform.position = Vector3.Lerp(transform.position, wantedPosition, Time.deltaTime * _damping);
 
             Vector3 lookPosition = _target.TransformPoint(_targetLookAtOffset);
