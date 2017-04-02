@@ -16,10 +16,17 @@ namespace Cameras {
         [SerializeField] private float _bumperCameraHeight = 1.0f; // adjust camera height while bumping
 
         private void Awake() {
+//            GetComponent<Camera>().transform.parent = _target;
+        }
+
+        public void SetPlayerTransforms(Transform player) {
+            _target = player;
             GetComponent<Camera>().transform.parent = _target;
         }
 
         private void FixedUpdate() {
+            if (!_target) return;
+
             Vector3 wantedPosition = _target.TransformPoint(0, _height, -_distance);
 
             // check to see if there is anything behind the target
@@ -27,7 +34,7 @@ namespace Cameras {
             Vector3 back = _target.transform.TransformDirection(-1 * Vector3.forward);
             // cast the bumper Sphere out from rear and check to see if there is anything behind
             if (Physics.SphereCast(_target.transform.position, _target.transform.position.y, back, out hit, _bumperDistanceCheck)
-                && hit.transform != _target && hit.transform.GetComponent<MeshRenderer>().bounds.size.y > 2) {
+                && !hit.transform.CompareTag("Player") && hit.transform.GetComponent<MeshRenderer>().bounds.size.y > 2) {
                 wantedPosition.x = hit.point.x;
                 wantedPosition.z = hit.point.z;
                 wantedPosition.y = Mathf.Lerp(hit.point.y + _bumperCameraHeight, wantedPosition.y, Time.deltaTime * _damping);
