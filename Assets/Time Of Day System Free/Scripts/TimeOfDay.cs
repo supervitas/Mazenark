@@ -461,12 +461,12 @@ namespace AC.TimeOfDaySystemFree
 	    public void CreateTimeUpdateEvent() {
 	        if (Application.isPlaying) {
 	            if (!_isDayEventWasFired && IsDay) {
-	                App.AppManager.Instance.EventHub.CreateEvent("TOD:dayStarted", new EventArguments(""));
+	                App.AppManager.Instance.EventHub.CreateEvent("TOD:dayStarted", null);
 	                _isDayEventWasFired = true;
 	                _isNighEventWasFired = false;
 	            }
 	            if (!_isNighEventWasFired && IsNight) {
-	                App.AppManager.Instance.EventHub.CreateEvent("TOD:nightStarted", new EventArguments(""));
+	                App.AppManager.Instance.EventHub.CreateEvent("TOD:nightStarted", null);
 	                _isDayEventWasFired = false;
 	                _isNighEventWasFired = true;
 	            }

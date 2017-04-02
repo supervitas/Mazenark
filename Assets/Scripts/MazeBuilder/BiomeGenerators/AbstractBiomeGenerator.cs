@@ -41,10 +41,13 @@ namespace MazeBuilder.BiomeGenerators {
 	    protected readonly CollectionRandom BiomeFloorsEnviroment = new CollectionRandom();
 
 	    protected void Awake() {
-	        BiomesCollecton = AppManager.Instance.MazeInstance.Maze.Biomes;
 	        Eventhub = AppManager.Instance.EventHub;
 	        GeneralSubscribtion();
 	        AddFloorsToRandomGenerator();
+	    }
+
+	    private void SetUp(object sender, EventArguments eventArguments) {
+	        BiomesCollecton = AppManager.Instance.MazeInstance.Maze.Biomes;
 	    }
 
 	    public abstract void CreateWall(Biome biome, Coordinate coordinate, Maze maze);
@@ -54,7 +57,7 @@ namespace MazeBuilder.BiomeGenerators {
 	    protected abstract void StartPostPlacement(object sender, EventArguments e);
 
 	    protected void OnDestroy() {
-	        Eventhub.UnsubscribeFromAll(this);
+//	        Eventhub.UnsubscribeFromAll(this);
 	    }
 
 	    protected IEnumerable<Maze.TileCollection> GetTileCollectionForBiome(Biome type) {
@@ -84,6 +87,7 @@ namespace MazeBuilder.BiomeGenerators {
 	    }
 
 	    private void GeneralSubscribtion() {
+	        Eventhub.Subscribe("MazeCreated", SetUp, this);
 	        Eventhub.Subscribe("mazedrawer:placement_finished", StartPostPlacement, this);
 	        Eventhub.Subscribe("TOD:nightStarted", OnNight, this);
             Eventhub.Subscribe("TOD:dayStarted", OnDay, this);

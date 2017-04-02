@@ -1,4 +1,5 @@
-﻿using App.EventSystem;
+﻿using App;
+using App.EventSystem;
 using MazeBuilder.Utility;
 using UnityEngine;
 
@@ -37,11 +38,11 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
-           Instantiate(FlatWall, GetDefaultPositionVector(coordinate), Quaternion.identity);
+            AppManager.Instance.InstantiateSOC(FlatWall, GetDefaultPositionVector(coordinate), Quaternion.identity);
         }
         public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
             if (FloorEnviromentSpawnChance >= UnityEngine.Random.Range(1, 100)) {
-                Instantiate((GameObject) BiomeFloorsEnviroment.GetRandom(typeof(GameObject)),
+                AppManager.Instance.InstantiateSOC((GameObject) BiomeFloorsEnviroment.GetRandom(typeof(GameObject)),
                     GetDefaultPositionVector(coordinate, 0.1f), Quaternion.identity);
             }
         }

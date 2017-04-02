@@ -1,4 +1,5 @@
-﻿using App.EventSystem;
+﻿using App;
+using App.EventSystem;
 using MazeBuilder.Utility;
 using Prefabs.Particles;
 using UnityEngine;
@@ -14,10 +15,10 @@ namespace MazeBuilder.BiomeGenerators {
         private new void Awake() {
             base.Awake();
             Eventhub.Subscribe("WeatherShouldChange", ToggleBiomeWeather, this);
-            InstantateWeather();
+            InstantiateWeather();
         }
 
-        private void InstantateWeather() {
+        private void InstantiateWeather() {
             _instancedRain = Instantiate(Rain, Vector3.back, Quaternion.identity);
             _instancedRain.GetComponent<RainFolowingPlayer>().StopRain();
         }
@@ -59,11 +60,11 @@ namespace MazeBuilder.BiomeGenerators {
 
 
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
-            Instantiate(FlatWall, GetDefaultPositionVector(coordinate), Quaternion.identity);
+            AppManager.Instance.InstantiateSOC(FlatWall, GetDefaultPositionVector(coordinate), Quaternion.identity);
         }
         public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
             if (FloorEnviromentSpawnChance >= UnityEngine.Random.Range(1, 100)) {
-                Instantiate((GameObject) BiomeFloorsEnviroment.GetRandom(typeof(GameObject)),
+                AppManager.Instance.InstantiateSOC((GameObject) BiomeFloorsEnviroment.GetRandom(typeof(GameObject)),
                     GetDefaultPositionVector(coordinate, 0.1f), Quaternion.identity);
             }
         }

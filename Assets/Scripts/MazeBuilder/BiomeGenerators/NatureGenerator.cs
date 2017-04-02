@@ -1,4 +1,5 @@
-﻿using App.EventSystem;
+﻿using App;
+using App.EventSystem;
 using MazeBuilder.BiomeGenerators.PlacementRules;
 using MazeBuilder.Utility;
 using UnityEngine;
@@ -58,7 +59,7 @@ namespace MazeBuilder.BiomeGenerators {
                     edgeMeshTemplate = _straightWalls.GetMeshForPlacement(maze, coordinate, edge);
 
                 if (edgeMeshTemplate != null) {
-                    var edgeMesh = Instantiate(edgeMeshTemplate, GetDefaultPositionVector(coordinate), edge.Rotation);
+                    var edgeMesh = AppManager.Instance.InstantiateSOC(edgeMeshTemplate, GetDefaultPositionVector(coordinate), edge.Rotation);
                     edgeMesh.name = string.Format(edge.Name);
                     edgeMesh.transform.parent = parent.transform;
                 }
@@ -73,7 +74,7 @@ namespace MazeBuilder.BiomeGenerators {
 //                    GetDefaultPositionVector(coordinate, 0.2f), Quaternion.identity);
 //            }
 
-            Instantiate(_floor2, GetDefaultPositionVector(coordinate), Edge.UpRight.Rotation);
+            AppManager.Instance.InstantiateSOC(_floor2, GetDefaultPositionVector(coordinate), Edge.UpRight.Rotation);
         }
 
         private void PlaceLightingObjects() {

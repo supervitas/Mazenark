@@ -21,6 +21,10 @@ namespace MazeBuilder {
         #endregion
 
         private void Start() {
+            App.AppManager.Instance.EventHub.Subscribe("MazeCreated", SetUp, this);
+        }
+
+        private void SetUp(object sender, EventArguments eventArguments) {
             var maze = App.AppManager.Instance.MazeInstance.Maze;
             for (var i = 0; i < maze.Width; i++) {
                 for (var j = 0; j < maze.Height; j++) {
@@ -33,7 +37,7 @@ namespace MazeBuilder {
                     }
                 }
             }
-            App.AppManager.Instance.EventHub.CreateEvent("mazedrawer:placement_finished", new EventArguments(""));
+            App.AppManager.Instance.EventHub.CreateEvent("mazedrawer:placement_finished", null);
         }
 
         private AbstractBiomeGenerator GetGenerator(Biome biome) {
