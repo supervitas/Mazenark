@@ -18,7 +18,7 @@ namespace Controls {
         [SerializeField] private Rigidbody m_rigidBody;
 
         [SerializeField] private ControlMode m_controlMode = ControlMode.Direct;
-
+        private GameObject _camera;
         private float m_currentV = 0;
         private float m_currentH = 0;
 
@@ -81,7 +81,13 @@ namespace Controls {
         }
 
         public override void OnStartLocalPlayer() { //mark local player to take camera to him
-           Camera.main.GetComponent<FolowingPlayerCamera>().SetPlayerTransforms(transform);
+            _camera = GameObject.FindGameObjectWithTag("MainCamera");
+            _camera.GetComponent<FolowingPlayerCamera>().SetPlayerTransforms(transform);
+        }
+
+        private void OnDestroy() {
+
+            _camera.GetComponent<FolowingPlayerCamera>().RemoveFromPlayer();
         }
 
         private void OnCollisionExit(Collision collision)

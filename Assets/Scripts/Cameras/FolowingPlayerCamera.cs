@@ -22,6 +22,13 @@ namespace Cameras {
         public void SetPlayerTransforms(Transform player) {
             _target = player;
             GetComponent<Camera>().transform.parent = _target;
+            GetComponent<Camera>().enabled = true;
+        }
+
+        public void RemoveFromPlayer() {
+            if (_target) {
+                GetComponent<Camera>().transform.parent = null;
+            }
         }
 
         private void FixedUpdate() {

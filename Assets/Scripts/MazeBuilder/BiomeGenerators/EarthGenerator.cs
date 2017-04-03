@@ -109,7 +109,7 @@ namespace MazeBuilder.BiomeGenerators {
                 z = Utils.TransformToWorldCoordinate(tile.Position.Y - sideOffset)
             };
 
-            AppManager.Instance.InstantiateSOC(Torch, position, rotation);
+            Instantiate(Torch, position, rotation);
         }
 
     }

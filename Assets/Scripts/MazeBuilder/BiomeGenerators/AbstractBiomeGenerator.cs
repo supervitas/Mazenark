@@ -57,7 +57,7 @@ namespace MazeBuilder.BiomeGenerators {
 	    protected abstract void StartPostPlacement(object sender, EventArguments e);
 
 	    protected void OnDestroy() {
-//	        Eventhub.UnsubscribeFromAll(this);
+	        Eventhub.UnsubscribeFromAll(this);
 	    }
 
 	    protected IEnumerable<Maze.TileCollection> GetTileCollectionForBiome(Biome type) {
