@@ -6,6 +6,7 @@ namespace App {
     public class AppManager : MonoBehaviour {
         public static AppManager Instance { get; private set; }
         public MazeSizeGenerator MazeSize { get; private set; }
+
         public MazeBuilder.MazeBuilder MazeInstance { get; set; }
         public Publisher EventHub { get; private set; }
 
