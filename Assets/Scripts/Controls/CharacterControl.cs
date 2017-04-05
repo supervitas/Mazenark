@@ -84,8 +84,12 @@ namespace Controls {
         public override void OnStartLocalPlayer() { // Set up game for client
             _camera = GameObject.FindGameObjectWithTag("MainCamera");
             _camera.GetComponent<FolowingPlayerCamera>().SetPlayerTransforms(transform);
-            var mazeDelivery = FindObjectOfType<MazeDelivery>();
-            mazeDelivery.GetMaze();
+            CmdGetMaze();
+        }
+
+        [Command]
+        public void CmdGetMaze() {
+            FindObjectOfType<MazeDelivery>().GetMaze();
         }
 
         private void OnDestroy() {

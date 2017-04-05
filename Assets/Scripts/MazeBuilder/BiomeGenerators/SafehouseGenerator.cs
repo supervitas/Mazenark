@@ -45,7 +45,7 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
         private void PlaceSafeHouse() {
-            AppManager.Instance.InstantiateSOC(Safehouse, GetDefaultPositionVector(new Coordinate(AppManager.Instance.MazeInstance.Height / 2,
+            Instantiate(Safehouse, GetDefaultPositionVector(new Coordinate(AppManager.Instance.MazeInstance.Height / 2,
                 AppManager.Instance.MazeInstance.Width / 2), 0.1f), Quaternion.identity);
         }
 
@@ -53,10 +53,10 @@ namespace MazeBuilder.BiomeGenerators {
             AppManager.Instance.InstantiateSOC(FlatWall, GetDefaultPositionVector(coordinate), Quaternion.identity);
         }
         public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
-            if (FloorEnviromentSpawnChance >= UnityEngine.Random.Range(1, 100)) {
-                AppManager.Instance.InstantiateSOC((GameObject) BiomeFloorsEnviroment.GetRandom(typeof(GameObject)),
-                    GetDefaultPositionVector(coordinate, 0.1f), Quaternion.identity);
-            }
+//            if (FloorEnviromentSpawnChance >= UnityEngine.Random.Range(1, 100)) {
+//                AppManager.Instance.InstantiateSOC((GameObject) BiomeFloorsEnviroment.GetRandom(typeof(GameObject)),
+//                    GetDefaultPositionVector(coordinate, 0.1f), Quaternion.identity);
+//            }
 
         }
     }

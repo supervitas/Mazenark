@@ -3,6 +3,7 @@ using System.Linq;
 using MazeBuilder;
 using UnityEngine.Networking;
 using MazeBuilder.BiomeStrategies;
+using UnityEngine;
 
 namespace App.Server {
     public class MazeDelivery : NetworkBehaviour {
@@ -13,14 +14,14 @@ namespace App.Server {
              public int Y;
              public string BiomeName;
              public int TileType;
-			public int BiomeInstanceID;
+			 public int BiomeInstanceId;
 
-            public MazeStruct(int x, int y, string biomeName, int tileType, int biomeInstanceID) {
+            public MazeStruct(int x, int y, string biomeName, int tileType, int biomeInstanceId) {
                 X = x;
                 Y = y;
                 BiomeName = biomeName;
                 TileType = tileType;
-				BiomeInstanceID = biomeInstanceID;
+				BiomeInstanceId = biomeInstanceId;
             }
         }
 
@@ -65,7 +66,7 @@ namespace App.Server {
             foreach (var tile in mazeArr) {
                 _fetchedMaze[tile.X, tile.Y].Biome = GetBiomeByName(tile.BiomeName);
                 _fetchedMaze[tile.X, tile.Y].Type = IntTileTypeToVariant(tile.TileType);
-				_fetchedMaze[tile.X, tile.Y].BiomeID = tile.BiomeInstanceID;
+				_fetchedMaze[tile.X, tile.Y].BiomeID = tile.BiomeInstanceId;
 			}
 			AdvancedBiomePlacer.WriteBiomesListIntoMaze(100, _fetchedMaze);
         }
@@ -77,12 +78,11 @@ namespace App.Server {
             AppManager.Instance.EventHub.CreateEvent("mazedrawer:placement_finished", null);
         }
 
-
         public void GetMaze() {
             if (!isServer)
                 return;
 
-            var messageBatchSize = 20; // how much rows will be send in one message;
+            var messageBatchSize = 10; // how much rows will be send in one message;
             var counter = 0;
             var biomeList = new List<MazeStruct>();
 

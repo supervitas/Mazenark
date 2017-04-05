@@ -12,8 +12,12 @@ namespace WeatherManager {
 
         private void Start() {
             if (!Target) return;
-            _maze = App.AppManager.Instance.MazeInstance.Maze;
             _eventhub = App.AppManager.Instance.EventHub;
+            _eventhub.Subscribe("MazeLoaded", StartManager, this);
+        }
+
+        void StartManager(object sender, EventArguments eventArguments) {
+            _maze = App.AppManager.Instance.MazeInstance.Maze;
             InvokeRepeating("CheckBiomeChanged", 0, 2);
         }
 

@@ -48,7 +48,6 @@ namespace MazeBuilder.BiomeGenerators {
 
 	    private void SetUp(object sender, EventArguments eventArguments) {
 	        BiomesCollecton = AppManager.Instance.MazeInstance.Maze.Biomes;
-	        Debug.Log(AppManager.Instance.MazeInstance.Maze[1,2].Biome.Name);
 	    }
 
 	    public abstract void CreateWall(Biome biome, Coordinate coordinate, Maze maze);
@@ -79,7 +78,7 @@ namespace MazeBuilder.BiomeGenerators {
 	    }
 
 	    protected List<ParticleSystem> PlaceLightingParticles(Biome biomeType, ParticleSystem particles) {
-//	        Debug.Log(GetTilesByTypeAndBiome(biomeType, Tile.Variant.Wall).ToList().Count);
+	        Debug.Log(GetTilesByTypeAndBiome(biomeType, Tile.Variant.Empty).ToList().Count);
 	        return (from tile in GetTilesByTypeAndBiome(biomeType, Tile.Variant.Empty)
 	        let shouldPlace = ParticlesSpawnChance >= Random.Range(1, 100)
             where shouldPlace select Instantiate(particles, GetDefaultPositionVector(tile.Position, 3.5f), Quaternion.identity)).ToList();
