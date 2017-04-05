@@ -1,14 +1,26 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
-using App.EventSystem;
 using MazeBuilder;
-using UnityEngine;
 using UnityEngine.Networking;
 
 
 namespace App.Server {
     public class MazeDelivery : NetworkBehaviour {
         private Maze _fetchedMaze;
+
+        public struct MazeStruct {
+             public int X;
+             public int Y;
+             public string BiomeName;
+             public int TileType;
+
+            public MazeStruct(int x, int y, string biomeName, int tileType) {
+                X = x;
+                Y = y;
+                BiomeName = biomeName;
+                TileType = tileType;
+            }
+        }
 
         private Tile.Variant IntTileTypeToVariant(int type) {
             switch (type) {
@@ -47,9 +59,11 @@ namespace App.Server {
         }
 
         [ClientRpc]
-        void RpcFillMaze(int x, int y, string biomeName, int type) {
-            _fetchedMaze[x, y].Biome = GetBiomeByName(biomeName);
-            _fetchedMaze[x, y].Type = IntTileTypeToVariant(type);
+        void RpcFillMaze(MazeStruct[] mazeArr) {
+            foreach (var tile in mazeArr) {
+                _fetchedMaze[tile.X, tile.Y].Biome = GetBiomeByName(tile.BiomeName);
+                _fetchedMaze[tile.X, tile.Y].Type = IntTileTypeToVariant(tile.TileType);
+            }
         }
 
         [ClientRpc]
@@ -64,16 +78,28 @@ namespace App.Server {
             if (!isServer)
                 return;
 
+            var messageBatchSize = 20; // how much rows will be send in one message;
+            var counter = 0;
+            var biomeList = new List<MazeStruct>();
+
             var mazeInstance = AppManager.Instance.MazeInstance;
             var maze = mazeInstance.Maze;
+
 
             RpcCreateMaze(maze.Width, maze.Height); // create maze
 
             for (var x = 0; x < mazeInstance.Height; x++) {
                 for (var y = 0; y < mazeInstance.Width; y++) {
-                    RpcFillMaze(x, y, maze[x, y].Biome.Name, VariantTyleTypeToInt(maze[x, y].Type)); // fill maze
+                    biomeList.Add(new MazeStruct(x, y, maze[x, y].Biome.Name, VariantTyleTypeToInt(maze[x, y].Type))); // fill maze
+                }
+                counter++;
+                if (counter >= messageBatchSize) {
+                    RpcFillMaze(biomeList.ToArray());
+                    counter = 0;
+                    biomeList.Clear();
                 }
             }
+            RpcFillMaze(biomeList.ToArray()); // send final chunk of data
 
             RpcMazeLoadingFinished(maze.Width, maze.Height);
         }

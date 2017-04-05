@@ -1,5 +1,7 @@
 ﻿using System;
 using MazeBuilder.BiomeStrategies;
+using UnityEngine;
+using Random = System.Random;
 
 namespace MazeBuilder {
     public class MazeBuilder {

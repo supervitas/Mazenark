@@ -78,6 +78,7 @@ namespace MazeBuilder.BiomeGenerators {
 	    }
 
 	    protected List<ParticleSystem> PlaceLightingParticles(Biome biomeType, ParticleSystem particles) {
+	        Debug.Log(GetTilesByTypeAndBiome(biomeType, Tile.Variant.Wall).ToList().Count);
 	        return (from tile in GetTilesByTypeAndBiome(biomeType, Tile.Variant.Empty)
 	        let shouldPlace = ParticlesSpawnChance >= Random.Range(1, 100)
             where shouldPlace select Instantiate(particles, GetDefaultPositionVector(tile.Position, 3.5f), Quaternion.identity)).ToList();
