@@ -45,8 +45,8 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
         private void PlaceSafeHouse() {
-            AppManager.Instance.InstantiateSOC(Safehouse, GetDefaultPositionVector(new Coordinate(App.AppManager.Instance.MazeInstance.Height / 2,
-                App.AppManager.Instance.MazeInstance.Width / 2), 0.1f), Quaternion.identity);
+            AppManager.Instance.InstantiateSOC(Safehouse, GetDefaultPositionVector(new Coordinate(AppManager.Instance.MazeInstance.Height / 2,
+                AppManager.Instance.MazeInstance.Width / 2), 0.1f), Quaternion.identity);
         }
 
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {

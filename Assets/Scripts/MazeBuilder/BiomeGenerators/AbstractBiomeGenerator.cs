@@ -56,9 +56,6 @@ namespace MazeBuilder.BiomeGenerators {
 	    protected abstract void OnDay(object sender, EventArguments args);
 	    protected abstract void StartPostPlacement(object sender, EventArguments e);
 
-	    protected void OnDestroy() {
-	        Eventhub.UnsubscribeFromAll(this);
-	    }
 
 	    protected IEnumerable<Maze.TileCollection> GetTileCollectionForBiome(Biome type) {
 	        return from biome in BiomesCollecton where biome.biome == type select biome;
@@ -87,7 +84,7 @@ namespace MazeBuilder.BiomeGenerators {
 	    }
 
 	    private void GeneralSubscribtion() {
-	        Eventhub.Subscribe("MazeCreated", SetUp, this);
+	        Eventhub.Subscribe("MazeLoaded", SetUp, this);
 	        Eventhub.Subscribe("mazedrawer:placement_finished", StartPostPlacement, this);
 	        Eventhub.Subscribe("TOD:nightStarted", OnNight, this);
             Eventhub.Subscribe("TOD:dayStarted", OnDay, this);

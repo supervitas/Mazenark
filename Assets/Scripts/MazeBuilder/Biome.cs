@@ -1,15 +1,19 @@
-﻿using MazeBuilder.BiomeStrategies;
+﻿using System.Collections.Generic;
+using MazeBuilder.BiomeStrategies;
 using MazeBuilder.Utility;
 
 
 namespace MazeBuilder {
     public class Biome {
-		public string Name { get; private set; }
+		public string Name { get; set; }
 
+        public static List<Biome> AllBiomesList = new List<Biome>();
 		public static CollectionRandom allBiomes = new CollectionRandom();
 
 		private static Biome prevPrevBiome = null;
 		private static Biome prevBiome = null;
+
+
 		public static Biome GetRandomBiome() {
 			var randomBiome = (Biome) allBiomes.GetRandom(typeof(Biome));
 			while (randomBiome == prevBiome || randomBiome == prevPrevBiome) {
@@ -34,6 +38,8 @@ namespace MazeBuilder {
 			IsManuallyPlaced = isManuallyPlaced;
 			ChanceToSpawnModifier = chanceToSpawnModifier;
 			SizeModifier = sizeModifier;
+
+            AllBiomesList.Add(this);
 
 			if (!isManuallyPlaced) {
 				allBiomes.Add(new CollectionRandom.Element(this, name, typeof(Biome), chanceToSpawnModifier));
@@ -73,6 +79,7 @@ namespace MazeBuilder {
         public static Biome Fire = new Biome(DefaultRoomPlacer.Instance, null, EuclidianTileWeighter.Instance, "Fire Biome", chanceToSpawnModifier:1.2f, sizeModifier:0.8f);
         public static Biome Wind = new Biome(DefaultRoomPlacer.Instance, null, EuclidianTileWeighter.Instance, "Wind Biome");
         public static Biome Nature = new Biome(DefaultRoomPlacer.Instance, null, EuclidianTileWeighter.Instance, "Nature Biome");
+
     }
 }
 

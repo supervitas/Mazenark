@@ -9,15 +9,19 @@ namespace MazeBuilder {
 
         private Maze _maze;
 
-        public MazeBuilder (int width = 10, int height = 10) {
+        public MazeBuilder (int width = 10, int height = 10, Maze maze = null) {
             Width = width;
             Height = height;
+            if (maze != null) {
+                _maze = maze;
+            }
         }
 
         public Maze Maze {
             get {
                 return _maze ?? CreateNewMaze();
             }
+
         }
 
         private Maze CreateNewMaze() {

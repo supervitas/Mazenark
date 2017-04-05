@@ -18,7 +18,7 @@ namespace MazeBuilder {
 		private List<TileCollection> biomeList = new List<TileCollection>();
 
 
-        public Maze (int width = 10, int height = 10) {
+        public Maze (int width = 10, int height = 10, bool fromServer = false) {
             if (width < 5)
                 width = 5;
             if (height < 5)
@@ -29,6 +29,10 @@ namespace MazeBuilder {
             for (var i = 0; i < width; i++)
 				for (var j = 0; j < height; j++)
 					tiles[i, j] = new Tile(new Coordinate(i, j));
+
+            if (fromServer) {
+                return;
+            }
 
 			AsRoom = new Room(new Coordinate(0, 0), new Coordinate(width - 1, height - 1));
 		}

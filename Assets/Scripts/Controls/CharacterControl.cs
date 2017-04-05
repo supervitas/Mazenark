@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using App.Server;
 using Cameras;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -80,9 +81,11 @@ namespace Controls {
             }
         }
 
-        public override void OnStartLocalPlayer() { //mark local player to take camera to him
+        public override void OnStartLocalPlayer() { // Set up game for client
             _camera = GameObject.FindGameObjectWithTag("MainCamera");
             _camera.GetComponent<FolowingPlayerCamera>().SetPlayerTransforms(transform);
+            var mazeDelivery = FindObjectOfType<MazeDelivery>();
+            mazeDelivery.GetMaze();
         }
 
         private void OnDestroy() {
@@ -184,8 +187,7 @@ namespace Controls {
             JumpingAndLanding();
         }
 
-        private void JumpingAndLanding()
-        {
+        private void JumpingAndLanding() {
             bool jumpCooldownOver = (Time.time - m_jumpTimeStamp) >= m_minJumpInterval;
 
             if (jumpCooldownOver && m_isGrounded && Input.GetKey(KeyCode.Space))
@@ -204,5 +206,6 @@ namespace Controls {
                 m_animator.SetTrigger("Jump");
             }
         }
+
     }
 }

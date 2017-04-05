@@ -9,12 +9,6 @@ namespace App.Server {
             AppManager.Instance.EventHub.CreateEvent("MazeCreated", null);
 
         }
-        public struct MazeStruct {
-            public int X;
-            public int Y;
-            public string BiomeName;
-            public int TileType;
-        }
 
     }
 }
