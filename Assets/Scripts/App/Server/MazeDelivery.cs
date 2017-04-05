@@ -53,13 +53,13 @@ namespace App.Server {
         }
 
         [ClientRpc]
-        void RpcCreateMaze(int width, int hight) {
+        public void RpcCreateMaze(int width, int hight) {
             _fetchedMaze = new Maze(width, hight, true);
 
         }
 
         [ClientRpc]
-        void RpcFillMaze(MazeStruct[] mazeArr) {
+        private void RpcFillMaze(MazeStruct[] mazeArr) {
             foreach (var tile in mazeArr) {
                 _fetchedMaze[tile.X, tile.Y].Biome = GetBiomeByName(tile.BiomeName);
                 _fetchedMaze[tile.X, tile.Y].Type = IntTileTypeToVariant(tile.TileType);
@@ -67,7 +67,7 @@ namespace App.Server {
         }
 
         [ClientRpc]
-        void RpcMazeLoadingFinished(int width, int hight) {
+        public void RpcMazeLoadingFinished(int width, int hight) {
             AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(width, hight, _fetchedMaze);
             AppManager.Instance.EventHub.CreateEvent("MazeLoaded", null);
             AppManager.Instance.EventHub.CreateEvent("mazedrawer:placement_finished", null);
