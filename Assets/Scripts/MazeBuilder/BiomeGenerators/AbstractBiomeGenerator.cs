@@ -48,6 +48,7 @@ namespace MazeBuilder.BiomeGenerators {
 
 	    private void SetUp(object sender, EventArguments eventArguments) {
 	        BiomesCollecton = AppManager.Instance.MazeInstance.Maze.Biomes;
+	        Debug.Log(AppManager.Instance.MazeInstance.Maze[1,2].Biome.Name);
 	    }
 
 	    public abstract void CreateWall(Biome biome, Coordinate coordinate, Maze maze);
