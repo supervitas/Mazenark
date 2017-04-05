@@ -2,7 +2,7 @@
 using System.Linq;
 using MazeBuilder;
 using UnityEngine.Networking;
-
+using MazeBuilder.BiomeStrategies;
 
 namespace App.Server {
     public class MazeDelivery : NetworkBehaviour {
@@ -13,12 +13,14 @@ namespace App.Server {
              public int Y;
              public string BiomeName;
              public int TileType;
+			public int BiomeInstanceID;
 
-            public MazeStruct(int x, int y, string biomeName, int tileType) {
+            public MazeStruct(int x, int y, string biomeName, int tileType, int biomeInstanceID) {
                 X = x;
                 Y = y;
                 BiomeName = biomeName;
                 TileType = tileType;
+				BiomeInstanceID = biomeInstanceID;
             }
         }
 
@@ -63,7 +65,9 @@ namespace App.Server {
             foreach (var tile in mazeArr) {
                 _fetchedMaze[tile.X, tile.Y].Biome = GetBiomeByName(tile.BiomeName);
                 _fetchedMaze[tile.X, tile.Y].Type = IntTileTypeToVariant(tile.TileType);
-            }
+				_fetchedMaze[tile.X, tile.Y].BiomeID = tile.BiomeInstanceID;
+			}
+			AdvancedBiomePlacer.WriteBiomesListIntoMaze(100, _fetchedMaze);
         }
 
         [ClientRpc]
@@ -90,7 +94,7 @@ namespace App.Server {
 
             for (var x = 0; x < mazeInstance.Height; x++) {
                 for (var y = 0; y < mazeInstance.Width; y++) {
-                    biomeList.Add(new MazeStruct(x, y, maze[x, y].Biome.Name, VariantTyleTypeToInt(maze[x, y].Type))); // fill maze
+                    biomeList.Add(new MazeStruct(x, y, maze[x, y].Biome.Name, VariantTyleTypeToInt(maze[x, y].Type), maze[x, y].BiomeID)); // fill maze
                 }
                 counter++;
                 if (counter >= messageBatchSize) {
