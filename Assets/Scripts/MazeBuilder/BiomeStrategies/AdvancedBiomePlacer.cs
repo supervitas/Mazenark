@@ -4,7 +4,7 @@ using System;
 namespace MazeBuilder.BiomeStrategies {
     public class AdvancedBiomePlacer : IBiomePlacer {
         private const float SAFEHOUSE_FRACTION = 0.16f;
-		private const int SPAWN_LENGTH = 3;
+		private const int SPAWN_LENGTH = 1;
 
 		private const int MIN_BIOMES = 4;
         private const int MAX_BIOMES = 8;
@@ -166,8 +166,8 @@ namespace MazeBuilder.BiomeStrategies {
 			}
 		}
 
-		public static void WriteBiomesListIntoMaze(int maxBiomeID, Maze maze) {
-			for (int i = 0; i < maxBiomeID; i++) {
+		public static void WriteBiomesListIntoMaze(int maxBiomeId, Maze maze) {
+			for (int i = 0; i < maxBiomeId; i++) {
 				Maze.TileCollection biome = null;
 
 				foreach (Tile tile in maze.Tiles) {

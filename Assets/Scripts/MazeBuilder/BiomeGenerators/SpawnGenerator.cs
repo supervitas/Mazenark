@@ -5,6 +5,10 @@ using UnityEngine;
 
 namespace MazeBuilder.BiomeGenerators {
     public class SpawnGenerator : AbstractBiomeGenerator {
+        #region BiomeWalls
+        [Header("Spawn")]
+        public GameObject Spawn;
+        #endregion
 
         private new void Awake() {
             base.Awake();
@@ -15,9 +19,10 @@ namespace MazeBuilder.BiomeGenerators {
         protected override void StartPostPlacement(object sender, EventArguments e) {}
 
 
-        public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
-            AppManager.Instance.InstantiateSOC(FlatWall, GetDefaultPositionVector(coordinate), Quaternion.identity);
+        public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {}
+
+        public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
+            AppManager.Instance.InstantiateSOC(Spawn, GetDefaultPositionVector(coordinate, 0.1f), Quaternion.identity);
         }
-        public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {}
     }
 }

@@ -68,7 +68,7 @@ namespace App.Server {
                 _fetchedMaze[tile.X, tile.Y].Type = IntTileTypeToVariant(tile.TileType);
 				_fetchedMaze[tile.X, tile.Y].BiomeID = tile.BiomeInstanceId;
 			}
-			AdvancedBiomePlacer.WriteBiomesListIntoMaze(100, _fetchedMaze);
+//			AdvancedBiomePlacer.WriteBiomesListIntoMaze(100, _fetchedMaze);
         }
 
         [ClientRpc]
@@ -94,7 +94,8 @@ namespace App.Server {
 
             for (var x = 0; x < mazeInstance.Height; x++) {
                 for (var y = 0; y < mazeInstance.Width; y++) {
-                    biomeList.Add(new MazeStruct(x, y, maze[x, y].Biome.Name, VariantTyleTypeToInt(maze[x, y].Type), maze[x, y].BiomeID)); // fill maze
+                    biomeList.Add(new MazeStruct(x, y, maze[x, y].Biome.Name,
+                        VariantTyleTypeToInt(maze[x, y].Type), maze[x, y].BiomeID)); // fill maze
                 }
                 counter++;
                 if (counter >= messageBatchSize) {

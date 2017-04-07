@@ -62,6 +62,5 @@ namespace MazeBuilder {
 			return EarthBiomeGenerator; //default is Earth
 		}
 
-
     }
 }
