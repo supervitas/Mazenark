@@ -25,32 +25,6 @@ namespace App.Server {
             }
         }
 
-        private Tile.Variant IntTileTypeToVariant(int type) {
-            switch (type) {
-                case 0:
-                    return Tile.Variant.Empty;
-                case 1:
-                    return Tile.Variant.Room;
-                case 2:
-                    return Tile.Variant.Wall;
-                default:
-                    return Tile.Variant.Empty;
-            }
-        }
-
-        private int VariantTyleTypeToInt(Tile.Variant type) {
-            switch (type) {
-                case Tile.Variant.Empty:
-                    return 0;
-                case Tile.Variant.Room:
-                    return 1;
-                case Tile.Variant.Wall:
-                    return 2;
-                default:
-                    return 0;
-            }
-        }
-
         private Biome GetBiomeByName(string biomeName) {
             return Biome.AllBiomesList.First(bm => bm.Name == biomeName);
         }
@@ -65,15 +39,15 @@ namespace App.Server {
         private void RpcFillMaze(MazeStruct[] mazeArr) {
             foreach (var tile in mazeArr) {
                 _fetchedMaze[tile.X, tile.Y].Biome = GetBiomeByName(tile.BiomeName);
-                _fetchedMaze[tile.X, tile.Y].Type = IntTileTypeToVariant(tile.TileType);
+				_fetchedMaze[tile.X, tile.Y].Type = (Tile.Variant) tile.TileType;
 				_fetchedMaze[tile.X, tile.Y].BiomeID = tile.BiomeInstanceId;
 			}
-//			AdvancedBiomePlacer.WriteBiomesListIntoMaze(100, _fetchedMaze);
         }
 
         [ClientRpc]
-        public void RpcMazeLoadingFinished(int width, int hight) {
-            AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(width, hight, _fetchedMaze);
+        public void RpcMazeLoadingFinished(int width, int hight, int maxBiomeID) {
+			AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(width, hight, _fetchedMaze);
+			AppManager.Instance.MazeInstance.Maze.GenerateBiomesList(maxBiomeID);
             AppManager.Instance.EventHub.CreateEvent("MazeLoaded", null);
             AppManager.Instance.EventHub.CreateEvent("mazedrawer:placement_finished", null);
         }
@@ -94,8 +68,7 @@ namespace App.Server {
 
             for (var x = 0; x < mazeInstance.Height; x++) {
                 for (var y = 0; y < mazeInstance.Width; y++) {
-                    biomeList.Add(new MazeStruct(x, y, maze[x, y].Biome.Name,
-                        VariantTyleTypeToInt(maze[x, y].Type), maze[x, y].BiomeID)); // fill maze
+                    biomeList.Add(new MazeStruct(x, y, maze[x, y].Biome.Name, (int) maze[x, y].Type, maze[x, y].BiomeID)); // fill maze
                 }
                 counter++;
                 if (counter >= messageBatchSize) {
@@ -106,8 +79,8 @@ namespace App.Server {
             }
             RpcFillMaze(biomeList.ToArray()); // send final chunk of data
 
-            RpcMazeLoadingFinished(maze.Width, maze.Height);
+            RpcMazeLoadingFinished(maze.Width, maze.Height, maze.MaxBiomeID);
         }
 
-    }
+	}
 }

@@ -15,7 +15,8 @@ namespace MazeBuilder {
 		private List<Coordinate> importantPlaces = new List<Coordinate>();  // Should have at least one path leading to them.
         private List<Room> rooms = new List<Room>();
         public Dictionary<Biome, Coordinate> BiomesSize = new Dictionary<Biome, Coordinate>();
-		private List<TileCollection> biomeList = new List<TileCollection>();
+		private List<TileCollection> biomeList = null;
+		public int MaxBiomeID { get; private set; }
 
 
         public Maze (int width = 10, int height = 10, bool fromServer = false) {
@@ -119,6 +120,25 @@ namespace MazeBuilder {
 
 			public TileCollection(Biome biome) {
 				this.biome = biome;
+			}
+		}
+
+		public void GenerateBiomesList(int maxBiomeID = -1) {
+			this.MaxBiomeID = maxBiomeID;
+			this.biomeList = new List<TileCollection>();
+
+			for (int i = 0; i < maxBiomeID; i++) {
+				TileCollection biome = null;
+
+				foreach (Tile tile in Tiles) {
+					if (tile.BiomeID == i) {
+						if (biome == null) {
+							biome = new Maze.TileCollection(tile.Biome);
+							Biomes.Add(biome);
+						}
+						biome.tiles.Add(tile);
+					}
+				}
 			}
 		}
 	}

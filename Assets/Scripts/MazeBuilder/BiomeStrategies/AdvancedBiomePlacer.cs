@@ -27,7 +27,7 @@ namespace MazeBuilder.BiomeStrategies {
             PlantBiomes();
 			GrowBiomes();
 
-			WriteBiomesListIntoMaze(biomeIDCounter, maze);
+			maze.GenerateBiomesList(biomeIDCounter);
 
             return emptyMaze;
         }
@@ -166,20 +166,5 @@ namespace MazeBuilder.BiomeStrategies {
 			}
 		}
 
-		public static void WriteBiomesListIntoMaze(int maxBiomeId, Maze maze) {
-			for (int i = 0; i < maxBiomeId; i++) {
-				Maze.TileCollection biome = null;
-
-				foreach (Tile tile in maze.Tiles) {
-					if (tile.BiomeID == i) {
-						if (biome == null) {
-							biome = new Maze.TileCollection(tile.Biome);
-							maze.Biomes.Add(biome);
-						}
-						biome.tiles.Add(tile);
-					}
-				}
-			}
-		}
 	}
 }
