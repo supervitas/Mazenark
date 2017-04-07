@@ -93,7 +93,6 @@ namespace Controls {
         }
 
         private void OnDestroy() {
-
             _camera.GetComponent<FolowingPlayerCamera>().RemoveFromPlayer();
         }
 

@@ -2,16 +2,16 @@
 using MazeBuilder;
 using MazeBuilder.Utility;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace WeatherManager {
-    public class WeatherManager : MonoBehaviour {
+    public class WeatherManager : NetworkBehaviour  {
         private Maze _maze;
         public Transform Target;
         private Biome _currentBiome;
         private Publisher _eventhub;
 
-        private void Start() {
-            if (!Target) return;
+        public override void OnStartLocalPlayer() { // Set up game for client
             _eventhub = App.AppManager.Instance.EventHub;
             _eventhub.Subscribe("MazeLoaded", StartManager, this);
         }
@@ -28,7 +28,5 @@ namespace WeatherManager {
             _currentBiome = biome;
             _eventhub.CreateEvent("WeatherShouldChange", new EventArguments(Target, _currentBiome.Name));
         }
-
-
     }
 }
