@@ -24,7 +24,7 @@ namespace App {
 
         public GameObject InstantiateSOC(GameObject go, Vector3 position, Quaternion rotation) { //ServerOrClient
             var instantiated = Instantiate(go, position, rotation);
-            NetworkServer.Spawn(instantiated);
+//            NetworkServer.Spawn(instantiated);
             return instantiated;
         }
 

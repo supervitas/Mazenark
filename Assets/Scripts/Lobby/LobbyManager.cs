@@ -234,15 +234,14 @@ namespace Lobby{
             ChangeTo(lobbyPanel);
             backDelegate = StopHostClbk;
             SetServerInfo("Hosting", networkAddress);
+            AppManager.Instance.MazeSize.GenerateRndSize();
+            AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(AppManager.Instance.MazeSize.X, AppManager.Instance.MazeSize.Y);
         }
 
-		public override void OnMatchCreate(bool success, string extendedInfo, MatchInfo matchInfo)
-		{
+		public override void OnMatchCreate(bool success, string extendedInfo, MatchInfo matchInfo){
 			base.OnMatchCreate(success, extendedInfo, matchInfo);
             _currentMatchID = (System.UInt64)matchInfo.networkId;
 
-		    AppManager.Instance.MazeSize.GenerateRndSize();
-		    AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(AppManager.Instance.MazeSize.X, AppManager.Instance.MazeSize.Y);
 		}
 
 		public override void OnDestroyMatch(bool success, string extendedInfo)
@@ -385,8 +384,7 @@ namespace Lobby{
 
         // ----------------- Client callbacks ------------------
 
-        public override void OnClientConnect(NetworkConnection conn)
-        {
+        public override void OnClientConnect(NetworkConnection conn) {
             base.OnClientConnect(conn);
 
             infoPanel.gameObject.SetActive(false);
