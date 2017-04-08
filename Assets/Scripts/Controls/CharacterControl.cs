@@ -71,10 +71,8 @@ namespace Controls {
                 {
                     m_collisions.Add(collision.collider);
                 }
-            } else
-            {
-                if (m_collisions.Contains(collision.collider))
-                {
+            } else {
+                if (m_collisions.Contains(collision.collider)) {
                     m_collisions.Remove(collision.collider);
                 }
                 if (m_collisions.Count == 0) { m_isGrounded = false; }
@@ -84,12 +82,6 @@ namespace Controls {
         public override void OnStartLocalPlayer() { // Set up game for client
             _camera = GameObject.FindGameObjectWithTag("MainCamera");
             _camera.GetComponent<FolowingPlayerCamera>().SetPlayerTransforms(transform);
-            CmdGetMaze();
-        }
-
-        [Command]
-        public void CmdGetMaze() {
-            FindObjectOfType<MazeDelivery>().GetMaze();
         }
 
         private void OnDestroy() {

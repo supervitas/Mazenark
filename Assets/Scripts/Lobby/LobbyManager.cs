@@ -1,19 +1,18 @@
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using UnityEngine.Networking;
-using UnityEngine.Networking.Types;
-using UnityEngine.Networking.Match;
 using System.Collections;
+using App;
+using Prototype.NetworkLobby;
+using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.Networking.Match;
+using UnityEngine.Networking.Types;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-
-namespace Prototype.NetworkLobby
-{
-    public class LobbyManager : NetworkLobbyManager 
-    {
+namespace Lobby{
+    public class LobbyManager : NetworkLobbyManager {
         static short MsgKicked = MsgType.Highest + 1;
 
-        static public LobbyManager s_Singleton;
+        public static LobbyManager SSingleton;
 
 
         [Header("Unity UI Lobby")]
@@ -53,10 +52,9 @@ namespace Prototype.NetworkLobby
 
         protected LobbyHook _lobbyHooks;
 
-        void Start()
-        {
-            s_Singleton = this;
-            _lobbyHooks = GetComponent<Prototype.NetworkLobby.LobbyHook>();
+        void Start() {
+            SSingleton = this;
+            _lobbyHooks = GetComponent<LobbyHook>();
             currentPanel = mainMenuPanel;
 
             backButton.gameObject.SetActive(false);
@@ -67,8 +65,7 @@ namespace Prototype.NetworkLobby
             SetServerInfo("Offline", "None");
         }
 
-        public override void OnLobbyClientSceneChanged(NetworkConnection conn)
-        {
+        public override void OnLobbyClientSceneChanged(NetworkConnection conn) {
             if (SceneManager.GetSceneAt(0).name == lobbyScene)
             {
                 if (topPanel.isInGame)
@@ -222,8 +219,6 @@ namespace Prototype.NetworkLobby
         }
 
 
-
-
         public void KickedMessageHandler(NetworkMessage netMsg)
         {
             infoPanel.Display("Kicked by Server", "Close", null);
@@ -245,6 +240,9 @@ namespace Prototype.NetworkLobby
 		{
 			base.OnMatchCreate(success, extendedInfo, matchInfo);
             _currentMatchID = (System.UInt64)matchInfo.networkId;
+
+		    AppManager.Instance.MazeSize.GenerateRndSize();
+		    AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(AppManager.Instance.MazeSize.X, AppManager.Instance.MazeSize.Y);
 		}
 
 		public override void OnDestroyMatch(bool success, string extendedInfo)
@@ -273,8 +271,7 @@ namespace Prototype.NetworkLobby
 
         //we want to disable the button JOIN if we don't have enough player
         //But OnLobbyClientConnect isn't called on hosting player. So we override the lobbyPlayer creation
-        public override GameObject OnLobbyServerCreateLobbyPlayer(NetworkConnection conn, short playerControllerId)
-        {
+        public override GameObject OnLobbyServerCreateLobbyPlayer(NetworkConnection conn, short playerControllerId) {
             GameObject obj = Instantiate(lobbyPlayerPrefab.gameObject) as GameObject;
 
             LobbyPlayer newPlayer = obj.GetComponent<LobbyPlayer>();
@@ -324,8 +321,7 @@ namespace Prototype.NetworkLobby
 
         }
 
-        public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer)
-        {
+        public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer) {
             //This hook allows you to apply state data from the lobby-player to the game-player
             //just subclass "LobbyHook" and add it to the lobby object.
 
@@ -397,8 +393,7 @@ namespace Prototype.NetworkLobby
 
             conn.RegisterHandler(MsgKicked, KickedMessageHandler);
 
-            if (!NetworkServer.active)
-            {//only to do on pure client (not self hosting client)
+            if (!NetworkServer.active) {//only to do on pure client (not self hosting client)
                 ChangeTo(lobbyPanel);
                 backDelegate = StopClientClbk;
                 SetServerInfo("Client", networkAddress);

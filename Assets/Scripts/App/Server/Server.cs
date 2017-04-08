@@ -7,7 +7,6 @@ namespace App.Server {
             AppManager.Instance.MazeSize.GenerateRndSize();
             AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(AppManager.Instance.MazeSize.X, AppManager.Instance.MazeSize.Y);
             AppManager.Instance.EventHub.CreateEvent("MazeCreated", null);
-
         }
 
     }

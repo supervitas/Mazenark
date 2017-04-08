@@ -25,10 +25,6 @@ namespace MazeBuilder.Walls {
 		}
 
         private void Start() {
-            AppManager.Instance.EventHub.Subscribe("MazeLoaded", SetUp, this);
-        }
-
-        private void SetUp(object sender, EventArguments eventArguments) {
             var mazeSize = AppManager.Instance.MazeInstance;
 
             GenerateWall(mazeSize.Width * Constants.Maze.TILE_SIZE + 25, Quaternion.Euler(0, 90, 0),

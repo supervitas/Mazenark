@@ -4,6 +4,7 @@ using UnityEngine.Networking;
 using UnityEngine.Networking.Match;
 using System.Collections;
 using System.Collections.Generic;
+using Lobby;
 
 namespace Prototype.NetworkLobby
 {

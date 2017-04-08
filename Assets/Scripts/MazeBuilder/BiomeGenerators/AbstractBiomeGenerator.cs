@@ -42,13 +42,11 @@ namespace MazeBuilder.BiomeGenerators {
 
 	    protected void Awake() {
 	        Eventhub = AppManager.Instance.EventHub;
+	        BiomesCollecton = AppManager.Instance.MazeInstance.Maze.Biomes;
 	        GeneralSubscribtion();
 	        AddFloorsToRandomGenerator();
 	    }
 
-	    private void SetUp(object sender, EventArguments eventArguments) {
-	        BiomesCollecton = AppManager.Instance.MazeInstance.Maze.Biomes;
-	    }
 
 	    public abstract void CreateWall(Biome biome, Coordinate coordinate, Maze maze);
 	    public abstract void CreateFloor(Biome biome, Coordinate coordinate, Maze maze);
@@ -84,7 +82,6 @@ namespace MazeBuilder.BiomeGenerators {
 	    }
 
 	    private void GeneralSubscribtion() {
-	        Eventhub.Subscribe("MazeLoaded", SetUp, this);
 	        Eventhub.Subscribe("mazedrawer:placement_finished", StartPostPlacement, this);
 	        Eventhub.Subscribe("TOD:nightStarted", OnNight, this);
             Eventhub.Subscribe("TOD:dayStarted", OnDay, this);

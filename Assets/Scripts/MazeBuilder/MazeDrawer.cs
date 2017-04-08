@@ -1,4 +1,5 @@
-﻿using MazeBuilder.Utility;
+﻿using App;
+using MazeBuilder.Utility;
 using App.EventSystem;
 using MazeBuilder.BiomeGenerators;
 using UnityEngine;
@@ -19,11 +20,7 @@ namespace MazeBuilder {
         #endregion
 
         private void Start() {
-            App.AppManager.Instance.EventHub.Subscribe("MazeCreated", CreateMaze, this);
-        }
-
-        private void CreateMaze(object sender, EventArguments eventArguments) {
-            var maze = App.AppManager.Instance.MazeInstance.Maze;
+            var maze = AppManager.Instance.MazeInstance.Maze;
             for (var i = 0; i < maze.Width; i++) {
                 for (var j = 0; j < maze.Height; j++) {
                     var generator = GetGenerator(maze.Tiles[i, j].Biome);
@@ -35,6 +32,7 @@ namespace MazeBuilder {
                     }
                 }
             }
+            AppManager.Instance.EventHub.CreateEvent("mazedrawer:placement_finished", null);
         }
 
         private AbstractBiomeGenerator GetGenerator(Biome biome) {

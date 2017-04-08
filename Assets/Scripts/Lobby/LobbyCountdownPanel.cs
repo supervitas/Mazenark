@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
-namespace Prototype.NetworkLobby
+namespace Lobby
 {
     public class LobbyCountdownPanel : MonoBehaviour
     {

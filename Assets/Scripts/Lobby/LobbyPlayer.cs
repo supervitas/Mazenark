@@ -1,16 +1,14 @@
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Networking;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
+using App.Server;
+using Prototype.NetworkLobby;
+using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.UI;
 
-namespace Prototype.NetworkLobby
-{
+namespace Lobby {
     //Player entry in the lobby. Handle selecting color/setting name & getting ready for the game
     //Any LobbyHook can then grab it and pass those value to the game player prefab (see the Pong Example in the Samples Scenes)
-    public class LobbyPlayer : NetworkLobbyPlayer
-    {
+    public class LobbyPlayer : NetworkLobbyPlayer {
         static Color[] Colors = new Color[] { Color.magenta, Color.red, Color.cyan, Color.blue, Color.green, Color.yellow };
         //used on server to avoid assigning the same color to two player
         static List<int> _colorInUse = new List<int>();
@@ -46,10 +44,10 @@ namespace Prototype.NetworkLobby
         {
             base.OnClientEnterLobby();
 
-            if (LobbyManager.s_Singleton != null) LobbyManager.s_Singleton.OnPlayersNumberModified(1);
+            if (LobbyManager.SSingleton != null) LobbyManager.SSingleton.OnPlayersNumberModified(1);
 
             LobbyPlayerList._instance.AddPlayer(this);
-            LobbyPlayerList._instance.DisplayDirectServerWarning(isServer && LobbyManager.s_Singleton.matchMaker == null);
+            LobbyPlayerList._instance.DisplayDirectServerWarning(isServer && LobbyManager.SSingleton.matchMaker == null);
 
             if (isLocalPlayer)
             {
@@ -99,11 +97,12 @@ namespace Prototype.NetworkLobby
             OnClientReady(false);
         }
 
-        void SetupLocalPlayer()
-        {
+        void SetupLocalPlayer() {
             nameInput.interactable = true;
             remoteIcone.gameObject.SetActive(false);
             localIcone.gameObject.SetActive(true);
+
+            CmdGetMaze();
 
             CheckRemoveButton();
 
@@ -134,7 +133,7 @@ namespace Prototype.NetworkLobby
 
             //when OnClientEnterLobby is called, the loval PlayerController is not yet created, so we need to redo that here to disable
             //the add button if we reach maxLocalPlayer. We pass 0, as it was already counted on OnClientEnterLobby
-            if (LobbyManager.s_Singleton != null) LobbyManager.s_Singleton.OnPlayersNumberModified(0);
+            if (LobbyManager.SSingleton != null) LobbyManager.SSingleton.OnPlayersNumberModified(0);
         }
 
         //This enable/disable the remove button depending on if that is the only local player or not
@@ -221,7 +220,7 @@ namespace Prototype.NetworkLobby
                 RemovePlayer();
             }
             else if (isServer)
-                LobbyManager.s_Singleton.KickPlayer(connectionToClient);
+                LobbyManager.SSingleton.KickPlayer(connectionToClient);
                 
         }
 
@@ -234,8 +233,8 @@ namespace Prototype.NetworkLobby
         [ClientRpc]
         public void RpcUpdateCountdown(int countdown)
         {
-            LobbyManager.s_Singleton.countdownPanel.UIText.text = "Match Starting in " + countdown;
-            LobbyManager.s_Singleton.countdownPanel.gameObject.SetActive(countdown != 0);
+            LobbyManager.SSingleton.countdownPanel.UIText.text = "Match Starting in " + countdown;
+            LobbyManager.SSingleton.countdownPanel.gameObject.SetActive(countdown != 0);
         }
 
         [ClientRpc]
@@ -245,6 +244,11 @@ namespace Prototype.NetworkLobby
         }
 
         //====== Server Command
+
+        [Command]
+        public void CmdGetMaze() {
+            FindObjectOfType<MazeDelivery>().GetMaze();
+        }
 
         [Command]
         public void CmdColorChange()
@@ -277,8 +281,7 @@ namespace Prototype.NetworkLobby
             {//if we already add an entry in the colorTabs, we change it
                 _colorInUse[inUseIdx] = idx;
             }
-            else
-            {//else we add it
+            else {//else we add it
                 _colorInUse.Add(idx);
             }
 
@@ -295,7 +298,7 @@ namespace Prototype.NetworkLobby
         public void OnDestroy()
         {
             LobbyPlayerList._instance.RemovePlayer(this);
-            if (LobbyManager.s_Singleton != null) LobbyManager.s_Singleton.OnPlayersNumberModified(-1);
+            if (LobbyManager.SSingleton != null) LobbyManager.SSingleton.OnPlayersNumberModified(-1);
 
             int idx = System.Array.IndexOf(Colors, playerColor);
 

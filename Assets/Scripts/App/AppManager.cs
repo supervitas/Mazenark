@@ -13,8 +13,8 @@ namespace App {
         private void Awake() {
             if (Instance == null) {
                 Instance = this;
+                CommonSetUp();
             }
-            CommonSetUp();
         }
 
         private void CommonSetUp() {

@@ -48,14 +48,11 @@ namespace App.Server {
         public void RpcMazeLoadingFinished(int width, int hight, int maxBiomeID) {
 			AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(width, hight, _fetchedMaze);
 			AppManager.Instance.MazeInstance.Maze.GenerateBiomesList(maxBiomeID);
-            AppManager.Instance.EventHub.CreateEvent("MazeLoaded", null);
-            AppManager.Instance.EventHub.CreateEvent("mazedrawer:placement_finished", null);
         }
 
         public void GetMaze() {
             if (!isServer)
                 return;
-
             var messageBatchSize = 10; // how much rows will be send in one message;
             var counter = 0;
             var biomeList = new List<MazeStruct>();
@@ -65,6 +62,7 @@ namespace App.Server {
 
 
             RpcCreateMaze(maze.Width, maze.Height); // create maze
+
 
             for (var x = 0; x < mazeInstance.Height; x++) {
                 for (var y = 0; y < mazeInstance.Width; y++) {

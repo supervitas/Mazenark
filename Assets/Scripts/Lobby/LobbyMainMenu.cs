@@ -1,12 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
-namespace Prototype.NetworkLobby
-{
+namespace Lobby {
     //Main menu, mainly only a bunch of callback called by the UI (setup throught the Inspector)
-    public class LobbyMainMenu : MonoBehaviour 
-    {
+    public class LobbyMainMenu : MonoBehaviour {
         public LobbyManager lobbyManager;
 
         public RectTransform lobbyServerList;
@@ -15,8 +12,7 @@ namespace Prototype.NetworkLobby
         public InputField ipInput;
         public InputField matchNameInput;
 
-        public void OnEnable()
-        {
+        public void OnEnable() {
             lobbyManager.topPanel.ToggleVisibility(true);
 
             ipInput.onEndEdit.RemoveAllListeners();
