@@ -1,12 +1,8 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Networking;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.Networking.Match;
-using System.Collections;
-using System.Collections.Generic;
-using Lobby;
 
-namespace Prototype.NetworkLobby
+namespace Lobby
 {
     public class LobbyServerList : MonoBehaviour
     {

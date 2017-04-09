@@ -1,10 +1,8 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
-using Lobby;
 
-namespace Prototype.NetworkLobby
+namespace Lobby
 {
     //List of players in the lobby
     public class LobbyPlayerList : MonoBehaviour

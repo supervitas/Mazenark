@@ -1,5 +1,9 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using App;
+using MazeBuilder;
+using MazeBuilder.Utility;
 using Prototype.NetworkLobby;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -37,6 +41,8 @@ namespace Lobby{
         public Text statusInfo;
         public Text hostInfo;
 
+        public GameObject SpawnPrefab;
+
         //Client numPlayers from NetworkManager is always 0, so we count (throught connect/destroy in LobbyPlayer) the number
         //of players, so that even client know how many player there is.
         [HideInInspector]
@@ -51,6 +57,8 @@ namespace Lobby{
         protected ulong _currentMatchID;
 
         protected LobbyHook _lobbyHooks;
+
+        private IEnumerator<Vector3> _spawnGenerator;
 
         void Start() {
             SSingleton = this;
@@ -227,8 +235,7 @@ namespace Lobby{
 
         //===================
 
-        public override void OnStartHost()
-        {
+        public override void OnStartHost() {
             base.OnStartHost();
 
             ChangeTo(lobbyPanel);
@@ -236,6 +243,10 @@ namespace Lobby{
             SetServerInfo("Hosting", networkAddress);
             AppManager.Instance.MazeSize.GenerateRndSize();
             AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(AppManager.Instance.MazeSize.X, AppManager.Instance.MazeSize.Y);
+
+            _spawnGenerator = GetSpawnPosition();
+            _spawnGenerator.MoveNext();
+
         }
 
 		public override void OnMatchCreate(bool success, string extendedInfo, MatchInfo matchInfo){
@@ -243,6 +254,7 @@ namespace Lobby{
             _currentMatchID = (System.UInt64)matchInfo.networkId;
 
 		}
+
 
 		public override void OnDestroyMatch(bool success, string extendedInfo)
 		{
@@ -327,9 +339,28 @@ namespace Lobby{
             if (_lobbyHooks)
                 _lobbyHooks.OnLobbyServerSceneLoadedForPlayer(this, lobbyPlayer, gamePlayer);
 
+
+            gamePlayer.transform.position = _spawnGenerator.Current;
+            _spawnGenerator.MoveNext();
+
             return true;
         }
 
+        public IEnumerator<Vector3> GetSpawnPosition() {
+            var tiles = from biome in AppManager.Instance.MazeInstance.Maze.Biomes
+                where biome.biome == Biome.Spawn
+                from tile in biome.tiles
+                select tile;
+
+            foreach (var tile in tiles) {
+                yield return new Vector3 {
+                    x = Utils.TransformToWorldCoordinate(tile.Position.X),
+                    y = 0.1f,
+                    z = Utils.TransformToWorldCoordinate(tile.Position.Y)
+                };
+
+            }
+        }
         // --- Countdown management
 
         public override void OnLobbyServerPlayersReady()
@@ -397,6 +428,7 @@ namespace Lobby{
                 SetServerInfo("Client", networkAddress);
             }
         }
+
 
 
         public override void OnClientDisconnect(NetworkConnection conn)
