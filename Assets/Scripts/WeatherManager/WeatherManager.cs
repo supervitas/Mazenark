@@ -17,10 +17,10 @@ namespace WeatherManager {
             InvokeRepeating("CheckBiomeChanged", 0, 2);
         }
 
-//        void StartManager(object sender, EventArguments eventArguments) {
-//            _maze = App.AppManager.Instance.MazeInstance.Maze;
-//            InvokeRepeating("CheckBiomeChanged", 0, 2);
-//        }
+        private void OnDestroy() {
+            CancelInvoke("CheckBiomeChanged");
+        }
+
 
         private void CheckBiomeChanged() {
             var mazeCoords = Utils.TransformWorldToLocalCoordinate(Target.position.x, Target.position.z);

@@ -109,9 +109,7 @@ namespace Lobby{
 
                 topPanel.ToggleVisibility(true);
                 topPanel.isInGame = false;
-            }
-            else
-            {
+            } else {
                 ChangeTo(null);
 
                 Destroy(GameObject.Find("MainMenuUI(Clone)"));
@@ -124,24 +122,20 @@ namespace Lobby{
 
         public void ChangeTo(RectTransform newPanel)
         {
-            if (currentPanel != null)
-            {
+            if (currentPanel != null) {
                 currentPanel.gameObject.SetActive(false);
             }
 
-            if (newPanel != null)
-            {
+            if (newPanel != null) {
                 newPanel.gameObject.SetActive(true);
             }
 
             currentPanel = newPanel;
 
-            if (currentPanel != mainMenuPanel)
-            {
+            if (currentPanel != mainMenuPanel) {
                 backButton.gameObject.SetActive(true);
             }
-            else
-            {
+            else {
                 backButton.gameObject.SetActive(false);
                 SetServerInfo("Offline", "None");
                 _isMatchmaking = false;
@@ -186,15 +180,12 @@ namespace Lobby{
             ChangeTo(mainMenuPanel);
         }
                  
-        public void StopHostClbk()
-        {
-            if (_isMatchmaking)
-            {
+        public void StopHostClbk() {
+            if (_isMatchmaking) {
 				matchMaker.DestroyMatch((NetworkID)_currentMatchID, 0, OnDestroyMatch);
 				_disconnectServer = true;
             }
-            else
-            {
+            else {
                 StopHost();
             }
 
@@ -241,6 +232,8 @@ namespace Lobby{
             ChangeTo(lobbyPanel);
             backDelegate = StopHostClbk;
             SetServerInfo("Hosting", networkAddress);
+
+            AppManager.Instance.CommonSetUp();
             AppManager.Instance.MazeSize.GenerateRndSize();
             AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(AppManager.Instance.MazeSize.X, AppManager.Instance.MazeSize.Y);
 
@@ -251,6 +244,7 @@ namespace Lobby{
 
         public override void OnStartServer() {
             base.OnStartServer();
+            AppManager.Instance.CommonSetUp();
             AppManager.Instance.MazeSize.GenerateRndSize();
             AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(AppManager.Instance.MazeSize.X, AppManager.Instance.MazeSize.Y);
 

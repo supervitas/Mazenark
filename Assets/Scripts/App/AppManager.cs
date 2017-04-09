@@ -17,10 +17,11 @@ namespace App {
             }
         }
 
-        private void CommonSetUp() {
+        public void CommonSetUp() {
             EventHub = new Publisher();
             MazeSize = new MazeSizeGenerator();
         }
+
 
         public GameObject InstantiateSOC(GameObject go, Vector3 position, Quaternion rotation) { //ServerOrClient
             var instantiated = Instantiate(go, position, rotation);

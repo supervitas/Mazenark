@@ -47,6 +47,9 @@ namespace MazeBuilder.BiomeGenerators {
 	        AddFloorsToRandomGenerator();
 	    }
 
+	    protected void OnDestroy() {
+	        Eventhub.UnsubscribeFromAll(this);
+	    }
 
 	    public abstract void CreateWall(Biome biome, Coordinate coordinate, Maze maze);
 	    public abstract void CreateFloor(Biome biome, Coordinate coordinate, Maze maze);

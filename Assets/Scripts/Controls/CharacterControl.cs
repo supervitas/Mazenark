@@ -18,7 +18,9 @@ namespace Controls {
         [SerializeField] private Rigidbody m_rigidBody;
 
         [SerializeField] private ControlMode m_controlMode = ControlMode.Direct;
-        private GameObject _camera;
+
+        public GameObject Camera;
+
         private float m_currentV = 0;
         private float m_currentH = 0;
 
@@ -79,13 +81,10 @@ namespace Controls {
         }
 
         public override void OnStartLocalPlayer() { // Set up game for client
-            _camera = GameObject.FindGameObjectWithTag("MainCamera");
-            _camera.GetComponent<FolowingPlayerCamera>().SetPlayerTransforms(transform);
+            var cam = Instantiate(Camera);
+            cam.GetComponent<FolowingPlayerCamera>().SetPlayerTransforms(transform);
         }
 
-        private void OnDestroy() {
-            _camera.GetComponent<FolowingPlayerCamera>().RemoveFromPlayer();
-        }
 
         private void OnCollisionExit(Collision collision)
         {
@@ -151,7 +150,7 @@ namespace Controls {
             float v = Input.GetAxis("Vertical");
             float h = Input.GetAxis("Horizontal");
 
-            Transform camera = Camera.main.transform;
+            Transform camera = UnityEngine.Camera.main.transform;
 
             if (Input.GetKey(KeyCode.LeftShift))
             {

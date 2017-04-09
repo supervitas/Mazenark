@@ -15,21 +15,12 @@ namespace Cameras {
         [SerializeField] private float _bumperDistanceCheck = 2.5f; // length of bumper ray
         [SerializeField] private float _bumperCameraHeight = 1.0f; // adjust camera height while bumping
 
-        private void Awake() {
-//            GetComponent<Camera>().transform.parent = _target;
-        }
 
         public void SetPlayerTransforms(Transform player) {
             _target = player;
             GetComponent<Camera>().transform.parent = _target;
-            GetComponent<Camera>().enabled = true;
         }
 
-        public void RemoveFromPlayer() {
-            if (_target) {
-                GetComponent<Camera>().transform.parent = null;
-            }
-        }
 
         private void FixedUpdate() {
             if (!_target) return;

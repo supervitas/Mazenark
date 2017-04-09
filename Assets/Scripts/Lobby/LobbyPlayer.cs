@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using App;
 using Prototype.NetworkLobby;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -294,8 +295,7 @@ namespace Lobby {
         }
 
         //Cleanup thing when get destroy (which happen when client kick or disconnect)
-        public void OnDestroy()
-        {
+        public void OnDestroy() {
             LobbyPlayerList._instance.RemovePlayer(this);
             if (LobbyManager.SSingleton != null) LobbyManager.SSingleton.OnPlayersNumberModified(-1);
 
