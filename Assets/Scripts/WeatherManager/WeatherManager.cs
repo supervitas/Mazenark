@@ -13,13 +13,14 @@ namespace WeatherManager {
 
         public override void OnStartLocalPlayer() { // Set up game for client
             _eventhub = App.AppManager.Instance.EventHub;
-            _eventhub.Subscribe("MazeLoaded", StartManager, this);
-        }
-
-        void StartManager(object sender, EventArguments eventArguments) {
             _maze = App.AppManager.Instance.MazeInstance.Maze;
             InvokeRepeating("CheckBiomeChanged", 0, 2);
         }
+
+//        void StartManager(object sender, EventArguments eventArguments) {
+//            _maze = App.AppManager.Instance.MazeInstance.Maze;
+//            InvokeRepeating("CheckBiomeChanged", 0, 2);
+//        }
 
         private void CheckBiomeChanged() {
             var mazeCoords = Utils.TransformWorldToLocalCoordinate(Target.position.x, Target.position.z);

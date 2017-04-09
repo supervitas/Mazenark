@@ -81,6 +81,7 @@ namespace MazeBuilder.BiomeGenerators {
             where shouldPlace select Instantiate(particles, GetDefaultPositionVector(tile.Position, 3.5f), Quaternion.identity)).ToList();
 	    }
 
+
 	    private void GeneralSubscribtion() {
 	        Eventhub.Subscribe("mazedrawer:placement_finished", StartPostPlacement, this);
 	        Eventhub.Subscribe("TOD:nightStarted", OnNight, this);
