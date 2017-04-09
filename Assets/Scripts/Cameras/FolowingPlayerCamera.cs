@@ -19,8 +19,16 @@ namespace Cameras {
         public void SetPlayerTransforms(Transform player) {
             _target = player;
             GetComponent<Camera>().transform.parent = _target;
+            DisableMainCamera();
         }
 
+        private void DisableMainCamera() {
+            Camera.main.enabled = false;
+        }
+
+        private void OnDestroy() {
+            Camera.main.enabled = true;
+        }
 
         private void FixedUpdate() {
             if (!_target) return;
