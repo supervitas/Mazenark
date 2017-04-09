@@ -1,4 +1,5 @@
-﻿using App;
+﻿using System.Collections.Generic;
+using App;
 using App.EventSystem;
 using MazeBuilder.Utility;
 using MazeBuilder.BiomeGenerators.PlacementRules;
@@ -50,6 +51,8 @@ namespace MazeBuilder.BiomeGenerators {
 
         private void PlaceLightingObjects() {
             ParticleList = PlaceLightingParticles(Biome.Fire, NightParticles);
+
+
         }
 
 		public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {

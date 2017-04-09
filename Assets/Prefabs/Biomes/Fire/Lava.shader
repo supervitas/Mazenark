@@ -4,7 +4,7 @@
 		_Color ("Diffuse", Color) = (1,1,1,1)
         _MoveSpeedU ("U Move Speed", Range(-6,6)) = 0.5
         _MoveSpeedV ("V Move Speed", Range(-6,6)) = 0.5
-        _FogColor ("Lava Fog Color", Color) = (0.3, 0.4, 0.7, 1.0)
+        _Scale ("Scale", float) = 1.0
 	}
 	SubShader {
 	    Tags {
@@ -19,21 +19,24 @@
 		CGPROGRAM
     		#pragma surface surf Lambert
 
+            half _Scale;
     		sampler2D _MainTex;
     		fixed4 _Color;
     		fixed _MoveSpeedU;
     		fixed _MoveSpeedV;
-    		fixed4 _FogColor;
 
     		struct Input {
     			float2 uv_MainTex;
+    			float3 worldPos;
     		};
 
 
-
     		void surf (Input IN, inout SurfaceOutput o) {
+                float2 uv = IN.worldPos.zx;
+                uv.x *= _Scale;
+                uv.y *= _Scale;
 
-    			fixed2 MoveScrolledUV = IN.uv_MainTex;
+    			fixed2 MoveScrolledUV = uv;
 
     			fixed MoveU = _MoveSpeedU * _Time;
     			fixed MoveV = _MoveSpeedV * _Time;
@@ -46,5 +49,5 @@
     		}
     		ENDCG
     	}
-    	FallBack "Diffuse"
+    FallBack "Diffuse"
 }
