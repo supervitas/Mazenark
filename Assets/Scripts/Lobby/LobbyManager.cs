@@ -249,6 +249,15 @@ namespace Lobby{
 
         }
 
+        public override void OnStartServer() {
+            base.OnStartServer();
+            AppManager.Instance.MazeSize.GenerateRndSize();
+            AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(AppManager.Instance.MazeSize.X, AppManager.Instance.MazeSize.Y);
+
+            _spawnGenerator = GetSpawnPosition();
+            _spawnGenerator.MoveNext();
+        }
+
 		public override void OnMatchCreate(bool success, string extendedInfo, MatchInfo matchInfo){
 			base.OnMatchCreate(success, extendedInfo, matchInfo);
             _currentMatchID = (System.UInt64)matchInfo.networkId;
@@ -343,27 +352,10 @@ namespace Lobby{
             gamePlayer.transform.position = _spawnGenerator.Current;
             _spawnGenerator.MoveNext();
 
-            test();
 
             return true;
         }
 
-        private void test() {
-            var tiles = from biome in AppManager.Instance.MazeInstance.Maze.Biomes
-                where biome.biome == Biome.Spawn
-                from tile in biome.tiles
-                select tile;
-            for (var i = 0; i < AppManager.Instance.MazeInstance.Maze.Height; i++) {
-                for (var j = 0; j < AppManager.Instance.MazeInstance.Maze.Width; j++) {
-                    if (AppManager.Instance.MazeInstance.Maze[i, j].Biome == Biome.Spawn) {
-                        Debug.Log(AppManager.Instance.MazeInstance.Maze[i, j].Position);
-                    }
-                }
-            }
-//            foreach (var t in tiles) {
-//                Debug.Log(t.Position);
-//            }
-        }
 
         private IEnumerator<Vector3> GetSpawnPosition() {
             var tiles = from biome in AppManager.Instance.MazeInstance.Maze.Biomes
