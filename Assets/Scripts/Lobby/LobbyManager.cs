@@ -343,10 +343,29 @@ namespace Lobby{
             gamePlayer.transform.position = _spawnGenerator.Current;
             _spawnGenerator.MoveNext();
 
+            test();
+
             return true;
         }
 
-        public IEnumerator<Vector3> GetSpawnPosition() {
+        private void test() {
+            var tiles = from biome in AppManager.Instance.MazeInstance.Maze.Biomes
+                where biome.biome == Biome.Spawn
+                from tile in biome.tiles
+                select tile;
+            for (var i = 0; i < AppManager.Instance.MazeInstance.Maze.Height; i++) {
+                for (var j = 0; j < AppManager.Instance.MazeInstance.Maze.Width; j++) {
+                    if (AppManager.Instance.MazeInstance.Maze[i, j].Biome == Biome.Spawn) {
+                        Debug.Log(AppManager.Instance.MazeInstance.Maze[i, j].Position);
+                    }
+                }
+            }
+//            foreach (var t in tiles) {
+//                Debug.Log(t.Position);
+//            }
+        }
+
+        private IEnumerator<Vector3> GetSpawnPosition() {
             var tiles = from biome in AppManager.Instance.MazeInstance.Maze.Biomes
                 where biome.biome == Biome.Spawn
                 from tile in biome.tiles
