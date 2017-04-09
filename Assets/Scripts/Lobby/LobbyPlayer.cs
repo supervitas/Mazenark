@@ -149,10 +149,8 @@ namespace Lobby {
             removePlayerButton.interactable = localPlayerCount > 1;
         }
 
-        public override void OnClientReady(bool readyState)
-        {
-            if (readyState)
-            {
+        public override void OnClientReady(bool readyState) {
+            if (readyState){
                 ChangeReadyButtonColor(TransparentColor);
 
                 Text textComponent = readyButton.transform.GetChild(0).GetComponent<Text>();
@@ -161,9 +159,7 @@ namespace Lobby {
                 readyButton.interactable = false;
                 colorButton.interactable = false;
                 nameInput.interactable = false;
-            }
-            else
-            {
+            } else {
                 ChangeReadyButtonColor(isLocalPlayer ? JoinColor : NotReadyColor);
 
                 Text textComponent = readyButton.transform.GetChild(0).GetComponent<Text>();
@@ -263,12 +259,10 @@ namespace Lobby {
 
             bool alreadyInUse = false;
 
-            do
-            {
+            do {
                 alreadyInUse = false;
-                for (int i = 0; i < _colorInUse.Count; ++i)
-                {
-                    if (_colorInUse[i] == idx)
+                foreach (var t in _colorInUse) {
+                    if (t == idx)
                     {//that color is already in use
                         alreadyInUse = true;
                         idx = (idx + 1) % Colors.Length;

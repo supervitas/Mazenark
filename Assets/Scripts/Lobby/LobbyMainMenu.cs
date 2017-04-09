@@ -22,13 +22,15 @@ namespace Lobby {
             matchNameInput.onEndEdit.AddListener(onEndEditGameName);
         }
 
-        public void OnClickHost()
-        {
+        public void OnClickSinglePlayer() {
+            lobbyManager.StartSinglePlayer();
+        }
+
+        public void OnClickHost() {
             lobbyManager.StartHost();
         }
 
-        public void OnClickJoin()
-        {
+        public void OnClickJoin() {
             lobbyManager.ChangeTo(lobbyPanel);
 
             lobbyManager.networkAddress = ipInput.text;
@@ -40,8 +42,7 @@ namespace Lobby {
             lobbyManager.SetServerInfo("Connecting...", lobbyManager.networkAddress);
         }
 
-        public void OnClickDedicated()
-        {
+        public void OnClickDedicated() {
             lobbyManager.ChangeTo(null);
             lobbyManager.StartServer();
 
@@ -50,8 +51,7 @@ namespace Lobby {
             lobbyManager.SetServerInfo("Dedicated Server", lobbyManager.networkAddress);
         }
 
-        public void OnClickCreateMatchmakingGame()
-        {
+        public void OnClickCreateMatchmakingGame() {
             lobbyManager.StartMatchMaker();
             lobbyManager.matchMaker.CreateMatch(
                 matchNameInput.text,
@@ -67,15 +67,13 @@ namespace Lobby {
             lobbyManager.SetServerInfo("Matchmaker Host", lobbyManager.matchHost);
         }
 
-        public void OnClickOpenServerList()
-        {
+        public void OnClickOpenServerList() {
             lobbyManager.StartMatchMaker();
             lobbyManager.backDelegate = lobbyManager.SimpleBackClbk;
             lobbyManager.ChangeTo(lobbyServerList);
         }
 
-        void onEndEditIP(string text)
-        {
+        void onEndEditIP(string text) {
             if (Input.GetKeyDown(KeyCode.Return))
             {
                 OnClickJoin();

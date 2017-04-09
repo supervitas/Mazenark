@@ -41,7 +41,6 @@ namespace Lobby{
         public Text statusInfo;
         public Text hostInfo;
 
-        public GameObject SpawnPrefab;
 
         //Client numPlayers from NetworkManager is always 0, so we count (throught connect/destroy in LobbyPlayer) the number
         //of players, so that even client know how many player there is.
@@ -226,6 +225,25 @@ namespace Lobby{
 
         //===================
 
+        public void StartSinglePlayer() {
+            AppManager.Instance.CommonSetUp();
+            AppManager.Instance.MazeSize.GenerateRndSize();
+            AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(AppManager.Instance.MazeSize.X, AppManager.Instance.MazeSize.Y);
+
+            _spawnGenerator = GetSpawnPosition();
+            _spawnGenerator.MoveNext();
+
+            ChangeTo(null);
+            Destroy(GameObject.Find("MainMenuUI(Clone)"));
+
+            //backDelegate = StopGameClbk;
+            topPanel.isInGame = true;
+            topPanel.ToggleVisibility(false);
+
+            FindObjectOfType<SinglePlayer.SinglePlayer>().StartSinglePlayer(_spawnGenerator.Current);
+
+        }
+
         public override void OnStartHost() {
             base.OnStartHost();
 
@@ -262,8 +280,7 @@ namespace Lobby{
 		public override void OnDestroyMatch(bool success, string extendedInfo)
 		{
 			base.OnDestroyMatch(success, extendedInfo);
-			if (_disconnectServer)
-            {
+			if (_disconnectServer) {
                 StopMatchMaker();
                 StopHost();
             }
@@ -276,7 +293,7 @@ namespace Lobby{
 
             int localPlayerCount = 0;
             foreach (PlayerController p in ClientScene.localPlayers)
-                localPlayerCount += (p == null || p.playerControllerId == -1) ? 0 : 1;
+                localPlayerCount += p == null || p.playerControllerId == -1 ? 0 : 1;
 
             addPlayerButton.SetActive(localPlayerCount < maxPlayersPerConnection && _playerNumber < maxPlayers);
         }
@@ -286,59 +303,46 @@ namespace Lobby{
         //we want to disable the button JOIN if we don't have enough player
         //But OnLobbyClientConnect isn't called on hosting player. So we override the lobbyPlayer creation
         public override GameObject OnLobbyServerCreateLobbyPlayer(NetworkConnection conn, short playerControllerId) {
-            GameObject obj = Instantiate(lobbyPlayerPrefab.gameObject) as GameObject;
+            var obj = Instantiate(lobbyPlayerPrefab.gameObject);
 
             LobbyPlayer newPlayer = obj.GetComponent<LobbyPlayer>();
             newPlayer.ToggleJoinButton(numPlayers + 1 >= minPlayers);
 
 
-            for (int i = 0; i < lobbySlots.Length; ++i)
-            {
-                LobbyPlayer p = lobbySlots[i] as LobbyPlayer;
+            foreach (NetworkLobbyPlayer t in lobbySlots) {
+                var p = t as LobbyPlayer;
 
-                if (p != null)
-                {
-                    p.RpcUpdateRemoveButton();
-                    p.ToggleJoinButton(numPlayers + 1 >= minPlayers);
-                }
+                if (p == null) continue;
+                p.RpcUpdateRemoveButton();
+                p.ToggleJoinButton(numPlayers + 1 >= minPlayers);
             }
 
             return obj;
         }
 
-        public override void OnLobbyServerPlayerRemoved(NetworkConnection conn, short playerControllerId)
-        {
-            for (int i = 0; i < lobbySlots.Length; ++i)
-            {
-                LobbyPlayer p = lobbySlots[i] as LobbyPlayer;
+        public override void OnLobbyServerPlayerRemoved(NetworkConnection conn, short playerControllerId) {
+            foreach (NetworkLobbyPlayer t in lobbySlots) {
+                var p = t as LobbyPlayer;
 
-                if (p != null)
-                {
-                    p.RpcUpdateRemoveButton();
-                    p.ToggleJoinButton(numPlayers + 1 >= minPlayers);
-                }
+                if (p == null) continue;
+                p.RpcUpdateRemoveButton();
+                p.ToggleJoinButton(numPlayers + 1 >= minPlayers);
             }
         }
 
-        public override void OnLobbyServerDisconnect(NetworkConnection conn)
-        {
-            for (int i = 0; i < lobbySlots.Length; ++i)
-            {
-                LobbyPlayer p = lobbySlots[i] as LobbyPlayer;
+        public override void OnLobbyServerDisconnect(NetworkConnection conn) {
+            foreach (var t in lobbySlots) {
+                LobbyPlayer p = t as LobbyPlayer;
 
-                if (p != null)
-                {
-                    p.RpcUpdateRemoveButton();
-                    p.ToggleJoinButton(numPlayers >= minPlayers);
-                }
+                if (p == null) continue;
+                p.RpcUpdateRemoveButton();
+                p.ToggleJoinButton(numPlayers >= minPlayers);
             }
-
         }
 
         public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer) {
             //This hook allows you to apply state data from the lobby-player to the game-player
             //just subclass "LobbyHook" and add it to the lobby object.
-
             if (_lobbyHooks)
                 _lobbyHooks.OnLobbyServerSceneLoadedForPlayer(this, lobbyPlayer, gamePlayer);
 
@@ -368,21 +372,18 @@ namespace Lobby{
         }
         // --- Countdown management
 
-        public override void OnLobbyServerPlayersReady()
-        {
-			bool allready = true;
-			for(int i = 0; i < lobbySlots.Length; ++i)
-			{
-				if(lobbySlots[i] != null)
-					allready &= lobbySlots[i].readyToBegin;
+        public override void OnLobbyServerPlayersReady() {
+			var allready = true;
+			foreach (NetworkLobbyPlayer t in lobbySlots) {
+			    if(t != null)
+			        allready &= t.readyToBegin;
 			}
 
 			if(allready)
 				StartCoroutine(ServerCountdownCoroutine());
         }
 
-        public IEnumerator ServerCountdownCoroutine()
-        {
+        public IEnumerator ServerCountdownCoroutine() {
             float remainingTime = prematchCountdown;
             int floorTime = Mathf.FloorToInt(remainingTime);
 
@@ -393,26 +394,22 @@ namespace Lobby{
                 remainingTime -= Time.deltaTime;
                 int newFloorTime = Mathf.FloorToInt(remainingTime);
 
-                if (newFloorTime != floorTime)
-                {//to avoid flooding the network of message, we only send a notice to client when the number of plain seconds change.
+                if (newFloorTime != floorTime) {//to avoid flooding the network of message, we only send a notice to client when the number of plain seconds change.
                     floorTime = newFloorTime;
 
-                    for (int i = 0; i < lobbySlots.Length; ++i)
-                    {
-                        if (lobbySlots[i] != null)
+                    foreach (NetworkLobbyPlayer t in lobbySlots) {
+                        if (t != null)
                         {//there is maxPlayer slots, so some could be == null, need to test it before accessing!
-                            (lobbySlots[i] as LobbyPlayer).RpcUpdateCountdown(floorTime);
+                            (t as LobbyPlayer).RpcUpdateCountdown(floorTime);
                         }
                     }
                 }
             }
 
-            for (int i = 0; i < lobbySlots.Length; ++i)
-            {
-                if (lobbySlots[i] != null)
-                {
-                    (lobbySlots[i] as LobbyPlayer).RpcUpdateCountdown(0);
-                }
+            foreach (NetworkLobbyPlayer t in lobbySlots) {
+                if (t == null) continue;
+                var lobbyPlayer = t as LobbyPlayer;
+                if (lobbyPlayer != null) lobbyPlayer.RpcUpdateCountdown(0);
             }
 
             ServerChangeScene(playScene);
@@ -436,8 +433,7 @@ namespace Lobby{
 
 
 
-        public override void OnClientDisconnect(NetworkConnection conn)
-        {
+        public override void OnClientDisconnect(NetworkConnection conn) {
             base.OnClientDisconnect(conn);
             ChangeTo(mainMenuPanel);
         }

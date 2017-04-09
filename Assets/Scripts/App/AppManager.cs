@@ -1,6 +1,5 @@
 ﻿using App.EventSystem;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace App {
     public class AppManager : MonoBehaviour {
@@ -17,7 +16,7 @@ namespace App {
             }
         }
 
-        public void CommonSetUp() {
+        public void CommonSetUp() { // also used from LobbyManager to remove all eventhandlers registered in previous game by reiniting
             EventHub = new Publisher();
             MazeSize = new MazeSizeGenerator();
         }
