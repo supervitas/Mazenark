@@ -22,7 +22,7 @@ namespace MazeBuilder.BiomeGenerators {
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {}
 
         public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
-            AppManager.Instance.InstantiateSOC(Spawn, GetDefaultPositionVector(coordinate, 0.1f), Quaternion.identity);
+            AppManager.Instance.InstantiateSOC(Spawn, Utils.GetDefaultPositionVector(coordinate, 0.1f), Quaternion.identity);
         }
     }
 }

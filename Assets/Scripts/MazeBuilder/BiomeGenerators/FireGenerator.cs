@@ -65,7 +65,7 @@ namespace MazeBuilder.BiomeGenerators {
 				if (edgeMeshTemplate == null)
 					edgeMeshTemplate = straightWalls.GetMeshForPlacement(maze, coordinate, edge);
 				if (edgeMeshTemplate != null) {
-					var edgeMesh = AppManager.Instance.InstantiateSOC(edgeMeshTemplate, GetDefaultPositionVector(coordinate), edge.Rotation);
+					var edgeMesh = AppManager.Instance.InstantiateSOC(edgeMeshTemplate, Utils.GetDefaultPositionVector(coordinate), edge.Rotation);
 					edgeMesh.name = string.Format(edge.Name);
 					edgeMesh.transform.parent = parent.transform;
 				}
@@ -77,10 +77,10 @@ namespace MazeBuilder.BiomeGenerators {
 		public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
 			if (FloorEnviromentSpawnChance >= Random.Range(1, 100)) {
 			    AppManager.Instance.InstantiateSOC((GameObject) BiomeFloorsEnviroment.GetRandom(typeof(GameObject)),
-					GetDefaultPositionVector(coordinate, 0.2f), Quaternion.identity);
+					Utils.GetDefaultPositionVector(coordinate, 0.2f), Quaternion.identity);
 			}
 
-		    AppManager.Instance.InstantiateSOC(floor2, GetDefaultPositionVector(coordinate), Edge.UpRight.Rotation);
+		    AppManager.Instance.InstantiateSOC(floor2, Utils.GetDefaultPositionVector(coordinate), Edge.UpRight.Rotation);
 		}
     }
 }

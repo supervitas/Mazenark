@@ -54,13 +54,13 @@ namespace Lobby {
             if (!isServer)
                 return;
 
+
             var messageBatchSize = 10; // how much rows will be send in one message;
             var counter = 0;
             var biomeList = new List<MazeStruct>();
 
             var mazeInstance = AppManager.Instance.MazeInstance;
             var maze = mazeInstance.Maze;
-
 
             RpcCreateMaze(maze.Width, maze.Height); // create maze
 

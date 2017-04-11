@@ -2,10 +2,8 @@
 using UnityEngine;
 using UnityEngine.Networking.Match;
 
-namespace Lobby
-{
-    public class LobbyServerList : MonoBehaviour
-    {
+namespace Lobby {
+    public class LobbyServerList : MonoBehaviour {
         public LobbyManager lobbyManager;
 
         public RectTransform serverListRect;
@@ -70,8 +68,7 @@ namespace Lobby
             RequestPage(newPage);
         }
 
-        public void RequestPage(int page)
-        {
+        public void RequestPage(int page) {
             previousPage = currentPage;
             currentPage = page;
 			lobbyManager.matchMaker.ListMatches(page, 6, "", true, 0, 0, OnGUIMatchList);

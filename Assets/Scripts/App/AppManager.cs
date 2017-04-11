@@ -1,5 +1,6 @@
 ﻿using App.EventSystem;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace App {
     public class AppManager : MonoBehaviour {

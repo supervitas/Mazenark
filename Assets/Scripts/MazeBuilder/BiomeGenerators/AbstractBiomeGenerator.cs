@@ -38,6 +38,7 @@ namespace MazeBuilder.BiomeGenerators {
 	    protected Publisher Eventhub;
 	    protected Dictionary<string, CollectionRandom> SpawnObjectsChances = new Dictionary<string, CollectionRandom>();
 	    protected List<ParticleSystem> ParticleList = new List<ParticleSystem>();
+
 	    protected readonly CollectionRandom BiomeFloorsEnviroment = new CollectionRandom();
 
 	    protected void Awake() {
@@ -70,18 +71,11 @@ namespace MazeBuilder.BiomeGenerators {
 	            select tile;
 	    }
 
-	    protected Vector3 GetDefaultPositionVector(Coordinate coords, float y = 0f) {
-	        return new Vector3 {
-	            x = Utils.TransformToWorldCoordinate(coords.X),
-	            y = y,
-	            z = Utils.TransformToWorldCoordinate(coords.Y)
-	        };
-	    }
 
 	    protected List<ParticleSystem> PlaceLightingParticles(Biome biomeType, ParticleSystem particles) {
 	        return (from tile in GetTilesByTypeAndBiome(biomeType, Tile.Variant.Empty)
 	        let shouldPlace = ParticlesSpawnChance >= Random.Range(1, 100)
-            where shouldPlace select Instantiate(particles, GetDefaultPositionVector(tile.Position, 3.5f), Quaternion.identity)).ToList();
+            where shouldPlace select Instantiate(particles, Utils.GetDefaultPositionVector(tile.Position, 3.5f), Quaternion.identity)).ToList();
 	    }
 
 
@@ -101,6 +95,5 @@ namespace MazeBuilder.BiomeGenerators {
 	            BiomeFloorsEnviroment.Add(floor, typeof(GameObject), chance);
 	        }
 	    }
-
 	}
 }

@@ -3,6 +3,7 @@ using MazeBuilder.Utility;
 using MazeBuilder.BiomeGenerators;
 using UnityEngine;
 
+
 namespace MazeBuilder {
     public class MazeDrawer : MonoBehaviour {
         [Tooltip("Object to be spawned as maze blocks")]

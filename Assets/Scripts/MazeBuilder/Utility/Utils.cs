@@ -1,4 +1,6 @@
-﻿namespace MazeBuilder.Utility {
+﻿using UnityEngine;
+
+namespace MazeBuilder.Utility {
     public class Utils {
         // E.g. 0 → 4.5, 3 → 3*9 + 4.5
         public static float TransformToWorldCoordinate(int absoluteCoordinate) {
@@ -12,5 +14,13 @@
         public static Coordinate TransformWorldToLocalCoordinate(float x, float z) {
             return new Coordinate((int) x / Constants.Maze.TILE_SIZE, (int) z / Constants.Maze.TILE_SIZE);
         }
+
+        public static Vector3 GetDefaultPositionVector(Coordinate coords, float y = 0f) {
+	        return new Vector3 {
+	            x = TransformToWorldCoordinate(coords.X),
+	            y = y,
+	            z = TransformToWorldCoordinate(coords.Y)
+	        };
+	    }
     }
 }
