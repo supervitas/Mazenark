@@ -81,36 +81,22 @@ namespace MazeBuilder.BiomeGenerators {
 
         private void PlaceLightingObjects() {
             ParticleList = PlaceLightingParticles(Biome.Earth, NightParticles);
-            PlaceTorches();
+            PlaceTorches(Biome.Earth);
         }
 
-        private void PlaceTorches() {
-            var mazeTiles = AppManager.Instance.MazeInstance.Maze;
-
-            for (var i = 0; i < mazeTiles.Width; i++) {
-                for (var j = 1; j < mazeTiles.Height - 1; j++) {
-                    var wall = mazeTiles[i, j];
-                    if (wall.Type == Tile.Variant.Wall && mazeTiles[i, j + 1].Type != Tile.Variant.Wall
-                                                       && mazeTiles[i, j - 1].Type != Tile.Variant.Wall) {
-                        PlaceTorch(wall);
-                    }
-                }
-            }
-        }
-
-        private void PlaceTorch(Tile tile) {
-            if (Random.Range(0, 100) >= TorchSpawnChance) return;
-            var sideOffset = Random.Range(0, 2) > 0 ? -0.53f : 0.53f;
-            var rotation = sideOffset > 0 ? Quaternion.Euler(0, 90, 0) : Quaternion.Euler(0, 270, 0);
-
-            var position = new Vector3 {
-                x = Utils.TransformToWorldCoordinate(tile.Position.X - Random.Range(-0.2f, 0.2f)),
-                y = Constants.Maze.TILE_SIZE - 3.5f,
-                z = Utils.TransformToWorldCoordinate(tile.Position.Y - sideOffset)
-            };
-
-            Instantiate(Torch, position, rotation);
-        }
+//        private void PlaceTorches() {
+//            var mazeTiles = AppManager.Instance.MazeInstance.Maze;
+//
+//            for (var i = 0; i < mazeTiles.Width; i++) {
+//                for (var j = 1; j < mazeTiles.Height - 1; j++) {
+//                    var wall = mazeTiles[i, j];
+//                    if (wall.Type == Tile.Variant.Wall && mazeTiles[i, j + 1].Type != Tile.Variant.Wall
+//                                                       && mazeTiles[i, j - 1].Type != Tile.Variant.Wall) {
+//                        PlaceTorch(wall);
+//                    }
+//                }
+//            }
+//        }
 
     }
 

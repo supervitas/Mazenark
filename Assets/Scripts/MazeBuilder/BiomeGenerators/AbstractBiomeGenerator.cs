@@ -78,6 +78,30 @@ namespace MazeBuilder.BiomeGenerators {
             where shouldPlace select Instantiate(particles, Utils.GetDefaultPositionVector(tile.Position, 3.5f), Quaternion.identity)).ToList();
 	    }
 
+	    protected void PlaceTorches(Biome biomeType) {
+	        var tiles = from tile in GetTilesByTypeAndBiome(biomeType, Tile.Variant.Wall)
+	            let shouldPlace = ParticlesSpawnChance >= Random.Range(1, 100)
+	            where shouldPlace
+	            select tile;
+
+	        foreach (var tile in tiles) {
+	            PlaceTorch(tile);
+	        }
+	    }
+
+	    protected void PlaceTorch(Tile tile) {
+	        var sideOffset = Random.Range(0, 2) > 0 ? -0.53f : 0.53f;
+	        var rotation = sideOffset > 0 ? Quaternion.Euler(0, 90, 0) : Quaternion.Euler(0, 270, 0);
+
+	        var position = new Vector3 {
+	            x = Utils.TransformToWorldCoordinate(tile.Position.X - Random.Range(-0.2f, 0.2f)),
+	            y = Constants.Maze.TILE_SIZE - 3.5f,
+	            z = Utils.TransformToWorldCoordinate(tile.Position.Y - sideOffset)
+	        };
+
+	        Instantiate(Torch, position, rotation);
+	    }
+
 
 	    private void GeneralSubscribtion() {
 	        Eventhub.Subscribe("mazedrawer:placement_finished", StartPostPlacement, this);

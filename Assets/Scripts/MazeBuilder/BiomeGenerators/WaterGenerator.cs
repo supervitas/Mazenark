@@ -43,12 +43,11 @@ namespace MazeBuilder.BiomeGenerators {
             }
         }
         protected override void StartPostPlacement(object sender, EventArguments e) {
-            PlaceLightingObjects();
+            ParticleList = PlaceLightingParticles(Biome.Water, NightParticles);
+            PlaceTorches(Biome.Water);
+
         }
 
-        private void PlaceLightingObjects() {
-            ParticleList = PlaceLightingParticles(Biome.Water, NightParticles);
-        }
 
         private void ToggleBiomeWeather(object sender, EventArguments e) {
             if (e.BiomeName == "Water Biome") {

@@ -30,11 +30,8 @@ namespace MazeBuilder.BiomeGenerators {
             }
         }
         protected override void StartPostPlacement(object sender, EventArguments e) {
-            PlaceLightingObjects();
-        }
-
-        private void PlaceLightingObjects() {
             ParticleList = PlaceLightingParticles(Biome.Wind, NightParticles);
+            PlaceTorches(Biome.Wind);
         }
 
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
