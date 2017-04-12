@@ -36,6 +36,10 @@ namespace Controls {
 
         // Update is called once per frame
         void Update () {
+            if (_agent.velocity != Vector3.zero) {
+                animator.SetBool("Moving", true);
+                animator.SetBool("Idle", false);
+            }
             if (PointsReady && !_agent.pathPending && _agent.remainingDistance < 0.5f) {
                 GotoNextPoint();
             }
