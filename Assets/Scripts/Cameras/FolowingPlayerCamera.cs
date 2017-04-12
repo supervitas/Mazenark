@@ -40,7 +40,8 @@ namespace Cameras {
             Vector3 back = _target.transform.TransformDirection(-1 * Vector3.forward);
             // cast the bumper Sphere out from rear and check to see if there is anything behind
             if (Physics.SphereCast(_target.transform.position, _target.transform.position.y, back, out hit, _bumperDistanceCheck)
-                && !hit.transform.CompareTag("Player") && hit.transform.GetComponent<MeshRenderer>().bounds.size.y > 2) {
+                && !hit.transform.CompareTag("Player") && hit.transform.GetComponent<MeshRenderer>() != null &&
+                hit.transform.GetComponent<MeshRenderer>().bounds.size.y > 2) {
                 wantedPosition.x = hit.point.x;
                 wantedPosition.z = hit.point.z;
                 wantedPosition.y = Mathf.Lerp(hit.point.y + _bumperCameraHeight, wantedPosition.y, Time.deltaTime * _damping);
