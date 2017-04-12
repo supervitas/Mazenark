@@ -167,8 +167,7 @@ namespace Controls {
             direction.y = 0;
             direction = direction.normalized * directionLength;
 
-            if(direction != Vector3.zero)
-            {
+            if(direction != Vector3.zero) {
                 m_currentDirection = Vector3.Slerp(m_currentDirection, direction, Time.deltaTime * m_interpolation);
 
                 transform.rotation = Quaternion.LookRotation(m_currentDirection);
