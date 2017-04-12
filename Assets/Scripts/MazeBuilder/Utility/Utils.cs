@@ -11,6 +11,10 @@ namespace MazeBuilder.Utility {
             return absoluteCoordinate * Constants.Maze.TILE_SIZE + Constants.Maze.TILE_SIZE / 2.0f;
         }
 
+        public static Vector3 TransformToWorldCoordinate(Coordinate coord) {
+            return new Vector3(TransformToWorldCoordinate(coord.X), 0.1f, TransformToWorldCoordinate(coord.Y));
+        }
+
         public static Coordinate TransformWorldToLocalCoordinate(float x, float z) {
             return new Coordinate((int) x / Constants.Maze.TILE_SIZE, (int) z / Constants.Maze.TILE_SIZE);
         }
