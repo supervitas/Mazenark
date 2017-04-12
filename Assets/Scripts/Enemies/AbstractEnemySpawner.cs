@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Controls;
 using MazeBuilder;
 using MazeBuilder.Utility;
 using UnityEngine;
@@ -38,6 +39,21 @@ namespace Enemies {
                 NetworkServer.Spawn(inst);
 
                 SpawnedEnemies.Add(inst);
+            }
+        }
+
+        protected void MakePatroolPointsToEnemies() {
+            var rand = new System.Random();
+            foreach (var enemy in SpawnedEnemies) {
+                var controller = enemy.GetComponent<EnemyController>();
+                // Add random point to patroll from list of empty tiles
+                for (var i = 0; i < 2; i++) {
+                    controller.Points.Add(
+                        Utils.TransformToWorldCoordinate(EmptyTiles[rand.Next(EmptyTiles.Count)].Position));
+                }
+
+                controller.PointsReady = true;
+                controller.GotoNextPoint();
             }
         }
 

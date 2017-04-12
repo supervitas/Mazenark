@@ -1,13 +1,11 @@
 ﻿using MazeBuilder;
 
 namespace Enemies {
-    public class EarthBiomeEnemySpawner : AbstractEnemySpawner {
-
+    public class WindBiomeEnemySpawner : AbstractEnemySpawner {
         private void Start() {
-            SetUpEmptyTiles(Biome.Earth);
+            SetUpEmptyTiles(Biome.Wind);
             SpawnEnemies();
             MakePatroolPointsToEnemies();
         }
-
     }
 }

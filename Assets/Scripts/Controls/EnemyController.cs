@@ -12,13 +12,12 @@ namespace Controls {
         private NavMeshAgent _agent;
 
         public readonly List <Vector3> Points = new List<Vector3>();
-        private int _destPoint = 1;
+        private int _destPoint = 0;
 
         [HideInInspector]
         public bool PointsReady;
 
-        void Start () {
-            Debug.Log("start");
+        void Awake () {
             animator.SetBool("Idle", true);
 
             _agent = GetComponent<NavMeshAgent>();
@@ -27,7 +26,6 @@ namespace Controls {
         }
 
         public void GotoNextPoint() {
-            Debug.Log("points");
             // Set the agent to go to the currently selected destination.
             _agent.destination = Points[_destPoint];
 
@@ -38,7 +36,7 @@ namespace Controls {
 
         // Update is called once per frame
         void Update () {
-            if (PointsReady && _agent.remainingDistance < 0.5f) {
+            if (PointsReady && !_agent.pathPending && _agent.remainingDistance < 0.5f) {
                 GotoNextPoint();
             }
         }
