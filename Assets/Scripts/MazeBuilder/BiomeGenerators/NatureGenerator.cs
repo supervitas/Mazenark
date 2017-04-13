@@ -45,8 +45,8 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
         protected override void StartPostPlacement(object sender, EventArguments e) {
-            ParticleList = PlaceLightingParticles(Biome.Nature, NightParticles);
-            PlaceTorches(Biome.Nature);
+//            ParticleList = PlaceLightingParticles(Biome.Nature, NightParticles);
+//            PlaceTorches(Biome.Nature);
         }
 
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {

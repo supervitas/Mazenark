@@ -42,14 +42,20 @@ namespace Enemies {
             }
         }
 
+        private void GetRandomNearCoordinates(Coordinate coordinate) {
+
+        }
+
         protected void MakePatroolPointsToEnemies() {
             var rand = new System.Random();
             foreach (var enemy in SpawnedEnemies) {
                 var controller = enemy.GetComponent<EnemyController>();
+                var enemyPos = Utils.TransformWorldToLocalCoordinate(enemy.transform.position.x, enemy.transform.position.z);
+                GetRandomNearCoordinates(enemyPos);
                 // Add random point to patroll from list of empty tiles
                 for (var i = 0; i < 2; i++) {
                     controller.Points.Add(
-                        Utils.TransformToWorldCoordinate(EmptyTiles[rand.Next(EmptyTiles.Count)].Position));
+                        Utils.TransformToWorldCoordinate(EmptyTiles[rand.Next(EmptyTiles.Count)].Position)); // todo should be near points
                 }
 
                 controller.PointsReady = true;

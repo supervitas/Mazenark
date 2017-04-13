@@ -54,9 +54,9 @@ namespace MazeBuilder {
 			if (biome == Biome.Wind) {
 				return WindBiomeGenerator;
 			}
-            if (biome == Biome.Nature) {
-                return NatureGenerator;
-            }
+//            if (biome == Biome.Nature) {
+//                return NatureGenerator;
+//            }
 			return EarthBiomeGenerator; //default is Earth
 		}
 
