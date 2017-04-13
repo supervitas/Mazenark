@@ -28,9 +28,9 @@ namespace MazeBuilder.BiomeStrategies {
             var width = GetRandomRoomDimension(targetBiome);
             var height = GetRandomRoomDimension(targetBiome);
 
-			if (x % 2 == 1)
+			if (x % 2 == 0)
 				x++;
-			if (y % 2 == 1)
+			if (y % 2 == 0)
 				y++;
 
 			var attempt = 0;
@@ -44,9 +44,9 @@ namespace MazeBuilder.BiomeStrategies {
                 x = random.Next(chunkLeftBoundary, chunkRightBoundary + 1);
                 y = random.Next(chunkTopBoundary, chunkBottomBoundary + 1);
 
-				if (x % 2 == 1)
+				if (x % 2 == 0)
 					x++;
-				if (y % 2 == 1)
+				if (y % 2 == 0)
 					y++;
 
 				room = new Room(x, y, x + width - 1, y + height - 1);

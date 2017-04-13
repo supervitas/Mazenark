@@ -4,7 +4,7 @@ using System;
 namespace MazeBuilder.BiomeStrategies {
     public class AdvancedBiomePlacer : IBiomePlacer {
         private const float SAFEHOUSE_FRACTION = 0.16f;
-		private const int SPAWN_LENGTH = 1;
+		private const int SPAWN_LENGTH = 3;
 
 		private const int MIN_BIOMES = 4;
         private const int MAX_BIOMES = 8;
@@ -106,30 +106,28 @@ namespace MazeBuilder.BiomeStrategies {
 			maze.Rooms.Add(new Room(minX, minY, maxX, maxY));
 		}
 
-		private void PlantSpawn(Coordinate where) {
-			ChangeMazeTileBiome(where, Biome.Spawn, biomeIDCounter);
+		private void PlantSpawn(Room where) {
 
-			for (int offset = 1; offset < SPAWN_LENGTH; offset++) {
-				foreach (Direction dir in Direction.Directions) {
+			foreach (Tile tile in maze.GetTilesWithinRoom(where)) {
+				ChangeMazeTileBiome(tile.Position, Biome.Spawn, biomeIDCounter);
+			} 
 
-					Coordinate sleeve = where;
-					for (int i = 0; i < offset; i++) {
-						sleeve = dir.Shift(sleeve);
-					}
-					ChangeMazeTileBiome(sleeve, Biome.Spawn, biomeIDCounter);
-				}
-			}
+			maze.Spawns.Add(where);
 		}
 
         private void PlantSpawns() {
+			// Top-Left
 			biomeIDCounter++;
-			PlantSpawn(maze.AsRoom.TopLeftCorner);
+			PlantSpawn(new Room(0 + 1, 0 + 1, SPAWN_LENGTH - 1 + 1, SPAWN_LENGTH - 1 + 1));
+			// Top-Right
 			biomeIDCounter++;
-			PlantSpawn(maze.AsRoom.TopRightCorner);
+			PlantSpawn(new Room(maze.Width - SPAWN_LENGTH - 1, 1, maze.Width - 1 - 1, SPAWN_LENGTH - 1 + 1));
+			// Down-Left
 			biomeIDCounter++;
-			PlantSpawn(maze.AsRoom.BottomLeftCorner);
+			PlantSpawn(new Room(0 + 1, maze.Height - SPAWN_LENGTH - 1, SPAWN_LENGTH - 1 + 1, maze.Height - 1 - 1));
+			// Down-Right
 			biomeIDCounter++;
-			PlantSpawn(maze.AsRoom.BottomRightCorner);
+			PlantSpawn(new Room(maze.Width - SPAWN_LENGTH - 1, maze.Height - SPAWN_LENGTH - 1, maze.Width - 1 - 1, maze.Height - 1 - 1));
 		}
 
 

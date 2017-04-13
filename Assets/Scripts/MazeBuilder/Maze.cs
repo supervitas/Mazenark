@@ -14,7 +14,8 @@ namespace MazeBuilder {
         private Tile[,] tiles;
 		private List<Coordinate> importantPlaces = new List<Coordinate>();  // Should have at least one path leading to them.
         private List<Room> rooms = new List<Room>();
-        public Dictionary<Biome, Coordinate> BiomesSize = new Dictionary<Biome, Coordinate>();
+		private List<Room> spawns = new List<Room>();
+		public Dictionary<Biome, Coordinate> BiomesSize = new Dictionary<Biome, Coordinate>();
 		private List<TileCollection> biomeList = null;
 		public int MaxBiomeID { get; private set; }
 
@@ -55,8 +56,13 @@ namespace MazeBuilder {
                 return rooms;
             }
         }
+		public List<Room> Spawns {
+			get {
+				return spawns;
+			}
+		}
 
-        public int Width {
+		public int Width {
             get { return tiles.GetLength(0); }
         }
 
@@ -112,6 +118,19 @@ namespace MazeBuilder {
 		}
 		public bool IsPointWithin(Coordinate point) {
 			return IsPointWithin(point.X, point.Y);
+		}
+		public List<Tile> GetTilesWithinRoom(Room room) {
+			var tiles = new List<Tile>();
+
+			for (int i = room.TopLeftCorner.X; i <= room.TopRightCorner.X; i++) {
+				for (int j = room.TopLeftCorner.Y; j <= room.BottomLeftCorner.Y; j++) {
+					if (IsPointWithin(i, j)) {
+						tiles.Add(Tiles[i, j]);
+					}
+				}
+			}
+
+			return tiles;
 		}
 
 		public class TileCollection {

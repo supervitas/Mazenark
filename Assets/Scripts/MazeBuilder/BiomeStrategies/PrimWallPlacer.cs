@@ -9,6 +9,7 @@ namespace MazeBuilder.BiomeStrategies {
         private static PrimWallPlacer instance = new PrimWallPlacer();
         private static Random random = new Random();
 		private const float CHANCE_TO_CUT_PASSAGE_THROUGH_DEAD_END = 1.0f / 2; // Every second will be cut through.
+		private readonly int SEW = 1; // Should enclose walls around the maze?
 
         private PrimWallPlacer() { }
 
@@ -25,8 +26,8 @@ namespace MazeBuilder.BiomeStrategies {
 				bool attemptToPlacePassage = false;	// More the random is better.
 
 				//foreach (Tile tile in roomedMaze.Tiles) {
-				for (int i = 0; i < roomedMaze.Width; i += 2) {
-					for (int j = 0; j < roomedMaze.Width; j += 2) {
+				for (int i = SEW; i < roomedMaze.Width; i += 2) {
+					for (int j = SEW; j < roomedMaze.Width; j += 2) {
 						Tile tile = roomedMaze[i, j];
 
 						attemptToPlacePassage = PlaceWallIfRandomSaysSo();
@@ -105,8 +106,8 @@ namespace MazeBuilder.BiomeStrategies {
 		}
 
 		private void CutThroughDeadEnds(Maze maze) {
-			for (int i = 0; i < maze.Width; i += 2) {
-				for (int j = 0; j < maze.Width; j += 2) {
+			for (int i = SEW; i < maze.Width; i += 2) {
+				for (int j = SEW; j < maze.Width; j += 2) {
 					Tile tile = maze[i, j];
 
 					var deadEndDirection = IsDeadEnd(maze, tile);

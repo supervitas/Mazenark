@@ -32,8 +32,9 @@ namespace MazeBuilder {
             GenerateRooms();
 			PlaceTileWeights();
             GenerateWalls();
+			EncloseMazeWithWalls();
 
-            return _maze;
+			return _maze;
         }
 
         private void GenerateRooms() {
@@ -72,6 +73,27 @@ namespace MazeBuilder {
 			// It should be per-biome strategy, not global!
 			PrimWallPlacer.Instance.PlaceWalls(_maze);
         }
+
+		private void EncloseMazeWithWalls() {
+			for (int i = 0; i < Maze.Width; i++) {
+				var tileUp = Maze[i, 0];
+				var tileDown = Maze[i, Maze.Height - 1];
+
+				if (tileUp.Biome != Biome.Spawn)
+					tileUp.Type = Tile.Variant.Wall;
+				if (tileDown.Biome != Biome.Spawn)
+					tileDown.Type = Tile.Variant.Wall;
+			}
+			for (int j = 0; j < Maze.Height; j++) {
+				var tileLeft = Maze[0, j];
+				var tileRight = Maze[Maze.Width - 1, j];
+
+				if (tileLeft.Biome != Biome.Spawn)
+					tileLeft.Type = Tile.Variant.Wall;
+				if (tileRight.Biome != Biome.Spawn)
+					tileRight.Type = Tile.Variant.Wall;
+			}
+		}
 
     }
 }
