@@ -17,10 +17,6 @@ namespace MazeBuilder.BiomeGenerators {
 		[SerializeField]
 		private PlacementRule _straightWalls;
 
-        [Header("Biome floors")]
-		[SerializeField]
-		private GameObject _floor2;
-
 
         private new void Awake() {
             base.Awake();
@@ -76,7 +72,7 @@ namespace MazeBuilder.BiomeGenerators {
                     Utils.GetDefaultPositionVector(coordinate, 0.2f), Quaternion.identity);
             }
 
-            AppManager.Instance.InstantiateSOC(_floor2, Utils.GetDefaultPositionVector(coordinate), Edge.UpRight.Rotation);
+            AppManager.Instance.InstantiateSOC(Floor, Utils.GetDefaultPositionVector(coordinate), Edge.UpRight.Rotation);
 		}
 
         private void PlaceLightingObjects() {
@@ -84,19 +80,6 @@ namespace MazeBuilder.BiomeGenerators {
             PlaceTorches(Biome.Earth);
         }
 
-//        private void PlaceTorches() {
-//            var mazeTiles = AppManager.Instance.MazeInstance.Maze;
-//
-//            for (var i = 0; i < mazeTiles.Width; i++) {
-//                for (var j = 1; j < mazeTiles.Height - 1; j++) {
-//                    var wall = mazeTiles[i, j];
-//                    if (wall.Type == Tile.Variant.Wall && mazeTiles[i, j + 1].Type != Tile.Variant.Wall
-//                                                       && mazeTiles[i, j - 1].Type != Tile.Variant.Wall) {
-//                        PlaceTorch(wall);
-//                    }
-//                }
-//            }
-//        }
 
     }
 

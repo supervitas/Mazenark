@@ -66,6 +66,7 @@ namespace MazeBuilder.BiomeGenerators {
                 AppManager.Instance.InstantiateSOC((GameObject) BiomeFloorsEnviroment.GetRandom(typeof(GameObject)),
                     Utils.GetDefaultPositionVector(coordinate, 0.1f), Quaternion.identity);
             }
+            AppManager.Instance.InstantiateSOC(Floor, Utils.GetDefaultPositionVector(coordinate), Edge.UpRight.Rotation);
         }
     }
 }

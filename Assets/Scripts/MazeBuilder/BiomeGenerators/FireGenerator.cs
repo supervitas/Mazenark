@@ -17,9 +17,6 @@ namespace MazeBuilder.BiomeGenerators {
 		[SerializeField]
 		private PlacementRule straightWalls;
 
-		[Header("Biome floors")]
-		[SerializeField]
-		private GameObject floor2;
 
 		private new void Awake() {
             base.Awake();
@@ -76,7 +73,7 @@ namespace MazeBuilder.BiomeGenerators {
 					Utils.GetDefaultPositionVector(coordinate, 0.2f), Quaternion.identity);
 			}
 
-		    AppManager.Instance.InstantiateSOC(floor2, Utils.GetDefaultPositionVector(coordinate), Edge.UpRight.Rotation);
+		    AppManager.Instance.InstantiateSOC(Floor, Utils.GetDefaultPositionVector(coordinate), Edge.UpRight.Rotation);
 		}
     }
 }

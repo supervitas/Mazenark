@@ -24,6 +24,9 @@ namespace MazeBuilder.BiomeGenerators {
 	    #endregion
 
 	    #region BiomeFloor
+	    [Header("Biome floors")]
+	    public GameObject Floor;
+
 	    [Header("Biome Floors Enviroment")]
 	    public GameObject[] FloorsEnviroment;
 	    #endregion
