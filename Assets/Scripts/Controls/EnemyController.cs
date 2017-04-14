@@ -19,10 +19,8 @@ namespace Controls {
 
         void Awake () {
             animator.SetBool("Idle", true);
-
             _agent = GetComponent<NavMeshAgent>();
             _agent.autoBraking = false;
-
         }
 
         public void GotoNextPoint() {

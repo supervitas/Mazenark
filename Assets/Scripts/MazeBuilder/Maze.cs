@@ -143,8 +143,8 @@ namespace MazeBuilder {
 		}
 
 		public void GenerateBiomesList(int maxBiomeID = -1) {
-			this.MaxBiomeID = maxBiomeID;
-			this.biomeList = new List<TileCollection>();
+			MaxBiomeID = maxBiomeID;
+			biomeList = new List<TileCollection>();
 
 			for (int i = 0; i < maxBiomeID; i++) {
 				TileCollection biome = null;

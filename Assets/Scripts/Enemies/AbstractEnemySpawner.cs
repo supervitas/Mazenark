@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Controls;
 using MazeBuilder;
 using MazeBuilder.Utility;
 using UnityEngine;
 using UnityEngine.Networking;
+using Random = UnityEngine.Random;
 
 namespace Enemies {
     public class AbstractEnemySpawner : NetworkBehaviour {
@@ -42,20 +44,42 @@ namespace Enemies {
             }
         }
 
-        private void GetRandomNearCoordinates(Coordinate coordinate) {
-
+        private bool TestEmptyCoordinate(Coordinate coordinate) {
+            return App.AppManager.Instance.MazeInstance.Maze[coordinate.X, coordinate.Y].Type == Tile.Variant.Empty;
         }
 
+        private Coordinate GetRandomCoordinate(Coordinate coordinate) {
+            var x = coordinate.X + Random.Range(-8, 8);
+            var y = coordinate.Y + Random.Range(-8, 8);
+            try {
+                return App.AppManager.Instance.MazeInstance.Maze[x, y].Position;
+            }
+            catch (IndexOutOfRangeException) {
+                return GetRandomCoordinate(coordinate);
+            }
+        }
+
+        private List<Vector3> GetRandomNearCoordinates(Coordinate coordinate, int coordsLimit) {
+            Coordinate coord = GetRandomCoordinate(coordinate);
+            var randomEmptyCoords = new List<Vector3>();
+            randomEmptyCoords.Add(Utils.TransformToWorldCoordinate(coord)); // add first point to patrool
+            for (var i = 0; i < coordsLimit; i++) {
+                while (!TestEmptyCoordinate(coord)) {
+                    coord = GetRandomCoordinate(coordinate);
+                }
+                randomEmptyCoords.Add(Utils.TransformToWorldCoordinate(coord));
+            }
+            return randomEmptyCoords;
+        }
+
+
         protected void MakePatroolPointsToEnemies() {
-            var rand = new System.Random();
             foreach (var enemy in SpawnedEnemies) {
                 var controller = enemy.GetComponent<EnemyController>();
                 var enemyPos = Utils.TransformWorldToLocalCoordinate(enemy.transform.position.x, enemy.transform.position.z);
-                GetRandomNearCoordinates(enemyPos);
-                // Add random point to patroll from list of empty tiles
-                for (var i = 0; i < 2; i++) {
-                    controller.Points.Add(
-                        Utils.TransformToWorldCoordinate(EmptyTiles[rand.Next(EmptyTiles.Count)].Position)); // todo should be near points
+
+                foreach (var patroolPoint in GetRandomNearCoordinates(enemyPos, 3)) {
+                    controller.Points.Add(patroolPoint);
                 }
 
                 controller.PointsReady = true;
