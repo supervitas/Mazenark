@@ -15,6 +15,7 @@ namespace MazeBuilder.BiomeStrategies {
 		private int tilesLeftEmpty;
 
 		private int biomeIDCounter = 0;
+		private Random random = new Random();
 
 		public Maze PlaceBiomes(Maze emptyMaze) {
             maze = emptyMaze;
@@ -132,7 +133,6 @@ namespace MazeBuilder.BiomeStrategies {
 
 
 		private void PlantBiomes() {
-			Random random = new Random();
 			int numOfBiomes = random.Next(MIN_BIOMES, MAX_BIOMES + 1);
 
 			int minimalDistanceFromCenter = (int) (maze.Width * SAFEHOUSE_FRACTION / 2) + 1;
@@ -140,17 +140,24 @@ namespace MazeBuilder.BiomeStrategies {
 			double radiansBetweenSpawns = 2 * Math.PI / numOfBiomes;
 
 			for (int i = 0; i < numOfBiomes; i++) {
-				int randomDistance = random.Next(minimalDistanceFromCenter, maximalDistanceFromCenter + 1);
-				int offsetX = (int) Math.Round(randomDistance * Math.Cos(radiansBetweenSpawns * i));
-				int offsetY = (int) Math.Round(randomDistance * Math.Sin(radiansBetweenSpawns * i));
+				Biome randomBiome = Biome.GetRandomBiome();
+				Coordinate randomPoint = GetRandomPointForBiomePlacement(minimalDistanceFromCenter, maximalDistanceFromCenter, i, radiansBetweenSpawns, randomBiome);
+				while (!maze.IsPointWithin(randomPoint)) {
+					randomPoint = GetRandomPointForBiomePlacement(minimalDistanceFromCenter, maximalDistanceFromCenter, i, radiansBetweenSpawns, randomBiome);
+				}
 
-				Coordinate randomPoint = new Coordinate(offsetX + maze.Width / 2, offsetY + maze.Height / 2);
-
-				ChangeMazeTileBiome(randomPoint, Biome.GetRandomBiome(), biomeIDCounter);
+				ChangeMazeTileBiome(randomPoint, randomBiome, biomeIDCounter);
 				maze[randomPoint].BiomeID = biomeIDCounter++;
 			}
 		}
 
+		private Coordinate GetRandomPointForBiomePlacement(int minimalDistanceFromCenter, int maximalDistanceFromCenter, int numOfBiome, double radiansBetweenSpawns, Biome biome) {
+			int randomDistance = (int) (random.Next(minimalDistanceFromCenter, maximalDistanceFromCenter + 1) * biome.MazeCenterDistanceModifier);
+			int offsetX = (int) Math.Round(randomDistance * Math.Cos(radiansBetweenSpawns * numOfBiome));
+			int offsetY = (int) Math.Round(randomDistance * Math.Sin(radiansBetweenSpawns * numOfBiome));
+
+			return new Coordinate(offsetX + maze.Width / 2, offsetY + maze.Height / 2);
+		}
 
 		// Beacuse I forgot `tilesLeftEmpty--;` several times...
 		private void ChangeMazeTileBiome(Coordinate where, Biome toWhich, int biomeID) {
