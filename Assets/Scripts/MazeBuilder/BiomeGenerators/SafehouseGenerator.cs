@@ -52,13 +52,5 @@ namespace MazeBuilder.BiomeGenerators {
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
             AppManager.Instance.InstantiateSOC(FlatWall, Utils.GetDefaultPositionVector(coordinate), Quaternion.identity);
         }
-        public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
-            if (FloorEnviromentSpawnChance >= UnityEngine.Random.Range(1, 100)) {
-                AppManager.Instance.InstantiateSOC((GameObject) BiomeFloorsEnviroment.GetRandom(typeof(GameObject)),
-                    Utils.GetDefaultPositionVector(coordinate, 0.1f), Quaternion.identity);
-            }
-            AppManager.Instance.InstantiateSOC(Floor, Utils.GetDefaultPositionVector(coordinate), Edge.UpRight.Rotation);
-
-        }
     }
 }

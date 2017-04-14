@@ -55,8 +55,15 @@ namespace MazeBuilder.BiomeGenerators {
 	        Eventhub.UnsubscribeFromAll(this);
 	    }
 
+
+	    public virtual void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
+	        if (FloorEnviromentSpawnChance >= Random.Range(1, 100)) {
+	            AppManager.Instance.InstantiateSOC((GameObject) BiomeFloorsEnviroment.GetRandom(typeof(GameObject)),
+	                Utils.GetDefaultPositionVector(coordinate, 0.3f), Quaternion.identity);
+	        }
+	        AppManager.Instance.InstantiateSOC(Floor, Utils.GetDefaultPositionVector(coordinate), Edge.UpRight.Rotation);
+	    }
 	    public abstract void CreateWall(Biome biome, Coordinate coordinate, Maze maze);
-	    public abstract void CreateFloor(Biome biome, Coordinate coordinate, Maze maze);
 	    protected abstract void OnNight(object sender, EventArguments args);
 	    protected abstract void OnDay(object sender, EventArguments args);
 	    protected abstract void StartPostPlacement(object sender, EventArguments e);
