@@ -8,7 +8,6 @@ namespace MazeBuilder.BiomeStrategies {
     public class PrimWallPlacer : IWallPlacer {
         private static PrimWallPlacer instance = new PrimWallPlacer();
         private static Random random = new Random();
-		private const float CHANCE_TO_CUT_PASSAGE_THROUGH_DEAD_END = 1.0f / 2; // Every second will be cut through.
 		private readonly int SEW = 1; // Should enclose walls around the maze?
 
         private PrimWallPlacer() { }
@@ -116,7 +115,7 @@ namespace MazeBuilder.BiomeStrategies {
 						Coordinate blockingWallPosition = deadEndDirection.Shift(tile.Position);
 
 						if (maze.IsPointWithin(blockingWallPosition)) {
-							bool shouldCutThrough = random.NextDouble() < CHANCE_TO_CUT_PASSAGE_THROUGH_DEAD_END;
+							bool shouldCutThrough = random.NextDouble() < maze[blockingWallPosition].Biome.DeadEndRemovalChance;
 							if (shouldCutThrough) {
 								maze[blockingWallPosition].Type = Tile.Variant.Empty;
 							}
