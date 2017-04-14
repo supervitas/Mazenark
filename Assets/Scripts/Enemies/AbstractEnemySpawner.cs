@@ -59,10 +59,9 @@ namespace Enemies {
             }
         }
 
-        private List<Vector3> GetRandomNearCoordinates(Coordinate coordinate, int coordsLimit) {
-            Coordinate coord = GetRandomCoordinate(coordinate);
-            var randomEmptyCoords = new List<Vector3>();
-            randomEmptyCoords.Add(Utils.TransformToWorldCoordinate(coord)); // add first point to patrool
+        private IEnumerable<Vector3> GetRandomNearCoordinates(Coordinate coordinate, int coordsLimit) {
+            var coord = GetRandomCoordinate(coordinate);
+            var randomEmptyCoords = new List<Vector3> {Utils.TransformToWorldCoordinate(coord)}; // add first point to patrool
             for (var i = 0; i < coordsLimit; i++) {
                 while (!TestEmptyCoordinate(coord)) {
                     coord = GetRandomCoordinate(coordinate);
