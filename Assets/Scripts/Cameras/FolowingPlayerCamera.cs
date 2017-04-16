@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using MazeBuilder.Utility;
+using UnityEngine;
 using UnityEngine.AI;
 
 namespace Cameras {
@@ -19,15 +20,9 @@ namespace Cameras {
         public void SetPlayerTransforms(Transform player) {
             _target = player;
             GetComponent<Camera>().transform.parent = _target;
-            DisableMainCamera();
-        }
+            Camera.main.transform.position = Utils.TransformToWorldCoordinate(new Coordinate(
+                App.AppManager.Instance.MazeInstance.Height / 2 - 2, App.AppManager.Instance.MazeInstance.Width / 2 - 2));
 
-        private void DisableMainCamera() {
-            Camera.main.enabled = false;
-        }
-
-        private void OnDestroy() {
-            Camera.main.enabled = true;
         }
 
         private void FixedUpdate() {

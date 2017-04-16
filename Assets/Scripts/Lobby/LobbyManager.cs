@@ -346,7 +346,7 @@ namespace Lobby{
             if (_lobbyHooks)
                 _lobbyHooks.OnLobbyServerSceneLoadedForPlayer(this, lobbyPlayer, gamePlayer);
 
-
+            gamePlayer.name = lobbyPlayer.GetComponent<LobbyPlayer>().playerName;
             gamePlayer.transform.position = _spawnGenerator.Current;
             _spawnGenerator.MoveNext();
 

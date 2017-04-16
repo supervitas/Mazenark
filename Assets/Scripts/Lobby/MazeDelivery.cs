@@ -31,12 +31,13 @@ namespace Lobby {
 
         [ClientRpc]
         public void RpcCreateMaze(int width, int hight) {
-            _fetchedMaze = new Maze(width, hight, true);
 
+            _fetchedMaze = new Maze(width, hight, true);
         }
 
         [ClientRpc]
         private void RpcFillMaze(MazeStruct[] mazeArr) {
+
             foreach (var tile in mazeArr) {
                 _fetchedMaze[tile.X, tile.Y].Biome = GetBiomeByName(tile.BiomeName);
 				_fetchedMaze[tile.X, tile.Y].Type = (Tile.Variant) tile.TileType;
@@ -46,6 +47,7 @@ namespace Lobby {
 
         [ClientRpc]
         public void RpcMazeLoadingFinished(int width, int hight, int maxBiomeID) {
+
 			AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(width, hight, _fetchedMaze);
 			AppManager.Instance.MazeInstance.Maze.GenerateBiomesList(maxBiomeID);
         }

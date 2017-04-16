@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Cameras;
+using Lobby;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -101,8 +102,7 @@ namespace Controls {
             }
             m_animator.SetBool("Grounded", m_isGrounded);
 
-            switch(m_controlMode)
-            {
+            switch(m_controlMode) {
                 case ControlMode.Direct:
                     DirectUpdate();
                     break;

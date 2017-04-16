@@ -23,6 +23,8 @@ namespace WeatherManager {
 
 
         private void CheckBiomeChanged() {
+            if (Target == null) return;
+
             var mazeCoords = Utils.TransformWorldToLocalCoordinate(Target.position.x, Target.position.z);
             var biome = _maze[mazeCoords.X, mazeCoords.Y].Biome;
             if (_currentBiome == biome) return;

@@ -10,7 +10,7 @@ namespace MazeBuilder.Safehouse {
         }
         void OnTriggerEnter(Collider other) {
             if (other.gameObject.CompareTag("Player")) {
-                App.AppManager.Instance.EventHub.CreateEvent("maze:levelCompleted", new EventArguments(""));
+                App.AppManager.Instance.EventHub.CreateEvent("maze:levelCompleted", null);
             }
         }
 
