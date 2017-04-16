@@ -20,9 +20,6 @@ namespace Cameras {
         public void SetPlayerTransforms(Transform player) {
             _target = player;
             GetComponent<Camera>().transform.parent = _target;
-            Camera.main.transform.position = Utils.TransformToWorldCoordinate(new Coordinate(
-                App.AppManager.Instance.MazeInstance.Height / 2 - 2, App.AppManager.Instance.MazeInstance.Width / 2 - 2));
-
         }
 
         private void FixedUpdate() {

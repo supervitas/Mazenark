@@ -54,6 +54,10 @@ namespace Controls {
             }
         }
 
+        private void OnDestroy() {
+            App.AppManager.Instance.TurnOnMainCamera();
+        }
+
         private void OnCollisionStay(Collision collision)
         {
             ContactPoint[] contactPoints = collision.contacts;
@@ -82,6 +86,7 @@ namespace Controls {
         }
 
         public override void OnStartLocalPlayer() { // Set up game for client
+            App.AppManager.Instance.TurnOffAndSetupMainCamera();
             var cam = Instantiate(Camera);
             cam.GetComponent<FolowingPlayerCamera>().SetPlayerTransforms(transform);
         }

@@ -1,4 +1,5 @@
 ﻿using App.EventSystem;
+using MazeBuilder.Utility;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -9,6 +10,7 @@ namespace App {
         public MazeBuilder.MazeBuilder MazeInstance { get; set; }
         public Publisher EventHub { get; private set; }
 
+        private Camera cam;
         //Singletone which starts firstly then other scripts;
         private void Awake() {
             if (Instance == null) {
@@ -29,5 +31,15 @@ namespace App {
             return instantiated;
         }
 
+        public void TurnOffAndSetupMainCamera() {
+            Camera.main.transform.position = Utils.TransformToWorldCoordinate(new Coordinate(
+                MazeInstance.Height / 2 - 2, MazeInstance.Width / 2 - 2));
+            cam = Camera.main;
+            cam.enabled = false;
+        }
+
+        public void TurnOnMainCamera() {
+            cam.enabled = true;
+        }
     }
 }
