@@ -8,19 +8,26 @@ using MazeBuilder.Utility;
 
 namespace Controls {
     public class EnemyController : MonoBehaviour {
-        [SerializeField] private Animator animator;
+        [SerializeField]
+        private Animator animator;
         private NavMeshAgent _agent;
 
         public readonly List <Vector3> Points = new List<Vector3>();
         private int _destPoint = 0;
 
         [HideInInspector]
-        public bool PointsReady;
+        public bool isPatrool;
+
 
         void Awake () {
             animator.SetBool("Idle", true);
             _agent = GetComponent<NavMeshAgent>();
             _agent.autoBraking = false;
+        }
+
+        public void SetIdleBehaivor() {
+            animator.SetBool("Idle", true);
+            _agent.autoBraking = true;
         }
 
         public void GotoNextPoint() {
@@ -33,12 +40,12 @@ namespace Controls {
         }
 
         // Update is called once per frame
-        void Update () {
+        private void LateUpdate () {
             if (_agent.velocity != Vector3.zero) {
                 animator.SetBool("Moving", true);
                 animator.SetBool("Idle", false);
             }
-            if (PointsReady && !_agent.pathPending && _agent.remainingDistance < 0.5f) {
+            if (isPatrool && !_agent.pathPending && _agent.remainingDistance <= 0.5f) {
                 GotoNextPoint();
             }
         }

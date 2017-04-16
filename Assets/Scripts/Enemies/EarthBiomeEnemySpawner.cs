@@ -6,7 +6,7 @@ namespace Enemies {
         private void Start() {
             SetUpEmptyTiles(Biome.Earth);
             SpawnEnemies();
-            MakePatroolPointsToEnemies();
+            CreateEnemyBehaivor();
         }
 
     }

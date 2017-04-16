@@ -13,6 +13,8 @@ namespace Enemies {
         #region BiomeEnemies
         [SerializeField]
         [Range(0, 100f)] protected float EnemySpawnChance = 25f;
+        [SerializeField]
+        [Range(0, 100f)] protected float EnemyIdleBehaivor = 25f;
         [Header("Biome Enemies Prefabs")]
         public GameObject[] Enemies;
         #endregion
@@ -23,6 +25,12 @@ namespace Enemies {
 
         protected void Awake() {
             SetUpRandomEnemies();
+        }
+
+        private void SetUpRandomEnemies() {
+            foreach (var enemy in Enemies) {
+                BiomeEnemies.Add(enemy, typeof(GameObject));
+            }
         }
 
         protected void SetUpEmptyTiles(Biome biomeType) {
@@ -39,56 +47,51 @@ namespace Enemies {
                 var enemy = (GameObject) BiomeEnemies.GetRandom(typeof(GameObject));
                 var inst = Instantiate(enemy, Utils.GetDefaultPositionVector(emptyTile.Position), Quaternion.identity);
                 NetworkServer.Spawn(inst);
-
                 SpawnedEnemies.Add(inst);
             }
         }
 
-        private bool TestEmptyCoordinate(Coordinate coordinate) {
-            return App.AppManager.Instance.MazeInstance.Maze[coordinate.X, coordinate.Y].Type == Tile.Variant.Empty;
-        }
-
-        private Coordinate GetRandomCoordinate(Coordinate coordinate) {
-            var x = coordinate.X + Random.Range(-8, 8);
-            var y = coordinate.Y + Random.Range(-8, 8);
+        protected Vector3 GetRandomEmptyCoordinate(Coordinate coordinate) {
+            var x = coordinate.X + Random.Range(-12, 12);
+            var y = coordinate.Y + Random.Range(-12, 12);
             try {
-                return App.AppManager.Instance.MazeInstance.Maze[x, y].Position;
+                return App.AppManager.Instance.MazeInstance.Maze[x, y].Type == Tile.Variant.Empty ?
+                    Utils.TransformToWorldCoordinate(App.AppManager.Instance.MazeInstance.Maze[x, y].Position) :
+                    GetRandomEmptyCoordinate(coordinate);
             }
             catch (IndexOutOfRangeException) {
-                return GetRandomCoordinate(coordinate);
+                return GetRandomEmptyCoordinate(coordinate);
             }
         }
 
-        private IEnumerable<Vector3> GetRandomNearCoordinates(Coordinate coordinate, int coordsLimit) {
-            var coord = GetRandomCoordinate(coordinate);
-            var randomEmptyCoords = new List<Vector3> {Utils.TransformToWorldCoordinate(coord)}; // add first point to patrool
+        protected IEnumerable<Vector3> GetRandomNearCoordinates(Coordinate coordinate, int coordsLimit) {
+            var randomEmptyCoords = new List<Vector3> {Utils.TransformToWorldCoordinate(coordinate)}; // add first point to patrool
             for (var i = 0; i < coordsLimit; i++) {
-                while (!TestEmptyCoordinate(coord)) {
-                    coord = GetRandomCoordinate(coordinate);
-                }
-                randomEmptyCoords.Add(Utils.TransformToWorldCoordinate(coord));
+                randomEmptyCoords.Add(GetRandomEmptyCoordinate(coordinate));
             }
             return randomEmptyCoords;
         }
 
 
-        protected void MakePatroolPointsToEnemies() {
+        protected void CreateEnemyBehaivor() {
             foreach (var enemy in SpawnedEnemies) {
                 var controller = enemy.GetComponent<EnemyController>();
+
+                if (EnemyIdleBehaivor >= Random.Range(1, 100)) {
+                    controller.SetIdleBehaivor();
+                    controller.Points.Add(enemy.transform.position); // add current position for enemy to go back if player will no longer visible
+                    continue;
+                }
+
                 var enemyPos = Utils.TransformWorldToLocalCoordinate(enemy.transform.position.x, enemy.transform.position.z);
 
                 foreach (var patroolPoint in GetRandomNearCoordinates(enemyPos, 3)) {
                     controller.Points.Add(patroolPoint);
                 }
 
-                controller.PointsReady = true;
+                controller.isPatrool = true;
                 controller.GotoNextPoint();
-            }
-        }
 
-        private void SetUpRandomEnemies() {
-            foreach (var enemy in Enemies) {
-                BiomeEnemies.Add(enemy, typeof(GameObject));
             }
         }
     }

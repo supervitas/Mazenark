@@ -356,18 +356,13 @@ namespace Lobby{
 
 
         private IEnumerator<Vector3> GetSpawnPosition() {
-            var tiles = from biome in AppManager.Instance.MazeInstance.Maze.Biomes
-                where biome.biome == Biome.Spawn
-                from tile in biome.tiles
-                select tile;
-
-            foreach (var tile in tiles) {
+            var spawns = AppManager.Instance.MazeInstance.Maze.Spawns;
+            foreach (var spawn in spawns) {
                 yield return new Vector3 {
-                    x = Utils.TransformToWorldCoordinate(tile.Position.X),
+                    x = Utils.TransformToWorldCoordinate(spawn.Center.X),
                     y = 0.1f,
-                    z = Utils.TransformToWorldCoordinate(tile.Position.Y)
+                    z = Utils.TransformToWorldCoordinate(spawn.Center.Y)
                 };
-
             }
         }
         // --- Countdown management
