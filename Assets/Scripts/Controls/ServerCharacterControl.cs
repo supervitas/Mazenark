@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 namespace Controls {
+    [NetworkSettings(channel = 0, sendInterval = 1f)]
     public class ServerCharacterControl : NetworkBehaviour {
         [SyncVar]
         public int CurrentHealth = 100;

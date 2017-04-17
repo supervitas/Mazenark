@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 namespace Lobby {
+    [NetworkSettings(channel = 0, sendInterval = 0)]
     public class MazeDelivery : NetworkBehaviour {
         private Maze _fetchedMaze;
 

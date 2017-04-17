@@ -10,7 +10,7 @@ namespace App {
         public MazeBuilder.MazeBuilder MazeInstance { get; set; }
         public Publisher EventHub { get; private set; }
 
-        private Camera cam;
+        private Camera _cam;
         //Singletone which starts firstly then other scripts;
         private void Awake() {
             if (Instance == null) {
@@ -33,13 +33,13 @@ namespace App {
 
         public void TurnOffAndSetupMainCamera() {
             Camera.main.transform.position = Utils.TransformToWorldCoordinate(new Coordinate(
-                MazeInstance.Height / 2 - 2, MazeInstance.Width / 2 - 2));
-            cam = Camera.main;
-            cam.enabled = false;
+                MazeInstance.Height / 2 - 1, MazeInstance.Width / 2 - 2), 10.5f);
+            _cam = Camera.main;
+            _cam.enabled = false;
         }
 
         public void TurnOnMainCamera() {
-            cam.enabled = true;
+            _cam.enabled = true;
         }
     }
 }

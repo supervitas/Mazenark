@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 namespace Controls {
+    [NetworkSettings(channel = 1, sendInterval = 0f)]
     public class CharacterControl : NetworkBehaviour {
 
         private enum ControlMode{
@@ -56,6 +57,9 @@ namespace Controls {
 
         private void OnDestroy() {
             App.AppManager.Instance.TurnOnMainCamera();
+            if (isLocalPlayer) {
+                App.AppManager.Instance.EventHub.CreateEvent("PlayerDead", null);
+            }
         }
 
         private void OnCollisionStay(Collision collision)
