@@ -7,17 +7,11 @@ namespace MazeBuilder.Safehouse {
 
         // Use this for initialization
         void Awake () {
-		
+		    App.AppManager.Instance.EventHub.Subscribe("safehouse:player_reached", OnPlayerReached, this);
         }
-        void OnTriggerEnter(Collider other) {
-            Debug.Log(isServer); //todo
-            Debug.Log(other.gameObject.name);
 
-            if (isServer) {
-                if (other.gameObject.CompareTag("Player")) {
-                    App.NetworkEventHub.Instance.RpcPublishEvent("maze:levelCompleted", other.gameObject.name);
-                }
-            }
+        void OnPlayerReached(object sender, EventArguments eventArguments) {
+            App.NetworkEventHub.Instance.RpcPublishEvent("maze:levelCompleted", eventArguments.Message);
         }
 
     }

@@ -45,7 +45,8 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
         private void PlaceSafeHouse() {
-            Instantiate(Safehouse, Utils.GetDefaultPositionVector(new Coordinate(AppManager.Instance.MazeInstance.Height / 2,
+            InGameServerSpawner.Instance.ServerSpawn(Safehouse,
+                Utils.GetDefaultPositionVector(new Coordinate(AppManager.Instance.MazeInstance.Height / 2,
                 AppManager.Instance.MazeInstance.Width / 2), 0.1f), Quaternion.identity);
         }
 
