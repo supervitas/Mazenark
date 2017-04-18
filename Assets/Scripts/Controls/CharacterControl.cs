@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 namespace Controls {
-    [NetworkSettings(channel = 1, sendInterval = 0f)]
+    [NetworkSettings(channel = 1, sendInterval = 0.2f)]
     public class CharacterControl : NetworkBehaviour {
 
         private enum ControlMode{
@@ -21,7 +21,9 @@ namespace Controls {
 
         [SerializeField] private ControlMode m_controlMode = ControlMode.Direct;
 
-        public GameObject Camera;
+        public GameObject PlayerCamera;
+        private Camera _cameraInstanced;
+        public GameObject Fireball;
 
         private float m_currentV = 0;
         private float m_currentH = 0;
@@ -40,8 +42,7 @@ namespace Controls {
         private bool m_isGrounded;
         private List<Collider> m_collisions = new List<Collider>();
 
-        private void OnCollisionEnter(Collision collision)
-        {
+        private void OnCollisionEnter(Collision collision) {
             ContactPoint[] contactPoints = collision.contacts;
             for(int i = 0; i < contactPoints.Length; i++)
             {
@@ -62,8 +63,7 @@ namespace Controls {
             }
         }
 
-        private void OnCollisionStay(Collision collision)
-        {
+        private void OnCollisionStay(Collision collision) {
             ContactPoint[] contactPoints = collision.contacts;
             bool validSurfaceNormal = false;
             for (int i = 0; i < contactPoints.Length; i++)
@@ -91,8 +91,9 @@ namespace Controls {
 
         public override void OnStartLocalPlayer() { // Set up game for client
             App.AppManager.Instance.TurnOffAndSetupMainCamera();
-            var cam = Instantiate(Camera);
+            var cam  = Instantiate(PlayerCamera);
             cam.GetComponent<FolowingPlayerCamera>().SetPlayerTransforms(transform);
+            _cameraInstanced = cam.GetComponent<Camera>();
         }
 
 
@@ -124,8 +125,22 @@ namespace Controls {
                     Debug.LogError("Unsupported state");
                     break;
             }
+            if (Input.GetMouseButton (0)) {
+               var ray = _cameraInstanced.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit, 100)) { // 100m posible attack distance
+                    Fire(hit.point);
+                }
+            }
 
             m_wasGrounded = m_isGrounded;
+        }
+
+        private void Fire(Vector3 direction) {
+            var fireball = Instantiate(Fireball, transform.position, Quaternion.identity);
+            fireball.transform.LookAt(direction);
+            fireball.GetComponent<Rigidbody>().velocity = fireball.transform.forward * 6;
+            Destroy(fireball, 6.0f);
         }
 
         private void TankUpdate()

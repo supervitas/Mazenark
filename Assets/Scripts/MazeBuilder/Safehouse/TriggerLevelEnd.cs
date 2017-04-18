@@ -10,7 +10,7 @@ namespace MazeBuilder.Safehouse {
 		
         }
         void OnTriggerEnter(Collider other) {
-            Debug.Log(isServer);
+            Debug.Log(isServer); //todo
             Debug.Log(other.gameObject.name);
 
             if (isServer) {
