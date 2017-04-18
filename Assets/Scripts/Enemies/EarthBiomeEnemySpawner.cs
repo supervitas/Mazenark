@@ -8,6 +8,5 @@ namespace Enemies {
             SpawnEnemies();
             CreateEnemyBehaivor();
         }
-
     }
 }

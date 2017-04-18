@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 namespace Controls {
-    [NetworkSettings(channel = 1, sendInterval = 0.2f)]
+    [NetworkSettings(channel = 1, sendInterval = 0.3f)]
     public class CharacterControl : NetworkBehaviour {
 
         private enum ControlMode{
@@ -130,20 +130,23 @@ namespace Controls {
                var ray = _cameraInstanced.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, 100)) { // 100m posible attack distance
-                    Fire(hit.point);
+                    CmdFire(hit.point);
                 }
             }
 
             m_wasGrounded = m_isGrounded;
         }
 
-        private void Fire(Vector3 direction) {
+        [Command]
+        private void CmdFire(Vector3 direction) {
             var pos = transform.position;
             pos.y += 2.3f;
             var fireball = Instantiate(Fireball, pos, Quaternion.identity);
             Physics.IgnoreCollision(fireball.GetComponent<Collider>(), GetComponent<Collider>());
             fireball.transform.LookAt(direction);
             fireball.GetComponent<Rigidbody>().velocity = fireball.transform.forward * 15;
+
+            NetworkServer.Spawn(fireball);
             Destroy(fireball, 6.0f);
         }
 

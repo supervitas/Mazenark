@@ -1,10 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using MazeBuilder;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Networking;
-using MazeBuilder.Utility;
 
 namespace Controls {
     public class EnemyController : MonoBehaviour {
@@ -24,7 +20,6 @@ namespace Controls {
 
 
         void Awake () {
-            animator.SetBool("Idle", true);
             _agent = GetComponent<NavMeshAgent>();
             _agent.autoBraking = false;
         }

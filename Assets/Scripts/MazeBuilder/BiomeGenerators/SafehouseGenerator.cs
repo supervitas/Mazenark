@@ -37,15 +37,15 @@ namespace MazeBuilder.BiomeGenerators {
 
         protected override void StartPostPlacement(object sender, EventArguments e) {
             PlaceLightingObjects();
-            PlaceSafeHouse();
         }
 
         private void PlaceLightingObjects() {
             ParticleList = PlaceLightingParticles(Biome.Safehouse, NightParticles);
         }
 
+        [System.Obsolete("Safehouse spawned by App.InGameServerSpawner")]
         private void PlaceSafeHouse() {
-            InGameServerSpawner.Instance.ServerSpawn(Safehouse,
+            Instantiate(Safehouse,
                 Utils.GetDefaultPositionVector(new Coordinate(AppManager.Instance.MazeInstance.Height / 2,
                 AppManager.Instance.MazeInstance.Width / 2), 0.1f), Quaternion.identity);
         }

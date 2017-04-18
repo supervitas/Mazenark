@@ -1,6 +1,4 @@
-﻿using MazeBuilder.Utility;
-using UnityEngine;
-using UnityEngine.AI;
+﻿using UnityEngine;
 
 namespace Cameras {
     public class FolowingPlayerCamera : MonoBehaviour {

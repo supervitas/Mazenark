@@ -9,7 +9,6 @@ using UnityEngine.Networking;
 using Random = UnityEngine.Random;
 
 namespace Enemies {
-    [NetworkSettings(channel = 0, sendInterval = 0)]
     public class AbstractEnemySpawner : NetworkBehaviour {
         #region BiomeEnemies
         [SerializeField]
