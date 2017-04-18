@@ -49,6 +49,13 @@ namespace Controls {
             _destPoint = (_destPoint + 1) % Points.Count;
         }
 
+        public void Die() {
+            animator.SetBool("isDead", true);
+            isPatrool = false;
+            _agent.autoBraking = true;
+            _agent.velocity = Vector3.zero;
+            _agent.ResetPath();
+        }
 
 
         // Update is called once per frame

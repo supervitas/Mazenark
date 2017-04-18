@@ -125,7 +125,8 @@ namespace Controls {
                     Debug.LogError("Unsupported state");
                     break;
             }
-            if (Input.GetMouseButton (0)) {
+
+            if (Input.GetMouseButton(0)) {
                var ray = _cameraInstanced.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, 100)) { // 100m posible attack distance
@@ -137,14 +138,16 @@ namespace Controls {
         }
 
         private void Fire(Vector3 direction) {
-            var fireball = Instantiate(Fireball, transform.position, Quaternion.identity);
+            var pos = transform.position;
+            pos.y += 2.3f;
+            var fireball = Instantiate(Fireball, pos, Quaternion.identity);
+            Physics.IgnoreCollision(fireball.GetComponent<Collider>(), GetComponent<Collider>());
             fireball.transform.LookAt(direction);
-            fireball.GetComponent<Rigidbody>().velocity = fireball.transform.forward * 6;
+            fireball.GetComponent<Rigidbody>().velocity = fireball.transform.forward * 15;
             Destroy(fireball, 6.0f);
         }
 
-        private void TankUpdate()
-        {
+        private void TankUpdate() {
             float v = Input.GetAxis("Vertical");
             float h = Input.GetAxis("Horizontal");
 
@@ -169,8 +172,7 @@ namespace Controls {
             JumpingAndLanding();
         }
 
-        private void DirectUpdate()
-        {
+        private void DirectUpdate() {
             float v = Input.GetAxis("Vertical");
             float h = Input.GetAxis("Horizontal");
 

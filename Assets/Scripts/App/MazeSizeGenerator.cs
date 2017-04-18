@@ -13,7 +13,7 @@ namespace App {
         }
 
         public void GenerateRndSize() {
-            var rndSize = Random.Range(31, 100/2) * 2 + 1;
+            var rndSize = Random.Range(31, 100 / 2 ) * 2 + 1;
             X = rndSize;
             Y = rndSize;
         }
