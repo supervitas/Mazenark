@@ -4,8 +4,8 @@ using MazeBuilder.Utility;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace WeatherManager {
-    public class WeatherManager : NetworkBehaviour  {
+namespace PlayerLocationManager {
+    public class BiomePlayerChecker : NetworkBehaviour  {
         private Maze _maze;
         public Transform Target;
         private Biome _currentBiome;
@@ -14,7 +14,7 @@ namespace WeatherManager {
         public override void OnStartLocalPlayer() { // Set up game for client
             _eventhub = App.AppManager.Instance.EventHub;
             _maze = App.AppManager.Instance.MazeInstance.Maze;
-            InvokeRepeating("CheckBiomeChanged", 0, 2);
+            InvokeRepeating("CheckBiomeChanged", 0, 1);
         }
 
         private void OnDestroy() {
@@ -29,7 +29,7 @@ namespace WeatherManager {
             var biome = _maze[mazeCoords.X, mazeCoords.Y].Biome;
             if (_currentBiome == biome) return;
             _currentBiome = biome;
-            _eventhub.CreateEvent("WeatherShouldChange", new EventArguments(Target, _currentBiome.Name));
+            _eventhub.CreateEvent("maze:biomeChanged", new EventArguments(Target, _currentBiome.Name));
         }
     }
 }

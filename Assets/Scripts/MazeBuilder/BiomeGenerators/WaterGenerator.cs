@@ -14,7 +14,7 @@ namespace MazeBuilder.BiomeGenerators {
 
         private new void Awake() {
             base.Awake();
-            Eventhub.Subscribe("WeatherShouldChange", ToggleBiomeWeather, this);
+            Eventhub.Subscribe("maze:biomeChanged", ToggleBiomeWeather, this);
             InstantiateWeather();
         }
 

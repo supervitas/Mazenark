@@ -66,10 +66,6 @@ namespace MazeBuilder.BiomeGenerators {
             parent.name = string.Format("Cube at {0}:{1}", coordinate.X, coordinate.Y);
         }
 
-        public void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
-            base.CreateFloor(biome, coordinate, maze);
-		}
-
         private void PlaceLightingObjects() {
             ParticleList = PlaceLightingParticles(Biome.Earth, NightParticles);
             PlaceTorches(Biome.Earth);

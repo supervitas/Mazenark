@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Cameras;
 using Lobby;
+using Ui;
 using UnityEngine;
 using UnityEngine.Networking;
 using Weapons.Spells;
@@ -27,6 +28,7 @@ namespace Controls {
         public GameObject Fireball;
         private float castTime;
         private float timeCasted;
+        private SpellCast _uiSpellCast;
 
         private float m_currentV = 0;
         private float m_currentH = 0;
@@ -93,12 +95,13 @@ namespace Controls {
         }
 
         public override void OnStartLocalPlayer() { // Set up game for client
-            App.AppManager.Instance.TurnOffAndSetupMainCamera();
+            App.AppManager.Instance.TurnOffAndSetupMainCamera(); // We have 2 cameras, and main should be disabled to stop unnes. render
             var cam  = Instantiate(PlayerCamera);
             cam.GetComponent<FolowingPlayerCamera>().SetPlayerTransforms(transform);
             _cameraInstanced = cam.GetComponent<Camera>();
 
             castTime = Fireball.GetComponent<Fireball>().CastTime; // should be interface of weapon.
+            _uiSpellCast = FindObjectOfType<SpellCast>();
 
         }
 
@@ -122,8 +125,12 @@ namespace Controls {
             if (Input.GetMouseButton(0)) {
                 m_animator.SetFloat("MoveSpeed", 0);
                 timeCasted += Time.deltaTime;
+                if (timeCasted > 0.15) {
+                    _uiSpellCast.SetProgress(timeCasted / castTime * 100);
+                }
                 if (timeCasted >= castTime) {
                     timeCasted = 0;
+                    _uiSpellCast.Reset();
                     var ray = _cameraInstanced.ScreenPointToRay(Input.mousePosition);
                     RaycastHit hit;
                     if (Physics.Raycast(ray, out hit, 100)) { // 100m posible attack distance
@@ -132,6 +139,9 @@ namespace Controls {
                 }
                 return;
             }
+
+            timeCasted = 0;
+//            _uiSpellCast.Reset();
 
             switch(m_controlMode) {
                 case ControlMode.Direct:
