@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Networking;
 
 namespace Controls {
     public class EnemyController : MonoBehaviour {
@@ -33,6 +34,9 @@ namespace Controls {
         public void SetIdleBehaivor() {
             animator.SetBool("Idle", true);
             _agent.autoBraking = true;
+            
+            GetComponent<NetworkAnimator>().enabled = false;
+            GetComponent<NetworkTransform>().enabled = false;
         }
 
         public void GotoNextPoint() {
