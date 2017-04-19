@@ -89,7 +89,7 @@ namespace Enemies {
                     controller.Points.Add(patroolPoint);
                 }
 
-                controller.isPatrool = true;
+                controller.canPatrool = true;
                 controller.GotoNextPoint();
 
             }
