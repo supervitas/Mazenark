@@ -3,6 +3,8 @@
 namespace Weapons.Spells {
     public class Fireball : MonoBehaviour {
 
+        [Range(0, 30f)] public float CastTime = 1.2f;
+
         void OnCollisionEnter(Collision other) {
             other.gameObject.SendMessage("TakeDamage", 100.0F, SendMessageOptions.DontRequireReceiver); // execute function on colided object.
             transform.GetChild(0).gameObject.SetActive(false);
@@ -11,7 +13,7 @@ namespace Weapons.Spells {
         }
 
         void Update() {
-            transform.Rotate(Vector3.right * Time.deltaTime * 60);
+            transform.Rotate(Vector3.up * Time.deltaTime * 90);
         }
     }
 }

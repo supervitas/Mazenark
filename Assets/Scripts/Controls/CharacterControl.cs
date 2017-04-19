@@ -3,6 +3,7 @@ using Cameras;
 using Lobby;
 using UnityEngine;
 using UnityEngine.Networking;
+using Weapons.Spells;
 
 namespace Controls {
     [NetworkSettings(channel = 1, sendInterval = 0.3f)]
@@ -24,6 +25,8 @@ namespace Controls {
         public GameObject PlayerCamera;
         private Camera _cameraInstanced;
         public GameObject Fireball;
+        private float castTime;
+        private float timeCasted;
 
         private float m_currentV = 0;
         private float m_currentH = 0;
@@ -94,6 +97,9 @@ namespace Controls {
             var cam  = Instantiate(PlayerCamera);
             cam.GetComponent<FolowingPlayerCamera>().SetPlayerTransforms(transform);
             _cameraInstanced = cam.GetComponent<Camera>();
+
+            castTime = Fireball.GetComponent<Fireball>().CastTime; // should be interface of weapon.
+
         }
 
 
@@ -110,7 +116,22 @@ namespace Controls {
             if (!isLocalPlayer){
                 return;
             }
+
             m_animator.SetBool("Grounded", m_isGrounded);
+
+            if (Input.GetMouseButton(0)) {
+                m_animator.SetFloat("MoveSpeed", 0);
+                timeCasted += Time.deltaTime;
+                if (timeCasted >= castTime) {
+                    timeCasted = 0;
+                    var ray = _cameraInstanced.ScreenPointToRay(Input.mousePosition);
+                    RaycastHit hit;
+                    if (Physics.Raycast(ray, out hit, 100)) { // 100m posible attack distance
+                        CmdFire(hit.point);
+                    }
+                }
+                return;
+            }
 
             switch(m_controlMode) {
                 case ControlMode.Direct:
@@ -124,14 +145,6 @@ namespace Controls {
                 default:
                     Debug.LogError("Unsupported state");
                     break;
-            }
-
-            if (Input.GetMouseButton(0)) {
-               var ray = _cameraInstanced.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 100)) { // 100m posible attack distance
-                    CmdFire(hit.point);
-                }
             }
 
             m_wasGrounded = m_isGrounded;
@@ -159,8 +172,7 @@ namespace Controls {
             if (v < 0) {
                 if (walk) { v *= m_backwardsWalkScale; }
                 else { v *= m_backwardRunScale; }
-            } else if(walk)
-            {
+            } else if(walk) {
                 v *= m_walkScale;
             }
 
@@ -179,7 +191,7 @@ namespace Controls {
             float v = Input.GetAxis("Vertical");
             float h = Input.GetAxis("Horizontal");
 
-            Transform camera = UnityEngine.Camera.main.transform;
+            Transform camera = Camera.main.transform;
 
             if (Input.GetKey(KeyCode.LeftShift))
             {
