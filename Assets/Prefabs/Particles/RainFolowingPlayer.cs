@@ -18,6 +18,7 @@ namespace Prefabs.Particles {
         }
 
         private void UpdateRainPosition() {
+            if (_target == null) return;
             _position.Set(_target.position.x, 0, _target.position.z);
             transform.SetPositionAndRotation(_position, Quaternion.identity );
         }

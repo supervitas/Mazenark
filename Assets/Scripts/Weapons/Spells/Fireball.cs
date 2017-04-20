@@ -1,12 +1,23 @@
-﻿using UnityEngine;
+﻿using Controls;
+using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Weapons.Spells {
     public class Fireball : MonoBehaviour {
 
-        [Range(0, 30f)] public float CastTime = 1.2f;
+        [Range(0, 10f)] public float CastTime = 1.2f;
+
+        private void Start() {
+            foreach (var player in GameObject.FindGameObjectsWithTag("Player")) {
+                if (player.GetComponent<CharacterControl>().isLocalPlayer) {
+                    Physics.IgnoreCollision(GetComponent<Collider>(), player.GetComponent<Collider>()); // ignore self colide
+                }
+            }
+        }
 
         void OnCollisionEnter(Collision other) {
-            other.gameObject.SendMessage("TakeDamage", 100.0F, SendMessageOptions.DontRequireReceiver); // execute function on colided object.
+            var go = other.gameObject;
+            go.SendMessage("TakeDamage", 100.0F, SendMessageOptions.DontRequireReceiver); // execute function on colided object.
             transform.GetChild(0).gameObject.SetActive(false);
             transform.GetChild(1).gameObject.SetActive(true);
             Destroy(gameObject, 1f);

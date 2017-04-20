@@ -24,7 +24,6 @@ namespace Controls {
         void Awake () {
             _agent = GetComponent<NavMeshAgent>();
             _agent.autoBraking = false;
-
         }
 
         void Start() {
@@ -48,8 +47,8 @@ namespace Controls {
         }
 
         public void Die() {
-            animator.SetBool("isDead", true);
             _isAlive = false;
+            animator.SetBool("isDead", true);
             _agent.enabled = false;
         }
 
