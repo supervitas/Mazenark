@@ -10,7 +10,12 @@ namespace App {
             if (Instance == null) {
                 Instance = this;
             }
-            SpawnSafehouse();
+        }
+
+        private void Start() {
+            if (isServer) {
+                SpawnSafehouse();
+            }
         }
 
         public GameObject ServerSpawn(GameObject go, Vector3 position, Quaternion rotation) {

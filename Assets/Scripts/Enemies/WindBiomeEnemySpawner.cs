@@ -2,7 +2,8 @@
 
 namespace Enemies {
     public class WindBiomeEnemySpawner : AbstractEnemySpawner {
-        private void Start() {
+        private new void Start() {
+            base.Start();
             SetUpEmptyTiles(Biome.Wind);
             SpawnEnemies();
             CreateEnemyBehaivor();

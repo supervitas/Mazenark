@@ -3,7 +3,8 @@
 namespace Enemies {
     public class WaterBiomeEnemySpawner : AbstractEnemySpawner {
 
-        private void Start() {
+        private new void Start() {
+            base.Start();
             SetUpEmptyTiles(Biome.Water);
             SpawnEnemies();
             CreateEnemyBehaivor();

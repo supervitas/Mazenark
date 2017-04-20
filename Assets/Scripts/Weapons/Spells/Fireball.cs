@@ -11,9 +11,5 @@ namespace Weapons.Spells {
             transform.GetChild(1).gameObject.SetActive(true);
             Destroy(gameObject, 1f);
         }
-
-        void Update() {
-            transform.Rotate(Vector3.up * Time.deltaTime * 90);
-        }
     }
 }

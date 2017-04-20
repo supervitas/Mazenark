@@ -14,15 +14,17 @@ namespace Controls {
         public readonly List <Vector3> Points = new List<Vector3>();
         private int _destPoint = 0;
 
-        private List<Transform> _playersTransform = new List<Transform>();
+        private readonly List<Transform> _playersTransform = new List<Transform>();
 
         [HideInInspector]
-        public bool canPatrool;
+        public bool CanPatrool;
 
+        private bool _isAlive = true;
 
         void Awake () {
             _agent = GetComponent<NavMeshAgent>();
             _agent.autoBraking = false;
+
         }
 
         void Start() {
@@ -34,8 +36,6 @@ namespace Controls {
         public void SetIdleBehaivor() {
             animator.SetBool("Idle", true);
             _agent.autoBraking = true;
-
-            ToggleNetworkComponents(false);
         }
 
         public void GotoNextPoint() {
@@ -49,29 +49,29 @@ namespace Controls {
 
         public void Die() {
             animator.SetBool("isDead", true);
-            canPatrool = false;
+            _isAlive = false;
             _agent.enabled = false;
         }
 
         private void Update () {
+            if (!_isAlive) return;
+
             foreach (var target in _playersTransform) {
+                if(target == null) return;
+
                 var distance = Vector3.Distance(transform.position, target.position);
-                if (canPatrool && distance <= enemyAgroRange) {
+                if (_isAlive && distance <= enemyAgroRange) {
                     _agent.destination = target.position;
-                    ToggleNetworkComponents(true);
                     return;
                 }
             }
 
-            if (canPatrool && !_agent.pathPending && _agent.remainingDistance <= 0.5f) {
+            if (CanPatrool && !_agent.pathPending && _agent.remainingDistance <= 0.5f) {
+
                 animator.SetBool("Moving", true);
+
                 GotoNextPoint();
             }
-        }
-
-        private void ToggleNetworkComponents(bool status) {
-            GetComponent<NetworkAnimator>().enabled = status;
-            GetComponent<NetworkTransform>().enabled = status;
         }
     }
 }

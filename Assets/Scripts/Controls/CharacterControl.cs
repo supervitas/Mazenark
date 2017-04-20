@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 using Weapons.Spells;
 
 namespace Controls {
-    [NetworkSettings(channel = 1, sendInterval = 0.3f)]
+    [NetworkSettings(channel = 1, sendInterval = 0.1f)]
     public class CharacterControl : NetworkBehaviour {
 
         private enum ControlMode{

@@ -23,7 +23,8 @@ namespace Enemies {
         protected List<Tile> EmptyTiles;
         protected List<GameObject> SpawnedEnemies = new List<GameObject>();
 
-        protected void Awake() {
+        protected void Start() {
+            if (!isServer) return;
             SetUpRandomEnemies();
         }
 
@@ -89,7 +90,7 @@ namespace Enemies {
                     controller.Points.Add(patroolPoint);
                 }
 
-                controller.canPatrool = true;
+                controller.CanPatrool = true;
                 controller.GotoNextPoint();
 
             }
