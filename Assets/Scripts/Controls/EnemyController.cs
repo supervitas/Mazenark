@@ -50,6 +50,8 @@ namespace Controls {
         }
 
         public void Die() { //called from fireball onColide method
+            CancelInvoke("CheckPlayersNear");
+
             _isAlive = false;
             animator.SetBool("isDead", true);
             _agent.enabled = false;
@@ -66,13 +68,13 @@ namespace Controls {
                     _agent.autoBraking = true;
 
                     _agent.destination = target.position;
-                    _agent.stoppingDistance = 1.5f;
 
                     _hasTarget = true;
 
                     return true;
                 }
             }
+            _hasTarget = false;
             return false;
         }
 
@@ -88,18 +90,22 @@ namespace Controls {
         private void Update () {
             if (!_isAlive) return;
 
+
             if (_hasTarget) {
-                if (_agent.remainingDistance <= 1.5f) {
+                if (_agent.remainingDistance > 2.5f) {
+                    animator.SetBool("Moving", true);
+                    animator.SetBool("Attack", false);
+                }
+                if (_agent.remainingDistance <= 2f) {
                     animator.SetBool("Attack", true);
                     return;
                 }
-                if (_agent.remainingDistance > enemyAgroRange + 5f) {
+                if (_agent.remainingDistance > enemyAgroRange + 2f) {
+                    _hasTarget = false;
                     animator.SetBool("Attack", false);
                     animator.SetBool("Idle", true);
 
-                    _hasTarget = false;
-                    GotoNextPoint();
-                    return;
+                    GoToNextPointIfPossible();
                 }
             }
 
