@@ -4,7 +4,8 @@ using UnityEngine.AI;
 using UnityEngine.Networking;
 
 namespace Controls {
-    public class EnemyController : MonoBehaviour {
+    [NetworkSettings(channel = 1, sendInterval = 0.3f)]
+    public class EnemyController : NetworkBehaviour {
         [SerializeField]
         private Animator animator;
         private NavMeshAgent _agent;
@@ -28,11 +29,13 @@ namespace Controls {
         }
 
         private void Start() {
+            if(!isServer) return;
+
             foreach (var player in GameObject.FindGameObjectsWithTag("Player")) {
                  _playersTransform.Add(player.transform);
             }
 
-            InvokeRepeating("CheckPlayersNear", 0, 2);
+            InvokeRepeating("CheckPlayersNear", 0, 1);
         }
 
         public void SetIdleBehaivor() {
@@ -68,12 +71,15 @@ namespace Controls {
                     _agent.autoBraking = true;
 
                     _agent.destination = target.position;
+//                    _agent.stoppingDistance = 2f;
 
                     _hasTarget = true;
 
                     return true;
                 }
             }
+            animator.SetBool("Attack", false);
+            animator.SetBool("Idle", true);
             _hasTarget = false;
             return false;
         }
@@ -98,19 +104,28 @@ namespace Controls {
                 }
                 if (_agent.remainingDistance <= 2f) {
                     animator.SetBool("Attack", true);
+                    Fire(transform.forward);
                     return;
-                }
-                if (_agent.remainingDistance > enemyAgroRange + 2f) {
-                    _hasTarget = false;
-                    animator.SetBool("Attack", false);
-                    animator.SetBool("Idle", true);
-
-                    GoToNextPointIfPossible();
                 }
             }
 
             if (CanPatrool) {
                 GoToNextPointIfPossible();
+            }
+        }
+
+
+        private void Fire(Vector3 direction) {
+            RaycastHit hit;
+            var pos = transform.position;
+
+            pos.y = 1f;
+
+            if (Physics.Raycast(pos, direction, out hit, 2.5f)) {
+                var go = hit.transform.gameObject;
+                if (go.CompareTag("Player")) {
+                    go.SendMessage("TakeDamage", 100.0F, SendMessageOptions.DontRequireReceiver); // execute function on colided object.
+                }
             }
 
         }

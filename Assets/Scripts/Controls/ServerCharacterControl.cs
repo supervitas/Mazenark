@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using UnityEngine.Networking;
+﻿using UnityEngine.Networking;
 
 namespace Controls {
     [NetworkSettings(channel = 1, sendInterval = 0.2f)]
