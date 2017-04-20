@@ -14,7 +14,7 @@ namespace PlayerLocationManager {
         public override void OnStartLocalPlayer() { // Set up game for client
             _eventhub = App.AppManager.Instance.EventHub;
             _maze = App.AppManager.Instance.MazeInstance.Maze;
-            InvokeRepeating("CheckBiomeChanged", 0, 1);
+            InvokeRepeating("CheckBiomeChanged", 0, 1.5f);
         }
 
         private void OnDestroy() {

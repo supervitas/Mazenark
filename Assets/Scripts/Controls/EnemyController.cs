@@ -20,16 +20,19 @@ namespace Controls {
         public bool CanPatrool;
 
         private bool _isAlive = true;
+        private bool _hasTarget;
 
-        void Awake () {
+        private void Awake () {
             _agent = GetComponent<NavMeshAgent>();
             _agent.autoBraking = false;
         }
 
-        void Start() {
+        private void Start() {
             foreach (var player in GameObject.FindGameObjectsWithTag("Player")) {
                  _playersTransform.Add(player.transform);
             }
+
+            InvokeRepeating("CheckPlayersNear", 0, 2);
         }
 
         public void SetIdleBehaivor() {
@@ -46,31 +49,64 @@ namespace Controls {
             _destPoint = (_destPoint + 1) % Points.Count;
         }
 
-        public void Die() {
+        public void Die() { //called from fireball onColide method
             _isAlive = false;
             animator.SetBool("isDead", true);
             _agent.enabled = false;
         }
 
-        private void Update () {
-            if (!_isAlive) return;
-
+        private bool CheckPlayersNear() {
             foreach (var target in _playersTransform) {
-                if(target == null) return;
+                if (target == null) continue;
 
                 var distance = Vector3.Distance(transform.position, target.position);
-                if (_isAlive && distance <= enemyAgroRange) {
+
+                if (distance <= enemyAgroRange) {
+
+                    _agent.autoBraking = true;
+
                     _agent.destination = target.position;
-                    return;
+                    _agent.stoppingDistance = 1.5f;
+
+                    _hasTarget = true;
+
+                    return true;
                 }
             }
+            return false;
+        }
 
-            if (CanPatrool && !_agent.pathPending && _agent.remainingDistance <= 0.5f) {
+        private void GoToNextPointIfPossible() {
+            if (!_agent.pathPending && _agent.remainingDistance <= 0.5f) {
 
                 animator.SetBool("Moving", true);
 
                 GotoNextPoint();
             }
+        }
+
+        private void Update () {
+            if (!_isAlive) return;
+
+            if (_hasTarget) {
+                if (_agent.remainingDistance <= 1.5f) {
+                    animator.SetBool("Attack", true);
+                    return;
+                }
+                if (_agent.remainingDistance > enemyAgroRange + 5f) {
+                    animator.SetBool("Attack", false);
+                    animator.SetBool("Idle", true);
+
+                    _hasTarget = false;
+                    GotoNextPoint();
+                    return;
+                }
+            }
+
+            if (CanPatrool) {
+                GoToNextPointIfPossible();
+            }
+
         }
     }
 }
