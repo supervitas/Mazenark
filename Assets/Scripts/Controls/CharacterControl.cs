@@ -141,7 +141,7 @@ namespace Controls {
             }
 
             timeCasted = 0;
-//            _uiSpellCast.Reset();
+            _uiSpellCast.Reset();
 
             switch(m_controlMode) {
                 case ControlMode.Direct:
