@@ -1,7 +1,7 @@
-﻿using App.EventSystem;
+﻿using System.Collections.Generic;
+using App.EventSystem;
 using MazeBuilder.Utility;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace App {
     public class AppManager : MonoBehaviour {

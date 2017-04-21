@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Networking;
@@ -15,7 +16,7 @@ namespace Controls {
         public readonly List <Vector3> Points = new List<Vector3>();
         private int _destPoint = 0;
 
-        private readonly List<Transform> _playersTransform = new List<Transform>();
+        private List<Transform> _playersTransform;
 
         [HideInInspector]
         public bool CanPatrool;
@@ -30,11 +31,7 @@ namespace Controls {
 
         private void Start() {
             if(!isServer) return;
-
-            foreach (var player in GameObject.FindGameObjectsWithTag("Player")) {
-                 _playersTransform.Add(player.transform);
-            }
-
+            _playersTransform = FindObjectOfType<PlayersTransformHolder>().PlayersTransform;
             InvokeRepeating("CheckPlayersNear", 0, 1);
         }
 
@@ -71,7 +68,7 @@ namespace Controls {
                     _agent.autoBraking = true;
 
                     _agent.destination = target.position;
-//                    _agent.stoppingDistance = 2f;
+                    _agent.stoppingDistance = 2.5f;
 
                     _hasTarget = true;
 
@@ -98,12 +95,17 @@ namespace Controls {
 
 
             if (_hasTarget) {
+                var direction = _agent.destination - transform.position;
+                direction.y = 0;
+                transform.rotation = Quaternion.Slerp(transform.rotation,
+                    Quaternion.LookRotation(direction), 0.1f);
                 if (_agent.remainingDistance > 2.5f) {
                     animator.SetBool("Moving", true);
                     animator.SetBool("Attack", false);
                 }
-                if (_agent.remainingDistance <= 2f) {
+                if (_agent.remainingDistance <= 2.5f) {
                     animator.SetBool("Attack", true);
+//                    StartCoroutine(Fire(transform.forward, 0.8f));
                     Fire(transform.forward);
                     return;
                 }
@@ -116,6 +118,7 @@ namespace Controls {
 
 
         private void Fire(Vector3 direction) {
+//            yield return new WaitForSeconds(delay);
             RaycastHit hit;
             var pos = transform.position;
 

@@ -1,6 +1,5 @@
 ﻿using Controls;
 using UnityEngine;
-using UnityEngine.Networking;
 
 namespace Weapons.Spells {
     public class Fireball : MonoBehaviour {

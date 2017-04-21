@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Cameras;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -36,8 +35,7 @@ namespace Lobby
                 _layout.childAlignment = Time.frameCount % 2 == 0 ? TextAnchor.UpperCenter : TextAnchor.UpperLeft;
         }
 
-        public void AddPlayer(LobbyPlayer player)
-        {
+        public void AddPlayer(LobbyPlayer player) {
             if (_players.Contains(player))
                 return;
 
