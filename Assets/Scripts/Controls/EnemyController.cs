@@ -62,8 +62,10 @@ namespace Controls {
                 if (target == null) continue;
 
                 var distance = Vector3.Distance(transform.position, target.position);
+                var direction = _agent.destination - transform.position;
+                var angle = Vector3.Angle(direction, transform.forward);
 
-                if (distance <= enemyAgroRange) {
+                if (distance <= enemyAgroRange && angle < 30) {
 
                     _agent.autoBraking = true;
 
@@ -96,7 +98,6 @@ namespace Controls {
 
             if (_hasTarget) {
                 var direction = _agent.destination - transform.position;
-                direction.y = 0;
                 transform.rotation = Quaternion.Slerp(transform.rotation,
                     Quaternion.LookRotation(direction), 0.1f);
                 if (_agent.remainingDistance > 2.5f) {
@@ -105,7 +106,6 @@ namespace Controls {
                 }
                 if (_agent.remainingDistance <= 2.5f) {
                     animator.SetBool("Attack", true);
-//                    StartCoroutine(Fire(transform.forward, 0.8f));
                     Fire(transform.forward);
                     return;
                 }
@@ -118,7 +118,6 @@ namespace Controls {
 
 
         private void Fire(Vector3 direction) {
-//            yield return new WaitForSeconds(delay);
             RaycastHit hit;
             var pos = transform.position;
 
@@ -127,7 +126,7 @@ namespace Controls {
             if (Physics.Raycast(pos, direction, out hit, 2.5f)) {
                 var go = hit.transform.gameObject;
                 if (go.CompareTag("Player")) {
-                    go.SendMessage("TakeDamage", 100.0F, SendMessageOptions.DontRequireReceiver); // execute function on colided object.
+                    go.SendMessage("TakeDamage", 50.0F, SendMessageOptions.DontRequireReceiver); // execute function on colided object.
                 }
             }
 
