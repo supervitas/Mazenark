@@ -13,6 +13,9 @@ namespace Controls {
 
         [SerializeField]
         private float enemyAgroRange = 15f;
+        [SerializeField]
+        private float enemyAngleVisibility = 30f;
+
         public readonly List <Vector3> Points = new List<Vector3>();
         private int _destPoint = 0;
 
@@ -65,7 +68,7 @@ namespace Controls {
                 var direction = _agent.destination - transform.position;
                 var angle = Vector3.Angle(direction, transform.forward);
 
-                if (distance <= enemyAgroRange && angle < 30) {
+                if (distance <= enemyAgroRange && angle < enemyAngleVisibility) {
 
                     _agent.autoBraking = true;
 
@@ -78,16 +81,12 @@ namespace Controls {
                 }
             }
             animator.SetBool("Attack", false);
-            animator.SetBool("Idle", true);
             _hasTarget = false;
             return false;
         }
 
         private void GoToNextPointIfPossible() {
             if (!_agent.pathPending && _agent.remainingDistance <= 0.5f) {
-
-                animator.SetBool("Moving", true);
-
                 GotoNextPoint();
             }
         }
@@ -95,13 +94,17 @@ namespace Controls {
         private void Update () {
             if (!_isAlive) return;
 
+            if (_agent.velocity != Vector3.zero) {
+                animator.SetBool("Moving", true);
+                animator.SetBool("Idle", false);
+            }
+
 
             if (_hasTarget) {
                 var direction = _agent.destination - transform.position;
                 transform.rotation = Quaternion.Slerp(transform.rotation,
                     Quaternion.LookRotation(direction), 0.1f);
                 if (_agent.remainingDistance > 2.5f) {
-                    animator.SetBool("Moving", true);
                     animator.SetBool("Attack", false);
                 }
                 if (_agent.remainingDistance <= 2.5f) {

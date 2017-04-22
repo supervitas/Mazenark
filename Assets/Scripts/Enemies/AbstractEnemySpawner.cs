@@ -46,7 +46,7 @@ namespace Enemies {
             foreach (var emptyTile in EmptyTiles) {
                 if (!(EnemySpawnChance >= Random.Range(1, 100))) continue;
                 var enemy = (GameObject) BiomeEnemies.GetRandom(typeof(GameObject));
-                var inst = Instantiate(enemy, Utils.GetDefaultPositionVector(emptyTile.Position, 0.5f), Quaternion.identity);
+                var inst = Instantiate(enemy, Utils.GetDefaultPositionVector(emptyTile.Position, 0.1f), Quaternion.identity);
                 NetworkServer.Spawn(inst);
                 SpawnedEnemies.Add(inst);
             }

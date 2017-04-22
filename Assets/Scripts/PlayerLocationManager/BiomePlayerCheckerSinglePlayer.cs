@@ -3,7 +3,6 @@ using MazeBuilder;
 using MazeBuilder.Utility;
 using UnityEngine;
 
-
 namespace PlayerLocationManager {
     public class BiomePlayerCheckerSinglePlayer : MonoBehaviour {
 
@@ -33,6 +32,4 @@ namespace PlayerLocationManager {
             _eventhub.CreateEvent("maze:biomeChanged", new EventArguments(Target, _currentBiome.Name));
         }
     }
-        }
-
 }
