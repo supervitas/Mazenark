@@ -22,10 +22,12 @@ namespace Controls {
         private List<Transform> _playersTransform;
 
         [HideInInspector]
-        public bool CanPatrool;
+        public bool CanPatrool = false;
 
-        private bool _isAlive = true;
-        private bool _hasTarget;
+        private int health;
+
+        [SyncVar]
+        private bool _hasTarget = false;
 
         private void Awake () {
             _agent = GetComponent<NavMeshAgent>();
@@ -36,6 +38,7 @@ namespace Controls {
             if(!isServer) return;
             _playersTransform = FindObjectOfType<PlayersTransformHolder>().PlayersTransform;
             InvokeRepeating("CheckPlayersNear", 0, 1);
+            health = GetComponent<ServerCharacterControl>().CurrentHealth;
         }
 
         public void SetIdleBehaivor() {
@@ -55,12 +58,13 @@ namespace Controls {
         public void Die() { //called from fireball onColide method
             CancelInvoke("CheckPlayersNear");
 
-            _isAlive = false;
             animator.SetBool("isDead", true);
             _agent.enabled = false;
         }
 
         private bool CheckPlayersNear() {
+            if (health == 0) return false;
+
             foreach (var target in _playersTransform) {
                 if (target == null) continue;
 
@@ -73,7 +77,7 @@ namespace Controls {
                     _agent.autoBraking = true;
 
                     _agent.destination = target.position;
-                    _agent.stoppingDistance = 2.5f;
+                    _agent.stoppingDistance = 1.5f;
 
                     _hasTarget = true;
 
@@ -82,6 +86,8 @@ namespace Controls {
             }
             animator.SetBool("Attack", false);
             _hasTarget = false;
+            _agent.autoBraking = false;
+
             return false;
         }
 
@@ -92,29 +98,27 @@ namespace Controls {
         }
 
         private void Update () {
-            if (!_isAlive) return;
+            if (health == 0) return;
 
             if (_agent.velocity != Vector3.zero) {
                 animator.SetBool("Moving", true);
                 animator.SetBool("Idle", false);
             }
 
-
             if (_hasTarget) {
                 var direction = _agent.destination - transform.position;
-                transform.rotation = Quaternion.Slerp(transform.rotation,
-                    Quaternion.LookRotation(direction), 0.1f);
-                if (_agent.remainingDistance > 2.5f) {
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
+
+                if (_agent.remainingDistance > 1.5f) {
                     animator.SetBool("Attack", false);
                 }
-                if (_agent.remainingDistance <= 2.5f) {
+                if (_agent.remainingDistance <= 1.5f) {
                     animator.SetBool("Attack", true);
-                    Fire(transform.forward);
-                    return;
+//                    Fire(transform.forward);
                 }
             }
 
-            if (CanPatrool) {
+            if (CanPatrool && !_hasTarget) {
                 GoToNextPointIfPossible();
             }
         }

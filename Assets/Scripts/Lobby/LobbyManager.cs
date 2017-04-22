@@ -119,8 +119,7 @@ namespace Lobby{
             }
         }
 
-        public void ChangeTo(RectTransform newPanel)
-        {
+        public void ChangeTo(RectTransform newPanel) {
             if (currentPanel != null) {
                 currentPanel.gameObject.SetActive(false);
             }

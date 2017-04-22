@@ -58,7 +58,6 @@ namespace Lobby {
                 return;
 
             var messageBatchSize = 10; // how much rows will be send in one message;
-            var counter = 0;
             var biomeList = new List<MazeStruct>();
 
             var mazeInstance = AppManager.Instance.MazeInstance;
@@ -66,7 +65,7 @@ namespace Lobby {
 
             RpcCreateMaze(maze.Width, maze.Height); // create maze
 
-
+            var counter = 0;
             for (var x = 0; x < mazeInstance.Height; x++) {
                 for (var y = 0; y < mazeInstance.Width; y++) {
                     biomeList.Add(new MazeStruct(x, y, maze[x, y].Biome.Name, (int) maze[x, y].Type, maze[x, y].BiomeID)); // fill maze
