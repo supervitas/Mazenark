@@ -39,7 +39,9 @@ namespace App {
         }
 
         public void TurnOnMainCamera() {
-            _cam.enabled = true;
+            if (_cam) {
+                _cam.enabled = true;
+            }
         }
     }
 }
