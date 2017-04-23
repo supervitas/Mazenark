@@ -21,7 +21,7 @@ namespace Controls {
                 Destroy(gameObject);
             }
             if (isNPC) {
-                GetComponent<EnemyController>().Die();
+                GetComponent<EnemyController>().Die(); // Play animation
                 Destroy(gameObject, 3.5f); // time after enemy will be destroyed. Maybe replace to fadeout. todo OBJECT POOL
             }
         }

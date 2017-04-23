@@ -132,7 +132,7 @@ namespace Controls {
                     _uiSpellCast.Reset();
                     var ray = _cameraInstanced.ScreenPointToRay(Input.mousePosition);
                     RaycastHit hit;
-                    if (Physics.Raycast(ray, out hit, 100)) { // 100m posible attack distance
+                    if (Physics.Raycast(ray, out hit)) {
                         CmdFire(hit.point);
                     }
                 }
@@ -169,7 +169,7 @@ namespace Controls {
             fireball.GetComponent<Rigidbody>().velocity = fireball.transform.forward * 15;
 
             NetworkServer.Spawn(fireball);
-            Destroy(fireball, 6.0f);
+            Destroy(fireball, 8.0f);
         }
 
         private void TankUpdate() {

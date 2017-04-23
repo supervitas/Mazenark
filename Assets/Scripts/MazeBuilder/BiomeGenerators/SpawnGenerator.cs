@@ -1,4 +1,5 @@
-﻿using App;
+﻿using System.Linq;
+using App;
 using App.EventSystem;
 using MazeBuilder.Utility;
 using UnityEngine;
@@ -19,13 +20,15 @@ namespace MazeBuilder.BiomeGenerators {
         protected override void OnDay(object sender, EventArguments args) {}
 
         protected override void StartPostPlacement(object sender, EventArguments e) {
-            var spawns = GetTilesByTypeAndBiome(Biome.Spawn, Tile.Variant.Empty);
+            var spawns = from biome in BiomesCollecton
+                where biome.biome == Biome.Spawn
+                select biome;
 
             foreach (var spawn in spawns) {
                 Instantiate(SpawnEffect, new Vector3(
-                    Utils.TransformToWorldCoordinate(spawn.Position.X),
+                    Utils.TransformToWorldCoordinate(spawn.tiles[4].Position.X),
                     45f,
-                    Utils.TransformToWorldCoordinate(spawn.Position.Y)
+                    Utils.TransformToWorldCoordinate(spawn.tiles[4].Position.Y)
                 ), Quaternion.identity);
             }
         }

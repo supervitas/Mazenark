@@ -24,7 +24,7 @@ namespace Controls {
         [HideInInspector]
         public bool CanPatrool = false;
 
-        private int health;
+        private bool _isAlive = true;
 
         [SyncVar]
         private bool _hasTarget = false;
@@ -34,11 +34,12 @@ namespace Controls {
             _agent.autoBraking = false;
         }
 
+
         private void Start() {
             if(!isServer) return;
             _playersTransform = FindObjectOfType<PlayersTransformHolder>().PlayersTransform;
             InvokeRepeating("CheckPlayersNear", 0, 1);
-            health = GetComponent<ServerCharacterControl>().CurrentHealth;
+
         }
 
         public void SetIdleBehaivor() {
@@ -55,7 +56,8 @@ namespace Controls {
             _destPoint = (_destPoint + 1) % Points.Count;
         }
 
-        public void Die() { //called from fireball onColide method
+        public void Die() {
+            _isAlive = false;
             CancelInvoke("CheckPlayersNear");
 
             animator.SetBool("isDead", true);
@@ -63,7 +65,7 @@ namespace Controls {
         }
 
         private bool CheckPlayersNear() {
-            if (health == 0) return false;
+            if (!_isAlive) return false;
 
             foreach (var target in _playersTransform) {
                 if (target == null) continue;
@@ -77,7 +79,7 @@ namespace Controls {
                     _agent.autoBraking = true;
 
                     _agent.destination = target.position;
-                    _agent.stoppingDistance = 1.5f;
+                    _agent.stoppingDistance = 2.5f;
 
                     _hasTarget = true;
 
@@ -85,6 +87,9 @@ namespace Controls {
                 }
             }
             animator.SetBool("Attack", false);
+
+            animator.SetBool("Idle", true);
+            
             _hasTarget = false;
             _agent.autoBraking = false;
 
@@ -98,7 +103,7 @@ namespace Controls {
         }
 
         private void Update () {
-            if (health == 0) return;
+            if (!_isAlive) return;
 
             if (_agent.velocity != Vector3.zero) {
                 animator.SetBool("Moving", true);
@@ -109,12 +114,12 @@ namespace Controls {
                 var direction = _agent.destination - transform.position;
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
 
-                if (_agent.remainingDistance > 1.5f) {
+                if (_agent.remainingDistance > 2.5f) {
                     animator.SetBool("Attack", false);
                 }
-                if (_agent.remainingDistance <= 1.5f) {
+                if (_agent.remainingDistance <= 2.5f) {
                     animator.SetBool("Attack", true);
-//                    Fire(transform.forward);
+                    Fire(transform.forward);
                 }
             }
 

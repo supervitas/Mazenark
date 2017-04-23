@@ -6,6 +6,9 @@ namespace Controls {
         public readonly List<Transform> PlayersTransform = new List<Transform>();
 
         public void Start() {
+            foreach (var player in GameObject.FindGameObjectsWithTag("Player")) {
+                PlayersTransform.Add(player.transform);
+            }
             Invoke("FillPlayers", 4);
         }
 
