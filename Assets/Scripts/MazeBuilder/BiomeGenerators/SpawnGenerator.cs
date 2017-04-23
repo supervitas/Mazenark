@@ -26,9 +26,9 @@ namespace MazeBuilder.BiomeGenerators {
 
             foreach (var spawn in spawns) {
                 Instantiate(SpawnEffect, new Vector3(
-                    Utils.TransformToWorldCoordinate(spawn.tiles[4].Position.X),
+                    Utils.TransformToWorldCoordinate(spawn.tiles[spawn.tiles.Count / 2].Position.X),
                     45f,
-                    Utils.TransformToWorldCoordinate(spawn.tiles[4].Position.Y)
+                    Utils.TransformToWorldCoordinate(spawn.tiles[spawn.tiles.Count / 2].Position.Y)
                 ), Quaternion.identity);
             }
         }
