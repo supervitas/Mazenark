@@ -13,12 +13,15 @@ namespace App {
 
         void Start() {
             args = System.Environment.GetCommandLineArgs();
-            var port = GetArg("-port");
-            if (port == null) {
-                Debug.LogError("No Port Provided");
+            var isServer = GetArg("-server");
+            if (isServer != null) {
+                var port = GetArg("-port");
+                if (port == null) {
+                    Debug.LogError("No Port Provided");
+                    Application.Quit();
+                }
+                _serverPort = Convert.ToInt32(port);
             }
-
-            _serverPort = Convert.ToInt32(port);
         }
 
         private string GetArg(string argName) {
