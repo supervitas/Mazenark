@@ -101,8 +101,7 @@ namespace Lobby{
                         }
                     }
                 }
-                else
-                {
+                else {
                     ChangeTo(mainMenuPanel);
                 }
 

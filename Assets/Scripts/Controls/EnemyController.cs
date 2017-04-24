@@ -88,8 +88,6 @@ namespace Controls {
             }
             animator.SetBool("Attack", false);
 
-            animator.SetBool("Idle", true);
-            
             _hasTarget = false;
             _agent.autoBraking = false;
 
@@ -110,6 +108,10 @@ namespace Controls {
                 animator.SetBool("Idle", false);
             }
 
+            if (_agent.velocity == Vector3.zero) {
+                animator.SetBool("Idle", true);
+            }
+
             if (_hasTarget) {
                 var direction = _agent.destination - transform.position;
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
@@ -119,7 +121,7 @@ namespace Controls {
                 }
                 if (_agent.remainingDistance <= 2.5f) {
                     animator.SetBool("Attack", true);
-                    Fire(transform.forward);
+                    Fire(transform.forward); // todo colider to enemy. No raycast
                 }
             }
 
