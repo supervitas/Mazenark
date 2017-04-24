@@ -1,4 +1,5 @@
 ﻿using System;
+using Lobby;
 using UnityEngine;
 
 namespace App {
@@ -24,6 +25,7 @@ namespace App {
             }
 
             _serverPort = Convert.ToInt32(port);
+            FindObjectOfType<LobbyMainMenu>().StartDedicatedServerInstance(_serverPort);
         }
 
         private string GetArg(string argName) {

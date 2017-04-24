@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,8 +33,13 @@ namespace Lobby {
 
         public void OnClickJoin() {
             lobbyManager.ChangeTo(lobbyPanel);
+            string[] addr = ipInput.text.Split(':');
 
-            lobbyManager.networkAddress = ipInput.text;
+            if (addr.Length > 1) {
+                lobbyManager.networkPort = Convert.ToInt32(addr[1]);
+            }
+            lobbyManager.networkAddress = addr[0];
+
             lobbyManager.StartClient();
 
             lobbyManager.backDelegate = lobbyManager.StopClientClbk;
