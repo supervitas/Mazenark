@@ -100,7 +100,9 @@ namespace Lobby {
             nameInput.interactable = true;
             remoteIcone.gameObject.SetActive(false);
             localIcone.gameObject.SetActive(true);
+            Debug.Log("willSet");
             CmdGetMaze();
+
 
             CheckRemoveButton();
 
@@ -169,8 +171,7 @@ namespace Lobby {
             }
         }
 
-        public void OnPlayerListChanged(int idx)
-        { 
+        public void OnPlayerListChanged(int idx) {
             GetComponent<Image>().color = (idx % 2 == 0) ? EvenRowColor : OddRowColor;
         }
 
@@ -182,8 +183,7 @@ namespace Lobby {
             nameInput.text = playerName;
         }
 
-        public void OnMyColor(Color newColor)
-        {
+        public void OnMyColor(Color newColor) {
             playerColor = newColor;
             colorButton.GetComponent<Image>().color = newColor;
         }
@@ -202,38 +202,31 @@ namespace Lobby {
             SendReadyToBeginMessage();
         }
 
-        public void OnNameChanged(string str)
-        {
+        public void OnNameChanged(string str) {
             CmdNameChanged(str);
         }
 
-        public void OnRemovePlayerClick()
-        {
-            if (isLocalPlayer)
-            {
+        public void OnRemovePlayerClick() {
+            if (isLocalPlayer) {
                 RemovePlayer();
-            }
-            else if (isServer)
+            } else if (isServer)
                 LobbyManager.SSingleton.KickPlayer(connectionToClient);
                 
         }
 
-        public void ToggleJoinButton(bool enabled)
-        {
+        public void ToggleJoinButton(bool enabled) {
             readyButton.gameObject.SetActive(enabled);
             waitingPlayerButton.gameObject.SetActive(!enabled);
         }
 
         [ClientRpc]
-        public void RpcUpdateCountdown(int countdown)
-        {
+        public void RpcUpdateCountdown(int countdown) {
             LobbyManager.SSingleton.countdownPanel.UIText.text = "Match Starting in " + countdown;
             LobbyManager.SSingleton.countdownPanel.gameObject.SetActive(countdown != 0);
         }
 
         [ClientRpc]
-        public void RpcUpdateRemoveButton()
-        {
+        public void RpcUpdateRemoveButton() {
             CheckRemoveButton();
         }
 
@@ -245,8 +238,7 @@ namespace Lobby {
         }
 
         [Command]
-        public void CmdColorChange()
-        {
+        public void CmdColorChange() {
             int idx = System.Array.IndexOf(Colors, playerColor);
 
             int inUseIdx = _colorInUse.IndexOf(idx);
@@ -281,27 +273,27 @@ namespace Lobby {
         }
 
         [Command]
-        public void CmdNameChanged(string name)
-        {
+        public void CmdNameChanged(string name) {
             playerName = name;
         }
 
         //Cleanup thing when get destroy (which happen when client kick or disconnect)
         public void OnDestroy() {
-            LobbyPlayerList._instance.RemovePlayer(this);
-            if (LobbyManager.SSingleton != null) LobbyManager.SSingleton.OnPlayersNumberModified(-1);
+            AppManager.Instance.CommonSetUp();
+            if (LobbyPlayerList._instance) {
+                LobbyPlayerList._instance.RemovePlayer(this);
+                if (LobbyManager.SSingleton != null) LobbyManager.SSingleton.OnPlayersNumberModified(-1);
 
-            int idx = System.Array.IndexOf(Colors, playerColor);
+                int idx = System.Array.IndexOf(Colors, playerColor);
 
-            if (idx < 0)
-                return;
+                if (idx < 0)
+                    return;
 
-            for (int i = 0; i < _colorInUse.Count; ++i)
-            {
-                if (_colorInUse[i] == idx)
-                {//that color is already in use
-                    _colorInUse.RemoveAt(i);
-                    break;
+                for (int i = 0; i < _colorInUse.Count; ++i) {
+                    if (_colorInUse[i] == idx) { //that color is already in use
+                        _colorInUse.RemoveAt(i);
+                        break;
+                    }
                 }
             }
         }

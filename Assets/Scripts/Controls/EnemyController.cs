@@ -114,7 +114,10 @@ namespace Controls {
 
             if (_hasTarget) {
                 var direction = _agent.destination - transform.position;
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
+
+                if (direction != Vector3.zero) {
+                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
+                }
 
                 if (_agent.remainingDistance > 2.5f) {
                     animator.SetBool("Attack", false);

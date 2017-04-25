@@ -22,6 +22,7 @@ namespace App {
         public void CommonSetUp() { // also used from LobbyManager to remove all eventhandlers registered in previous game by reiniting
             EventHub = new Publisher();
             MazeSize = new MazeSizeGenerator();
+            MazeInstance = null;
         }
 
 

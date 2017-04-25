@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 namespace Lobby {
-    [NetworkSettings(channel = 0, sendInterval = 0)]
+    [NetworkSettings(channel = 0, sendInterval = 0.1f)]
     public class MazeDelivery : NetworkBehaviour {
         private Maze _fetchedMaze;
 
@@ -48,7 +48,6 @@ namespace Lobby {
 
         [ClientRpc]
         public void RpcMazeLoadingFinished(int width, int hight, int maxBiomeID) {
-
 			AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(width, hight, _fetchedMaze);
 			AppManager.Instance.MazeInstance.Maze.GenerateBiomesList(maxBiomeID);
         }

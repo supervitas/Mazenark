@@ -260,6 +260,7 @@ namespace Lobby{
 
         public override void OnStartServer() {
             base.OnStartServer();
+
             AppManager.Instance.CommonSetUp();
             AppManager.Instance.MazeSize.GenerateRndSize();
             AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(AppManager.Instance.MazeSize.X, AppManager.Instance.MazeSize.Y);

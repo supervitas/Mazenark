@@ -169,7 +169,7 @@ namespace Controls {
             fireball.GetComponent<Rigidbody>().velocity = fireball.transform.forward * 15;
 
             NetworkServer.Spawn(fireball);
-            Destroy(fireball, 8.0f);
+            Destroy(fireball.GetComponent<Fireball>(), 8.0f);
         }
 
         private void TankUpdate() {
