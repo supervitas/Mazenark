@@ -73,30 +73,19 @@ namespace Lobby{
         }
 
         public override void OnLobbyClientSceneChanged(NetworkConnection conn) {
-            if (SceneManager.GetSceneAt(0).name == lobbyScene)
-            {
-                if (topPanel.isInGame)
-                {
+            if (SceneManager.GetSceneAt(0).name == lobbyScene) {
+                if (topPanel.isInGame) {
                     ChangeTo(lobbyPanel);
-                    if (_isMatchmaking)
-                    {
-                        if (conn.playerControllers[0].unetView.isServer)
-                        {
+                    if (_isMatchmaking) {
+                        if (conn.playerControllers[0].unetView.isServer) {
                             backDelegate = StopHostClbk;
-                        }
-                        else
-                        {
+                        } else {
                             backDelegate = StopClientClbk;
                         }
-                    }
-                    else
-                    {
-                        if (conn.playerControllers[0].unetView.isClient)
-                        {
+                    } else {
+                        if (conn.playerControllers[0].unetView.isClient) {
                             backDelegate = StopHostClbk;
-                        }
-                        else
-                        {
+                        } else {
                             backDelegate = StopClientClbk;
                         }
                     }
@@ -131,16 +120,14 @@ namespace Lobby{
 
             if (currentPanel != mainMenuPanel) {
                 backButton.gameObject.SetActive(true);
-            }
-            else {
+            } else {
                 backButton.gameObject.SetActive(false);
                 SetServerInfo("Offline", "None");
                 _isMatchmaking = false;
             }
         }
 
-        public void DisplayIsConnecting()
-        {
+        public void DisplayIsConnecting() {
             var _this = this;
             infoPanel.Display("Connecting...", "Cancel", () => { _this.backDelegate(); });
         }
@@ -154,21 +141,18 @@ namespace Lobby{
 
         public delegate void BackButtonDelegate();
         public BackButtonDelegate backDelegate;
-        public void GoBackButton()
-        {
+        public void GoBackButton() {
             backDelegate();
 			topPanel.isInGame = false;
         }
 
         // ----------------- Server management
 
-        public void AddLocalPlayer()
-        {
+        public void AddLocalPlayer() {
             TryToAddPlayer();
         }
 
-        public void RemovePlayer(LobbyPlayer player)
-        {
+        public void RemovePlayer(LobbyPlayer player) {
             player.RemovePlayer();
         }
 
@@ -202,21 +186,18 @@ namespace Lobby{
             ChangeTo(mainMenuPanel);
         }
 
-        public void StopServerClbk()
-        {
+        public void StopServerClbk() {
             StopServer();
             ChangeTo(mainMenuPanel);
         }
 
         class KickMsg : MessageBase { }
-        public void KickPlayer(NetworkConnection conn)
-        {
+        public void KickPlayer(NetworkConnection conn) {
             conn.Send(MsgKicked, new KickMsg());
         }
 
 
-        public void KickedMessageHandler(NetworkMessage netMsg)
-        {
+        public void KickedMessageHandler(NetworkMessage netMsg) {
             infoPanel.Display("Kicked by Server", "Close", null);
             netMsg.conn.Disconnect();
         }
@@ -256,6 +237,13 @@ namespace Lobby{
             _spawnGenerator = GetSpawnPosition();
             _spawnGenerator.MoveNext();
 
+        }
+
+        public void StartDedicatedServerInstance(int port) {
+            networkPort = port;
+            StartServer();
+            Debug.Log(string.Format("instance started  {0}:{1}", networkAddress, networkPort));
+            SetServerInfo("Dedicated Server", networkAddress);
         }
 
         public override void OnStartServer() {
@@ -318,6 +306,7 @@ namespace Lobby{
             return obj;
         }
 
+
         public override void OnLobbyServerPlayerRemoved(NetworkConnection conn, short playerControllerId) {
             foreach (NetworkLobbyPlayer t in lobbySlots) {
                 var p = t as LobbyPlayer;
@@ -371,17 +360,17 @@ namespace Lobby{
 			    if(t != null)
 			        allready &= t.readyToBegin;
 			}
-
-			if(allready)
-				StartCoroutine(ServerCountdownCoroutine());
+            if (allready) {
+                GetComponent<LobbyGameManager>().SetPlayersCount((byte) lobbySlots.Count(player => player != null));
+                StartCoroutine(ServerCountdownCoroutine());
+            }
         }
 
         public IEnumerator ServerCountdownCoroutine() {
             float remainingTime = prematchCountdown;
             int floorTime = Mathf.FloorToInt(remainingTime);
 
-            while (remainingTime > 0)
-            {
+            while (remainingTime > 0) {
                 yield return null;
 
                 remainingTime -= Time.deltaTime;
@@ -431,8 +420,7 @@ namespace Lobby{
             ChangeTo(mainMenuPanel);
         }
 
-        public override void OnClientError(NetworkConnection conn, int errorCode)
-        {
+        public override void OnClientError(NetworkConnection conn, int errorCode) {
             ChangeTo(mainMenuPanel);
             infoPanel.Display("Cient error : " + (errorCode == 6 ? "timeout" : errorCode.ToString()), "Close", null);
         }

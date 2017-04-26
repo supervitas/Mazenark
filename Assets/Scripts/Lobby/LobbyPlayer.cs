@@ -9,7 +9,7 @@ namespace Lobby {
     //Player entry in the lobby. Handle selecting color/setting name & getting ready for the game
     //Any LobbyHook can then grab it and pass those value to the game player prefab (see the Pong Example in the Samples Scenes)
     public class LobbyPlayer : NetworkLobbyPlayer {
-        static Color[] Colors = new Color[] { Color.magenta, Color.red, Color.cyan, Color.blue, Color.green, Color.yellow };
+        static Color[] Colors = { Color.magenta, Color.red, Color.cyan, Color.blue, Color.green, Color.yellow };
         //used on server to avoid assigning the same color to two player
         static List<int> _colorInUse = new List<int>();
 
@@ -39,8 +39,7 @@ namespace Lobby {
 
 
 
-        public override void OnClientEnterLobby()
-        {
+        public override void OnClientEnterLobby() {
             base.OnClientEnterLobby();
 
             if (LobbyManager.SSingleton != null) LobbyManager.SSingleton.OnPlayersNumberModified(1);
@@ -63,8 +62,7 @@ namespace Lobby {
             OnMyColor(playerColor);
         }
 
-        public override void OnStartAuthority()
-        {
+        public override void OnStartAuthority() {
             base.OnStartAuthority();
 
             //if we return from a game, color of text can still be the one for "Ready"
@@ -279,7 +277,9 @@ namespace Lobby {
 
         //Cleanup thing when get destroy (which happen when client kick or disconnect)
         public void OnDestroy() {
-            AppManager.Instance.CommonSetUp();
+            if (isServer) {
+                FindObjectOfType<LobbyGameManager>().PlayerLefted();
+            }
             if (LobbyPlayerList._instance) {
                 LobbyPlayerList._instance.RemovePlayer(this);
                 if (LobbyManager.SSingleton != null) LobbyManager.SSingleton.OnPlayersNumberModified(-1);

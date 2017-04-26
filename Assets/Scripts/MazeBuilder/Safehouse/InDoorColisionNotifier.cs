@@ -9,5 +9,4 @@ namespace MazeBuilder.Safehouse {
             }
         }
     }
-
 }

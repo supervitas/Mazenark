@@ -2,11 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Lobby
-{
+namespace Lobby {
     //List of players in the lobby
-    public class LobbyPlayerList : MonoBehaviour
-    {
+    public class LobbyPlayerList : MonoBehaviour {
         public static LobbyPlayerList _instance = null;
 
         public RectTransform playerListContentTransform;
@@ -21,8 +19,7 @@ namespace Lobby
             _layout = playerListContentTransform.GetComponent<VerticalLayoutGroup>();
         }
 
-        public void DisplayDirectServerWarning(bool enabled)
-        {
+        public void DisplayDirectServerWarning(bool enabled) {
             if(warningDirectPlayServer != null)
                 warningDirectPlayServer.SetActive(enabled);
         }
@@ -47,13 +44,16 @@ namespace Lobby
             PlayerListModified();
         }
 
+        public List<LobbyPlayer> GetPlayers() {
+            return _players;
+        }
+
         public void RemovePlayer(LobbyPlayer player){
             _players.Remove(player);
             PlayerListModified();
         }
 
-        public void PlayerListModified()
-        {
+        public void PlayerListModified(){
             int i = 0;
             foreach (LobbyPlayer p in _players)
             {

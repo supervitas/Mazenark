@@ -57,13 +57,6 @@ namespace Lobby {
             lobbyManager.SetServerInfo("Dedicated Server", lobbyManager.networkAddress);
         }
 
-        public void StartDedicatedServerInstance(int port) {
-            lobbyManager.networkPort = port;
-            lobbyManager.StartServer();
-            Debug.Log(string.Format("instance started  {0}:{1}", lobbyManager.networkAddress, lobbyManager.networkPort));
-            lobbyManager.SetServerInfo("Dedicated Server", lobbyManager.networkAddress);
-        }
-
         public void OnClickCreateMatchmakingGame() {
             lobbyManager.StartMatchMaker();
             lobbyManager.matchMaker.CreateMatch(

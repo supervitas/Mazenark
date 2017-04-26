@@ -25,7 +25,7 @@ namespace App {
             }
 
             _serverPort = Convert.ToInt32(port);
-            FindObjectOfType<LobbyMainMenu>().StartDedicatedServerInstance(_serverPort);
+            FindObjectOfType<LobbyManager>().StartDedicatedServerInstance(_serverPort);
         }
 
         private string GetArg(string argName) {
