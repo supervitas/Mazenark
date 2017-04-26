@@ -78,11 +78,9 @@ namespace Controls {
                 }
             }
 
-            if(validSurfaceNormal)
-            {
+            if(validSurfaceNormal) {
                 m_isGrounded = true;
-                if (!m_collisions.Contains(collision.collider))
-                {
+                if (!m_collisions.Contains(collision.collider)) {
                     m_collisions.Add(collision.collider);
                 }
             } else {

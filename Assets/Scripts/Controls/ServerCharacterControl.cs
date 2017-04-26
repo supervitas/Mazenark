@@ -1,13 +1,25 @@
 ﻿using UnityEngine.Networking;
 
 namespace Controls {
-    [NetworkSettings(channel = 1, sendInterval = 0.2f)]
+    [NetworkSettings(channel = 0, sendInterval = 0.2f)]
     public class ServerCharacterControl : NetworkBehaviour {
 
         [SyncVar]
         public int CurrentHealth = 100;
         public bool destroyOnDeath;
         public bool isNPC;
+
+        private void Start() {
+            if (!isNPC) {
+                InvokeRepeating("PlayerUpdate", 0, 1.5f);
+            }
+        }
+
+        private void OnDestroy() {
+            if (!isNPC) {
+                CancelInvoke("PlayerUpdate");
+            }
+        }
 
         public void TakeDamage(int amount) {
             if (!isServer) return;
@@ -22,15 +34,14 @@ namespace Controls {
             }
             if (isNPC) {
                 GetComponent<EnemyController>().Die(); // Play animation
-                Destroy(gameObject, 3.5f); // time after enemy will be destroyed. Maybe replace to fadeout. todo OBJECT POOL
+                Destroy(gameObject, 3.5f); // time after enemy will be destroyed. Maybe replace to fadeout
             }
         }
 
-        private void Update() {
+        private void PlayerUpdate() {
             if (transform.position.y < -5.5) {
-               TakeDamage(100);
+                TakeDamage(100);
             }
         }
-
     }
 }

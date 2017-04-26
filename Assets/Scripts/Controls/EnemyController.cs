@@ -5,7 +5,7 @@ using UnityEngine.AI;
 using UnityEngine.Networking;
 
 namespace Controls {
-    [NetworkSettings(channel = 1, sendInterval = 0.3f)]
+    [NetworkSettings(channel = 1, sendInterval = 0.5f)]
     public class EnemyController : NetworkBehaviour {
         [SerializeField]
         private Animator animator;
@@ -39,7 +39,6 @@ namespace Controls {
             if(!isServer) return;
             _playersTransform = FindObjectOfType<PlayersTransformHolder>().PlayersTransform;
             InvokeRepeating("CheckPlayersNear", 0, 1);
-
         }
 
         public void SetIdleBehaivor() {
@@ -65,8 +64,6 @@ namespace Controls {
         }
 
         private bool CheckPlayersNear() {
-            if (!_isAlive) return false;
-
             foreach (var target in _playersTransform) {
                 if (target == null) continue;
 
@@ -124,7 +121,7 @@ namespace Controls {
                 }
                 if (_agent.remainingDistance <= 2.5f) {
                     animator.SetBool("Attack", true);
-                    Fire(transform.forward); // todo colider to enemy. No raycast
+//                    Fire(transform.forward); // todo colider to enemy. No raycast
                 }
             }
 
