@@ -38,11 +38,28 @@ namespace MazeBuilder.Utility {
 			}
 		}
 
+
 		private Edge(Quaternion rotation, string name) {
 			Rotation = rotation;
 			Name = name;
 			Edges.Add(this);
 		}
+
+	    public static Edge GetRandomEdgeRotation() {
+	        var rand = UnityEngine.Random.Range(0, 4);
+	        switch (rand) {
+	            case 0:
+	                return UpLeft;
+	            case 1:
+	                return UpRight;
+	            case 2:
+	                return DownLeft;
+	            case 3:
+	                return DownRight;
+	            default:
+	                return UpLeft;
+	        }
+	    }
 
 		public static Edge UpRight = new Edge(Quaternion.Euler(-90, 90, 0), "DownLeft");
 		public static Edge UpLeft = new Edge(Quaternion.Euler(-90, 180, 0), "UpLeft");

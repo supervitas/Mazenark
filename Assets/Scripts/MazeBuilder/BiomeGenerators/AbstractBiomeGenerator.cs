@@ -61,8 +61,11 @@ namespace MazeBuilder.BiomeGenerators {
 	            AppManager.Instance.InstantiateSOC((GameObject) BiomeFloorsEnviroment.GetRandom(typeof(GameObject)),
 	                Utils.GetDefaultPositionVector(coordinate, 0.3f), Quaternion.identity);
 	        }
-	        AppManager.Instance.InstantiateSOC(Floor, Utils.GetDefaultPositionVector(coordinate), Edge.UpRight.Rotation);
+
+	        AppManager.Instance.InstantiateSOC(Floor, Utils.GetDefaultPositionVector(coordinate),
+	            Edge.GetRandomEdgeRotation().Rotation);
 	    }
+
 	    public abstract void CreateWall(Biome biome, Coordinate coordinate, Maze maze);
 	    protected abstract void OnNight(object sender, EventArguments args);
 	    protected abstract void OnDay(object sender, EventArguments args);
