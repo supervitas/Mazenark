@@ -15,9 +15,6 @@ namespace MazeBuilder.BiomeGenerators {
             base.Awake();
         }
 
-        protected override void OnNight(object sender, EventArguments args) {}
-        protected override void OnDay(object sender, EventArguments args) {}
-
         protected override void StartPostPlacement(object sender, EventArguments e) {
             var spawns = from biome in BiomesCollecton
                 where biome.biome == Biome.Spawn

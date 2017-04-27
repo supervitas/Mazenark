@@ -22,25 +22,6 @@ namespace MazeBuilder.BiomeGenerators {
             base.Awake();
         }
 
-        protected override void OnNight(object sender, EventArguments args) {
-            EnableParticles();
-        }
-
-        protected override void OnDay(object sender, EventArguments args) {
-            DisableParticles();
-        }
-
-        private void EnableParticles() {
-            foreach (var particles in ParticleList) {
-                particles.Play();
-            }
-
-        }
-        private void DisableParticles() {
-            foreach (var particles in ParticleList) {
-                particles.Stop();
-            }
-        }
 
         protected override void StartPostPlacement(object sender, EventArguments e) {
             PlaceLightingObjects();
@@ -67,7 +48,6 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
         private void PlaceLightingObjects() {
-            ParticleList = PlaceLightingParticles(Biome.Earth, NightParticles);
             PlaceTorches(Biome.Earth);
         }
 

@@ -13,8 +13,6 @@ namespace MazeBuilder.BiomeGenerators {
 	    [SerializeField]
 	    [Range(0, 100f)] protected float TorchSpawnChance = 25f;
 	    [SerializeField]
-	    [Range(0, 100f)] protected float ParticlesSpawnChance = 25f;
-	    [SerializeField]
 	    [Range(0, 100f)] protected float FloorEnviromentSpawnChance = 25f;
 	    #endregion
 
@@ -40,7 +38,7 @@ namespace MazeBuilder.BiomeGenerators {
 	    protected List<Maze.TileCollection> BiomesCollecton;
 	    protected Publisher Eventhub;
 	    protected Dictionary<string, CollectionRandom> SpawnObjectsChances = new Dictionary<string, CollectionRandom>();
-	    protected List<ParticleSystem> ParticleList = new List<ParticleSystem>();
+
 
 	    protected readonly CollectionRandom BiomeFloorsEnviroment = new CollectionRandom();
 
@@ -55,7 +53,6 @@ namespace MazeBuilder.BiomeGenerators {
 	        Eventhub.UnsubscribeFromAll(this);
 	    }
 
-
 	    public virtual void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
 	        if (FloorEnviromentSpawnChance >= Random.Range(1, 100)) {
 	            AppManager.Instance.InstantiateSOC((GameObject) BiomeFloorsEnviroment.GetRandom(typeof(GameObject)),
@@ -66,10 +63,11 @@ namespace MazeBuilder.BiomeGenerators {
 	            Edge.GetRandomEdgeRotation().Rotation);
 	    }
 
+	    protected virtual void StartPostPlacement(object sender, EventArguments e) {}
+	    protected virtual void OnNight(object sender, EventArguments args) {}
+	    protected virtual void OnDay(object sender, EventArguments args) {}
+
 	    public abstract void CreateWall(Biome biome, Coordinate coordinate, Maze maze);
-	    protected abstract void OnNight(object sender, EventArguments args);
-	    protected abstract void OnDay(object sender, EventArguments args);
-	    protected abstract void StartPostPlacement(object sender, EventArguments e);
 
 
 	    protected IEnumerable<Maze.TileCollection> GetTileCollectionForBiome(Biome type) {
@@ -85,15 +83,9 @@ namespace MazeBuilder.BiomeGenerators {
 	    }
 
 
-	    protected List<ParticleSystem> PlaceLightingParticles(Biome biomeType, ParticleSystem particles) {
-	        return (from tile in GetTilesByTypeAndBiome(biomeType, Tile.Variant.Empty)
-	        let shouldPlace = ParticlesSpawnChance >= Random.Range(1, 100)
-            where shouldPlace select Instantiate(particles, Utils.GetDefaultPositionVector(tile.Position, 3.5f), Quaternion.identity)).ToList();
-	    }
-
 	    protected void PlaceTorches(Biome biomeType) {
 	        var tiles = from tile in GetTilesByTypeAndBiome(biomeType, Tile.Variant.Wall)
-	            let shouldPlace = ParticlesSpawnChance >= Random.Range(1, 100)
+	            let shouldPlace = TorchSpawnChance >= Random.Range(1, 100)
 	            where shouldPlace
 	            select tile;
 
@@ -124,12 +116,7 @@ namespace MazeBuilder.BiomeGenerators {
 
 	    protected void AddFloorsToRandomGenerator() {
 	        foreach (var floor in FloorsEnviroment) {
-	            var settings = floor.GetComponent<PrefabSettings>();
-	            var chance = 1.0f;
-	            if (settings) {
-	                chance = settings.SpawnChances;
-	            }
-	            BiomeFloorsEnviroment.Add(floor, typeof(GameObject), chance);
+	            BiomeFloorsEnviroment.Add(floor, typeof(GameObject));
 	        }
 	    }
 	}

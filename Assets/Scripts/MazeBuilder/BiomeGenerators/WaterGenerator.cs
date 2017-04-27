@@ -1,7 +1,7 @@
 ﻿using App;
 using App.EventSystem;
 using MazeBuilder.Utility;
-using Prefabs.Particles;
+using PlayerLocationManager;
 using UnityEngine;
 
 namespace MazeBuilder.BiomeGenerators {
@@ -20,40 +20,16 @@ namespace MazeBuilder.BiomeGenerators {
 
         private void InstantiateWeather() {
             _instancedRain = Instantiate(Rain, Vector3.back, Quaternion.identity);
-            _instancedRain.GetComponent<RainFolowingPlayer>().StopRain();
+            _instancedRain.GetComponent<EffectsNearPlayer>().StopEffect();
         }
 
-        protected override void OnNight(object sender, EventArguments args) {
-            EnableParticles();
-        }
-
-        protected override void OnDay(object sender, EventArguments args) {
-            DisableParticles();
-        }
-
-        private void EnableParticles() {
-            foreach (var particles in ParticleList) {
-                particles.Play();
-            }
-
-        }
-        private void DisableParticles() {
-            foreach (var particles in ParticleList) {
-                particles.Stop();
-            }
-        }
-        protected override void StartPostPlacement(object sender, EventArguments e) {
-            ParticleList = PlaceLightingParticles(Biome.Water, NightParticles);
-            PlaceTorches(Biome.Water);
-
-        }
 
 
         private void ToggleBiomeWeather(object sender, EventArguments e) {
             if (e.BiomeName == "Water Biome") {
-                _instancedRain.GetComponent<RainFolowingPlayer>().StartRain(e.Transform);
+                _instancedRain.GetComponent<EffectsNearPlayer>().StartEffect(e.Transform);
             } else {
-                _instancedRain.GetComponent<RainFolowingPlayer>().StopRain();
+                _instancedRain.GetComponent<EffectsNearPlayer>().StopEffect();
             }
         }
 
