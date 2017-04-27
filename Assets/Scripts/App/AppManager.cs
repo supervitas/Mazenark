@@ -26,13 +26,13 @@ namespace App {
         }
 
 
-        public GameObject InstantiateSOC(GameObject go, Vector3 position, Quaternion rotation) { //ServerOrClient
+        public GameObject InstantiateSOC(GameObject go, Vector3 position, Quaternion rotation) { // ServerOrClient
             var instantiated = Instantiate(go, position, rotation);
 //            NetworkServer.Spawn(instantiated);
             return instantiated;
         }
 
-        public void TurnOffAndSetupMainCamera() {
+        public void TurnOffAndSetupMainCamera() { // Here gameover camera will be set
             Camera.main.transform.position = Utils.TransformToWorldCoordinate(new Coordinate(
                 MazeInstance.Height / 2 - 1, MazeInstance.Width / 2 - 2), 10.5f);
             _cam = Camera.main;

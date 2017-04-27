@@ -132,8 +132,7 @@ namespace Lobby{
             infoPanel.Display("Connecting...", "Cancel", () => { _this.backDelegate(); });
         }
 
-        public void SetServerInfo(string status, string host)
-        {
+        public void SetServerInfo(string status, string host) {
             statusInfo.text = status;
             hostInfo.text = host;
         }
@@ -273,8 +272,7 @@ namespace Lobby{
         }
 
         //allow to handle the (+) button to add/remove player
-        public void OnPlayersNumberModified(int count)
-        {
+        public void OnPlayersNumberModified(int count) {
             _playerNumber += count;
 
             int localPlayerCount = 0;

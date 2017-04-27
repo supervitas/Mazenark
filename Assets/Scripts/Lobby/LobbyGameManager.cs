@@ -12,7 +12,10 @@ namespace Lobby {
         public void PlayerLefted() {
             _playersCount--;
             if (GameShouldFinish()) {
+                // todo send results here
                 GetComponent<LobbyManager>().StopServer();
+
+                GetComponent<LobbyManager>().StartServer();
             }
         }
 

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using App;
+using MazeBuilder;
 using Prototype.NetworkLobby;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -36,6 +38,23 @@ namespace Lobby {
         static Color ReadyColor = new Color(0.0f, 204.0f / 255.0f, 204.0f / 255.0f, 1.0f);
         static Color TransparentColor = new Color(0, 0, 0, 0);
 
+        private Maze _fetchedMaze;
+
+        public struct MazeStruct {
+            public int X;
+            public int Y;
+            public string BiomeName;
+            public int TileType;
+            public int BiomeInstanceId;
+
+            public MazeStruct(int x, int y, string biomeName, int tileType, int biomeInstanceId) {
+                X = x;
+                Y = y;
+                BiomeName = biomeName;
+                TileType = tileType;
+                BiomeInstanceId = biomeInstanceId;
+            }
+        }
 
 
 
@@ -47,12 +66,10 @@ namespace Lobby {
             LobbyPlayerList._instance.AddPlayer(this);
             LobbyPlayerList._instance.DisplayDirectServerWarning(isServer && LobbyManager.SSingleton.matchMaker == null);
 
-            if (isLocalPlayer)
-            {
+            if (isLocalPlayer) {
                 SetupLocalPlayer();
             }
-            else
-            {
+            else {
                 SetupOtherPlayer();
             }
 
@@ -81,8 +98,7 @@ namespace Lobby {
             readyButton.colors = b;
         }
 
-        void SetupOtherPlayer()
-        {
+        void SetupOtherPlayer() {
             nameInput.interactable = false;
             removePlayerButton.interactable = NetworkServer.active;
 
@@ -98,7 +114,7 @@ namespace Lobby {
             nameInput.interactable = true;
             remoteIcone.gameObject.SetActive(false);
             localIcone.gameObject.SetActive(true);
-            Debug.Log("willSet");
+
             CmdGetMaze();
 
 
@@ -228,11 +244,61 @@ namespace Lobby {
             CheckRemoveButton();
         }
 
+        private Biome GetBiomeByName(string biomeName) {
+            return Biome.AllBiomesList.First(bm => bm.Name == biomeName);
+        }
+
+        [ClientRpc]
+        public void RpcCreateMaze(int width, int height) {
+            _fetchedMaze = new Maze(width, height, true);
+        }
+
+        [ClientRpc]
+        private void RpcFillMaze(MazeStruct[] mazeArr) {
+
+            foreach (var tile in mazeArr) {
+                _fetchedMaze[tile.X, tile.Y].Biome = GetBiomeByName(tile.BiomeName);
+                _fetchedMaze[tile.X, tile.Y].Type = (Tile.Variant) tile.TileType;
+                _fetchedMaze[tile.X, tile.Y].BiomeID = tile.BiomeInstanceId;
+            }
+        }
+
+        [ClientRpc]
+        public void RpcMazeLoadingFinished(int width, int hight, int maxBiomeID) {
+            AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(width, hight, _fetchedMaze);
+            AppManager.Instance.MazeInstance.Maze.GenerateBiomesList(maxBiomeID);
+        }
+
         //====== Server Command
 
         [Command]
         public void CmdGetMaze() {
-            FindObjectOfType<MazeDelivery>().GetMaze();
+            if (!isServer)
+                return;
+
+            var messageBatchSize = 10; // how much rows will be send in one message;
+            var biomeList = new List<MazeStruct>();
+
+            var mazeInstance = AppManager.Instance.MazeInstance;
+            var maze = mazeInstance.Maze;
+
+            RpcCreateMaze(maze.Width, maze.Height); // create maze
+
+            var counter = 0;
+            for (var x = 0; x < mazeInstance.Height; x++) {
+                for (var y = 0; y < mazeInstance.Width; y++) {
+                    biomeList.Add(new MazeStruct(x, y, maze[x, y].Biome.Name, (int) maze[x, y].Type, maze[x, y].BiomeID)); // fill maze
+                }
+                counter++;
+                if (counter >= messageBatchSize) {
+                    RpcFillMaze(biomeList.ToArray());
+                    counter = 0;
+                    biomeList.Clear();
+                }
+            }
+            RpcFillMaze(biomeList.ToArray()); // send final chunk of data
+
+            RpcMazeLoadingFinished(maze.Width, maze.Height, maze.MaxBiomeID);
         }
 
         [Command]
