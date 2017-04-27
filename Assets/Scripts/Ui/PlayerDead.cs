@@ -19,6 +19,7 @@ namespace Ui {
         }
 
         private void OnPlayerDied(object sender, EventArguments args) {
+            Debug.Log(args.Message);
             CanvasObject.enabled = true;
             Text t = transform.GetChild(0).GetChild(0).GetComponent<Text>();
             t.text = string.Format("{0} died", args.Message);

@@ -248,13 +248,13 @@ namespace Lobby {
             return Biome.AllBiomesList.First(bm => bm.Name == biomeName);
         }
 
-        [ClientRpc]
-        public void RpcCreateMaze(int width, int height) {
+        [TargetRpc]
+        public void TargetCreateMaze(NetworkConnection target, int width, int height) {
             _fetchedMaze = new Maze(width, height, true);
         }
 
-        [ClientRpc]
-        private void RpcFillMaze(MazeStruct[] mazeArr) {
+        [TargetRpc]
+        private void TargetFillMaze(NetworkConnection target, MazeStruct[] mazeArr) {
 
             foreach (var tile in mazeArr) {
                 _fetchedMaze[tile.X, tile.Y].Biome = GetBiomeByName(tile.BiomeName);
@@ -263,8 +263,8 @@ namespace Lobby {
             }
         }
 
-        [ClientRpc]
-        public void RpcMazeLoadingFinished(int width, int hight, int maxBiomeID) {
+        [TargetRpc]
+        public void TargetMazeLoadingFinished(NetworkConnection target, int width, int hight, int maxBiomeID) {
             AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(width, hight, _fetchedMaze);
             AppManager.Instance.MazeInstance.Maze.GenerateBiomesList(maxBiomeID);
         }
@@ -282,7 +282,7 @@ namespace Lobby {
             var mazeInstance = AppManager.Instance.MazeInstance;
             var maze = mazeInstance.Maze;
 
-            RpcCreateMaze(maze.Width, maze.Height); // create maze
+            TargetCreateMaze(connectionToClient, maze.Width, maze.Height); // create maze
 
             var counter = 0;
             for (var x = 0; x < mazeInstance.Height; x++) {
@@ -291,14 +291,14 @@ namespace Lobby {
                 }
                 counter++;
                 if (counter >= messageBatchSize) {
-                    RpcFillMaze(biomeList.ToArray());
+                    TargetFillMaze(connectionToClient, biomeList.ToArray());
                     counter = 0;
                     biomeList.Clear();
                 }
             }
-            RpcFillMaze(biomeList.ToArray()); // send final chunk of data
+            TargetFillMaze(connectionToClient, biomeList.ToArray()); // send final chunk of data
 
-            RpcMazeLoadingFinished(maze.Width, maze.Height, maze.MaxBiomeID);
+            TargetMazeLoadingFinished(connectionToClient, maze.Width, maze.Height, maze.MaxBiomeID);
         }
 
         [Command]
