@@ -11,7 +11,7 @@ namespace Controls {
 
         private void Start() {
             if (!isNPC) {
-                InvokeRepeating("PlayerUpdate", 0, 1.5f);
+                InvokeRepeating("PlayerUpdate", 0, 1f);
             }
         }
 
@@ -39,7 +39,7 @@ namespace Controls {
         }
 
         private void PlayerUpdate() {
-            if (transform.position.y < -5.5) {
+            if (transform.position.y < -3.5) {
                 TakeDamage(100);
             }
         }

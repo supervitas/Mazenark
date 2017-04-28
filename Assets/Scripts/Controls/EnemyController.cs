@@ -69,6 +69,9 @@ namespace Controls {
 
                 var distance = Vector3.Distance(transform.position, target.position);
                 var direction = _agent.destination - transform.position;
+                if (direction.magnitude < 10e-3) {
+                    direction = transform.forward;
+                }
                 var angle = Vector3.Angle(direction, transform.forward);
 
                 if (distance <= enemyAgroRange && angle < enemyAngleVisibility) {
@@ -121,7 +124,7 @@ namespace Controls {
                 }
                 if (_agent.remainingDistance <= 2.5f) {
                     animator.SetBool("Attack", true);
-//                    Fire(transform.forward); // todo colider to enemy. No raycast
+                    Fire(transform.forward); // todo colider to enemy. No raycast
                 }
             }
 
