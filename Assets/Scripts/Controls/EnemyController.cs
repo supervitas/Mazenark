@@ -69,9 +69,11 @@ namespace Controls {
 
                 var distance = Vector3.Distance(transform.position, target.position);
                 var direction = _agent.destination - transform.position;
-                if (direction.magnitude < 10e-3) {
+
+                if (direction == Vector3.zero) {
                     direction = transform.forward;
                 }
+
                 var angle = Vector3.Angle(direction, transform.forward);
 
                 if (distance <= enemyAgroRange && angle < enemyAngleVisibility) {

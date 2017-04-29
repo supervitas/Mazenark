@@ -10,10 +10,6 @@ namespace MazeBuilder.BiomeGenerators {
             base.Awake();
         }
 
-        protected override void StartPostPlacement(object sender, EventArguments e) {
-            PlaceTorches(Biome.Wind);
-        }
-
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
             AppManager.Instance.InstantiateSOC(FlatWall, Utils.GetDefaultPositionVector(coordinate), Quaternion.identity);
         }

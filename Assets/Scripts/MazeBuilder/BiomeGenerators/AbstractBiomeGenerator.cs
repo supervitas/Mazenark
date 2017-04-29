@@ -55,8 +55,11 @@ namespace MazeBuilder.BiomeGenerators {
 
 	    public virtual void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
 	        if (FloorEnviromentSpawnChance >= Random.Range(1, 100)) {
+	            var position = Utils.GetDefaultPositionVector(coordinate, 0.3f);
+	            position.x += Random.Range(-0.5f, 0.5f);
+	            position.z += Random.Range(-0.5f, 0.5f);
 	            AppManager.Instance.InstantiateSOC((GameObject) BiomeFloorsEnviroment.GetRandom(typeof(GameObject)),
-	                Utils.GetDefaultPositionVector(coordinate, 0.3f), Quaternion.identity);
+	                position, Quaternion.identity);
 	        }
 
 	        AppManager.Instance.InstantiateSOC(Floor, Utils.GetDefaultPositionVector(coordinate),

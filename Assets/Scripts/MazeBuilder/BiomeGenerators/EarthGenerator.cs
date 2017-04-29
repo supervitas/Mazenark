@@ -22,11 +22,6 @@ namespace MazeBuilder.BiomeGenerators {
             base.Awake();
         }
 
-
-        protected override void StartPostPlacement(object sender, EventArguments e) {
-            PlaceLightingObjects();
-        }
-
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
             GameObject parent = new GameObject();
 
@@ -47,9 +42,6 @@ namespace MazeBuilder.BiomeGenerators {
             parent.name = string.Format("Cube at {0}:{1}", coordinate.X, coordinate.Y);
         }
 
-        private void PlaceLightingObjects() {
-            PlaceTorches(Biome.Earth);
-        }
 
 
     }
