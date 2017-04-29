@@ -27,16 +27,16 @@ namespace MazeBuilder.Walls {
         private void Start() {
             var mazeSize = AppManager.Instance.MazeInstance;
 
-            GenerateWall(mazeSize.Width * Constants.Maze.TILE_SIZE + 25, Quaternion.Euler(0, 90, 0),
+            GenerateWall(mazeSize.Width * global::Constants.Maze.TILE_SIZE + 25, Quaternion.Euler(0, 90, 0),
                 getPosition: index => new Vector3(-25, 0, index), increment: bounds => bounds.z); // Left
 
-            GenerateWall(mazeSize.Height * Constants.Maze.TILE_SIZE + 25, Quaternion.identity,
+            GenerateWall(mazeSize.Height * global::Constants.Maze.TILE_SIZE + 25, Quaternion.identity,
                 getPosition: index => new Vector3(index, 0, -25), increment: bounds => bounds.x); // Bottom
 
-            GenerateWall(mazeSize.Width * Constants.Maze.TILE_SIZE + 25, Quaternion.Euler(0, 270, 0),
+            GenerateWall(mazeSize.Width * global::Constants.Maze.TILE_SIZE + 25, Quaternion.Euler(0, 270, 0),
                 getPosition: index => new Vector3(mazeSize.Width * 8 + 25, 0, index), increment: bounds => bounds.z); // Right
 
-            GenerateWall(mazeSize.Height * Constants.Maze.TILE_SIZE + 25, Quaternion.Euler(0, 180, 0),
+            GenerateWall(mazeSize.Height * global::Constants.Maze.TILE_SIZE + 25, Quaternion.Euler(0, 180, 0),
                 getPosition: index => new Vector3(index, 0, mazeSize.Height * 8 + 25), increment: bounds => bounds.x); // Top
 
         }

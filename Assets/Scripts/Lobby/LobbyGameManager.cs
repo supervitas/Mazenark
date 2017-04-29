@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using App;
+using UnityEngine;
 using UnityEngine.Networking;
+using Constants;
 
 namespace Lobby {
     public class LobbyGameManager : MonoBehaviour {
@@ -12,8 +14,11 @@ namespace Lobby {
         public void PlayerLefted() {
             _playersCount--;
             if (GameShouldFinish()) {
-                // todo send results here
                 GetComponent<LobbyManager>().StopServer();
+                var networkManager = NetworkHttpManager.Instance;
+                var result = networkManager.CreateRequest(NetworkConstants.GameResultUrl);
+
+
 
                 GetComponent<LobbyManager>().StartServer();
             }

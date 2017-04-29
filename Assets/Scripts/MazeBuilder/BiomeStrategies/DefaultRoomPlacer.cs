@@ -66,7 +66,7 @@ namespace MazeBuilder.BiomeStrategies {
         }
 
         private int GetRandomRoomDimension(Biome biome) {
-            int dimen = (int) Math.Round(random.Next(Constants.Biome.ROOM_MIN_SIZE, Constants.Biome.ROOM_MAX_SIZE + 1) * biome.RoomSizeModifier);
+            int dimen = (int) Math.Round(random.Next(global::Constants.Biome.ROOM_MIN_SIZE, global::Constants.Biome.ROOM_MAX_SIZE + 1) * biome.RoomSizeModifier);
 			if (dimen % 2 != 1)
 				dimen = GetRandomRoomDimension(biome);
 			return dimen;

@@ -38,7 +38,7 @@ namespace MazeBuilder {
         }
 
         private void GenerateRooms() {
-            var chunkSize = Constants.Maze.ROOM_CHUNK_SIZE;
+            var chunkSize = global::Constants.Maze.ROOM_CHUNK_SIZE;
             var random = new Random();
             // split maze into 16x16 chunks and roll a dice to spawn room somewhere in it
             for (var i = 0; i <= Width - chunkSize; i += chunkSize)   // if maze size is not a multiple of ROOM_CHUNK_SIZE, ignore things left.
@@ -54,7 +54,7 @@ namespace MazeBuilder {
 
                 var biome = _maze.Tiles[x, y].Biome;
 
-                var spawnChance = Constants.Biome.ROOM_SPAWN_CHANCE * biome.RoomSpawnChanceModifier;
+                var spawnChance = global::Constants.Biome.ROOM_SPAWN_CHANCE * biome.RoomSpawnChanceModifier;
                 if (random.NextDouble() < spawnChance)
                     biome.RoomPlacer.PlaceRoom(x: x, y: y, chunkLeftBoundary: i, chunkRightBoundary: i + chunkSize - 1,
                         chunkTopBoundary: j, chunkBottomBoundary: j + chunkSize - 1, maze: _maze);

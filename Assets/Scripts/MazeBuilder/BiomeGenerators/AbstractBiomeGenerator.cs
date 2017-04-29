@@ -103,7 +103,7 @@ namespace MazeBuilder.BiomeGenerators {
 
 	        var position = new Vector3 {
 	            x = Utils.TransformToWorldCoordinate(tile.Position.X - Random.Range(-0.2f, 0.2f)),
-	            y = Constants.Maze.TILE_SIZE - 3.5f,
+	            y = global::Constants.Maze.TILE_SIZE - 3.5f,
 	            z = Utils.TransformToWorldCoordinate(tile.Position.Y - sideOffset)
 	        };
 
