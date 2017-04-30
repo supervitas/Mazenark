@@ -74,22 +74,28 @@ namespace Lobby {
             lobbyManager.SetServerInfo("Matchmaker Host", lobbyManager.matchHost);
         }
 
-        public void OnClickPlayOnline() {
-            lobbyManager.ChangeTo(lobbyPanel);
-            var addr = NetworkHttpManager.Instance.MakeRequest(NetworkConstants.GameGetRoom);
-
-            Debug.Log(addr.text);
-
-//            lobbyManager.networkAddress = addr[0];
-
-            lobbyManager.StartClient();
-
-            lobbyManager.backDelegate = lobbyManager.StopClientClbk;
-            lobbyManager.DisplayIsConnecting();
-
-            lobbyManager.SetServerInfo("Connecting...", lobbyManager.networkAddress);
-
+        internal class JsonPort {
+            public int port;
         }
+        public void OnClickPlayOnline() {
+            Action<string> callback = result => { // inline callback which takes result http body as a param
+                lobbyManager.ChangeTo(lobbyPanel);
+
+                var jsonPort = JsonUtility.FromJson<JsonPort>(result);
+
+                lobbyManager.networkAddress = NetworkConstants.GameRoomAdress;
+                lobbyManager.networkPort = jsonPort.port;
+
+                lobbyManager.StartClient();
+
+                lobbyManager.backDelegate = lobbyManager.StopClientClbk;
+                lobbyManager.DisplayIsConnecting();
+
+                lobbyManager.SetServerInfo("Connecting...", lobbyManager.networkAddress);
+            };
+            NetworkHttpManager.Instance.GetRequest(NetworkConstants.GameGetRoom, callback);
+        }
+
 
         void onEndEditIP(string text) {
             if (Input.GetKeyDown(KeyCode.Return))
