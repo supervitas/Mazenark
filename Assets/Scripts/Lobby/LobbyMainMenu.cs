@@ -1,4 +1,7 @@
 using System;
+using App;
+using Constants;
+using NUnit.Framework.Internal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,8 +22,6 @@ namespace Lobby {
             ipInput.onEndEdit.RemoveAllListeners();
             ipInput.onEndEdit.AddListener(onEndEditIP);
 
-            matchNameInput.onEndEdit.RemoveAllListeners();
-            matchNameInput.onEndEdit.AddListener(onEndEditGameName);
         }
 
         public void OnClickSinglePlayer() {
@@ -73,10 +74,21 @@ namespace Lobby {
             lobbyManager.SetServerInfo("Matchmaker Host", lobbyManager.matchHost);
         }
 
-        public void OnClickOpenServerList() {
-            lobbyManager.StartMatchMaker();
-            lobbyManager.backDelegate = lobbyManager.SimpleBackClbk;
-            lobbyManager.ChangeTo(lobbyServerList);
+        public void OnClickPlayOnline() {
+            lobbyManager.ChangeTo(lobbyPanel);
+            var addr = NetworkHttpManager.Instance.MakeRequest(NetworkConstants.GameGetRoom);
+
+            Debug.Log(addr.text);
+
+//            lobbyManager.networkAddress = addr[0];
+
+            lobbyManager.StartClient();
+
+            lobbyManager.backDelegate = lobbyManager.StopClientClbk;
+            lobbyManager.DisplayIsConnecting();
+
+            lobbyManager.SetServerInfo("Connecting...", lobbyManager.networkAddress);
+
         }
 
         void onEndEditIP(string text) {

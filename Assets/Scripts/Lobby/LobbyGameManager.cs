@@ -16,9 +16,7 @@ namespace Lobby {
             if (GameShouldFinish()) {
                 GetComponent<LobbyManager>().StopServer();
                 var networkManager = NetworkHttpManager.Instance;
-                var result = networkManager.CreateRequest(NetworkConstants.GameResultUrl);
-
-
+//                var result = networkManager.CreateRequest(NetworkConstants.GameResultUrl);
 
                 GetComponent<LobbyManager>().StartServer();
             }

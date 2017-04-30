@@ -3,9 +3,9 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 namespace App {
-    public class InGameServerSpawner : NetworkBehaviour {
+    public class ServerSpawner : NetworkBehaviour {
         public GameObject Safehouse;
-        public static InGameServerSpawner Instance { get; private set; }
+        public static ServerSpawner Instance { get; private set; }
         public void Awake() {
             if (Instance == null) {
                 Instance = this;
