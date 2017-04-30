@@ -74,11 +74,8 @@ namespace Lobby {
             lobbyManager.SetServerInfo("Matchmaker Host", lobbyManager.matchHost);
         }
 
-        internal class JsonPort {
-            public int port;
-        }
         public void OnClickPlayOnline() {
-            Action<string> callback = result => { // inline callback which takes result http body as a param
+            Action<string> callback = result => { // callback which takes result http body as a param
                 lobbyManager.ChangeTo(lobbyPanel);
 
                 var jsonPort = JsonUtility.FromJson<JsonPort>(result);
@@ -95,7 +92,6 @@ namespace Lobby {
             };
             NetworkHttpManager.Instance.GetRequest(NetworkConstants.GameGetRoom, callback);
         }
-
 
         void onEndEditIP(string text) {
             if (Input.GetKeyDown(KeyCode.Return))
