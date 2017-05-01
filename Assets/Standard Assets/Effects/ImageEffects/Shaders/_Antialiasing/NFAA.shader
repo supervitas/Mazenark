@@ -126,6 +126,7 @@ SubShader {
 	
 		#pragma vertex vert
 		#pragma fragment frag
+		#pragma target 3.0
 		#pragma exclude_renderers d3d11_9x
 		
 		ENDCG
@@ -137,6 +138,7 @@ SubShader {
 	
 		#pragma vertex vert
 		#pragma fragment fragDebug
+		#pragma target 3.0
 		#pragma exclude_renderers d3d11_9x
 		
 		ENDCG

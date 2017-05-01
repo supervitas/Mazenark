@@ -4,16 +4,10 @@ using UnityEngine;
 
 namespace App {
     public class CommandLineParser: MonoBehaviour {
+        private string[] _args;
 
-        bool _client = false;
-
-        string _serverAddress = "127.0.0.1";
-        int _serverPort = 25000;
-
-        string[] args;
-
-        void Start() {
-            args = Environment.GetCommandLineArgs();
+        private void Start() {
+            _args = Environment.GetCommandLineArgs();
             var isServer = GetArg("-server");
             if (isServer == null) return;
 
@@ -24,14 +18,13 @@ namespace App {
                 Application.Quit();
             }
 
-            _serverPort = Convert.ToInt32(port);
-            FindObjectOfType<LobbyManager>().StartDedicatedServerInstance(_serverPort);
+            FindObjectOfType<LobbyManager>().StartDedicatedServerInstance(Convert.ToInt32(port));
         }
 
         private string GetArg(string argName) {
-            for (var i = 0; i < args.Length; i++) {
-                if (args[i] == argName && args.Length > i + 1) {
-                    return args[i + 1];
+            for (var i = 0; i < _args.Length; i++) {
+                if (_args[i] == argName && _args.Length > i + 1) {
+                    return _args[i + 1];
                 }
             }
             return null;

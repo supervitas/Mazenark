@@ -6,9 +6,11 @@ namespace UnityStandardAssets.ImageEffects
     [ExecuteInEditMode]
     [RequireComponent (typeof(Camera))]
     [AddComponentMenu ("Image Effects/Displacement/Fisheye")]
-    class Fisheye : PostEffectsBase
+    public class Fisheye : PostEffectsBase
 	{
+        [Range(0.0f, 1.5f)]
         public float strengthX = 0.05f;
+        [Range(0.0f, 1.5f)]
         public float strengthY = 0.05f;
 
         public Shader fishEyeShader = null;

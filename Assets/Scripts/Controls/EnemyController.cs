@@ -14,7 +14,7 @@ namespace Controls {
         [SerializeField]
         private float enemyAgroRange = 15f;
         [SerializeField]
-        private float enemyAngleVisibility = 30f;
+        private float enemyAngleVisibility = 60f;
 
         public readonly List <Vector3> Points = new List<Vector3>();
         private int _destPoint = 0;
@@ -43,7 +43,6 @@ namespace Controls {
 
         public void SetIdleBehaivor() {
             animator.SetBool("Idle", true);
-            _agent.autoBraking = true;
         }
 
         public void GotoNextPoint() {
@@ -126,7 +125,7 @@ namespace Controls {
                 }
                 if (_agent.remainingDistance <= 2.5f) {
                     animator.SetBool("Attack", true);
-                    Fire(transform.forward); // todo colider to enemy. No raycast
+//                    Fire(transform.forward); // todo colider to enemy. No raycast
                 }
             }
 

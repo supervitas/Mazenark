@@ -9,14 +9,6 @@ namespace Controls {
             foreach (var player in GameObject.FindGameObjectsWithTag("Player")) {
                 PlayersTransform.Add(player.transform);
             }
-            Invoke("FillPlayers", 4);
         }
-
-        private void FillPlayers() {
-            foreach (var player in GameObject.FindGameObjectsWithTag("Player")) {
-                PlayersTransform.Add(player.transform);
-            }
-        }
-
     }
 }

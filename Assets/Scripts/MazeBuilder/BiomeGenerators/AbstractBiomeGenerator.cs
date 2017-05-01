@@ -11,8 +11,6 @@ namespace MazeBuilder.BiomeGenerators {
 	    #region BiomeSpawnChances
 	    [Header("Biome Spawn Chances")]
 	    [SerializeField]
-	    [Range(0, 100f)] protected float TorchSpawnChance = 25f;
-	    [SerializeField]
 	    [Range(0, 100f)] protected float FloorEnviromentSpawnChance = 25f;
 	    #endregion
 
@@ -27,12 +25,6 @@ namespace MazeBuilder.BiomeGenerators {
 
 	    [Header("Biome Floors Enviroment")]
 	    public GameObject[] FloorsEnviroment;
-	    #endregion
-
-	    #region BiomeLights
-	    [Header("Biome Lighting Objetcs")]
-	    public ParticleSystem NightParticles;
-	    public GameObject Torch;
 	    #endregion
 
 	    protected List<Maze.TileCollection> BiomesCollecton;
@@ -86,29 +78,6 @@ namespace MazeBuilder.BiomeGenerators {
 	    }
 
 
-	    protected void PlaceTorches(Biome biomeType) {
-	        var tiles = from tile in GetTilesByTypeAndBiome(biomeType, Tile.Variant.Wall)
-	            let shouldPlace = TorchSpawnChance >= Random.Range(1, 100)
-	            where shouldPlace
-	            select tile;
-
-	        foreach (var tile in tiles) {
-	            PlaceTorch(tile);
-	        }
-	    }
-
-	    protected void PlaceTorch(Tile tile) {
-	        var sideOffset = Random.Range(0, 2) > 0 ? -0.53f : 0.53f;
-	        var rotation = sideOffset > 0 ? Quaternion.Euler(0, 90, 0) : Quaternion.Euler(0, 270, 0);
-
-	        var position = new Vector3 {
-	            x = Utils.TransformToWorldCoordinate(tile.Position.X - Random.Range(-0.2f, 0.2f)),
-	            y = global::Constants.Maze.TILE_SIZE - 3.5f,
-	            z = Utils.TransformToWorldCoordinate(tile.Position.Y - sideOffset)
-	        };
-
-	        Instantiate(Torch, position, rotation);
-	    }
 
 
 	    private void GeneralSubscribtion() {

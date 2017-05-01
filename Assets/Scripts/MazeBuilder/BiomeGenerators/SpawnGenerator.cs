@@ -32,7 +32,7 @@ namespace MazeBuilder.BiomeGenerators {
 
 
         public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
-            Instantiate(Spawn, Utils.GetDefaultPositionVector(coordinate, 0.1f), Quaternion.identity);
+            Instantiate(Spawn, Utils.GetDefaultPositionVector(coordinate, 0.1f), Edge.GetRandomEdgeRotation().Rotation);
         }
     }
 }
