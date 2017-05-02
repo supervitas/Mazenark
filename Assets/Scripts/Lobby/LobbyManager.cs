@@ -59,6 +59,8 @@ namespace Lobby{
 
         private IEnumerator<Vector3> _spawnGenerator;
 
+        public int InstanceId;
+
         void Start() {
             SSingleton = this;
             _lobbyHooks = GetComponent<LobbyHook>();
@@ -238,7 +240,8 @@ namespace Lobby{
 
         }
 
-        public void StartDedicatedServerInstance(int port) {
+        public void StartDedicatedServerInstance(int port, int instanceId) {
+            InstanceId = instanceId;
             networkPort = port;
             StartServer();
             Debug.Log(string.Format("instance started  {0}:{1}", networkAddress, networkPort));

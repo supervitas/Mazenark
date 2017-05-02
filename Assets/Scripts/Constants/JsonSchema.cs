@@ -3,4 +3,7 @@
         public int port;
     }
 
+    public class Room {
+        public int room;
+    }
 }

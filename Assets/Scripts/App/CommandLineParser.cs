@@ -18,7 +18,13 @@ namespace App {
                 Application.Quit();
             }
 
-            FindObjectOfType<LobbyManager>().StartDedicatedServerInstance(Convert.ToInt32(port));
+            var instanceId = GetArg("-instanceid");
+            if (instanceId == null) {
+                Debug.LogError("No instanceid provided");
+                Application.Quit();
+            }
+
+            FindObjectOfType<LobbyManager>().StartDedicatedServerInstance(Convert.ToInt32(port), Convert.ToInt32(instanceId));
         }
 
         private string GetArg(string argName) {
