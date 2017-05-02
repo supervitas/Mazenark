@@ -18,23 +18,24 @@ namespace App {
             _instanceId = FindObjectOfType<LobbyManager>().InstanceId;
         }
 
-        public UnityWebRequest GetRequest(string url, Action<string> callback) {
+        public UnityWebRequest GetRequest(string url, Action<string> callback, Action<string> error) {
             var request = UnityWebRequest.Get(url);
-            StartCoroutine(WaitForRequest(request, callback));
+            StartCoroutine(WaitForRequest(request, callback, error));
             return request;
         }
 
         public void PlayerLeftFromRoom() {
             var request = UnityWebRequest.Post(NetworkConstants.GamePlayerLeft,
                 JsonUtility.ToJson(new Room {room = _instanceId}));
-            StartCoroutine(WaitForRequest(request, null));
+            request.uploadHandler.contentType= "application/json";
+            StartCoroutine(WaitForRequest(request, null, null));
         }
 
-        private IEnumerator WaitForRequest(UnityWebRequest www, Action<string> callback) {
+        private IEnumerator WaitForRequest(UnityWebRequest www, Action<string> callback,  Action<string> error) {
             yield return www.Send();
 
-            if(www.isError) {
-                Debug.LogError(www.error);
+            if(www.isError && error!= null) {
+                error(www.error);
             } else {
                 if (callback != null) {
                     callback(www.downloadHandler.text);
