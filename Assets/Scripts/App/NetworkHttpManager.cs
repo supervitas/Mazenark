@@ -27,8 +27,11 @@ namespace App {
         public void PlayerLeftFromRoom() {
             var request = UnityWebRequest.Post(NetworkConstants.GamePlayerLeft,
                 JsonUtility.ToJson(new Room {room = _instanceId}));
-            request.uploadHandler.contentType= "application/json";
+            UploadHandler customUploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(JsonUtility.ToJson(new Room {room = _instanceId})));
+            customUploadHandler.contentType = "application/json";
+            request.uploadHandler = customUploadHandler;
             StartCoroutine(WaitForRequest(request, null, null));
+
         }
 
         private IEnumerator WaitForRequest(UnityWebRequest www, Action<string> callback,  Action<string> error) {

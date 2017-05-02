@@ -1,10 +1,12 @@
 ﻿namespace Constants {
-    public static class NetworkConstants {
-        public const string GameRoomAdress = "localhost";
-//        public const string ServerApiUrl = "http://localhost:9000";
+    public class NetworkConstants {
+        public static string GameRoomAdress = "localhost";
+        public static string ServerApiUrl = "http://localhost:9000";
 
-        public const string GameResultUrl = "http://localhost:9000/api/gameresult";
-        public const string GameGetRoom = "http://localhost:9000/api/getRoom";
-        public const string GamePlayerLeft = "http://localhost:9000/api/room/playerLeft";
+        public static string GameResultUrl = string.Format("{0}/api/gameresult", ServerApiUrl);
+        public static string GameGetRoom = string.Format("{0}/api/getRoom", ServerApiUrl);
+        public static string GamePlayerLeft = string.Format("{0}/api/room/playerLeft", ServerApiUrl);
+        public static string GameStarted = string.Format("{0}/api/gameStarted", ServerApiUrl);
+        public static string GameEnded = string.Format("{0}/api/gameEnded", ServerApiUrl);
     }
 }
