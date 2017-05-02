@@ -9,6 +9,6 @@
     }
 
     public class Error {
-        public int error;
+        public string error;
     }
 }

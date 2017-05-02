@@ -33,9 +33,8 @@ namespace App {
 
         private IEnumerator WaitForRequest(UnityWebRequest www, Action<string> callback,  Action<string> error) {
             yield return www.Send();
-
-            if(www.isError && error!= null) {
-                error(www.error);
+            if(www.responseCode == 400 && error != null) {
+                error(www.downloadHandler.text);
             } else {
                 if (callback != null) {
                     callback(www.downloadHandler.text);

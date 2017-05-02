@@ -15,6 +15,8 @@ namespace Lobby {
         public InputField ipInput;
         public InputField matchNameInput;
 
+        public LobbyInfoPanel infoPanel;
+
         public void OnEnable() {
             lobbyManager.topPanel.ToggleVisibility(true);
 
@@ -91,10 +93,8 @@ namespace Lobby {
             };
 
             Action<string> errorCb = error => { // callback which takes result http body as a param
-                lobbyManager.ChangeTo(lobbyPanel);
                 var errorJson = JsonUtility.FromJson<Error>(error);
-                Debug.Log(errorJson.error);
-                // todo should be popup with error
+                infoPanel.Display(errorJson.error, "Close", null);
 
             };
             NetworkHttpManager.Instance.GetRequest(NetworkConstants.GameGetRoom, callback, errorCb);
