@@ -36,6 +36,10 @@ namespace App {
 
         private IEnumerator WaitForRequest(UnityWebRequest www, Action<string> callback,  Action<string> error) {
             yield return www.Send();
+            if (www.error != null && error != null) {
+                error(JsonUtility.ToJson(new Error {error = "Network error, try again latter"}));
+                yield break;
+            }
             if(www.responseCode == 400 && error != null) {
                 error(www.downloadHandler.text);
             } else {

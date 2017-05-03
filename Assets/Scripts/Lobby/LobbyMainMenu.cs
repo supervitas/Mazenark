@@ -95,7 +95,6 @@ namespace Lobby {
             Action<string> errorCb = error => { // callback which takes result http body as a param
                 var errorJson = JsonUtility.FromJson<Error>(error);
                 infoPanel.Display(errorJson.error, "Close", null);
-
             };
             NetworkHttpManager.Instance.GetRequest(NetworkConstants.GameGetRoom, callback, errorCb);
         }

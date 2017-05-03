@@ -60,6 +60,7 @@ namespace Controls {
 
             animator.SetBool("isDead", true);
             _agent.enabled = false;
+            GetComponent<Collider>().enabled = false;
         }
 
         private bool CheckPlayersNear() {
