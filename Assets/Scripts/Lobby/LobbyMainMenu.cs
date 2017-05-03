@@ -96,7 +96,7 @@ namespace Lobby {
                 var errorJson = JsonUtility.FromJson<Error>(error);
                 infoPanel.Display(errorJson.error, "Close", null);
             };
-            NetworkHttpManager.Instance.GetRequest(NetworkConstants.GameGetRoom, callback, errorCb);
+            NetworkHttpManager.Instance.GetRequest(NetworkConstants.RoomGetRoom, callback, errorCb);
         }
 
         void onEndEditIP(string text) {

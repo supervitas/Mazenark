@@ -290,6 +290,8 @@ namespace Lobby{
         //we want to disable the button JOIN if we don't have enough player
         //But OnLobbyClientConnect isn't called on hosting player. So we override the lobbyPlayer creation
         public override GameObject OnLobbyServerCreateLobbyPlayer(NetworkConnection conn, short playerControllerId) {
+            NetworkHttpManager.Instance.RoomJoinedOrLeaved(true);
+
             var obj = Instantiate(lobbyPlayerPrefab.gameObject);
 
             LobbyPlayer newPlayer = obj.GetComponent<LobbyPlayer>();
@@ -319,6 +321,9 @@ namespace Lobby{
         }
 
         public override void OnLobbyServerDisconnect(NetworkConnection conn) {
+            NetworkHttpManager.Instance.RoomJoinedOrLeaved(false);
+            FindObjectOfType<LobbyGameManager>().PlayerLefted();
+
             foreach (var t in lobbySlots) {
                 LobbyPlayer p = t as LobbyPlayer;
 
@@ -362,6 +367,7 @@ namespace Lobby{
 			        allready &= t.readyToBegin;
 			}
             if (allready) {
+                NetworkHttpManager.Instance.GameStartedOrEnded(true);
                 GetComponent<LobbyGameManager>().SetPlayersCount((byte) lobbySlots.Count(player => player != null));
                 StartCoroutine(ServerCountdownCoroutine());
             }

@@ -24,14 +24,24 @@ namespace App {
             return request;
         }
 
-        public void PlayerLeftFromRoom() {
-            var request = UnityWebRequest.Post(NetworkConstants.GamePlayerLeft,
-                JsonUtility.ToJson(new Room {room = _instanceId}));
-            UploadHandler customUploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(JsonUtility.ToJson(new Room {room = _instanceId})));
+        public void RoomJoinedOrLeaved(bool joined) {
+            var url = joined ? NetworkConstants.RoomPlayerJoined : NetworkConstants.RoomPlayerLeft;
+            var request = UnityWebRequest.Post(url, "");
+            UploadHandler customUploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(
+                JsonUtility.ToJson(new Room {room = _instanceId})));
             customUploadHandler.contentType = "application/json";
             request.uploadHandler = customUploadHandler;
             StartCoroutine(WaitForRequest(request, null, null));
+        }
 
+        public void GameStartedOrEnded(bool started) {
+            var url = started ? NetworkConstants.RoomGameStarted : NetworkConstants.RoomGameEnded;
+            var request = UnityWebRequest.Post(url, "");
+            UploadHandler customUploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(
+                JsonUtility.ToJson(new Room {room = _instanceId})));
+            customUploadHandler.contentType = "application/json";
+            request.uploadHandler = customUploadHandler;
+            StartCoroutine(WaitForRequest(request, null, null));
         }
 
         private IEnumerator WaitForRequest(UnityWebRequest www, Action<string> callback,  Action<string> error) {

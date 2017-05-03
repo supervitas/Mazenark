@@ -14,15 +14,11 @@ namespace Lobby {
 
         public void PlayerLefted() {
             _playersCount--;
-            NetworkHttpManager.Instance.PlayerLeftFromRoom();
-            if (GameShouldFinish()) {
-                // send game result.
-                GetComponent<LobbyManager>().StopServer();
-                var networkManager = NetworkHttpManager.Instance;
-//                var result = networkManager.CreateRequest(NetworkConstants.GameResultUrl);
+            if (!GameShouldFinish()) return;
 
-                GetComponent<LobbyManager>().StartServer();
-            }
+            GetComponent<LobbyManager>().StopServer();
+            NetworkHttpManager.Instance.GameStartedOrEnded(false);
+            GetComponent<LobbyManager>().StartServer(); // restart server
         }
 
         private bool GameShouldFinish() {

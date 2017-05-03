@@ -343,9 +343,6 @@ namespace Lobby {
 
         //Cleanup thing when get destroy (which happen when client kick or disconnect)
         public void OnDestroy() {
-            if (isServer) {
-                FindObjectOfType<LobbyGameManager>().PlayerLefted();
-            }
             if (LobbyPlayerList._instance) {
                 LobbyPlayerList._instance.RemovePlayer(this);
                 if (LobbyManager.SSingleton != null) LobbyManager.SSingleton.OnPlayersNumberModified(-1);
