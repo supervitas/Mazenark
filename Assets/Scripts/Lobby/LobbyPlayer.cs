@@ -284,12 +284,6 @@ namespace Lobby {
 
             TargetCreateMaze(connectionToClient, maze.Width, maze.Height); // create maze
 
-            var spawns = from biome in mazeInstance.Maze.Biomes
-                where biome.biome == Biome.Spawn
-                select biome;
-
-            Debug.Log(spawns.Count());
-
             var counter = 0;
             for (var x = 0; x < mazeInstance.Height; x++) {
                 for (var y = 0; y < mazeInstance.Width; y++) {
