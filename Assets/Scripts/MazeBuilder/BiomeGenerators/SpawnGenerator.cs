@@ -19,7 +19,7 @@ namespace MazeBuilder.BiomeGenerators {
             var spawns = from biome in BiomesCollecton
                 where biome.biome == Biome.Spawn
                 select biome;
-            Debug.Log(spawns.Count());
+
             foreach (var spawn in spawns) {
                 Instantiate(SpawnEffect, new Vector3(
                     Utils.TransformToWorldCoordinate(spawn.tiles[spawn.tiles.Count / 2].Position.X),
