@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using App;
-using MazeBuilder;
+using Constants;
 using MazeBuilder.Utility;
-using Prototype.NetworkLobby;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Networking.Match;
@@ -290,7 +289,7 @@ namespace Lobby{
         //we want to disable the button JOIN if we don't have enough player
         //But OnLobbyClientConnect isn't called on hosting player. So we override the lobbyPlayer creation
         public override GameObject OnLobbyServerCreateLobbyPlayer(NetworkConnection conn, short playerControllerId) {
-            NetworkHttpManager.Instance.RoomJoinedOrLeaved(true);
+            NetworkHttpManager.Instance.SendRoomUpdate(NetworkConstants.RoomPlayerJoined);
 
             var obj = Instantiate(lobbyPlayerPrefab.gameObject);
 
@@ -321,7 +320,7 @@ namespace Lobby{
         }
 
         public override void OnLobbyServerDisconnect(NetworkConnection conn) {
-            NetworkHttpManager.Instance.RoomJoinedOrLeaved(false);
+            NetworkHttpManager.Instance.SendRoomUpdate(NetworkConstants.RoomPlayerLeft);
             FindObjectOfType<LobbyGameManager>().PlayerLefted();
 
             foreach (var t in lobbySlots) {
@@ -367,7 +366,7 @@ namespace Lobby{
 			        allready &= t.readyToBegin;
 			}
             if (allready) {
-                NetworkHttpManager.Instance.GameStartedOrEnded(true);
+                NetworkHttpManager.Instance.SendRoomUpdate(NetworkConstants.RoomGameStarted);
                 GetComponent<LobbyGameManager>().SetPlayersCount((byte) lobbySlots.Count(player => player != null));
                 StartCoroutine(ServerCountdownCoroutine());
             }

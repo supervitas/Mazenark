@@ -24,18 +24,7 @@ namespace App {
             return request;
         }
 
-        public void RoomJoinedOrLeaved(bool joined) {
-            var url = joined ? NetworkConstants.RoomPlayerJoined : NetworkConstants.RoomPlayerLeft;
-            var request = UnityWebRequest.Post(url, "");
-            UploadHandler customUploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(
-                JsonUtility.ToJson(new Room {room = _instanceId})));
-            customUploadHandler.contentType = "application/json";
-            request.uploadHandler = customUploadHandler;
-            StartCoroutine(WaitForRequest(request, null, null));
-        }
-
-        public void GameStartedOrEnded(bool started) {
-            var url = started ? NetworkConstants.RoomGameStarted : NetworkConstants.RoomGameEnded;
+        public void SendRoomUpdate(string url) {
             var request = UnityWebRequest.Post(url, "");
             UploadHandler customUploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(
                 JsonUtility.ToJson(new Room {room = _instanceId})));

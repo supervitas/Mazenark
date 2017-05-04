@@ -17,7 +17,7 @@ namespace Lobby {
             if (!GameShouldFinish()) return;
 
             GetComponent<LobbyManager>().StopServer();
-            NetworkHttpManager.Instance.GameStartedOrEnded(false);
+            NetworkHttpManager.Instance.SendRoomUpdate(NetworkConstants.RoomGameEnded);
             GetComponent<LobbyManager>().StartServer(); // restart server
         }
 
