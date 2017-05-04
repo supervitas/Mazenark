@@ -129,6 +129,7 @@ namespace MazeBuilder.BiomeStrategies {
 			// Down-Right
 			biomeIDCounter++;
 			PlantSpawn(new Room(maze.Width - SPAWN_LENGTH - 1, maze.Height - SPAWN_LENGTH - 1, maze.Width - 1 - 1, maze.Height - 1 - 1));
+
 		}
 
 
@@ -147,7 +148,7 @@ namespace MazeBuilder.BiomeStrategies {
 				}
 
 				ChangeMazeTileBiome(randomPoint, randomBiome, biomeIDCounter);
-				maze[randomPoint].BiomeID = biomeIDCounter++;
+				maze[randomPoint].BiomeID = ++biomeIDCounter;
 			}
 		}
 
