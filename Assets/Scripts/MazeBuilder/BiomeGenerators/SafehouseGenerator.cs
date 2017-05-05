@@ -16,7 +16,7 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
 
-        [System.Obsolete("Safehouse spawned by App.InGameServerSpawner")]
+        [System.Obsolete("Safehouse spawned by App.ServerSpawner")]
         private void PlaceSafeHouse() {
             Instantiate(Safehouse,
                 Utils.GetDefaultPositionVector(new Coordinate(AppManager.Instance.MazeInstance.Height / 2,

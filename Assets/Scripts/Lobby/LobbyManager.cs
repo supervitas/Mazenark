@@ -206,7 +206,7 @@ namespace Lobby{
 
         public void StartSinglePlayer() {
             AppManager.Instance.CommonSetUp();
-            AppManager.Instance.MazeSize.GenerateRndSize();
+            AppManager.Instance.MazeSize.GenerateRandomSize();
             AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(AppManager.Instance.MazeSize.X, AppManager.Instance.MazeSize.Y);
 
             _spawnGenerator = GetSpawnPosition();
@@ -231,7 +231,7 @@ namespace Lobby{
             SetServerInfo("Hosting", networkAddress);
 
             AppManager.Instance.CommonSetUp();
-            AppManager.Instance.MazeSize.GenerateRndSize();
+            AppManager.Instance.MazeSize.GenerateRandomSize();
             AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(AppManager.Instance.MazeSize.X, AppManager.Instance.MazeSize.Y);
 
             _spawnGenerator = GetSpawnPosition();
@@ -251,7 +251,7 @@ namespace Lobby{
             base.OnStartServer();
 
             AppManager.Instance.CommonSetUp();
-            AppManager.Instance.MazeSize.GenerateRndSize();
+            AppManager.Instance.MazeSize.GenerateRandomSize();
             AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(AppManager.Instance.MazeSize.X, AppManager.Instance.MazeSize.Y);
 
             _spawnGenerator = GetSpawnPosition();

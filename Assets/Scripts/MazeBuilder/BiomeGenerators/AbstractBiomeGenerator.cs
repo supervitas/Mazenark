@@ -37,8 +37,8 @@ namespace MazeBuilder.BiomeGenerators {
 	    protected void Awake() {
 	        Eventhub = AppManager.Instance.EventHub;
 	        BiomesCollecton = AppManager.Instance.MazeInstance.Maze.Biomes;
-	        GeneralSubscribtion();
 	        AddFloorsToRandomGenerator();
+		    Eventhub.Subscribe("mazedrawer:placement_finished", StartPostPlacement, this);
 	    }
 
 	    protected void OnDestroy() {
@@ -52,6 +52,7 @@ namespace MazeBuilder.BiomeGenerators {
 	            position.z += Random.Range(-0.5f, 0.5f);
 	            AppManager.Instance.InstantiateSOC((GameObject) BiomeFloorsEnviroment.GetRandom(typeof(GameObject)),
 	                position, Quaternion.identity);
+		        Debug.Log(Quaternion.identity);
 	        }
 
 	        AppManager.Instance.InstantiateSOC(Floor, Utils.GetDefaultPositionVector(coordinate),
@@ -59,8 +60,6 @@ namespace MazeBuilder.BiomeGenerators {
 	    }
 
 	    protected virtual void StartPostPlacement(object sender, EventArguments e) {}
-	    protected virtual void OnNight(object sender, EventArguments args) {}
-	    protected virtual void OnDay(object sender, EventArguments args) {}
 
 	    public abstract void CreateWall(Biome biome, Coordinate coordinate, Maze maze);
 
@@ -75,15 +74,6 @@ namespace MazeBuilder.BiomeGenerators {
 	            from tile in biome.tiles
 	            where tile.Type == tileType
 	            select tile;
-	    }
-
-
-
-
-	    private void GeneralSubscribtion() {
-	        Eventhub.Subscribe("mazedrawer:placement_finished", StartPostPlacement, this);
-	        Eventhub.Subscribe("TOD:nightStarted", OnNight, this);
-            Eventhub.Subscribe("TOD:dayStarted", OnDay, this);
 	    }
 
 	    protected void AddFloorsToRandomGenerator() {

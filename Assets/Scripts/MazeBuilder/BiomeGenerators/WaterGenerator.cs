@@ -23,8 +23,6 @@ namespace MazeBuilder.BiomeGenerators {
             _instancedRain.GetComponent<EffectsNearPlayer>().StopEffect();
         }
 
-
-
         private void ToggleBiomeWeather(object sender, EventArguments e) {
             if (e.BiomeName == "Water Biome") {
                 _instancedRain.GetComponent<EffectsNearPlayer>().StartEffect(e.Transform);
@@ -32,7 +30,6 @@ namespace MazeBuilder.BiomeGenerators {
                 _instancedRain.GetComponent<EffectsNearPlayer>().StopEffect();
             }
         }
-
 
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
             AppManager.Instance.InstantiateSOC(FlatWall, Utils.GetDefaultPositionVector(coordinate), Quaternion.identity);
