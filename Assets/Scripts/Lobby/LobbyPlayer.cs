@@ -135,6 +135,8 @@ namespace Lobby {
                 CmdNameChanged("Player" + (LobbyPlayerList._instance.playerListContentTransform.childCount-1));
             LocalPlayerName = playerName;
 
+            AppManager.Instance.PlayerName = playerName;
+
             //we switch from simple name display to name input
             colorButton.interactable = true;
             nameInput.interactable = true;

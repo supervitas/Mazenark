@@ -14,7 +14,7 @@ namespace Controls {
         private NavMeshAgent _agent;
 
         [SerializeField]
-        private float enemyAgroRange = 15f;
+        private float enemyAgroRange = 20f;
         [SerializeField]
         private float enemyAngleVisibility = 60f;
 
@@ -39,7 +39,7 @@ namespace Controls {
 
         private void Start() {
             if (!isServer) return;
-            _playersTransform = FindObjectOfType<LobbyGameManager>().PlayersTransforms.Values.ToList();
+            _playersTransform = FindObjectOfType<LobbyGameManager>().PlayersTransforms;
             InvokeRepeating("CheckPlayersNear", 0, 0.5f);
         }
 

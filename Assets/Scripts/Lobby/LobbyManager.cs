@@ -343,7 +343,7 @@ namespace Lobby{
             gamePlayer.transform.position = _spawnGenerator.Current;
             _spawnGenerator.MoveNext();
 
-            GetComponent<LobbyGameManager>().PlayersTransforms.Add(gamePlayer.name, gamePlayer.transform);
+            GetComponent<LobbyGameManager>().PlayersTransforms.Add(gamePlayer.transform);
 
             return true;
         }

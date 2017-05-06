@@ -8,7 +8,7 @@ using Constants;
 namespace Lobby {
     public class LobbyGameManager : MonoBehaviour {
         private byte _playersCount;
-        public Dictionary<string, Transform> PlayersTransforms = new Dictionary<string, Transform>();
+        public List<Transform> PlayersTransforms = new List <Transform>();
 
         public void SetPlayersCount(byte players) {
             _playersCount = players;
@@ -17,6 +17,8 @@ namespace Lobby {
         public void PlayerLefted() {
             _playersCount--;
             if (!GameShouldFinish()) return;
+
+            PlayersTransforms.Clear();
 
             GetComponent<LobbyManager>().StopServer();
             NetworkHttpManager.Instance.SendRoomUpdate(NetworkConstants.RoomGameEnded);

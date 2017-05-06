@@ -99,7 +99,7 @@ namespace Controls {
 
             castTime = Fireball.GetComponent<Fireball>().CastTime; // should be interface of weapon.
             _uiSpellCast = FindObjectOfType<SpellCast>();
-
+            GetComponentInChildren<TextMesh>().text = App.AppManager.Instance.PlayerName;
         }
 
 

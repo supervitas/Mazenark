@@ -39,7 +39,7 @@ namespace Controls {
         }
 
         private void PlayerUpdate() {
-            if (transform.position.y < -3.5) {
+            if (transform.position.y < -2.5) {
                 TakeDamage(100);
             }
         }

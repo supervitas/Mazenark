@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using App.EventSystem;
+﻿using App.EventSystem;
 using MazeBuilder.Utility;
 using UnityEngine;
 
@@ -9,6 +8,8 @@ namespace App {
         public MazeSizeGenerator MazeSize { get; private set; }
         public MazeBuilder.MazeBuilder MazeInstance { get; set; }
         public Publisher EventHub { get; private set; }
+
+        public string PlayerName;
 
         private Camera _cam;
         //Singletone which starts firstly then other scripts;
