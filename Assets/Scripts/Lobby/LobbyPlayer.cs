@@ -30,6 +30,8 @@ namespace Lobby {
         [SyncVar(hook = "OnMyColor")]
         public Color playerColor = Color.white;
 
+        public string LocalPlayerName = null;
+
         public Color OddRowColor = new Color(250.0f / 255.0f, 250.0f / 255.0f, 250.0f / 255.0f, 1.0f);
         public Color EvenRowColor = new Color(180.0f / 255.0f, 180.0f / 255.0f, 180.0f / 255.0f, 1.0f);
 
@@ -131,6 +133,7 @@ namespace Lobby {
             //have to use child count of player prefab already setup as "this.slot" is not set yet
             if (playerName == "")
                 CmdNameChanged("Player" + (LobbyPlayerList._instance.playerListContentTransform.childCount-1));
+            LocalPlayerName = playerName;
 
             //we switch from simple name display to name input
             colorButton.interactable = true;

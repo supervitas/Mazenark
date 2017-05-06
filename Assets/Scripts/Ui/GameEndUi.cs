@@ -7,10 +7,16 @@ using UnityEngine.UI;
 namespace Ui {
     public class GameEndUi : MonoBehaviour {
         public Canvas CanvasObject;
+        private string localPlayerName;
 
         private void Start () {
             App.AppManager.Instance.EventHub.Subscribe("maze:levelCompleted", OnLevelComplete, this);
             App.AppManager.Instance.EventHub.Subscribe("PlayerDied", OnPlayerDead, this);
+            foreach (var player in FindObjectsOfType<LobbyPlayer>()) {
+                if (player.LocalPlayerName != null) {
+                    localPlayerName = player.playerName;
+                }
+            }
         }
 
         private void OnDestroy() {
@@ -18,7 +24,7 @@ namespace Ui {
         }
 
         private void OnPlayerDead(object sender, EventArguments args) {
-            Debug.Log(GetComponent<LobbyPlayer>().playerName);
+            if(args.Message != localPlayerName) return;
             CanvasObject.enabled = true;
             Text t = transform.GetChild(0).GetChild(0).GetComponent<Text>();
             t.text = "You Died";
@@ -26,7 +32,7 @@ namespace Ui {
         }
 
         private void OnLevelComplete(object sender, EventArguments args) {
-//            if (args.Message == )
+            if (args.Message != localPlayerName) return;
             CanvasObject.enabled = true;
             Text t = transform.GetChild(0).GetChild(0).GetComponent<Text>();
             t.text = "Success! Take this award";
