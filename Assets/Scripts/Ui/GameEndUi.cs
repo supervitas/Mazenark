@@ -1,35 +1,36 @@
 ﻿using App.EventSystem;
+using Lobby;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+
 using UnityEngine.UI;
 
 namespace Ui {
     public class GameEndUi : MonoBehaviour {
         public Canvas CanvasObject;
-        // Use this for initialization
 
-        void Start () {
+        private void Start () {
             App.AppManager.Instance.EventHub.Subscribe("maze:levelCompleted", OnLevelComplete, this);
-            App.AppManager.Instance.EventHub.Subscribe("PlayerDead", OnPlayerDead, this);
-
+            App.AppManager.Instance.EventHub.Subscribe("PlayerDied", OnPlayerDead, this);
         }
 
         private void OnDestroy() {
             App.AppManager.Instance.EventHub.UnsubscribeFromAll(this);
         }
 
-        private void OnLevelComplete(object sender, EventArguments args) {
+        private void OnPlayerDead(object sender, EventArguments args) {
+            Debug.Log(GetComponent<LobbyPlayer>().playerName);
             CanvasObject.enabled = true;
             Text t = transform.GetChild(0).GetChild(0).GetComponent<Text>();
-            t.text = string.Format("{0} Reached Safehouse", args.Message);
-            Invoke("TurnOffCanvas", 3);
-//            SceneManager. (Application.loadedLevel);
+            t.text = "You Died";
+            t.color = Color.red;
         }
 
-        private void OnPlayerDead(object sender, EventArguments args) {
+        private void OnLevelComplete(object sender, EventArguments args) {
+//            if (args.Message == )
             CanvasObject.enabled = true;
             Text t = transform.GetChild(0).GetChild(0).GetComponent<Text>();
-            t.text = "You Failed";
+            t.text = "Success! Take this award";
+            t.color = Color.green;
         }
 
         private void TurnOffCanvas() {
