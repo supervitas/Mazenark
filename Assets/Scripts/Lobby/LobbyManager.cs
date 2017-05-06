@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using App;
 using Constants;
+using Controls;
 using MazeBuilder.Utility;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -342,6 +343,7 @@ namespace Lobby{
             gamePlayer.transform.position = _spawnGenerator.Current;
             _spawnGenerator.MoveNext();
 
+            GetComponent<LobbyGameManager>().PlayersTransforms.Add(gamePlayer.name, gamePlayer.transform);
 
             return true;
         }

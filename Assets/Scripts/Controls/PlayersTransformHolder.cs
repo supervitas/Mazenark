@@ -4,11 +4,5 @@ using UnityEngine;
 namespace Controls {
     public class PlayersTransformHolder : MonoBehaviour {
         public readonly List<Transform> PlayersTransform = new List<Transform>();
-
-        public void Start() {
-            foreach (var player in GameObject.FindGameObjectsWithTag("Player")) {
-                PlayersTransform.Add(player.transform);
-            }
-        }
     }
 }

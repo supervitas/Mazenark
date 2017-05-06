@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Lobby;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Networking;
@@ -36,9 +38,9 @@ namespace Controls {
 
 
         private void Start() {
-            if(!isServer) return;
-            _playersTransform = FindObjectOfType<PlayersTransformHolder>().PlayersTransform;
-            InvokeRepeating("CheckPlayersNear", 0, 1);
+            if (!isServer) return;
+            _playersTransform = FindObjectOfType<LobbyGameManager>().PlayersTransforms.Values.ToList();
+            InvokeRepeating("CheckPlayersNear", 0, 0.5f);
         }
 
         public void SetIdleBehaivor() {
