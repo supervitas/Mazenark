@@ -61,6 +61,9 @@ namespace Lobby{
 
         public int InstanceId;
 
+        private AppLocalStorage _storage;
+
+
         void Start() {
             SSingleton = this;
             _lobbyHooks = GetComponent<LobbyHook>();
@@ -70,6 +73,15 @@ namespace Lobby{
             GetComponent<Canvas>().enabled = true;
 
             DontDestroyOnLoad(gameObject);
+
+            _storage = FindObjectOfType<AppLocalStorage>();
+
+            if (!_storage.IsAuthed()) {
+                var playBtn = GameObject.FindGameObjectWithTag("PlayOnline");
+                playBtn.GetComponent<Button>().interactable = false;
+//                playBtn.GetComponent<Button>() = false;
+            }
+
 
             SetServerInfo("Offline", "None");
         }
