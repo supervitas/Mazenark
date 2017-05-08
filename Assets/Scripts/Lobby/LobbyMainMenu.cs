@@ -14,6 +14,8 @@ namespace Lobby {
 
         public InputField ipInput;
         public InputField matchNameInput;
+        public InputField loginInput;
+        public InputField passwordInput;
 
         public LobbyInfoPanel infoPanel;
 
@@ -23,6 +25,50 @@ namespace Lobby {
             ipInput.onEndEdit.RemoveAllListeners();
             ipInput.onEndEdit.AddListener(onEndEditIP);
 
+        }
+
+        public void OnClickRegister() {
+            var login = loginInput.text;
+            var password = passwordInput.text;
+            if(login == "" || password == "") return;
+
+
+            Action<string> callback = result => {
+                var user = JsonUtility.FromJson<User>(result);
+                AppLocalStorage.Instance.SetAuth(user.token);
+                var playBtn = GameObject.FindGameObjectWithTag("PlayOnline");
+                playBtn.GetComponent<Button>().interactable = true;
+            };
+
+            Action<string> errorCallback = error => {
+                var errorJson = JsonUtility.FromJson<Error>(error);
+                infoPanel.Display(errorJson.error, "Close", null);
+            };
+
+            NetworkHttpManager.Instance.AuthRequest(NetworkConstants.Register, new AuthData
+                {password = password, username = login},  callback, errorCallback);
+        }
+
+        public void OnClickLogin() {
+            var login = loginInput.text;
+            var password = passwordInput.text;
+            if(login == "" || password == "") return;
+
+
+            Action<string> callback = result => {
+                var user = JsonUtility.FromJson<User>(result);
+                AppLocalStorage.Instance.SetAuth(user.token);
+                var playBtn = GameObject.FindGameObjectWithTag("PlayOnline");
+                playBtn.GetComponent<Button>().interactable = true;
+            };
+
+            Action<string> errorCb = error => { // callback which takes result http body as a param
+                var errorJson = JsonUtility.FromJson<Error>(error);
+                infoPanel.Display(errorJson.error, "Close", null);
+            };
+
+            NetworkHttpManager.Instance.AuthRequest(NetworkConstants.Login, new AuthData
+                {password = password, username = login},  callback, errorCb);
         }
 
         public void OnClickSinglePlayer() {

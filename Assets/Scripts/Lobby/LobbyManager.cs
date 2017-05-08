@@ -79,7 +79,6 @@ namespace Lobby{
             if (!_storage.IsAuthed()) {
                 var playBtn = GameObject.FindGameObjectWithTag("PlayOnline");
                 playBtn.GetComponent<Button>().interactable = false;
-//                playBtn.GetComponent<Button>() = false;
             }
 
 
@@ -356,7 +355,7 @@ namespace Lobby{
             _spawnGenerator.MoveNext();
 
             GetComponent<LobbyGameManager>().PlayersTransforms.Add(gamePlayer.transform);
-
+            gamePlayer.GetComponentInChildren<TextMesh>().text = gamePlayer.name;
             return true;
         }
 
