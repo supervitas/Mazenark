@@ -21,5 +21,10 @@
         public string username;
         public int id;
         public string token;
+        public int score;
+    }
+
+    public class Token {
+        public string token;
     }
 }

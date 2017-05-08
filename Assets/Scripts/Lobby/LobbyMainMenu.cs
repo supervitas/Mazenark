@@ -1,6 +1,7 @@
 using System;
 using App;
 using Constants;
+using Ui;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -35,9 +36,8 @@ namespace Lobby {
 
             Action<string> callback = result => {
                 var user = JsonUtility.FromJson<User>(result);
-                AppLocalStorage.Instance.SetAuth(user.token);
-                var playBtn = GameObject.FindGameObjectWithTag("PlayOnline");
-                playBtn.GetComponent<Button>().interactable = true;
+                AppLocalStorage.Instance.SetUserData(user);
+                AuthUiManager.Instance.ToggleAuthPannel(true);
             };
 
             Action<string> errorCallback = error => {
@@ -54,21 +54,27 @@ namespace Lobby {
             var password = passwordInput.text;
             if(login == "" || password == "") return;
 
-
             Action<string> callback = result => {
                 var user = JsonUtility.FromJson<User>(result);
-                AppLocalStorage.Instance.SetAuth(user.token);
-                var playBtn = GameObject.FindGameObjectWithTag("PlayOnline");
-                playBtn.GetComponent<Button>().interactable = true;
+                user.username = login;
+                AppLocalStorage.Instance.SetUserData(user);
+                AuthUiManager.Instance.ToggleAuthPannel(true);
             };
 
-            Action<string> errorCb = error => { // callback which takes result http body as a param
+            Action<string> errorCb = error => {
                 var errorJson = JsonUtility.FromJson<Error>(error);
                 infoPanel.Display(errorJson.error, "Close", null);
             };
 
             NetworkHttpManager.Instance.AuthRequest(NetworkConstants.Login, new AuthData
                 {password = password, username = login},  callback, errorCb);
+        }
+
+        public void OnClickLogout() {
+            AppLocalStorage.Instance.ResetAuth();
+            AuthUiManager.Instance.ToggleAuthPannel(false);
+
+            NetworkHttpManager.Instance.Logout(new Token {token = AppLocalStorage.Instance.GetToken()});
         }
 
         public void OnClickSinglePlayer() {

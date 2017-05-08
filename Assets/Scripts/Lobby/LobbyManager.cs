@@ -5,6 +5,7 @@ using App;
 using Constants;
 using Controls;
 using MazeBuilder.Utility;
+using Ui;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Networking.Match;
@@ -64,6 +65,7 @@ namespace Lobby{
         private AppLocalStorage _storage;
 
 
+
         void Start() {
             SSingleton = this;
             _lobbyHooks = GetComponent<LobbyHook>();
@@ -76,10 +78,7 @@ namespace Lobby{
 
             _storage = FindObjectOfType<AppLocalStorage>();
 
-            if (!_storage.IsAuthed()) {
-                var playBtn = GameObject.FindGameObjectWithTag("PlayOnline");
-                playBtn.GetComponent<Button>().interactable = false;
-            }
+            AuthUiManager.Instance.ToggleAuthPannel(_storage.IsAuthed());
 
 
             SetServerInfo("Offline", "None");
@@ -306,6 +305,7 @@ namespace Lobby{
             var obj = Instantiate(lobbyPlayerPrefab.gameObject);
 
             LobbyPlayer newPlayer = obj.GetComponent<LobbyPlayer>();
+//            Debug.Log(newPlayer.playerName);
             newPlayer.ToggleJoinButton(numPlayers + 1 >= minPlayers);
 
 

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Constants;
+using UnityEngine;
 
 namespace App {
     public class AppLocalStorage: MonoBehaviour {
@@ -10,12 +11,22 @@ namespace App {
             }
         }
 
+        public string GetToken() {
+            return PlayerPrefs.GetString("token");
+        }
+
         public bool IsAuthed() {
             return PlayerPrefs.GetString("token") != "";
         }
 
-        public void SetAuth(string sessionId) {
-            PlayerPrefs.SetString("token", sessionId);
+        public void SetUserData(User userData) {
+            PlayerPrefs.SetString("token", userData.token);
+            PlayerPrefs.SetString("username", userData.username);
+            PlayerPrefs.SetInt("score", 0);
+        }
+
+        public User GetUserData() {
+            return new User {username = PlayerPrefs.GetString("username"), score = 0};
         }
 
         public void ResetAuth() {

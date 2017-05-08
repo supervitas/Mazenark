@@ -30,7 +30,7 @@ namespace App {
                 JsonUtility.ToJson(new Room {room = _instanceId})));
             customUploadHandler.contentType = "application/json";
             request.uploadHandler = customUploadHandler;
-            StartCoroutine(WaitForRequest(request, null, null));
+            StartCoroutine(WaitForRequest(request));
         }
 
         public UnityWebRequest AuthRequest(string url, AuthData data, Action<string> callback, Action<string> error) {
@@ -43,8 +43,17 @@ namespace App {
             return request;
         }
 
+        public UnityWebRequest Logout(Token data, Action<string> callback = null, Action<string> error = null) {
+            var request = UnityWebRequest.Post(NetworkConstants.Logout, "");
+            UploadHandler customUploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(
+                JsonUtility.ToJson(data)));
+            customUploadHandler.contentType = "application/json";
+            request.uploadHandler = customUploadHandler;
+            StartCoroutine(WaitForRequest(request, callback, error));
+            return request;
+        }
 
-        private IEnumerator WaitForRequest(UnityWebRequest www, Action<string> callback,  Action<string> error) {
+        private IEnumerator WaitForRequest(UnityWebRequest www, Action<string> callback = null,  Action<string> error = null) {
             yield return www.Send();
             if (www.error != null && error != null) {
                 error(JsonUtility.ToJson(new Error {error = "Network error, try again latter"}));
