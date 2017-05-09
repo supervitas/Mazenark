@@ -111,12 +111,18 @@ namespace Lobby {
         }
 
         void SetupLocalPlayer() {
-            nameInput.interactable = true;
             remoteIcone.gameObject.SetActive(false);
             localIcone.gameObject.SetActive(true);
 
-            CmdGetMaze();
+            var playerNick = PlayerPrefs.GetString("username");
+            if (playerNick.Length > 12) {
+                playerNick = name.Substring(0, 12);
+                playerNick += "...";
+            }
 
+            CmdNameChanged(playerNick);
+
+            CmdGetMaze();
 
             CheckRemoveButton();
 
@@ -136,7 +142,7 @@ namespace Lobby {
 
             //we switch from simple name display to name input
             colorButton.interactable = true;
-            nameInput.interactable = true;
+//            nameInput.interactable = true;
 
             nameInput.onEndEdit.RemoveAllListeners();
             nameInput.onEndEdit.AddListener(OnNameChanged);

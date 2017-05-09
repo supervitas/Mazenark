@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,6 +65,7 @@ namespace Lobby{
 
         private AppLocalStorage _storage;
 
+        private Dictionary<string, string> _playersTokens = new Dictionary<string, string>();
 
 
         void Start() {
@@ -295,6 +297,7 @@ namespace Lobby{
             addPlayerButton.SetActive(localPlayerCount < maxPlayersPerConnection && _playerNumber < maxPlayers);
         }
 
+
         // ----------------- Server callbacks ------------------
 
         //we want to disable the button JOIN if we don't have enough player
@@ -305,10 +308,11 @@ namespace Lobby{
             var obj = Instantiate(lobbyPlayerPrefab.gameObject);
 
             LobbyPlayer newPlayer = obj.GetComponent<LobbyPlayer>();
+            
 //            Debug.Log(newPlayer.playerName);
             newPlayer.ToggleJoinButton(numPlayers + 1 >= minPlayers);
 
-
+//            KickPlayer(conn);
             foreach (NetworkLobbyPlayer t in lobbySlots) {
                 var p = t as LobbyPlayer;
 
@@ -420,6 +424,7 @@ namespace Lobby{
 
         public override void OnClientConnect(NetworkConnection conn) {
             base.OnClientConnect(conn);
+
 
             infoPanel.gameObject.SetActive(false);
 
