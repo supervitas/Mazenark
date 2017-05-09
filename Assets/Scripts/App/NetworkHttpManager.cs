@@ -53,6 +53,16 @@ namespace App {
             return request;
         }
 
+        public UnityWebRequest GetUserData(string url, Token token, Action<string> callback, Action<string> error) {
+            var request = UnityWebRequest.Post(url, "");
+            UploadHandler customUploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(
+                JsonUtility.ToJson(token)));
+            customUploadHandler.contentType = "application/json";
+            request.uploadHandler = customUploadHandler;
+            StartCoroutine(WaitForRequest(request, callback, error));
+            return request;
+        }
+
         private IEnumerator WaitForRequest(UnityWebRequest www, Action<string> callback = null,  Action<string> error = null) {
             yield return www.Send();
             if (www.error != null && error != null) {

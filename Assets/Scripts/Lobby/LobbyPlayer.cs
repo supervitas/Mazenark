@@ -1,11 +1,16 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using App;
+using Constants;
 using MazeBuilder;
 using Prototype.NetworkLobby;
+using Ui;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using Biome = MazeBuilder.Biome;
+using Maze = MazeBuilder.Maze;
 
 namespace Lobby {
     //Player entry in the lobby. Handle selecting color/setting name & getting ready for the game
@@ -113,8 +118,11 @@ namespace Lobby {
         void SetupLocalPlayer() {
             remoteIcone.gameObject.SetActive(false);
             localIcone.gameObject.SetActive(true);
+            var user = AppLocalStorage.Instance.user;
 
-            var playerNick = PlayerPrefs.GetString("username");
+            CmdCheckToken(user.token);
+
+            var playerNick = user.username;
             if (playerNick.Length > 12) {
                 playerNick = name.Substring(0, 12);
                 playerNick += "...";
@@ -159,8 +167,7 @@ namespace Lobby {
         }
 
         //This enable/disable the remove button depending on if that is the only local player or not
-        public void CheckRemoveButton()
-        {
+        public void CheckRemoveButton() {
             if (!isLocalPlayer)
                 return;
 
@@ -169,10 +176,11 @@ namespace Lobby {
                 localPlayerCount += (p == null || p.playerControllerId == -1) ? 0 : 1;
 
             removePlayerButton.interactable = localPlayerCount > 1;
+
         }
 
         public override void OnClientReady(bool readyState) {
-            if (readyState){
+            if (readyState) {
                 ChangeReadyButtonColor(TransparentColor);
 
                 Text textComponent = readyButton.transform.GetChild(0).GetComponent<Text>();
@@ -280,7 +288,7 @@ namespace Lobby {
         //====== Server Command
 
         [Command]
-        public void CmdGetMaze() {
+        private void CmdGetMaze() {
             if (!isServer)
                 return;
 
@@ -307,6 +315,25 @@ namespace Lobby {
             TargetFillMaze(connectionToClient, biomeList.ToArray()); // send final chunk of data
 
             TargetMazeLoadingFinished(connectionToClient, maze.Width, maze.Height, maze.MaxBiomeID);
+        }
+
+        [TargetRpc]
+        public void TargetDropAuth(NetworkConnection target) {
+            AppLocalStorage.Instance.ResetAuth();
+        }
+
+        [Command]
+        private void CmdCheckToken(string token) {
+            if (!isServer)
+                return;
+
+            Action<string> errorCb = error => {
+                TargetDropAuth(connectionToClient);
+                LobbyManager.SSingleton.KickPlayer(connectionToClient);
+
+            };
+
+            NetworkHttpManager.Instance.GetUserData(NetworkConstants.UserByToken, new Token {token = token}, null, errorCb);
         }
 
         [Command]

@@ -35,6 +35,8 @@ namespace Lobby {
 
 
             Action<string> callback = result => {
+                login = "";
+                password = "";
                 var user = JsonUtility.FromJson<User>(result);
                 AppLocalStorage.Instance.SetUserData(user);
                 AuthUiManager.Instance.ToggleAuthPannel(true);
@@ -55,6 +57,8 @@ namespace Lobby {
             if(login == "" || password == "") return;
 
             Action<string> callback = result => {
+                login = "";
+                password = "";
                 var user = JsonUtility.FromJson<User>(result);
                 user.username = login;
                 AppLocalStorage.Instance.SetUserData(user);

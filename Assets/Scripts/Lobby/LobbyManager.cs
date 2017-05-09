@@ -10,6 +10,7 @@ using Ui;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Networking.Match;
+using UnityEngine.Networking.NetworkSystem;
 using UnityEngine.Networking.Types;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -308,8 +309,7 @@ namespace Lobby{
             var obj = Instantiate(lobbyPlayerPrefab.gameObject);
 
             LobbyPlayer newPlayer = obj.GetComponent<LobbyPlayer>();
-            
-//            Debug.Log(newPlayer.playerName);
+
             newPlayer.ToggleJoinButton(numPlayers + 1 >= minPlayers);
 
 //            KickPlayer(conn);
@@ -424,7 +424,6 @@ namespace Lobby{
 
         public override void OnClientConnect(NetworkConnection conn) {
             base.OnClientConnect(conn);
-
 
             infoPanel.gameObject.SetActive(false);
 

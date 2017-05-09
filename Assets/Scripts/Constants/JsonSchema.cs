@@ -27,4 +27,6 @@
     public class Token {
         public string token;
     }
+
+//    public class UserResult
 }

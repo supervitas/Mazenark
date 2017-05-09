@@ -22,6 +22,14 @@
 
         #endregion
 
+        #region User
+
+        public static string UserByToken = string.Format("{0}/api/user/token", ServerApiUrl);
+        public static string UserById = string.Format("{0}/api/user/id", ServerApiUrl);
+
+
+        #endregion
+
         public static string GameResultUrl = string.Format("{0}/api/gameresult", ServerApiUrl);
     }
 }
