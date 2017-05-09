@@ -9,10 +9,8 @@ namespace App {
         public MazeBuilder.MazeBuilder MazeInstance { get; set; }
         public Publisher EventHub { get; private set; }
 
-        public string PlayerName;
-
         private Camera _cam;
-        //Singletone which starts firstly then other scripts;
+
         private void Awake() {
             if (Instance == null) {
                 Instance = this;

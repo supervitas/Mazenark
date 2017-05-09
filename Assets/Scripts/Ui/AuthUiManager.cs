@@ -9,6 +9,7 @@ namespace Ui {
         [SerializeField] public GameObject UserDataPanel;
         [SerializeField] public GameObject PlayerName;
         [SerializeField] public GameObject PlayerScore;
+        [SerializeField] public GameObject PlayOnline;
 
         private Button _playButton;
         private Text _playerName;
@@ -18,7 +19,7 @@ namespace Ui {
             if (Instance == null) {
                 Instance = this;
             }
-            _playButton = GameObject.FindGameObjectWithTag("PlayOnline").GetComponent<Button>();
+            _playButton = PlayOnline.GetComponent<Button>();
             _playerName = PlayerName.GetComponent<Text>();
             _playerScore = PlayerScore.GetComponent<Text>();
         }

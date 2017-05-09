@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using App;
 using Cameras;
 using Ui;
 using UnityEngine;
@@ -12,6 +13,18 @@ namespace Controls {
         private enum ControlMode{
             Tank,
             Direct
+        }
+
+        [SyncVar(hook = "OnSetName")] private string playerName;
+
+        [Command]
+        public void CmdNameChanged(string name) {
+            playerName = name;
+        }
+
+        private void OnSetName(string playerName) {
+            var textMesh = GetComponentInChildren<TextMesh>();
+            textMesh.text = playerName;
         }
 
         [SerializeField] private float m_moveSpeed = 2;
@@ -92,19 +105,20 @@ namespace Controls {
         }
 
         public override void OnStartLocalPlayer() { // Set up game for client
-            App.AppManager.Instance.TurnOffAndSetupMainCamera(); // We have 2 cameras, and main should be disabled to stop unnes. render
+            AppManager.Instance.TurnOffAndSetupMainCamera(); // We have 2 cameras, and main should be disabled to stop unnes. render
             var cam  = Instantiate(PlayerCamera);
             cam.GetComponent<FolowingPlayerCamera>().SetPlayerTransforms(transform);
             _cameraInstanced = cam.GetComponent<Camera>();
 
             castTime = Fireball.GetComponent<Fireball>().CastTime; // should be interface of weapon.
             _uiSpellCast = FindObjectOfType<SpellCast>();
-//            GetComponentInChildren<TextMesh>().
+
+            CmdNameChanged(AppLocalStorage.Instance.user.username);
+            GetComponentInChildren<TextMesh>().gameObject.SetActive(false);
         }
 
 
-        private void OnCollisionExit(Collision collision)
-        {
+        private void OnCollisionExit(Collision collision) {
             if(m_collisions.Contains(collision.collider))
             {
                 m_collisions.Remove(collision.collider);

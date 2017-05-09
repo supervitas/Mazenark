@@ -127,6 +127,7 @@ namespace Lobby {
                 playerNick = name.Substring(0, 12);
                 playerNick += "...";
             }
+            playerName = playerNick;
 
             CmdNameChanged(playerNick);
 
@@ -146,7 +147,6 @@ namespace Lobby {
             if (playerName == "")
                 CmdNameChanged("Player" + (LobbyPlayerList._instance.playerListContentTransform.childCount-1));
 
-            AppManager.Instance.PlayerName = playerName;
 
             //we switch from simple name display to name input
             colorButton.interactable = true;

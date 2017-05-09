@@ -312,7 +312,6 @@ namespace Lobby{
 
             newPlayer.ToggleJoinButton(numPlayers + 1 >= minPlayers);
 
-//            KickPlayer(conn);
             foreach (NetworkLobbyPlayer t in lobbySlots) {
                 var p = t as LobbyPlayer;
 
@@ -359,7 +358,7 @@ namespace Lobby{
             _spawnGenerator.MoveNext();
 
             GetComponent<LobbyGameManager>().PlayersTransforms.Add(gamePlayer.transform);
-            gamePlayer.GetComponentInChildren<TextMesh>().text = gamePlayer.name;
+
             return true;
         }
 
