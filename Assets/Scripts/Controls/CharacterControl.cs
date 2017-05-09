@@ -23,6 +23,7 @@ namespace Controls {
         }
 
         private void OnSetName(string playerName) {
+            if (isLocalPlayer) return;
             var textMesh = GetComponentInChildren<TextMesh>();
             textMesh.text = playerName;
         }
