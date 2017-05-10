@@ -18,7 +18,7 @@
         public static string Register = string.Format("{0}/api/auth/register", ServerApiUrl);
         public static string Login = string.Format("{0}/api/auth/login", ServerApiUrl);
         public static string Logout = string.Format("{0}/api/auth/logout", ServerApiUrl);
-        public static string Guest = string.Format("{0}/api/auth/guest", ServerApiUrl);
+        public static string RegisterAsGuest = string.Format("{0}/api/auth/guest", ServerApiUrl);
 
         #endregion
 

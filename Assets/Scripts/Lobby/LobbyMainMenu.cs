@@ -28,6 +28,22 @@ namespace Lobby {
 
         }
 
+        public void OnClickRegisterAsGuest() {
+
+            Action<string> callback = result => {
+                var user = JsonUtility.FromJson<User>(result);
+                AppLocalStorage.Instance.SetUserData(user);
+                AuthUiManager.Instance.ToggleAuthPannel(true);
+            };
+
+            Action<string> errorCallback = error => {
+                var errorJson = JsonUtility.FromJson<Error>(error);
+                infoPanel.Display(errorJson.error, "Close", null);
+            };
+
+            NetworkHttpManager.Instance.RegisterAsGuest(callback, errorCallback);
+        }
+
         public void OnClickRegister() {
             var login = loginInput.text;
             var password = passwordInput.text;

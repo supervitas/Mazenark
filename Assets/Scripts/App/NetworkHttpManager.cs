@@ -43,6 +43,12 @@ namespace App {
             return request;
         }
 
+        public UnityWebRequest RegisterAsGuest(Action<string> callback, Action<string> error) {
+            var request = UnityWebRequest.Post(NetworkConstants.RegisterAsGuest, "");
+            StartCoroutine(WaitForRequest(request, callback, error));
+            return request;
+        }
+
         public UnityWebRequest Logout(Token data, Action<string> callback = null, Action<string> error = null) {
             var request = UnityWebRequest.Post(NetworkConstants.Logout, "");
             UploadHandler customUploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(
