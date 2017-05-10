@@ -1,4 +1,5 @@
-﻿using UnityEngine.Networking;
+﻿using Loot;
+using UnityEngine.Networking;
 
 namespace Controls {
     [NetworkSettings(channel = 0, sendInterval = 0.2f)]
@@ -35,6 +36,7 @@ namespace Controls {
             if (isNPC) {
                 GetComponent<EnemyController>().Die(); // Play animation
                 Destroy(gameObject, 2f); // time after enemy will be destroyed. Maybe replace to fadeout
+				//LootManager.SpawnLoot(transform.position);
             }
         }
 
