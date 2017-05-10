@@ -1,6 +1,4 @@
-﻿using App;
-using App.EventSystem;
-using MazeBuilder.Utility;
+﻿using MazeBuilder.Utility;
 using UnityEngine;
 
 namespace MazeBuilder.BiomeGenerators {
@@ -11,7 +9,7 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
-            AppManager.Instance.InstantiateSOC(FlatWall, Utils.GetDefaultPositionVector(coordinate), Quaternion.identity);
+            Instantiate(FlatWall, Utils.GetDefaultPositionVector(coordinate), Quaternion.identity);
         }
     }
 }

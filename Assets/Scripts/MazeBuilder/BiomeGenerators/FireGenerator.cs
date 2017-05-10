@@ -32,7 +32,7 @@ namespace MazeBuilder.BiomeGenerators {
 				if (edgeMeshTemplate == null)
 					edgeMeshTemplate = straightWalls.GetMeshForPlacement(maze, coordinate, edge);
 				if (edgeMeshTemplate != null) {
-					var edgeMesh = AppManager.Instance.InstantiateSOC(edgeMeshTemplate, Utils.GetDefaultPositionVector(coordinate), edge.Rotation);
+					var edgeMesh = Instantiate(edgeMeshTemplate, Utils.GetDefaultPositionVector(coordinate), edge.Rotation);
 					edgeMesh.name = string.Format(edge.Name);
 					edgeMesh.transform.parent = parent.transform;
 				}

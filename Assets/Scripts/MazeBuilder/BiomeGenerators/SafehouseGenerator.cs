@@ -24,7 +24,7 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
-            AppManager.Instance.InstantiateSOC(FlatWall, Utils.GetDefaultPositionVector(coordinate), Quaternion.identity);
+            Instantiate(FlatWall, Utils.GetDefaultPositionVector(coordinate), Quaternion.identity);
         }
     }
 }
