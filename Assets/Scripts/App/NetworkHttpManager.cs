@@ -18,55 +18,43 @@ namespace App {
             _instanceId = FindObjectOfType<LobbyManager>().InstanceId;
         }
 
-        public UnityWebRequest GetRequest(string url, Action<string> callback, Action<string> error) {
+        public void GetRequest(string url, Action<string> callback, Action<string> error) {
             var request = UnityWebRequest.Get(url);
             StartCoroutine(WaitForRequest(request, callback, error));
-            return request;
         }
 
         public void SendRoomUpdate(string url) {
             var request = UnityWebRequest.Post(url, "");
-            UploadHandler customUploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(
-                JsonUtility.ToJson(new Room {room = _instanceId})));
-            customUploadHandler.contentType = "application/json";
-            request.uploadHandler = customUploadHandler;
-            StartCoroutine(WaitForRequest(request));
+            MakeRequest(request, JsonUtility.ToJson(new Room {room = _instanceId}));
         }
 
-        public UnityWebRequest AuthRequest(string url, AuthData data, Action<string> callback, Action<string> error) {
+        public void AuthRequest(string url, AuthData data, Action<string> callback, Action<string> error) {
             var request = UnityWebRequest.Post(url, "");
-            UploadHandler customUploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(
-                JsonUtility.ToJson(data)));
-            customUploadHandler.contentType = "application/json";
-            request.uploadHandler = customUploadHandler;
-            StartCoroutine(WaitForRequest(request, callback, error));
-            return request;
+            MakeRequest(request,JsonUtility.ToJson(data), callback, error);
         }
 
-        public UnityWebRequest RegisterAsGuest(Action<string> callback, Action<string> error) {
+        public void RegisterAsGuest(Action<string> callback, Action<string> error) {
             var request = UnityWebRequest.Post(NetworkConstants.RegisterAsGuest, "");
             StartCoroutine(WaitForRequest(request, callback, error));
-            return request;
         }
 
-        public UnityWebRequest Logout(Token data, Action<string> callback = null, Action<string> error = null) {
+        public void Logout(Token token, Action<string> callback = null, Action<string> error = null) {
             var request = UnityWebRequest.Post(NetworkConstants.Logout, "");
-            UploadHandler customUploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(
-                JsonUtility.ToJson(data)));
-            customUploadHandler.contentType = "application/json";
-            request.uploadHandler = customUploadHandler;
-            StartCoroutine(WaitForRequest(request, callback, error));
-            return request;
+            MakeRequest(request,JsonUtility.ToJson(token), callback, error);
         }
 
-        public UnityWebRequest GetUserData(string url, Token token, Action<string> callback, Action<string> error) {
+        public void GetUserData(string url, Token token, Action<string> callback, Action<string> error) {
             var request = UnityWebRequest.Post(url, "");
-            UploadHandler customUploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(
-                JsonUtility.ToJson(token)));
-            customUploadHandler.contentType = "application/json";
-            request.uploadHandler = customUploadHandler;
+            MakeRequest(request,JsonUtility.ToJson(token), callback, error);
+        }
+
+        private void MakeRequest(UnityWebRequest request, string json = null, Action<string> callback = null, Action<string> error = null) {
+            if (json != null) {
+                UploadHandler customUploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(json));
+                customUploadHandler.contentType = "application/json";
+                request.uploadHandler = customUploadHandler;
+            }
             StartCoroutine(WaitForRequest(request, callback, error));
-            return request;
         }
 
         private IEnumerator WaitForRequest(UnityWebRequest www, Action<string> callback = null,  Action<string> error = null) {
