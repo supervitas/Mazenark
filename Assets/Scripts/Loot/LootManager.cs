@@ -13,7 +13,11 @@ namespace Loot {
 		public GameObject lootObject;
 
 		public void SpawnLoot(Vector3 where) {
-			Instantiate(lootObject, where, Quaternion.identity);
+			Instantiate(lootObject, where, Quaternion.identity); // Это отспавнит только сервер, клиенты это не увидят.
+		}
+
+		public GameObject GetLoot() { // Возвращаем объект который нужно отспавнить..
+			return lootObject;
 		}
 
 	}
