@@ -16,12 +16,15 @@ namespace Controls {
         private LootManager _lootManager;
 
         private void Start() {
-            if (!isNPC) {
-                InvokeRepeating("PlayerUpdate", 0, 0.5f);
-                _characterControl = GetComponent<CharacterControl>();
-                _characterControl.TargetSetFireballs(connectionToClient, 5);
+            if (isServer) {
+                if (!isNPC) {
+                    InvokeRepeating("PlayerUpdate", 0, 0.5f);
+                    _characterControl = GetComponent<CharacterControl>();
+                    _characterControl.fireballsLeft = 5;
+                    _characterControl.TargetSetFireballs(connectionToClient, 5);
+                }
+                _lootManager = FindObjectOfType<LootManager>();
             }
-            _lootManager = FindObjectOfType<LootManager>();
         }
 
         private void OnDestroy() {
@@ -31,9 +34,12 @@ namespace Controls {
         }
 
         private void OnTriggerEnter(Collider other) {
+            if(!isServer) return;
+
             if (isNPC) return;
             var go = other.gameObject;
             if (go.CompareTag("Pickable")) {
+                _characterControl.fireballsLeft += 1;
                 _characterControl.TargetAddFireballs(connectionToClient, 1);
                 Destroy(go);
             }
@@ -54,11 +60,12 @@ namespace Controls {
                 GetComponent<EnemyController>().Die(); // Play animation
                 Destroy(gameObject, 2f); // time after enemy will be destroyed. Maybe replace to fadeout
 
-                //todo CHANCE
-                var loot = _lootManager.GetLoot();
-                var pos = transform.position;
-                pos.y = 1.5f;
-                ServerSpawner.Instance.ServerSpawn(loot, pos, Quaternion.identity);
+                if (Random.Range(0, 3) == 1) {
+                    var loot = _lootManager.GetLoot();
+                    var pos = transform.position;
+                    pos.y = 1.5f;
+                    ServerSpawner.Instance.ServerSpawn(loot, pos, Quaternion.identity);
+                }
             }
         }
 

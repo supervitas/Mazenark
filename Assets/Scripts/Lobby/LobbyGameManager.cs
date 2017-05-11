@@ -21,8 +21,8 @@ namespace Lobby {
             PlayersTransforms.Clear();
 
             GetComponent<LobbyManager>().StopServer();
-            NetworkHttpManager.Instance.SendRoomUpdate(NetworkConstants.RoomGameEnded);
             GetComponent<LobbyManager>().StartServer(); // restart server
+            NetworkHttpManager.Instance.SendRoomUpdate(NetworkConstants.RoomGameEnded);
         }
 
         private bool GameShouldFinish() {

@@ -29,7 +29,7 @@ namespace Controls {
             textMesh.text = playerName;
         }
 
-        [SyncVar] private int fireballsLeft;
+        public int fireballsLeft;
 
         [SerializeField] private float m_moveSpeed = 2;
         [SerializeField] private float m_turnSpeed = 200;
@@ -144,9 +144,9 @@ namespace Controls {
                     RaycastHit hit;
                     if (Physics.Raycast(ray, out hit)) {
                         CmdFire(hit.point);
-
+                        fireballsLeft--;
                         _gameGui.ModifyFirstItemCount(fireballsLeft.ToString());
-                        if (fireballsLeft == 0) {
+                        if (fireballsLeft <= 0) {
                             _gameGui.DisableFirstItem();
                         }
 

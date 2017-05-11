@@ -1,4 +1,6 @@
-﻿using App;
+﻿using System.Collections;
+using System.Collections.Generic;
+using App;
 using App.Eventhub;
 using Lobby;
 using UnityEngine;
@@ -26,6 +28,7 @@ namespace Ui {
             Text t = transform.GetChild(0).GetChild(0).GetComponent<Text>();
             t.text = "You Died";
             t.color = Color.red;
+            Invoke("GoBackToMenu", 4);
         }
 
         private void OnLevelComplete(object sender, EventArguments args) {
@@ -34,6 +37,11 @@ namespace Ui {
             Text t = transform.GetChild(0).GetChild(0).GetComponent<Text>();
             t.text = "Success! Take this award";
             t.color = Color.green;
+            Invoke("GoBackToMenu", 4);
+        }
+
+        private void GoBackToMenu() {
+            FindObjectOfType<LobbyManager>().GoBackButton();
         }
 
         private void TurnOffCanvas() {
