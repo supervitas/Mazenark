@@ -62,7 +62,6 @@ namespace Controls {
 
             animator.SetBool("isDead", true);
             _agent.enabled = false;
-            GetComponent<Collider>().enabled = false;
         }
 
         private bool CheckPlayersNear() {
@@ -128,11 +127,13 @@ namespace Controls {
                 }
                 if (_agent.remainingDistance <= 2.5f) {
                     animator.SetBool("Attack", true);
-//                    Fire(transform.forward); // todo colider to enemy. No raycast
+                    if (isServer) {
+                        Fire(transform.forward); // todo colider to enemy. No raycast
+                    }
                 }
             }
 
-            if (CanPatrool && !_hasTarget) {
+            if (isServer && CanPatrool && !_hasTarget) {
                 GoToNextPointIfPossible();
             }
         }

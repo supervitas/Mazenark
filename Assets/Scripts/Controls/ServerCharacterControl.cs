@@ -9,18 +9,33 @@ namespace Controls {
 
         [SyncVar]
         public int CurrentHealth = 100;
+
         public bool destroyOnDeath;
         public bool isNPC;
+        private CharacterControl _characterControl;
+        private LootManager _lootManager;
 
         private void Start() {
             if (!isNPC) {
-                InvokeRepeating("PlayerUpdate", 0, 1f);
+                InvokeRepeating("PlayerUpdate", 0, 0.5f);
+                _characterControl = GetComponent<CharacterControl>();
+                _characterControl.TargetSetFireballs(connectionToClient, 5);
             }
+            _lootManager = FindObjectOfType<LootManager>();
         }
 
         private void OnDestroy() {
             if (!isNPC) {
                 CancelInvoke("PlayerUpdate");
+            }
+        }
+
+        private void OnTriggerEnter(Collider other) {
+            if (isNPC) return;
+            var go = other.gameObject;
+            if (go.CompareTag("Pickable")) {
+                _characterControl.TargetAddFireballs(connectionToClient, 1);
+                Destroy(go);
             }
         }
 
@@ -32,15 +47,18 @@ namespace Controls {
             CurrentHealth = 0;
             if (!destroyOnDeath) return;
             if (!isNPC) {
-                App.NetworkEventHub.Instance.RpcPublishEvent("PlayerDied", gameObject.name);
+                NetworkEventHub.Instance.RpcPublishEvent("PlayerDied", gameObject.name);
                 Destroy(gameObject);
             }
             if (isNPC) {
                 GetComponent<EnemyController>().Die(); // Play animation
                 Destroy(gameObject, 2f); // time after enemy will be destroyed. Maybe replace to fadeout
-                var loot = FindObjectOfType<LootManager>().GetLoot(); // Находим первый объект LootManager в сцене.
-                ServerSpawner.Instance.ServerSpawn(loot, transform.position, Quaternion.identity); // Cпавним объект. И рассылаем то, что мы отспавнили на все клиенты.
-                // Также к геймобжекту, который собираемся инстансить нужно добавить Network Identity, и зарегистрировать в LobbyManager(См скриншот в вк).
+
+                //todo CHANCE
+                var loot = _lootManager.GetLoot();
+                var pos = transform.position;
+                pos.y = 1.5f;
+                ServerSpawner.Instance.ServerSpawn(loot, pos, Quaternion.identity);
             }
         }
 

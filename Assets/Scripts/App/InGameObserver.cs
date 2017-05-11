@@ -1,4 +1,5 @@
 ﻿using App.Eventhub;
+using Lobby;
 using UnityEngine;
 
 namespace App {
@@ -8,7 +9,11 @@ namespace App {
         }
 
         public void PlayerCompletedLevel(object sender, EventArguments eventArguments) {
-            Debug.Log(eventArguments.Message);
+            foreach (var player in FindObjectsOfType<LobbyPlayer>()) {
+//                if (player.playerName == eventArguments.Message) {
+                    Debug.Log(player.playerName);
+//                }
+            }
         }
     }
 }

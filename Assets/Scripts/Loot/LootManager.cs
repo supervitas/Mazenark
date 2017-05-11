@@ -1,8 +1,4 @@
 ﻿using MazeBuilder.Utility;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace Loot {
@@ -10,13 +6,9 @@ namespace Loot {
 		private CollectionRandom loots = new CollectionRandom();
 
 		[SerializeField]
-		public GameObject lootObject;
+		private GameObject lootObject;
 
-		public void SpawnLoot(Vector3 where) {
-			Instantiate(lootObject, where, Quaternion.identity); // Это отспавнит только сервер, клиенты это не увидят.
-		}
-
-		public GameObject GetLoot() { // Возвращаем объект который нужно отспавнить..
+		public GameObject GetLoot() {
 			return lootObject;
 		}
 

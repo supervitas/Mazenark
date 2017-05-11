@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using App;
 using Cameras;
 using Ui;
@@ -27,6 +28,8 @@ namespace Controls {
             var textMesh = GetComponentInChildren<TextMesh>();
             textMesh.text = playerName;
         }
+
+        [SyncVar] private int fireballsLeft;
 
         [SerializeField] private float m_moveSpeed = 2;
         [SerializeField] private float m_turnSpeed = 200;
@@ -60,12 +63,12 @@ namespace Controls {
         private bool m_isGrounded;
         private List<Collider> m_collisions = new List<Collider>();
 
+        private GameGui _gameGui;
+
         private void OnCollisionEnter(Collision collision) {
             ContactPoint[] contactPoints = collision.contacts;
-            for(int i = 0; i < contactPoints.Length; i++)
-            {
-                if (Vector3.Dot(contactPoints[i].normal, Vector3.up) > 0.5f)
-                {
+            foreach (ContactPoint t in contactPoints) {
+                if (Vector3.Dot(t.normal, Vector3.up) > 0.5f) {
                     if (!m_collisions.Contains(collision.collider)) {
                         m_collisions.Add(collision.collider);
                     }
@@ -75,22 +78,15 @@ namespace Controls {
         }
 
         private void OnDestroy() {
-            App.AppManager.Instance.TurnOnMainCamera();
+            AppManager.Instance.TurnOnMainCamera();
             if (isLocalPlayer) {
-                App.AppManager.Instance.EventHub.CreateEvent("PlayerDead", null);
+                AppManager.Instance.EventHub.CreateEvent("PlayerDead", null);
             }
         }
 
         private void OnCollisionStay(Collision collision) {
             ContactPoint[] contactPoints = collision.contacts;
-            bool validSurfaceNormal = false;
-            for (int i = 0; i < contactPoints.Length; i++)
-            {
-                if (Vector3.Dot(contactPoints[i].normal, Vector3.up) > 0.5f)
-                {
-                    validSurfaceNormal = true; break;
-                }
-            }
+            bool validSurfaceNormal = contactPoints.Any(t => Vector3.Dot(t.normal, Vector3.up) > 0.5f);
 
             if(validSurfaceNormal) {
                 m_isGrounded = true;
@@ -116,6 +112,7 @@ namespace Controls {
 
             CmdNameChanged(AppLocalStorage.Instance.user.username);
             GetComponentInChildren<TextMesh>().gameObject.SetActive(false);
+            _gameGui = FindObjectOfType<GameGui>();
         }
 
 
@@ -134,7 +131,7 @@ namespace Controls {
 
             m_animator.SetBool("Grounded", m_isGrounded);
 
-            if (Input.GetMouseButton(0)) {
+            if (Input.GetMouseButton(0) && fireballsLeft > 0) {
                 m_animator.SetFloat("MoveSpeed", 0);
                 timeCasted += Time.deltaTime;
                 if (timeCasted > 0.15) {
@@ -147,6 +144,12 @@ namespace Controls {
                     RaycastHit hit;
                     if (Physics.Raycast(ray, out hit)) {
                         CmdFire(hit.point);
+
+                        _gameGui.ModifyFirstItemCount(fireballsLeft.ToString());
+                        if (fireballsLeft == 0) {
+                            _gameGui.DisableFirstItem();
+                        }
+
                     }
                 }
                 return;
@@ -172,8 +175,23 @@ namespace Controls {
             m_wasGrounded = m_isGrounded;
         }
 
+        [TargetRpc]
+        public void TargetSetFireballs(NetworkConnection target, int count) {
+            fireballsLeft = count;
+            _gameGui.EnableFirstItem(count.ToString());
+        }
+
+        [TargetRpc]
+        public void TargetAddFireballs(NetworkConnection target, int count) {
+            fireballsLeft += count;
+            _gameGui.EnableFirstItem(fireballsLeft.ToString());
+        }
+
         [Command]
         private void CmdFire(Vector3 direction) {
+            if(fireballsLeft <= 0) return;
+
+            fireballsLeft--;
             var pos = transform.position;
             pos.y += 2.3f;
             var fireball = Instantiate(Fireball, pos, Quaternion.identity);
