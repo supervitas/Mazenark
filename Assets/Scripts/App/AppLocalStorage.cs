@@ -55,7 +55,7 @@ namespace App {
             if (user == null) {
                 user = new User {
                     id = PlayerPrefs.GetInt("id"),
-                    isGuest = Convert.ToBoolean(PlayerPrefs.GetString("isGuest")),
+                    //isGuest = Convert.ToBoolean(PlayerPrefs.GetString("isGuest")),
                     score = PlayerPrefs.GetInt("score"),
                     token = PlayerPrefs.GetString("token"),
                     username = PlayerPrefs.GetString("username")
