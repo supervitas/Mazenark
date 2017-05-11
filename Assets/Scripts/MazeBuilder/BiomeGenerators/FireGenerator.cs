@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using App;
-using App.EventSystem;
+using App.Eventhub;
 using MazeBuilder.Utility;
 using MazeBuilder.BiomeGenerators.PlacementRules;
 using UnityEngine;

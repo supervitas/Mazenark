@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using App;
-using App.EventSystem;
+using App.Eventhub;
 using MazeBuilder.Utility;
 using UnityEngine;
 

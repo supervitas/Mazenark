@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using App;
-using App.EventSystem;
+using App.Eventhub;
 using UnityEngine;
 using Random = UnityEngine.Random;
 

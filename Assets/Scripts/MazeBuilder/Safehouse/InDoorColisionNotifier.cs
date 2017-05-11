@@ -1,4 +1,4 @@
-﻿using App.EventSystem;
+﻿using App.Eventhub;
 using UnityEngine;
 
 namespace MazeBuilder.Safehouse {

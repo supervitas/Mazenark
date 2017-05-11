@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace App.EventSystem {
+namespace App.Eventhub {
     public class EventArguments : EventArgs {
         public EventArguments(string s) {
             Message = s;

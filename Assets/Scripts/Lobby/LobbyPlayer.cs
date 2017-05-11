@@ -120,7 +120,7 @@ namespace Lobby {
             localIcone.gameObject.SetActive(true);
             var user = AppLocalStorage.Instance.user;
 
-            CmdCheckToken(user.token);
+//            CmdCheckToken(user.token);
 
             var playerNick = user.username;
             if (playerNick.Length > 12) {
@@ -207,8 +207,7 @@ namespace Lobby {
 
         ///===== callback from sync var
 
-        public void OnMyName(string newName)
-        {
+        public void OnMyName(string newName) {
             playerName = newName;
             nameInput.text = playerName;
         }

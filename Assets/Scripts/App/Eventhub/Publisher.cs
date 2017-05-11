@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace App.EventSystem {
+namespace App.Eventhub {
     public class Publisher {
         private readonly Dictionary <string, Dictionary<object, EventHandler<EventArguments>>> _eventHandlers =
             new Dictionary <string, Dictionary<object, EventHandler<EventArguments>>>();
