@@ -118,16 +118,22 @@ namespace Lobby {
         void SetupLocalPlayer() {
             remoteIcone.gameObject.SetActive(false);
             localIcone.gameObject.SetActive(true);
+
             var user = AppLocalStorage.Instance.user;
-
-//            CmdCheckToken(user.token);
-
             var playerNick = user.username;
             if (playerNick.Length > 12) {
                 playerNick = name.Substring(0, 12);
                 playerNick += "...";
             }
+
             playerName = playerNick;
+
+            if (AppManager.Instance.IsSinglePlayer) {
+                OnReadyClicked();
+                return;
+            }
+
+//            CmdCheckToken(user.token);
 
             CmdNameChanged(playerNick);
 

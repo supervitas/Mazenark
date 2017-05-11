@@ -14,8 +14,7 @@ namespace Lobby {
 
             singleButton.onClick.RemoveAllListeners();
 
-            if (buttonClbk != null)
-            {
+            if (buttonClbk != null) {
                 singleButton.onClick.AddListener(buttonClbk);
             }
 

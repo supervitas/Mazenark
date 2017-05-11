@@ -219,22 +219,9 @@ namespace Lobby{
         //===================
 
         public void StartSinglePlayer() {
-            AppManager.Instance.CommonSetUp();
-            AppManager.Instance.MazeSize.GenerateRandomSize();
-            AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(AppManager.Instance.MazeSize.X, AppManager.Instance.MazeSize.Y);
-
-            _spawnGenerator = GetSpawnPosition();
-            _spawnGenerator.MoveNext();
-
-            ChangeTo(null);
-            Destroy(GameObject.Find("MainMenuUI(Clone)"));
-
-            //backDelegate = StopGameClbk;
-            topPanel.isInGame = true;
-            topPanel.ToggleVisibility(false);
-
-            FindObjectOfType<SinglePlayer.SinglePlayer>().StartSinglePlayer(_spawnGenerator.Current);
-
+            AppManager.Instance.IsSinglePlayer = true;
+            prematchCountdown = 0;
+            StartHost();
         }
 
         public override void OnStartHost() {
