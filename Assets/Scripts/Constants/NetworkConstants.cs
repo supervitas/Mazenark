@@ -6,7 +6,8 @@
 
         #region Room
 
-        public static string RoomGetRoom = string.Format("{0}/api/getRoom", UnityServerOnlyUrl);
+        public static string RoomGetRoom = string.Format("{0}/api/getRoom", ServerApiUrl);
+
         public static string RoomPlayerLeft = string.Format("{0}/api/room/playerLeft", UnityServerOnlyUrl);
         public static string RoomPlayerJoined = string.Format("{0}/api/room/playerJoined", UnityServerOnlyUrl);
         public static string RoomGameStarted = string.Format("{0}/api/room/gameStarted", UnityServerOnlyUrl);
