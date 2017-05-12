@@ -29,7 +29,8 @@ namespace Controls {
             textMesh.text = playerName;
         }
 
-        public int fireballsLeft;
+        private int fireballsLeft;
+        private int ServerFireballsLeft;
 
         [SerializeField] private float m_moveSpeed = 2;
         [SerializeField] private float m_turnSpeed = 200;
@@ -144,8 +145,10 @@ namespace Controls {
                     RaycastHit hit;
                     if (Physics.Raycast(ray, out hit)) {
                         CmdFire(hit.point);
+
                         fireballsLeft--;
                         _gameGui.ModifyFirstItemCount(fireballsLeft.ToString());
+
                         if (fireballsLeft <= 0) {
                             _gameGui.DisableFirstItem();
                         }
@@ -187,11 +190,15 @@ namespace Controls {
             _gameGui.EnableFirstItem(fireballsLeft.ToString());
         }
 
+        public void SetFireballsOnServer(int count) {
+            ServerFireballsLeft += count;
+        }
+
         [Command]
         private void CmdFire(Vector3 direction) {
-            if(fireballsLeft <= 0) return;
+            if(ServerFireballsLeft <= 0) return;
 
-            fireballsLeft--;
+            ServerFireballsLeft--;
             var pos = transform.position;
             pos.y += 2.3f;
             var fireball = Instantiate(Fireball, pos, Quaternion.identity);

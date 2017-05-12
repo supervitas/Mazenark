@@ -20,7 +20,7 @@ namespace Controls {
                 if (!isNPC) {
                     InvokeRepeating("PlayerUpdate", 0, 0.5f);
                     _characterControl = GetComponent<CharacterControl>();
-                    _characterControl.fireballsLeft = 5;
+                    _characterControl.SetFireballsOnServer(5);
                     _characterControl.TargetSetFireballs(connectionToClient, 5);
                 }
                 _lootManager = FindObjectOfType<LootManager>();
@@ -39,7 +39,7 @@ namespace Controls {
             if (isNPC) return;
             var go = other.gameObject;
             if (go.CompareTag("Pickable")) {
-                _characterControl.fireballsLeft += 1;
+                _characterControl.SetFireballsOnServer(1);
                 _characterControl.TargetAddFireballs(connectionToClient, 1);
                 Destroy(go);
             }
