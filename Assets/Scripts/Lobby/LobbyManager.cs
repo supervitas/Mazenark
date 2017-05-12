@@ -219,7 +219,6 @@ namespace Lobby{
         //===================
 
         public void StartSinglePlayer() {
-            AppManager.Instance.IsSinglePlayer = true;
             prematchCountdown = 0;
             StartHost();
         }

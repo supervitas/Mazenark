@@ -28,7 +28,7 @@ namespace Ui {
             Text t = transform.GetChild(0).GetChild(0).GetComponent<Text>();
             t.text = "You Died";
             t.color = Color.red;
-            Invoke("GoBackToMenu", 4);
+            Invoke("GoBackToMenu", 5);
         }
 
         private void OnLevelComplete(object sender, EventArguments args) {
@@ -37,7 +37,7 @@ namespace Ui {
             Text t = transform.GetChild(0).GetChild(0).GetComponent<Text>();
             t.text = "Success! Take this award";
             t.color = Color.green;
-            Invoke("GoBackToMenu", 4);
+            Invoke("GoBackToMenu", 5);
         }
 
         private void GoBackToMenu() {

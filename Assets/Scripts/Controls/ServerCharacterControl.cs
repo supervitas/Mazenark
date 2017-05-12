@@ -1,4 +1,5 @@
 ﻿using App;
+using Lobby;
 using Loot;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -53,6 +54,8 @@ namespace Controls {
             CurrentHealth = 0;
             if (!destroyOnDeath) return;
             if (!isNPC) {
+                FindObjectOfType<LobbyGameManager>().OnGameover(gameObject.name);
+
                 NetworkEventHub.Instance.RpcPublishEvent("PlayerDied", gameObject.name);
                 Destroy(gameObject);
             }

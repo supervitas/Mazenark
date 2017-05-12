@@ -1,14 +1,28 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using App;
 using UnityEngine;
-using UnityEngine.Networking;
 using Constants;
 
 namespace Lobby {
     public class LobbyGameManager : MonoBehaviour {
         private byte _playersCount;
         public List<Transform> PlayersTransforms = new List <Transform>();
+
+        public void OnGameover(string playerName) {
+//            foreach (var x in LobbyManager.SSingleton.lobbySlots ) {
+//                var player = x as LobbyPlayer;
+//                if (player != null && player.playerName == playerName) {
+////                    Destroy(x.);
+////                    StartCoroutine(DestroyPlayer(player));
+//                }
+//            }
+        }
+
+        IEnumerator DestroyPlayer(LobbyPlayer player) {
+            yield return new WaitForSeconds(2f);
+            Destroy(player);
+        }
 
         public void SetPlayersCount(byte players) {
             _playersCount = players;

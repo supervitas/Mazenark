@@ -99,6 +99,7 @@ namespace Lobby {
 
         public void OnClickSinglePlayer() {
             lobbyManager.StartSinglePlayer();
+            AppManager.Instance.IsSinglePlayer = true;
         }
 
         public void OnClickHost() {
@@ -168,6 +169,7 @@ namespace Lobby {
                 var errorJson = JsonUtility.FromJson<Error>(error);
                 infoPanel.Display(errorJson.error, "Close", null);
             };
+            AppManager.Instance.IsSinglePlayer = false;
             NetworkHttpManager.Instance.GetRequest(NetworkConstants.RoomGetRoom, callback, errorCb);
         }
 

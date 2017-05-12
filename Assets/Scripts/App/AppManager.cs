@@ -23,7 +23,6 @@ namespace App {
             EventHub = new Publisher();
             MazeSize = new MazeSizeGenerator();
             MazeInstance = null;
-            IsSinglePlayer = false;
         }
 
 
