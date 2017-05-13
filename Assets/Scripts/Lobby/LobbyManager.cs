@@ -219,6 +219,7 @@ namespace Lobby{
         //===================
 
         public void StartSinglePlayer() {
+            minPlayers = 1;
             prematchCountdown = 0;
             StartHost();
         }

@@ -21,7 +21,7 @@ namespace Controls {
                 if (!isNPC) {
                     InvokeRepeating("PlayerUpdate", 0, 0.5f);
                     _characterControl = GetComponent<CharacterControl>();
-                    _characterControl.SetFireballsOnServer(5);
+                    _characterControl.SetFireballsForServer(5);
                     _characterControl.TargetSetFireballs(connectionToClient, 5);
                 }
                 _lootManager = FindObjectOfType<LootManager>();
@@ -40,7 +40,7 @@ namespace Controls {
             if (isNPC) return;
             var go = other.gameObject;
             if (go.CompareTag("Pickable")) {
-                _characterControl.SetFireballsOnServer(1);
+                _characterControl.SetFireballsForServer(1);
                 _characterControl.TargetAddFireballs(connectionToClient, 1);
                 Destroy(go);
             }
@@ -53,6 +53,7 @@ namespace Controls {
             if (CurrentHealth > 0) return;
             CurrentHealth = 0;
             if (!destroyOnDeath) return;
+
             if (!isNPC) {
                 FindObjectOfType<LobbyGameManager>().OnGameover(gameObject.name);
 
@@ -67,7 +68,9 @@ namespace Controls {
                     var loot = _lootManager.GetLoot();
                     var pos = transform.position;
                     pos.y = 1.5f;
-                    ServerSpawner.Instance.ServerSpawn(loot, pos, Quaternion.identity);
+//                    ServerSpawner.Instance.ServerSpawn(loot, pos, Quaternion.identity);
+                    var instantiated = Instantiate(loot, pos, Quaternion.identity);
+                    NetworkServer.Spawn(instantiated);
                 }
             }
         }

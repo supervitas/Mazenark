@@ -18,17 +18,6 @@ namespace Controls {
 
         [SyncVar(hook = "OnSetName")] private string playerName;
 
-        [Command]
-        public void CmdNameChanged(string name) {
-            playerName = name;
-        }
-
-        private void OnSetName(string playerName) {
-            if (isLocalPlayer) return;
-            var textMesh = GetComponentInChildren<TextMesh>();
-            textMesh.text = playerName;
-        }
-
         private int fireballsLeft;
         private int ServerFireballsLeft;
 
@@ -65,6 +54,12 @@ namespace Controls {
         private List<Collider> m_collisions = new List<Collider>();
 
         private GameGui _gameGui;
+
+        private void OnSetName(string playerName) {
+            if (isLocalPlayer) return;
+            var textMesh = GetComponentInChildren<TextMesh>();
+            textMesh.text = playerName;
+        }
 
         private void OnCollisionEnter(Collision collision) {
             ContactPoint[] contactPoints = collision.contacts;
@@ -104,6 +99,8 @@ namespace Controls {
 
         public override void OnStartLocalPlayer() { // Set up game for client
             AppManager.Instance.TurnOffAndSetupMainCamera(); // We have 2 cameras, and main should be disabled to stop unnes. render
+            _gameGui = FindObjectOfType<GameGui>();
+
             var cam  = Instantiate(PlayerCamera);
             cam.GetComponent<FolowingPlayerCamera>().SetPlayerTransforms(transform);
             _cameraInstanced = cam.GetComponent<Camera>();
@@ -113,7 +110,6 @@ namespace Controls {
 
             CmdNameChanged(AppLocalStorage.Instance.user.username);
             GetComponentInChildren<TextMesh>().gameObject.SetActive(false);
-            _gameGui = FindObjectOfType<GameGui>();
         }
 
 
@@ -125,17 +121,11 @@ namespace Controls {
             if (m_collisions.Count == 0) { m_isGrounded = false; }
         }
 
-        void Update () {
-            if (!isLocalPlayer){
-                return;
-            }
-
-            m_animator.SetBool("Grounded", m_isGrounded);
-
+        private bool CheckPlayerFire() {
             if (Input.GetMouseButton(0) && fireballsLeft > 0) {
                 m_animator.SetFloat("MoveSpeed", 0);
                 timeCasted += Time.deltaTime;
-                if (timeCasted > 0.15) {
+                if (timeCasted > 0.2) {
                     _uiSpellCast.SetProgress(timeCasted / castTime * 100);
                 }
                 if (timeCasted >= castTime) {
@@ -145,18 +135,26 @@ namespace Controls {
                     RaycastHit hit;
                     if (Physics.Raycast(ray, out hit)) {
                         CmdFire(hit.point);
-
                         fireballsLeft--;
                         _gameGui.ModifyFirstItemCount(fireballsLeft.ToString());
 
                         if (fireballsLeft <= 0) {
                             _gameGui.DisableFirstItem();
                         }
-
                     }
                 }
-                return;
+                return true;
             }
+            return false;
+        }
+
+        void Update () {
+            if (!isLocalPlayer) return;
+
+            m_animator.SetBool("Grounded", m_isGrounded);
+
+            if(CheckPlayerFire()) return;
+
 
             timeCasted = 0;
             _uiSpellCast.Reset();
@@ -176,38 +174,6 @@ namespace Controls {
             }
 
             m_wasGrounded = m_isGrounded;
-        }
-
-        [TargetRpc]
-        public void TargetSetFireballs(NetworkConnection target, int count) {
-            fireballsLeft = count;
-            _gameGui.EnableFirstItem(count.ToString());
-        }
-
-        [TargetRpc]
-        public void TargetAddFireballs(NetworkConnection target, int count) {
-            fireballsLeft += count;
-            _gameGui.EnableFirstItem(fireballsLeft.ToString());
-        }
-
-        public void SetFireballsOnServer(int count) {
-            ServerFireballsLeft += count;
-        }
-
-        [Command]
-        private void CmdFire(Vector3 direction) {
-            if(ServerFireballsLeft <= 0) return;
-
-            ServerFireballsLeft--;
-            var pos = transform.position;
-            pos.y += 2.3f;
-            var fireball = Instantiate(Fireball, pos, Quaternion.identity);
-            Physics.IgnoreCollision(fireball.GetComponent<Collider>(), GetComponent<Collider>());
-            fireball.transform.LookAt(direction);
-            fireball.GetComponent<Rigidbody>().velocity = fireball.transform.forward * 15;
-
-            NetworkServer.Spawn(fireball);
-            Destroy(fireball.GetComponent<Fireball>(), 8.0f);
         }
 
         private void TankUpdate() {
@@ -287,5 +253,46 @@ namespace Controls {
             }
         }
 
+        // Client
+
+        [TargetRpc]
+        public void TargetSetFireballs(NetworkConnection target, int count) {
+            fireballsLeft = count;
+            _gameGui.EnableFirstItem(count.ToString());
+        }
+
+        [TargetRpc]
+        public void TargetAddFireballs(NetworkConnection target, int count) {
+            fireballsLeft += count;
+            _gameGui.EnableFirstItem(fireballsLeft.ToString());
+        }
+
+        // Server
+        [Command]
+        private void CmdFire(Vector3 direction) {
+            if(ServerFireballsLeft <= 0) return;
+
+            ServerFireballsLeft--;
+            var pos = transform.position;
+            pos.y += 2.3f;
+            var fireball = Instantiate(Fireball, pos, Quaternion.identity);
+            Physics.IgnoreCollision(fireball.GetComponent<Collider>(), GetComponent<Collider>());
+            fireball.transform.LookAt(direction);
+            fireball.GetComponent<Rigidbody>().velocity = fireball.transform.forward * 15;
+
+            NetworkServer.Spawn(fireball);
+            Destroy(fireball.GetComponent<Fireball>(), 8.0f);
+        }
+
+        [Command]
+        public void CmdNameChanged(string name) {
+            playerName = name;
+        }
+
+
+
+        public void SetFireballsForServer(int count) {
+            ServerFireballsLeft += count;
+        }
     }
 }

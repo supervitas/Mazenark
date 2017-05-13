@@ -89,7 +89,7 @@ namespace Controls {
                     return true;
                 }
             }
-            animator.SetBool("Attack", false);
+//            animator.SetBool("Attack", false);
 
             _hasTarget = false;
             _agent.autoBraking = false;
