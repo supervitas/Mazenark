@@ -14,9 +14,9 @@ namespace Controls {
         private NavMeshAgent _agent;
 
         [SerializeField]
-        private float enemyAgroRange = 20f;
+        private float enemyAgroRange = 40f;
         [SerializeField]
-        private float enemyAngleVisibility = 60f;
+        private float enemyAngleVisibility = 30f;
 
         public readonly List <Vector3> Points = new List<Vector3>();
         private int _destPoint = 0;
@@ -28,23 +28,28 @@ namespace Controls {
 
         private bool _isAlive = true;
 
-        [SyncVar]
+
         private bool _hasTarget = false;
 
-        private void Awake () {
-            _agent = GetComponent<NavMeshAgent>();
-            _agent.autoBraking = false;
-        }
 
 
+        // Server Only
         private void Start() {
             if (!isServer) return;
+            _agent = GetComponent<NavMeshAgent>();
             _playersTransform = FindObjectOfType<LobbyGameManager>().PlayersTransforms;
             InvokeRepeating("CheckPlayersNear", 0, 0.5f);
+            InvokeRepeating("UpdateEnemies", 0, 0.3f);
+        }
+
+        private void SetAnimation(string animationState, bool value) {
+            if (animator.GetBool(animationState) != value) {
+                animator.SetBool(animationState, value);
+            }
         }
 
         public void SetIdleBehaivor() {
-            animator.SetBool("Idle", true);
+            SetAnimation("Idle", true);
         }
 
         public void GotoNextPoint() {
@@ -57,6 +62,8 @@ namespace Controls {
         }
 
         public void Die() {
+            if(!isServer) return;
+
             _isAlive = false;
             CancelInvoke("CheckPlayersNear");
 
@@ -89,8 +96,6 @@ namespace Controls {
                     return true;
                 }
             }
-//            animator.SetBool("Attack", false);
-
             _hasTarget = false;
             _agent.autoBraking = false;
 
@@ -103,16 +108,16 @@ namespace Controls {
             }
         }
 
-        private void Update () {
-            if (!_isAlive) return;
+        private void UpdateEnemies() {
+            if(!isServer && !_isAlive) return;
 
             if (_agent.velocity != Vector3.zero) {
-                animator.SetBool("Moving", true);
-                animator.SetBool("Idle", false);
+                SetAnimation("Moving", true);
+                SetAnimation("Idle", false);
             }
 
             if (_agent.velocity == Vector3.zero) {
-                animator.SetBool("Idle", true);
+                SetAnimation("Idle", true);
             }
 
             if (_hasTarget) {
@@ -123,20 +128,19 @@ namespace Controls {
                 }
 
                 if (_agent.remainingDistance > 2.5f) {
-                    animator.SetBool("Attack", false);
+                    SetAnimation("Attack", false);
                 }
                 if (_agent.remainingDistance <= 2.5f) {
-                    animator.SetBool("Attack", true);
-                    if (isServer) {
-                        Fire(transform.forward); // todo colider to enemy. No raycast
-                    }
+                    SetAnimation("Attack", true);
+//                    Fire(transform.forward); // todo colider to enemy. No raycast
                 }
             }
 
-            if (isServer && CanPatrool && !_hasTarget) {
+            if (CanPatrool && !_hasTarget) {
                 GoToNextPointIfPossible();
             }
         }
+
 
 
         private void Fire(Vector3 direction) {

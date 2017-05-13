@@ -91,7 +91,6 @@ namespace Enemies {
                 }
 
                 controller.CanPatrool = true;
-                controller.GotoNextPoint();
 
             }
         }
