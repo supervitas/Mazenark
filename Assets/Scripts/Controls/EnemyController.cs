@@ -7,7 +7,7 @@ using UnityEngine.AI;
 using UnityEngine.Networking;
 
 namespace Controls {
-    [NetworkSettings(channel = 1, sendInterval = 0.5f)]
+    [NetworkSettings(channel = 1, sendInterval = 0.2f)]
     public class EnemyController : NetworkBehaviour {
         [SerializeField]
         private Animator animator;
@@ -32,14 +32,13 @@ namespace Controls {
         private bool _hasTarget = false;
 
 
-
         // Server Only
         private void Start() {
             if (!isServer) return;
             _agent = GetComponent<NavMeshAgent>();
             _playersTransform = FindObjectOfType<LobbyGameManager>().PlayersTransforms;
-            InvokeRepeating("CheckPlayersNear", 0, 0.5f);
-            InvokeRepeating("UpdateEnemies", 0, 0.3f);
+            InvokeRepeating("CheckPlayersNear", 0, 0.1f);
+            InvokeRepeating("UpdateEnemies", 0, 0.1f);
         }
 
         private void SetAnimation(string animationState, bool value) {
@@ -67,11 +66,11 @@ namespace Controls {
             _isAlive = false;
             CancelInvoke("CheckPlayersNear");
 
-            animator.SetBool("isDead", true);
+            SetAnimation("isDead", true);
             _agent.enabled = false;
         }
 
-        private bool CheckPlayersNear() {
+        private void CheckPlayersNear() {
             foreach (var target in _playersTransform) {
                 if (target == null) continue;
 
@@ -80,26 +79,25 @@ namespace Controls {
 
                 if (direction == Vector3.zero) {
                     direction = transform.forward;
+
                 }
 
                 var angle = Vector3.Angle(direction, transform.forward);
-
-                if (distance <= enemyAgroRange && angle < enemyAngleVisibility) {
+                //&& angle < enemyAngleVisibility
+                if (distance <= enemyAgroRange ) {
 
                     _agent.autoBraking = true;
 
                     _agent.destination = target.position;
-                    _agent.stoppingDistance = 2.5f;
+                    _agent.stoppingDistance = 3f;
 
                     _hasTarget = true;
-
-                    return true;
+                    return;
                 }
             }
+            SetAnimation("Attack", false);
             _hasTarget = false;
             _agent.autoBraking = false;
-
-            return false;
         }
 
         private void GoToNextPointIfPossible() {
@@ -109,7 +107,7 @@ namespace Controls {
         }
 
         private void UpdateEnemies() {
-            if(!isServer && !_isAlive) return;
+            if(!_isAlive) return;
 
             if (_agent.velocity != Vector3.zero) {
                 SetAnimation("Moving", true);
@@ -127,10 +125,10 @@ namespace Controls {
                     transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
                 }
 
-                if (_agent.remainingDistance > 2.5f) {
+                if (_agent.remainingDistance > 3f) {
                     SetAnimation("Attack", false);
                 }
-                if (_agent.remainingDistance <= 2.5f) {
+                if (_agent.remainingDistance <= 3f) {
                     SetAnimation("Attack", true);
 //                    Fire(transform.forward); // todo colider to enemy. No raycast
                 }
