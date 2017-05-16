@@ -122,33 +122,35 @@ namespace Controls {
         }
 
         private bool CheckPlayerFire() {
-            if (Input.GetMouseButton(0) && fireballsLeft > 0) {
-                m_animator.SetFloat("MoveSpeed", 0);
-                timeCasted += Time.deltaTime;
-                if (timeCasted > 0.2) {
-                    _uiSpellCast.SetProgress(timeCasted / castTime * 100);
-                }
-                if (timeCasted >= castTime) {
-                    timeCasted = 0;
-                    _uiSpellCast.Reset();
-                    var ray = _cameraInstanced.ScreenPointToRay(Input.mousePosition);
-                    RaycastHit hit;
-                    if (Physics.Raycast(ray, out hit)) {
-                        CmdFire(hit.point);
-                        fireballsLeft--;
-                        _gameGui.ModifyFirstItemCount(fireballsLeft.ToString());
+            if (!Input.GetMouseButton(0) || fireballsLeft <= 0) return false;
+            m_animator.SetFloat("MoveSpeed", 0);
+            timeCasted += Time.deltaTime;
 
-                        if (fireballsLeft <= 0) {
-                            _gameGui.DisableFirstItem();
-                        }
+            if (timeCasted > 0.2) {
+                _uiSpellCast.SetProgress(timeCasted / castTime * 100);
+            }
+
+            if (timeCasted >= castTime) {
+                timeCasted = 0;
+                _uiSpellCast.Reset();
+
+                var ray = _cameraInstanced.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit)) {
+                    CmdFire(hit.point);
+                    fireballsLeft--;
+                    _gameGui.ModifyFirstItemCount(fireballsLeft.ToString());
+
+                    if (fireballsLeft <= 0) {
+                        _gameGui.DisableFirstItem();
                     }
                 }
-                return true;
             }
-            return false;
+            return true;
         }
 
-        void Update () {
+        private void Update () {
             if (!isLocalPlayer) return;
 
             m_animator.SetBool("Grounded", m_isGrounded);
@@ -288,8 +290,6 @@ namespace Controls {
         public void CmdNameChanged(string name) {
             playerName = name;
         }
-
-
 
         public void SetFireballsForServer(int count) {
             ServerFireballsLeft += count;

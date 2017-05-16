@@ -63,16 +63,10 @@ namespace Controls {
             if (isNPC) {
                 GetComponent<EnemyController>().Die(); // Play animation
                 Destroy(gameObject, 2f); // time after enemy will be destroyed. Maybe replace to fadeout
-
-                if (Random.Range(0, 3) == 1) {
-                    var loot = _lootManager.GetLoot();
                     var pos = transform.position;
                     pos.y = 1.5f;
-//                    ServerSpawner.Instance.ServerSpawn(loot, pos, Quaternion.identity);
-                    var instantiated = Instantiate(loot, pos, Quaternion.identity);
-                    NetworkServer.Spawn(instantiated);
+                    _lootManager.CreateLoot(pos);
                 }
-            }
         }
 
         private void PlayerUpdate() {
