@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 namespace App {
     public class ServerSpawner : NetworkBehaviour {
         public GameObject Safehouse;
+        public GameObject Fog;
         public static ServerSpawner Instance { get; private set; }
         public void Awake() {
             if (Instance == null) {
@@ -14,6 +15,7 @@ namespace App {
 
         private void Start() {
             SpawnSafehouse();
+            SpawnFog();
         }
 
         public GameObject ServerSpawn(GameObject go, Vector3 position, Quaternion rotation) {
@@ -22,7 +24,12 @@ namespace App {
             return instantiated;
         }
 
-        public void SpawnSafehouse() {
+        private void SpawnFog() {
+            ServerSpawn(Fog,
+                Utils.GetDefaultPositionVector(new Coordinate(AppManager.Instance.MazeInstance.Height / 2,
+                    AppManager.Instance.MazeInstance.Width / 2), 0.1f), Quaternion.Euler(-90, 0, 0));
+        }
+        private void SpawnSafehouse() {
 //            ServerSpawn(Safehouse, new Vector3(40, 0, 40), Quaternion.identity);
             ServerSpawn(Safehouse,
                 Utils.GetDefaultPositionVector(new Coordinate(AppManager.Instance.MazeInstance.Height / 2,
