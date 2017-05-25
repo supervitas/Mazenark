@@ -1,21 +1,16 @@
-﻿using MazeBuilder.Utility;
+﻿using App;
+using MazeBuilder.Utility;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace App {
-    public class ServerSpawner : NetworkBehaviour {
+namespace GameEnv {
+    public class GameEnvironmentManager : NetworkBehaviour {
         public GameObject Safehouse;
         public GameObject Fog;
-        public static ServerSpawner Instance { get; private set; }
-        public void Awake() {
-            if (Instance == null) {
-                Instance = this;
-            }
-        }
 
         private void Start() {
             SpawnSafehouse();
-            SpawnFog();
+//            SpawnFog();
         }
 
         public GameObject ServerSpawn(GameObject go, Vector3 position, Quaternion rotation) {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Fog {
+namespace GameEnv.Fog {
     public class FogManager : MonoBehaviour {
         
     }
