@@ -8,7 +8,7 @@ namespace Weapons.Spells {
 
         private void Start() {
             foreach (var player in GameObject.FindGameObjectsWithTag("Player")) {
-                if (player.GetComponent<CharacterControl>().isLocalPlayer) {
+                if (player.GetComponent<PlayerControl>().isLocalPlayer) {
                     Physics.IgnoreCollision(GetComponent<Collider>(), player.GetComponent<Collider>()); // ignore self colide
                 }
             }

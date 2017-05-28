@@ -76,7 +76,7 @@ namespace Enemies {
 
         protected void CreateEnemyBehaivor() {
             foreach (var enemy in SpawnedEnemies) {
-                var controller = enemy.GetComponent<EnemyController>();
+                var controller = enemy.GetComponent<EnemyControl>();
 
                 if (EnemyIdleBehaivor >= Random.Range(1, 100)) {
                     controller.SetIdleBehaivor();
