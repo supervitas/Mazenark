@@ -36,7 +36,7 @@ namespace Controls {
             _agent = GetComponent<NavMeshAgent>();
             _playersTransform = FindObjectOfType<LobbyGameManager>().PlayersTransforms;
             InvokeRepeating("CheckPlayersNear", 0, 0.1f);
-            InvokeRepeating("UpdateEnemies", 0, 0.1f);
+            InvokeRepeating("UpdateEnemy", 0, 0.1f);
         }
 
         private void SetAnimation(string animationState, bool value) {
@@ -104,7 +104,7 @@ namespace Controls {
             }
         }
 
-        private void UpdateEnemies() {
+        private void UpdateEnemy() {
             if(!_isAlive) return;
 
             if (_agent.velocity != Vector3.zero) {

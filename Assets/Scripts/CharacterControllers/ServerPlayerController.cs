@@ -7,8 +7,7 @@ namespace CharacterControllers {
         private PlayerControl _characterControl;
         
         private void Start() {
-            IsNpc = false;
-            DestroyOnDeath = true;
+            IsNpc = false;            
             InvokeRepeating("PlayerUpdate", 0, 0.5f);
             
             _characterControl = GetComponent<PlayerControl>();          

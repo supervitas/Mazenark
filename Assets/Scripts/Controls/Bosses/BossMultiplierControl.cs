@@ -4,59 +4,38 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Networking;
 
-namespace Controls.Server.Enemies.Bosses {
+namespace Controls.Bosses {
     [NetworkSettings(channel = 1, sendInterval = 0.2f)]
-    public class BossMultiplier : NetworkBehaviour {
+    public class BossMultiplierControl : NetworkBehaviour {
         [SerializeField]
-        private Animator animator;
+        private Animator _animator;
         private NavMeshAgent _agent;
 
         [SerializeField]
-        private float enemyAgroRange = 50f;
-        
-               
-
-        public readonly List <Vector3> Points = new List<Vector3>();
-        private int _destPoint = 0;
+        private float enemyAgroRange = 50f;                                  
 
         private List<Transform> _playersTransform;
 
-        [HideInInspector]
-        public bool CanPatrool = false;
-
         private bool _isAlive = true;
-
 
         private bool _hasTarget = false;
 
-
-        // Server Only
+        private Transform _spawnTransform;
+        
         private void Start() {
             if (!isServer) return;
+            SetAnimation("Idle", true);
             _agent = GetComponent<NavMeshAgent>();
             _playersTransform = FindObjectOfType<LobbyGameManager>().PlayersTransforms;
-            InvokeRepeating("CheckPlayersNear", 0, 0.1f);
+            InvokeRepeating("CheckPlayersNear", 0, 0.3f);
             InvokeRepeating("UpdateEnemies", 0, 0.1f);
         }
 
         private void SetAnimation(string animationState, bool value) {
-            if (animator.GetBool(animationState) != value) {
-                animator.SetBool(animationState, value);
+            if (_animator.GetBool(animationState) != value) {
+                _animator.SetBool(animationState, value);
             }
-        }
-
-        public void SetIdleBehaivor() {
-            SetAnimation("Idle", true);
-        }
-
-        public void GotoNextPoint() {
-            // Set the agent to go to the currently selected destination.
-            _agent.destination = Points[_destPoint];
-
-            // Choose the next point in the array as the destination,
-            // cycling to the start if necessary.
-            _destPoint = (_destPoint + 1) % Points.Count;
-        }
+        }    
 
         public void Die() {
             if(!isServer) return;
@@ -98,12 +77,6 @@ namespace Controls.Server.Enemies.Bosses {
             _agent.autoBraking = false;
         }
 
-        private void GoToNextPointIfPossible() {
-            if (!_agent.pathPending && _agent.remainingDistance <= 0.5f) {
-                GotoNextPoint();
-            }
-        }
-
         private void UpdateEnemies() {
             if(!_isAlive) return;
 
@@ -132,12 +105,7 @@ namespace Controls.Server.Enemies.Bosses {
                 }
             }
 
-            if (CanPatrool && !_hasTarget) {
-                GoToNextPointIfPossible();
-            }
         }
-
-
 
         private void Fire(Vector3 direction) {
             RaycastHit hit;

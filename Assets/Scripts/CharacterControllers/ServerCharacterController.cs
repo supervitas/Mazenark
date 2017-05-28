@@ -10,7 +10,6 @@ namespace CharacterControllers {
         
         public int CurrentHealth = 100;
 
-        protected bool DestroyOnDeath;
         protected bool IsNpc;        
          
 
@@ -19,8 +18,7 @@ namespace CharacterControllers {
 
             CurrentHealth -= amount;
             if (CurrentHealth > 0) return;
-            CurrentHealth = 0;
-            if (!DestroyOnDeath) return;
+            CurrentHealth = 0;            
 
             if (!IsNpc) {
                 FindObjectOfType<LobbyGameManager>().OnGameover(gameObject.name);

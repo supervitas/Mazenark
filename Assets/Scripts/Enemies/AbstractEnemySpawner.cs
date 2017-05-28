@@ -17,10 +17,13 @@ namespace Enemies {
         [Range(0, 100f)] protected float EnemyIdleBehaivor = 25f;
         [Header("Biome Enemies Prefabs")]
         public GameObject[] Enemies;
+        public GameObject[] Bosses;
         #endregion
 
         protected readonly CollectionRandom BiomeEnemies = new CollectionRandom();
+        protected readonly CollectionRandom BiomeBosses = new CollectionRandom();
         protected List<Tile> EmptyTiles;
+        protected List<Tile> RoomTiles;
         protected List<GameObject> SpawnedEnemies = new List<GameObject>();
 
         protected void Start() {
@@ -32,6 +35,9 @@ namespace Enemies {
             foreach (var enemy in Enemies) {
                 BiomeEnemies.Add(enemy, typeof(GameObject));
             }
+            foreach (var boss in Bosses) {
+                BiomeBosses.Add(boss, typeof(GameObject));
+            }
         }
 
         protected void SetUpEmptyTiles(Biome biomeType) {
@@ -40,6 +46,11 @@ namespace Enemies {
                 from tile in biome.tiles
                 where tile.Type == Tile.Variant.Empty
                 select tile).ToList();
+            RoomTiles = (from biome in App.AppManager.Instance.MazeInstance.Maze.Biomes
+                where biome.biome == biomeType
+                from tile in biome.tiles
+                where tile.Type == Tile.Variant.Room
+                select tile).ToList();            
         }
 
         protected void SpawnEnemies() {
@@ -50,6 +61,10 @@ namespace Enemies {
                 NetworkServer.Spawn(inst);
                 SpawnedEnemies.Add(inst);
             }
+        }
+
+        protected void SpawnBosses() {
+            
         }
 
         protected Vector3 GetRandomEmptyCoordinate(Coordinate coordinate) {
