@@ -136,6 +136,7 @@ namespace MazeBuilder {
 		public class TileCollection {
 			public readonly Biome biome;
 			public readonly List<Tile> tiles = new List<Tile>();
+			public readonly List<Room> rooms = new List<Room>();
 
 			public TileCollection(Biome biome) {
 				this.biome = biome;
@@ -146,9 +147,11 @@ namespace MazeBuilder {
 			MaxBiomeID = maxBiomeID;
 			biomeList = new List<TileCollection>();
 
+			// foreach biome
 			for (int i = 0; i < maxBiomeID; i++) {
 				TileCollection biome = null;
 
+				// add appropriate tiles into that biome
 				foreach (Tile tile in Tiles) {
 					if (tile.BiomeID == i) {
 						if (biome == null) {
@@ -156,6 +159,19 @@ namespace MazeBuilder {
 							Biomes.Add(biome);
 						}
 						biome.tiles.Add(tile);
+					}
+				}
+
+				// add appropriate rooms into that biome
+				foreach (Room room in Rooms) {
+					var tile = this[room.Center];
+					if (tile.BiomeID == i) {
+						// very unlikely.
+						if (biome == null) {
+							biome = new Maze.TileCollection(tile.Biome);
+							Biomes.Add(biome);
+						}
+						biome.rooms.Add(room);
 					}
 				}
 			}
