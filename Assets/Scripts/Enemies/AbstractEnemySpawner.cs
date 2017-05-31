@@ -23,7 +23,7 @@ namespace Enemies {
         protected readonly CollectionRandom BiomeEnemies = new CollectionRandom();
         protected readonly CollectionRandom BiomeBosses = new CollectionRandom();
         protected List<Tile> EmptyTiles;
-        protected List<Tile> RoomTiles;
+        protected List<Room> Rooms;
         protected List<GameObject> SpawnedEnemies = new List<GameObject>();
 
         protected void Start() {
@@ -40,17 +40,18 @@ namespace Enemies {
             }
         }
 
-        protected void SetUpEmptyTiles(Biome biomeType) {
+        protected void InitEnemyPlaces(Biome biomeType) {
             EmptyTiles = (from biome in App.AppManager.Instance.MazeInstance.Maze.Biomes
                 where biome.biome == biomeType
                 from tile in biome.tiles
                 where tile.Type == Tile.Variant.Empty
                 select tile).ToList();
-            RoomTiles = (from biome in App.AppManager.Instance.MazeInstance.Maze.Biomes
+            
+//            App.AppManager.Instance.MazeInstance.Maze.GenerateBiomesList();
+            Rooms = (from biome in App.AppManager.Instance.MazeInstance.Maze.Biomes
                 where biome.biome == biomeType
-                from tile in biome.tiles
-                where tile.Type == Tile.Variant.Room
-                select tile).ToList();            
+                from room in biome.rooms
+                select room).ToList();
         }
 
         protected void SpawnEnemies() {
@@ -64,6 +65,7 @@ namespace Enemies {
         }
 
         protected void SpawnBosses() {
+            Debug.Log(Rooms.Count);
             
         }
 
@@ -102,11 +104,9 @@ namespace Enemies {
                 var enemyPos = Utils.TransformWorldToLocalCoordinate(enemy.transform.position.x, enemy.transform.position.z);
 
                 foreach (var patroolPoint in GetRandomNearCoordinates(enemyPos, 3)) {
-                    controller.Points.Add(patroolPoint);
-                }
-
-                controller.CanPatrool = true;
-
+                    controller.AddPatroolPoint(patroolPoint);
+                }               
+                controller.isPatrooling(true);               
             }
         }
     }

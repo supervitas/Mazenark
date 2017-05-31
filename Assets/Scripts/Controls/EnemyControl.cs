@@ -21,11 +21,9 @@ namespace Controls {
 
         private List<Transform> _playersTransform;
 
-        [HideInInspector]
-        public bool CanPatrool = false;
+        private bool _canPatrool = false;
 
         private bool _isAlive = true;
-
 
         private bool _hasTarget = false;
 
@@ -33,10 +31,10 @@ namespace Controls {
         // Server Only
         private void Start() {
             if (!isServer) return;
-            _agent = GetComponent<NavMeshAgent>();
+            _agent = GetComponent<NavMeshAgent>();            
             _playersTransform = FindObjectOfType<LobbyGameManager>().PlayersTransforms;
-            InvokeRepeating("CheckPlayersNear", 0, 0.1f);
-            InvokeRepeating("UpdateEnemy", 0, 0.1f);
+            InvokeRepeating("CheckPlayersNear", 0, 0.2f);
+            InvokeRepeating("UpdateEnemy", 0, 0.2f);
         }
 
         private void SetAnimation(string animationState, bool value) {
@@ -47,6 +45,15 @@ namespace Controls {
 
         public void SetIdleBehaivor() {
             SetAnimation("Idle", true);
+        }
+        
+
+        public void AddPatroolPoint(Vector3 patroolPoint) {           
+            Points.Add(patroolPoint);
+        }
+
+        public void isPatrooling(bool patrool) {
+            _canPatrool = patrool;
         }
 
         public void GotoNextPoint() {
@@ -77,7 +84,6 @@ namespace Controls {
 
                 if (direction == Vector3.zero) {
                     direction = transform.forward;
-
                 }
 
                 var angle = Vector3.Angle(direction, transform.forward);
@@ -95,6 +101,7 @@ namespace Controls {
             }
             SetAnimation("Attack", false);
             _hasTarget = false;
+//            _agent.destination = null;
             _agent.autoBraking = false;
         }
 
@@ -107,15 +114,14 @@ namespace Controls {
         private void UpdateEnemy() {
             if(!_isAlive) return;
 
+            
             if (_agent.velocity != Vector3.zero) {
                 SetAnimation("Moving", true);
                 SetAnimation("Idle", false);
-            }
-
-            if (_agent.velocity == Vector3.zero) {
+            } else {         
                 SetAnimation("Idle", true);
             }
-
+            
             if (_hasTarget) {
                 var direction = _agent.destination - transform.position;
 
@@ -125,14 +131,13 @@ namespace Controls {
 
                 if (_agent.remainingDistance > 3f) {
                     SetAnimation("Attack", false);
-                }
-                if (_agent.remainingDistance <= 3f) {
+                } else {               
                     SetAnimation("Attack", true);
 //                    Fire(transform.forward); // todo colider to enemy. No raycast
                 }
             }
 
-            if (CanPatrool && !_hasTarget) {
+            if (_canPatrool && !_hasTarget) {
                 GoToNextPointIfPossible();
             }
         }
