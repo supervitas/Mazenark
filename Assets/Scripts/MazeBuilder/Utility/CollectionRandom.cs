@@ -110,7 +110,8 @@ namespace MazeBuilder.Utility {
 				/*hash = hash * 13 + Name.GetHashCode();
 				hash = hash * 13 + (int) Weight;
 				hash = hash * 13 + Class.GetHashCode();*/
-				hash = hash * 13 + Data.GetHashCode();
+				int dataHash = (Data == null) ? 0 : Data.GetHashCode();
+				hash = hash * 13 + dataHash;
 
 				return hash;
 			}
