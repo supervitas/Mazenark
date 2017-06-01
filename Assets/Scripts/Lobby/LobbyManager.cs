@@ -226,18 +226,9 @@ namespace Lobby{
 
         public override void OnStartHost() {
             base.OnStartHost();
-
             ChangeTo(lobbyPanel);
             backDelegate = StopHostClbk;
-            SetServerInfo("Hosting", networkAddress);
-
-            AppManager.Instance.CommonSetUp();
-            AppManager.Instance.MazeSize.GenerateRandomSize();
-            AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(AppManager.Instance.MazeSize.X, AppManager.Instance.MazeSize.Y);
-
-            _spawnGenerator = GetSpawnPosition();
-            _spawnGenerator.MoveNext();
-
+            SetServerInfo("Hosting", networkAddress);         
         }
 
         public void StartDedicatedServerInstance(int port, int instanceId) {

@@ -1,25 +1,31 @@
-﻿using System.Collections.Generic;
+﻿//using System;
+using System.Collections.Generic;
 using System.Linq;
 using App;
+using App.Eventhub;
 using Cameras;
+using Loot;
 using Ui;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
+using Weapons;
 using Weapons.Spells;
 
 namespace Controls {
     [NetworkSettings(channel = 1, sendInterval = 0.1f)]
     public class PlayerControl : NetworkBehaviour {
 
-        private enum ControlMode{
+        private enum ControlMode {
             Tank,
             Direct
         }
 
         [SyncVar(hook = "OnSetName")] private string playerName;
 
-        private int fireballsLeft;
-        private int ServerFireballsLeft;
+
+        private Dictionary<string, int> _playerItems = new Dictionary<string, int>();
+        private Dictionary<string, int> _serverPlayerItems = new Dictionary<string, int>();
 
         [SerializeField] private float m_moveSpeed = 2;
         [SerializeField] private float m_turnSpeed = 200;
@@ -30,8 +36,10 @@ namespace Controls {
         [SerializeField] private ControlMode m_controlMode = ControlMode.Direct;
 
         public GameObject PlayerCamera;
-        private Camera _cameraInstanced;
-        public GameObject Fireball;
+        private Camera _cameraInstanced;       
+
+        private GameObject _activeItem;
+        private Text _spellText;
         private float castTime;
         private float timeCasted;
         private SpellCast _uiSpellCast;
@@ -84,45 +92,60 @@ namespace Controls {
             ContactPoint[] contactPoints = collision.contacts;
             bool validSurfaceNormal = contactPoints.Any(t => Vector3.Dot(t.normal, Vector3.up) > 0.5f);
 
-            if(validSurfaceNormal) {
+            if (validSurfaceNormal) {
                 m_isGrounded = true;
                 if (!m_collisions.Contains(collision.collider)) {
                     m_collisions.Add(collision.collider);
                 }
-            } else {
+            }
+            else {
                 if (m_collisions.Contains(collision.collider)) {
                     m_collisions.Remove(collision.collider);
                 }
-                if (m_collisions.Count == 0) { m_isGrounded = false; }
+                if (m_collisions.Count == 0) {
+                    m_isGrounded = false;
+                }
             }
         }
 
-        public override void OnStartLocalPlayer() { // Set up game for client
+
+        public override void OnStartLocalPlayer() {
+            // Set up game for client
+            AppManager.Instance.EventHub.Subscribe("ItemChanged", OnActiveItemChanged, this);
             AppManager.Instance.TurnOffAndSetupMainCamera(); // We have 2 cameras, and main should be disabled to stop unnes. render
             _gameGui = FindObjectOfType<GameGui>();
+            _spellText = GameObject.FindGameObjectWithTag("UISpellName").GetComponent<Text>();
 
-            var cam  = Instantiate(PlayerCamera);
+            var cam = Instantiate(PlayerCamera);
             cam.GetComponent<FolowingPlayerCamera>().SetPlayerTransforms(transform);
             _cameraInstanced = cam.GetComponent<Camera>();
 
-            castTime = Fireball.GetComponent<Fireball>().CastTime; // should be interface of weapon.
             _uiSpellCast = FindObjectOfType<SpellCast>();
-
+            
+            
             CmdNameChanged(AppLocalStorage.Instance.user.username);
             GetComponentInChildren<TextMesh>().gameObject.SetActive(false);
         }
 
+        private void OnActiveItemChanged(object sender, EventArguments e) {
+            _activeItem = ItemsCollection.Instance.GetItemByName(e.Message);
+            castTime = _activeItem.GetComponent<Weapon>().GetCastTime();
+            _spellText.text = e.Message;
+            CmdSetActiveItem(e.Message);
+        }
+
 
         private void OnCollisionExit(Collision collision) {
-            if(m_collisions.Contains(collision.collider))
-            {
+            if (m_collisions.Contains(collision.collider)) {
                 m_collisions.Remove(collision.collider);
             }
-            if (m_collisions.Count == 0) { m_isGrounded = false; }
+            if (m_collisions.Count == 0) {
+                m_isGrounded = false;
+            }
         }
 
         private bool CheckPlayerFire() {
-            if (!Input.GetMouseButton(0) || fireballsLeft <= 0) return false;
+            if (!Input.GetMouseButton(0) || _activeItem == null || _playerItems[_activeItem.name] <= 0) return false;
             m_animator.SetFloat("MoveSpeed", 0);
             timeCasted += Time.deltaTime;
 
@@ -139,29 +162,31 @@ namespace Controls {
 
                 if (Physics.Raycast(ray, out hit)) {
                     CmdFire(hit.point);
-                    fireballsLeft--;
-                    _gameGui.ModifyFirstItemCount(fireballsLeft.ToString());
+                    _playerItems[_activeItem.name]--;
+                    _gameGui.ModifyItemCount(_activeItem.name, _playerItems[_activeItem.name].ToString());
 
-                    if (fireballsLeft <= 0) {
-                        _gameGui.DisableFirstItem();
+                    if ( _playerItems[_activeItem.name] <= 0) {
+                        _gameGui.DisableItem(_activeItem.name);
+                        _playerItems.Remove(_activeItem.name);
+                        _activeItem = null;
                     }
                 }
             }
             return true;
         }
 
-        private void Update () {
+        private void Update() {
             if (!isLocalPlayer) return;
 
             m_animator.SetBool("Grounded", m_isGrounded);
 
-            if(CheckPlayerFire()) return;
+            if (CheckPlayerFire()) return;
 
 
             timeCasted = 0;
             _uiSpellCast.Reset();
 
-            switch(m_controlMode) {
+            switch (m_controlMode) {
                 case ControlMode.Direct:
                     DirectUpdate();
                     break;
@@ -185,9 +210,14 @@ namespace Controls {
             bool walk = Input.GetKey(KeyCode.LeftShift);
 
             if (v < 0) {
-                if (walk) { v *= m_backwardsWalkScale; }
-                else { v *= m_backwardRunScale; }
-            } else if(walk) {
+                if (walk) {
+                    v *= m_backwardsWalkScale;
+                }
+                else {
+                    v *= m_backwardRunScale;
+                }
+            }
+            else if (walk) {
                 v *= m_walkScale;
             }
 
@@ -208,8 +238,7 @@ namespace Controls {
 
             Transform camera = Camera.main.transform;
 
-            if (Input.GetKey(KeyCode.LeftShift))
-            {
+            if (Input.GetKey(KeyCode.LeftShift)) {
                 v *= m_walkScale;
                 h *= m_walkScale;
             }
@@ -223,7 +252,7 @@ namespace Controls {
             direction.y = 0;
             direction = direction.normalized * directionLength;
 
-            if(direction != Vector3.zero) {
+            if (direction != Vector3.zero) {
                 m_currentDirection = Vector3.Slerp(m_currentDirection, direction, Time.deltaTime * m_interpolation);
 
                 transform.rotation = Quaternion.LookRotation(m_currentDirection);
@@ -238,52 +267,53 @@ namespace Controls {
         private void JumpingAndLanding() {
             bool jumpCooldownOver = (Time.time - m_jumpTimeStamp) >= m_minJumpInterval;
 
-            if (jumpCooldownOver && m_isGrounded && Input.GetKey(KeyCode.Space))
-            {
+            if (jumpCooldownOver && m_isGrounded && Input.GetKey(KeyCode.Space)) {
                 m_jumpTimeStamp = Time.time;
                 m_rigidBody.AddForce(Vector3.up * m_jumpForce, ForceMode.Impulse);
             }
 
-            if (!m_wasGrounded && m_isGrounded)
-            {
+            if (!m_wasGrounded && m_isGrounded) {
                 m_animator.SetTrigger("Land");
             }
 
-            if (!m_isGrounded && m_wasGrounded)
-            {
+            if (!m_isGrounded && m_wasGrounded) {
                 m_animator.SetTrigger("Jump");
             }
         }
 
         // Client
-
         [TargetRpc]
-        public void TargetSetFireballs(NetworkConnection target, int count) {
-            fireballsLeft = count;
-            _gameGui.EnableFirstItem(count.ToString());
-        }
-
-        [TargetRpc]
-        public void TargetAddFireballs(NetworkConnection target, int count) {
-            fireballsLeft += count;
-            _gameGui.EnableFirstItem(fireballsLeft.ToString());
+        public void TargetSetPlayerItems(NetworkConnection target, string name, int count) {
+            if (!_playerItems.ContainsKey(name)) {                
+                _playerItems.Add(name, 0);
+                _gameGui.AddItem(name, count.ToString());
+            }            
+            _playerItems[name] += count;
+            _gameGui.ModifyItemCount(name, _playerItems[name].ToString());
+           
         }
 
         // Server
         [Command]
         private void CmdFire(Vector3 direction) {
-            if(ServerFireballsLeft <= 0) return;
+            if (_serverPlayerItems[_activeItem.name] <= 0) return;
 
-            ServerFireballsLeft--;
+            _serverPlayerItems[_activeItem.name]--;
             var pos = transform.position;
             pos.y += 2.3f;
-            var fireball = Instantiate(Fireball, pos, Quaternion.identity);
-            Physics.IgnoreCollision(fireball.GetComponent<Collider>(), GetComponent<Collider>());
-            fireball.transform.LookAt(direction);
-            fireball.GetComponent<Rigidbody>().velocity = fireball.transform.forward * 15;
+            var activeItem = Instantiate(_activeItem, pos, Quaternion.identity);
+            Physics.IgnoreCollision(activeItem.GetComponent<Collider>(), GetComponent<Collider>());
+            activeItem.transform.LookAt(direction);
+            activeItem.GetComponent<Rigidbody>().velocity = activeItem.transform.forward * 15;
 
-            NetworkServer.Spawn(fireball);
-            Destroy(fireball.GetComponent<Fireball>(), 8.0f);
+            NetworkServer.Spawn(activeItem);
+            Destroy(activeItem.GetComponent<Weapon>(), 8.0f);
+        }
+
+        [Command]
+        private void CmdSetActiveItem(string itemName) {
+            _activeItem = ItemsCollection.Instance.GetItemByName(itemName);
+            
         }
 
         [Command]
@@ -291,8 +321,11 @@ namespace Controls {
             playerName = name;
         }
 
-        public void SetFireballsForServer(int count) {
-            ServerFireballsLeft += count;
+        public void ServerSetItems(string name, int count) {          
+            if (!_serverPlayerItems.ContainsKey(name)) {               
+                _serverPlayerItems.Add(name, 0);
+            }
+            _serverPlayerItems[name] += count;
         }
     }
 }

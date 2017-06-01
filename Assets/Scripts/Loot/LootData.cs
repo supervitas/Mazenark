@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Loot {
-	public class LootRotation : MonoBehaviour {
+	public class LootData : MonoBehaviour {
+		public string lootName;
 
 		[Range(0.0f, 360.0f)]
 		[Tooltip("Rotational speed. Measured in degrees per second.")]

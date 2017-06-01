@@ -1,8 +1,9 @@
-﻿using Controls;
+using Controls;
 using UnityEngine;
 
 namespace Weapons.Spells {
-    public class Fireball : Weapon {
+    public class Tornado : Weapon {       
+
         private void Start() {
             foreach (var player in GameObject.FindGameObjectsWithTag("Player")) {
                 if (player.GetComponent<PlayerControl>().isLocalPlayer) {
@@ -17,10 +18,10 @@ namespace Weapons.Spells {
             Destroy(this);
         }
 
-        public override void OnDestroy() {
-            transform.GetChild(0).gameObject.SetActive(false);
-            transform.GetChild(1).gameObject.SetActive(true);
+        public override void OnDestroy() {        
             Destroy(gameObject, 1f);
         }
+    
+        
     }
 }

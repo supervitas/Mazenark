@@ -64,8 +64,7 @@ namespace Enemies {
             }
         }
 
-        protected void SpawnBosses() {
-            Debug.Log(Rooms.Count);
+        protected void SpawnBosses() {            
             
         }
 

@@ -1,4 +1,5 @@
 using Controls;
+using Loot;
 using UnityEngine;
 
 namespace CharacterControllers {
@@ -10,9 +11,14 @@ namespace CharacterControllers {
             IsNpc = false;            
             InvokeRepeating("PlayerUpdate", 0, 0.5f);
             
-            _characterControl = GetComponent<PlayerControl>();          
-            _characterControl.SetFireballsForServer(5);
-            _characterControl.TargetSetFireballs(connectionToClient, 5);
+            _characterControl = GetComponent<PlayerControl>();
+            SetPlayerItems("Fireball", 5);
+            SetPlayerItems("Tornado", 2);
+        }
+
+        private void SetPlayerItems(string itemName, int itemCount) {
+            _characterControl.ServerSetItems(itemName, itemCount);
+            _characterControl.TargetSetPlayerItems(connectionToClient, itemName, itemCount);
         }
         
         private void OnDestroy() {            
@@ -20,13 +26,11 @@ namespace CharacterControllers {
         }     
         
         private void OnTriggerEnter(Collider other) { // take loot
-            if(!isServer) return;            
+            if (!isServer) return;            
             var go = other.gameObject;
             if (!go.CompareTag("Pickable")) return;
-            
-            _characterControl.SetFireballsForServer(1);
-            _characterControl.TargetAddFireballs(connectionToClient, 1);
-            
+            var lootName = go.GetComponent<LootData>().lootName;
+            SetPlayerItems(lootName, 1);          
             Destroy(go);
         }
         
