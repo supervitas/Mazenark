@@ -146,6 +146,7 @@ namespace MazeBuilder {
 		public void GenerateBiomesList() {
 			biomeList = new List<TileCollection>();
 			int tmpCounter = 0;
+			MaxBiomeID = 999; // There I fixed it.
 
 			// foreach biome
 			for (int i = 0; i < MaxBiomeID; i++) {
@@ -162,6 +163,11 @@ namespace MazeBuilder {
 					}
 				}
 
+				//Debug.Log(":===:");
+				//Debug.Log("Here are all rooms:");
+				//DebugPrintRooms();
+				//Debug.Log("Adding rooms for biomes:");
+
 				// add appropriate rooms into that biome
 				foreach (Room room in Rooms) {
 					var tile = this[room.Center];
@@ -173,10 +179,36 @@ namespace MazeBuilder {
 						}
 						biome.rooms.Add(room);
 						tmpCounter++;
+						//DebugPrintRoom(room);
 					}
 				}
 			}
-			Debug.Log("Total rooms in maze: " + Rooms.Count + "\nRooms counted in biomes:" + tmpCounter);
+
+			
+
+			Debug.Log(string.Format("Added {0} rooms from {1} total. Maze has {2} walls.", tmpCounter, Rooms.Count, DebugCountWallTiles()));
+
+		}
+
+		private int DebugCountWallTiles() {
+			int result = 0;
+			foreach (Tile tile in tiles) {
+				if (tile.Type == Tile.Variant.Wall) {
+					result++;
+				}
+			}
+			return result;
+		}
+
+		private void DebugPrintRooms() {
+			foreach (Room room in Rooms)
+				DebugPrintRoom(room);
+		}
+
+		private void DebugPrintRoom(Room room) {
+			Debug.Log("Room@" + this[room.Center].Biome.Name + string.Format(".\n{0,2}:{1,2} {0,2}:{1,2}", room.TopLeftCorner.X, room.TopLeftCorner.Y, room.TopRightCorner.X, room.TopRightCorner.Y)
+				+ string.Format("\n   {0,2}:{1,2}", room.Center.X, room.Center.Y)
+				+ string.Format("\n{0,2}:{1,2} {0,2}:{1,2}", room.BottomLeftCorner.X, room.BottomLeftCorner.Y, room.BottomRightCorner.X, room.BottomRightCorner.Y));
 		}
 	}
 }
