@@ -17,7 +17,7 @@ namespace MazeBuilder {
 		private List<Room> spawns = new List<Room>();
 		public Dictionary<Biome, Coordinate> BiomesSize = new Dictionary<Biome, Coordinate>();
 		private List<TileCollection> biomeList = null;
-		public int MaxBiomeID { get; private set; }
+		public int MaxBiomeID { get; set; }
 
 
         public Maze (int width = 10, int height = 10, bool fromServer = false) {
@@ -143,12 +143,12 @@ namespace MazeBuilder {
 			}
 		}
 
-		public void GenerateBiomesList(int maxBiomeID = -1) {
-			MaxBiomeID = maxBiomeID;
+		public void GenerateBiomesList() {
 			biomeList = new List<TileCollection>();
+			int tmpCounter = 0;
 
 			// foreach biome
-			for (int i = 0; i < maxBiomeID; i++) {
+			for (int i = 0; i < MaxBiomeID; i++) {
 				TileCollection biome = null;
 
 				// add appropriate tiles into that biome
@@ -172,9 +172,11 @@ namespace MazeBuilder {
 							Biomes.Add(biome);
 						}
 						biome.rooms.Add(room);
+						tmpCounter++;
 					}
 				}
 			}
+			Debug.Log("Total rooms in maze: " + Rooms.Count + "\nRooms counted in biomes:" + tmpCounter);
 		}
 	}
 }

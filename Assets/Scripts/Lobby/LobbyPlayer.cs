@@ -287,7 +287,7 @@ namespace Lobby {
         [TargetRpc]
         public void TargetMazeLoadingFinished(NetworkConnection target, int width, int hight, int maxBiomeID) {
             AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(width, hight, _fetchedMaze);
-            AppManager.Instance.MazeInstance.Maze.GenerateBiomesList(maxBiomeID);
+            AppManager.Instance.MazeInstance.Maze.GenerateBiomesList();
         }
 
         //====== Server Command

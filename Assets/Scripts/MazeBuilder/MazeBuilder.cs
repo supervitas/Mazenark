@@ -34,6 +34,8 @@ namespace MazeBuilder {
             GenerateWalls();
 			EncloseMazeWithWalls();
 
+			_maze.GenerateBiomesList();
+
 			return _maze;
         }
 

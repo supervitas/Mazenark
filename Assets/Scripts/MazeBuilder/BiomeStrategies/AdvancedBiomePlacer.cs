@@ -28,7 +28,7 @@ namespace MazeBuilder.BiomeStrategies {
             PlantBiomes();
 			GrowBiomes();
 
-			maze.GenerateBiomesList(biomeIDCounter);
+			maze.MaxBiomeID = biomeIDCounter;
 
             return emptyMaze;
         }
