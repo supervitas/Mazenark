@@ -25,7 +25,7 @@ namespace Controls {
 
         private bool _isAlive = true;
 
-        private bool _hasTarget = false;
+        private bool _hasTarget = false;              
 
 
         // Server Only
@@ -88,7 +88,7 @@ namespace Controls {
 
                 var angle = Vector3.Angle(direction, transform.forward);
                 //&& angle < enemyAngleVisibility
-                if (distance <= enemyAgroRange ) {
+                if (distance <= enemyAgroRange) {
 
                     _agent.autoBraking = true;
 
@@ -99,17 +99,13 @@ namespace Controls {
                     return;
                 }
             }
+            if (!_hasTarget) return;
+            
+            GotoNextPoint();
             SetAnimation("Attack", false);
-            _hasTarget = false;
-//            _agent.destination = null;
+            _hasTarget = false;           
             _agent.autoBraking = false;
-        }
-
-        private void GoToNextPointIfPossible() {
-            if (!_agent.pathPending && _agent.remainingDistance <= 0.5f) {
-                GotoNextPoint();
-            }
-        }
+        }        
 
         private void UpdateEnemy() {
             if(!_isAlive) return;
@@ -137,11 +133,10 @@ namespace Controls {
                 }
             }
 
-            if (_canPatrool && !_hasTarget) {
-                GoToNextPointIfPossible();
+            if (_canPatrool && !_hasTarget && !_agent.pathPending && _agent.remainingDistance <= 0.5f) {
+                GotoNextPoint();
             }
         }
-
 
 
         private void Fire(Vector3 direction) {
