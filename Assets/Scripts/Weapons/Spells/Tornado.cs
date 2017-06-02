@@ -11,7 +11,10 @@ namespace Weapons.Spells {
             var go = other.gameObject;                        
             if (go.CompareTag("Enemy")|| go.CompareTag("Player")) {
                 go.GetComponent<ServerCharacterController>().TakeDamage(100, 3.5f);
-                go.GetComponent<Rigidbody>().velocity = go.transform.up * 10;
+                var rigidBody = go.GetComponent<Rigidbody>();
+                if (rigidBody) {
+                    rigidBody.velocity = go.transform.up * 10;
+                }
                 _killed++;
                 if (_killed >= _countOfPossibleKills) {
                     Destroy(this);

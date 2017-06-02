@@ -9,11 +9,10 @@ namespace CharacterControllers {
     public class ServerCharacterController : NetworkBehaviour {
         
         public int CurrentHealth = 100;
-
         protected bool IsNpc;        
          
 
-        public virtual void TakeDamage(int amount, float timeOfDeath = 2f) {
+        public virtual void TakeDamage(int amount, float timeOfDeath = 2f) {            
             if (!isServer) return;
 
             CurrentHealth -= amount;

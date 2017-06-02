@@ -1,6 +1,5 @@
-﻿using Controls;
+﻿using Controls.Bosses;
 using Loot;
-using UnityEngine;
 
 
 namespace CharacterControllers.Enemies.Bosses {    
@@ -11,14 +10,14 @@ namespace CharacterControllers.Enemies.Bosses {
             IsNpc = true;                        
         }
 
-        public override void TakeDamage(int amount, float timeOfDeath) {
+        public override void TakeDamage(int amount, float timeOfDeath = 2f) {            
             if (!isServer) return;
-            hited++;
+            hited++;           
             if (hited >= hitCounter) {
-                GetComponent<EnemyControl>().Die(); // Play animation
+                GetComponent<BossMultiplierControl>().Die(); // Play animation
                 Destroy(gameObject, timeOfDeath); // time after enemy will be destroyed. Maybe replace to fadeout
                 var pos = transform.position;
-                pos.y = 1.5f;
+                pos.y = 1.5f;                
                 FindObjectOfType<LootManager>().CreateLoot(pos, 100f);
             }
         }

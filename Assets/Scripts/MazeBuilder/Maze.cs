@@ -146,45 +146,31 @@ namespace MazeBuilder {
 		public void GenerateBiomesList() {
 			biomeList = new List<TileCollection>();
 			int tmpCounter = 0;
-			MaxBiomeID = 999; // There I fixed it.
-
-			// foreach biome
-			for (int i = 0; i < MaxBiomeID; i++) {
+					
+			for (int i = 0; i <= MaxBiomeID; i++) {
 				TileCollection biome = null;
 
-				// add appropriate tiles into that biome
+		
 				foreach (Tile tile in Tiles) {
 					if (tile.BiomeID == i) {
 						if (biome == null) {
-							biome = new Maze.TileCollection(tile.Biome);
+							biome = new TileCollection(tile.Biome);
 							Biomes.Add(biome);
 						}
 						biome.tiles.Add(tile);
 					}
 				}
 
-				//Debug.Log(":===:");
-				//Debug.Log("Here are all rooms:");
-				//DebugPrintRooms();
-				//Debug.Log("Adding rooms for biomes:");
-
-				// add appropriate rooms into that biome
 				foreach (Room room in Rooms) {
 					var tile = this[room.Center];
-					if (tile.BiomeID == i) {
-						// very unlikely.
-						if (biome == null) {
-							biome = new Maze.TileCollection(tile.Biome);
-							Biomes.Add(biome);
-						}
+					if (tile.BiomeID == i) {																										
 						biome.rooms.Add(room);
 						tmpCounter++;
 						//DebugPrintRoom(room);
 					}
 				}
 			}
-
-			
+	
 
 			Debug.Log(string.Format("Added {0} rooms from {1} total. Maze has {2} walls.", tmpCounter, Rooms.Count, DebugCountWallTiles()));
 

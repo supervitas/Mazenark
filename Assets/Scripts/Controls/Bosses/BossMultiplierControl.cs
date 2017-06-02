@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Lobby;
+using MazeBuilder.Utility;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Networking;
@@ -59,9 +60,8 @@ namespace Controls.Bosses {
 
                 }
 
-                var angle = Vector3.Angle(direction, transform.forward);
-                //&& angle < enemyAngleVisibility
-                if (distance <= enemyAgroRange ) {
+                var angle = Vector3.Angle(direction, transform.forward);                
+                if (distance <= enemyAgroRange && angle < 30 /*&& Utils.TransformWorldToLocalCoordinate(target.position.x, target.position.z).*/) {
 
                     _agent.autoBraking = true;
 
