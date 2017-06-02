@@ -165,36 +165,12 @@ namespace MazeBuilder {
 					var tile = this[room.Center];
 					if (tile.BiomeID == i) {																										
 						biome.rooms.Add(room);
-						tmpCounter++;
-						//DebugPrintRoom(room);
+						tmpCounter++;			
 					}
 				}
-			}
-	
-
-			Debug.Log(string.Format("Added {0} rooms from {1} total. Maze has {2} walls.", tmpCounter, Rooms.Count, DebugCountWallTiles()));
+			}			
 
 		}
 
-		private int DebugCountWallTiles() {
-			int result = 0;
-			foreach (Tile tile in tiles) {
-				if (tile.Type == Tile.Variant.Wall) {
-					result++;
-				}
-			}
-			return result;
-		}
-
-		private void DebugPrintRooms() {
-			foreach (Room room in Rooms)
-				DebugPrintRoom(room);
-		}
-
-		private void DebugPrintRoom(Room room) {
-			Debug.Log("Room@" + this[room.Center].Biome.Name + string.Format(".\n{0,2}:{1,2} {0,2}:{1,2}", room.TopLeftCorner.X, room.TopLeftCorner.Y, room.TopRightCorner.X, room.TopRightCorner.Y)
-				+ string.Format("\n   {0,2}:{1,2}", room.Center.X, room.Center.Y)
-				+ string.Format("\n{0,2}:{1,2} {0,2}:{1,2}", room.BottomLeftCorner.X, room.BottomLeftCorner.Y, room.BottomRightCorner.X, room.BottomRightCorner.Y));
-		}
 	}
 }
