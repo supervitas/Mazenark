@@ -47,7 +47,6 @@ namespace Enemies {
                 where tile.Type == Tile.Variant.Empty
                 select tile).ToList();
             
-//            App.AppManager.Instance.MazeInstance.Maze.GenerateBiomesList();
             Rooms = (from biome in App.AppManager.Instance.MazeInstance.Maze.Biomes
                 where biome.biome == biomeType
                 from room in biome.rooms
@@ -64,8 +63,12 @@ namespace Enemies {
             }
         }
 
-        protected void SpawnBosses() {            
-            
+        protected void SpawnBosses() {
+            foreach (var room in Rooms) {
+                var boss = (GameObject) BiomeBosses.GetRandom(typeof(GameObject));
+                var inst = Instantiate(boss, Utils.GetDefaultPositionVector(room.Center, 0.1f), Quaternion.identity);
+                NetworkServer.Spawn(inst);                   
+            }
         }
 
         protected Vector3 GetRandomEmptyCoordinate(Coordinate coordinate) {

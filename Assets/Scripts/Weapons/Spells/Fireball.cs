@@ -1,5 +1,4 @@
 ﻿using CharacterControllers;
-using Controls;
 using UnityEngine;
 
 namespace Weapons.Spells {
