@@ -302,12 +302,12 @@ namespace Controls {
             var pos = transform.position;
             pos.y += 2.3f;
             var activeItem = Instantiate(_activeItem, pos, Quaternion.identity);
+            var weapon = activeItem.GetComponent<Weapon>();
             Physics.IgnoreCollision(activeItem.GetComponent<Collider>(), GetComponent<Collider>());
             activeItem.transform.LookAt(direction);
-            activeItem.GetComponent<Rigidbody>().velocity = activeItem.transform.forward * 15;
-
+            weapon.Fire();
             NetworkServer.Spawn(activeItem);
-            Destroy(activeItem.GetComponent<Weapon>(), 8.0f);
+            Destroy(weapon, 8.0f);
         }
 
         [Command]

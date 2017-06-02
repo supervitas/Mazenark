@@ -14,8 +14,7 @@ namespace Weapons {
             }
         }
 
-        public abstract void OnDestroy();    
-
+        public abstract void Fire();
 
         public float GetCastTime() {
             return CastTime;
