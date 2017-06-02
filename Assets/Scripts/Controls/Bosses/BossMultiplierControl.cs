@@ -28,7 +28,7 @@ namespace Controls.Bosses {
             _agent = GetComponent<NavMeshAgent>();
             _playersTransform = FindObjectOfType<LobbyGameManager>().PlayersTransforms;
             InvokeRepeating("CheckPlayersNear", 0, 0.3f);
-            InvokeRepeating("UpdateEnemies", 0, 0.1f);
+            InvokeRepeating("UpdateBoss", 0, 0.1f);
         }
 
         private void SetAnimation(string animationState, bool value) {
@@ -77,7 +77,7 @@ namespace Controls.Bosses {
             _agent.autoBraking = false;
         }
 
-        private void UpdateEnemies() {
+        private void UpdateBoss() {
             if(!_isAlive) return;
 
             if (_agent.velocity != Vector3.zero) {

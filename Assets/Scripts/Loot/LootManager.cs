@@ -14,8 +14,11 @@ namespace Loot {
 		[SerializeField]
 		private GameObject lootObject;
 
-		public void CreateLoot(Vector3 where) {
-			if (Random.Range(0, 101) <= chanceOfSpawnLoot) {
+		public void CreateLoot(Vector3 where, float chanse = 0.1f ) {
+			if (chanse == 0.1f) {
+				chanse = Random.Range(0, 101);
+			}
+			if (chanse <= chanceOfSpawnLoot) {
 				var instantiated = Instantiate(lootObject, where, Quaternion.identity);
 				NetworkServer.Spawn(instantiated);
 			}
