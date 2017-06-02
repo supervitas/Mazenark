@@ -1,14 +1,25 @@
+using CharacterControllers;
 using Controls;
 using UnityEngine;
 
 namespace Weapons.Spells {
     public class Tornado : Weapon {       
+        public int _countOfPossibleKills = 2;
+        private int _killed = 0;
         
-
         void OnCollisionEnter(Collision other) {
-            var go = other.gameObject;
-            go.SendMessage("TakeDamage", 100.0F, SendMessageOptions.DontRequireReceiver); // execute function on colided object.
-//            Destroy(this);
+            var go = other.gameObject;                        
+            if (go.CompareTag("Enemy")) {
+                go.GetComponent<ServerCharacterController>().TakeDamage(100, 3.5f);
+                go.GetComponent<Rigidbody>().velocity = go.transform.up * 10;
+                _killed++;
+                if (_killed >= _countOfPossibleKills) {
+                    Destroy(this);
+                }
+            } else {
+               Destroy(this);
+            }
+                       
         }
 
         public void OnDestroy() {        
@@ -17,7 +28,7 @@ namespace Weapons.Spells {
 
 
         public override void Fire() {
-            gameObject.GetComponent<Rigidbody>().velocity = gameObject.transform.forward * 20;
+            gameObject.GetComponent<Rigidbody>().velocity = gameObject.transform.forward * 10;
         }
     }
 }

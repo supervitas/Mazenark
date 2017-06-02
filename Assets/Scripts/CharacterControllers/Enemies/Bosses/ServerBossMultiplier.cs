@@ -7,7 +7,7 @@ namespace CharacterControllers.Enemies.Bosses {
             IsNpc = true;                        
         }
 
-        public override void TakeDamage(int amount) {
+        public override void TakeDamage(int amount, float timeOfDeath) {
             Debug.Log(amount);
         }
     }

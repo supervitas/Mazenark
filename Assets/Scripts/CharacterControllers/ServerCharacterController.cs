@@ -13,7 +13,7 @@ namespace CharacterControllers {
         protected bool IsNpc;        
          
 
-        public virtual void TakeDamage(int amount) {
+        public virtual void TakeDamage(int amount, float timeOfDeath = 2f) {
             if (!isServer) return;
 
             CurrentHealth -= amount;
@@ -28,7 +28,7 @@ namespace CharacterControllers {
             }
             if (IsNpc) {
                 GetComponent<EnemyControl>().Die(); // Play animation
-                Destroy(gameObject, 2f); // time after enemy will be destroyed. Maybe replace to fadeout
+                Destroy(gameObject, timeOfDeath); // time after enemy will be destroyed. Maybe replace to fadeout
                     var pos = transform.position;
                     pos.y = 1.5f;
                     FindObjectOfType<LootManager>().CreateLoot(pos);

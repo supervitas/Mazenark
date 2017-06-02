@@ -13,7 +13,7 @@ namespace CharacterControllers {
             
             _characterControl = GetComponent<PlayerControl>();
             SetPlayerItems("Fireball", 5);
-            SetPlayerItems("Tornado", 2);
+            SetPlayerItems("Tornado", 3);
         }
 
         private void SetPlayerItems(string itemName, int itemCount) {

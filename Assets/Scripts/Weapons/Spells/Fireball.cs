@@ -1,4 +1,5 @@
-﻿using Controls;
+﻿using CharacterControllers;
+using Controls;
 using UnityEngine;
 
 namespace Weapons.Spells {
@@ -6,7 +7,9 @@ namespace Weapons.Spells {
 
         void OnCollisionEnter(Collision other) {
             var go = other.gameObject;
-            go.SendMessage("TakeDamage", 100.0F, SendMessageOptions.DontRequireReceiver); // execute function on colided object.
+            if (go.CompareTag("Enemy")) {              
+                go.GetComponent<ServerCharacterController>().TakeDamage(100, 3.5f);   
+            }            
             Destroy(this);
         }
 
