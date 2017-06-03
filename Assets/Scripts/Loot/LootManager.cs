@@ -1,13 +1,12 @@
-﻿
-using System.Collections.Generic;
-using MazeBuilder.Utility;
+﻿using MazeBuilder.Utility;
 using UnityEngine;
 using UnityEngine.Networking;
+using Random = UnityEngine.Random;
 
 namespace Loot {
 	public class LootManager : NetworkBehaviour {
 		private static LootManager Instance;
-		private CollectionRandom loots = new CollectionRandom();
+		private readonly CollectionRandom _loots = new CollectionRandom();
 
 		[SerializeField]
 		[Range(0, 100f)] private float chanceOfSpawnLoot = 30f;
@@ -17,16 +16,16 @@ namespace Loot {
 
 		private void Start() {
 			foreach (var lootItem in loot) {
-				loots.Add(lootItem, typeof(GameObject));
+				_loots.Add(lootItem, typeof(GameObject));
 			}		
 		}
 
-		public void CreateLoot(Vector3 where, float chanse = 0.1f ) {
-			if (chanse == 0.1f) {
-				chanse = Random.Range(0, 101);
+		public void CreateLoot(Vector3 where, float chance = float.NaN ) {
+			if (float.IsNaN(chance)) {
+				chance = Random.Range(0, 101);
 			}
-			if (chanse <= chanceOfSpawnLoot) {
-				var instantiated = Instantiate((GameObject) loots.GetRandom(typeof(GameObject)), where, Quaternion.identity);
+			if (chance <= chanceOfSpawnLoot) {
+				var instantiated = Instantiate((GameObject) _loots.GetRandom(typeof(GameObject)), where, Quaternion.identity);
 				NetworkServer.Spawn(instantiated);
 			}
 		}

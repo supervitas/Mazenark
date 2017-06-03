@@ -31,6 +31,13 @@ namespace Enemies {
             SetUpRandomEnemies();
         }
 
+        protected void InitBiomeEnemies(Biome biomeType) {
+            CreateEnemyPlaces(biomeType);
+            SpawnEnemies();
+            CreateEnemyBehaivor();
+            SpawnBosses();
+        }
+
         private void SetUpRandomEnemies() {
             foreach (var enemy in Enemies) {
                 BiomeEnemies.Add(enemy, typeof(GameObject));
@@ -40,7 +47,7 @@ namespace Enemies {
             }
         }
 
-        protected void InitEnemyPlaces(Biome biomeType) {
+        protected void CreateEnemyPlaces(Biome biomeType) {
             EmptyTiles = (from biome in App.AppManager.Instance.MazeInstance.Maze.Biomes
                 where biome.biome == biomeType
                 from tile in biome.tiles

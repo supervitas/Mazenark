@@ -6,10 +6,7 @@ namespace Enemies {
 
         private new void Start() {
             base.Start();
-            InitEnemyPlaces(Biome.Earth);
-            SpawnEnemies();
-            CreateEnemyBehaivor();
-            SpawnBosses();
+            InitBiomeEnemies(Biome.Earth);           
         }
     }
 }

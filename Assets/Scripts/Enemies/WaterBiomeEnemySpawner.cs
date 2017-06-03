@@ -5,10 +5,7 @@ namespace Enemies {
 
         private new void Start() {
             base.Start();
-            InitEnemyPlaces(Biome.Water);
-            SpawnEnemies();
-            CreateEnemyBehaivor();
-            SpawnBosses();
+            InitBiomeEnemies(Biome.Water);        
         }
     }
 }
