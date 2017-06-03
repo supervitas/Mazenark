@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Lobby;
-using MazeBuilder.Utility;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Networking;
