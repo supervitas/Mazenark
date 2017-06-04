@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Controls;
+using Controls.Bosses;
 using MazeBuilder;
 using MazeBuilder.Utility;
 using UnityEngine;
@@ -9,7 +10,7 @@ using UnityEngine.Networking;
 using Random = UnityEngine.Random;
 
 namespace Enemies {
-    public class AbstractEnemySpawner : NetworkBehaviour {
+    public abstract class AbstractEnemySpawner : NetworkBehaviour {
         #region BiomeEnemies
         [SerializeField]
         [Range(0, 100f)] protected float EnemySpawnChance = 25f;
@@ -72,9 +73,10 @@ namespace Enemies {
 
         protected void SpawnBosses() {
             foreach (var room in Rooms) {
-                var boss = (GameObject) BiomeBosses.GetRandom(typeof(GameObject));
-                var inst = Instantiate(boss, Utils.GetDefaultPositionVector(room.Center, 0.1f), Quaternion.identity);
-                NetworkServer.Spawn(inst);                   
+                var bossGo = (GameObject) BiomeBosses.GetRandom(typeof(GameObject));
+                var boss = Instantiate(bossGo, Utils.GetDefaultPositionVector(room.Center, 0.1f), Quaternion.identity);
+                boss.GetComponent<BasicBossControl>().SetSpawnRoom(room);
+                NetworkServer.Spawn(boss);                   
             }
         }
 

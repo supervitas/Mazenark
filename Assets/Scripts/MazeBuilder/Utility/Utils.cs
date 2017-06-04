@@ -4,11 +4,11 @@ namespace MazeBuilder.Utility {
     public class Utils {
         // E.g. 0 → 4.5, 3 → 3*9 + 4.5
         public static float TransformToWorldCoordinate(int absoluteCoordinate) {
-            return absoluteCoordinate * global::Constants.Maze.TILE_SIZE + global::Constants.Maze.TILE_SIZE / 2.0f;
+            return absoluteCoordinate * Constants.Maze.TILE_SIZE + Constants.Maze.TILE_SIZE / 2.0f;
         }
 
         public static float TransformToWorldCoordinate(float absoluteCoordinate) {
-            return absoluteCoordinate * global::Constants.Maze.TILE_SIZE + global::Constants.Maze.TILE_SIZE / 2.0f;
+            return absoluteCoordinate * Constants.Maze.TILE_SIZE + Constants.Maze.TILE_SIZE / 2.0f;
         }
 
         public static Vector3 TransformToWorldCoordinate(Coordinate coord, float height = 0.1f) {
@@ -16,7 +16,7 @@ namespace MazeBuilder.Utility {
         }
 
         public static Coordinate TransformWorldToLocalCoordinate(float x, float z) {
-            return new Coordinate((int) x / global::Constants.Maze.TILE_SIZE, (int) z / global::Constants.Maze.TILE_SIZE);
+            return new Coordinate((int) x / Constants.Maze.TILE_SIZE, (int) z / Constants.Maze.TILE_SIZE);
         }
 
         public static Vector3 GetDefaultPositionVector(Coordinate coords, float y = 0f) {
