@@ -5,7 +5,8 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Networking;
 
-namespace Controls.Bosses {  
+namespace Controls.Bosses {
+    [NetworkSettings(channel = 1, sendInterval = 0.2f)]
     public abstract class BasicBossControl : NetworkBehaviour {
         [SerializeField]
         protected Animator Animator;

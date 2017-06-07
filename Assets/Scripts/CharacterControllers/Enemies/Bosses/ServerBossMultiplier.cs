@@ -13,12 +13,12 @@ namespace CharacterControllers.Enemies.Bosses {
         public override void TakeDamage(int amount, float timeOfDeath = 2f) {            
             if (!isServer) return;
             hited++;           
-            if (hited >= hitCounter) {
-                GetComponent<BossMultiplierControl>().Die(); // Play animation
+            if (hited >= hitCounter) {                                
+                GetComponent<BossMultiplierControl>().Die();                
                 Destroy(gameObject, timeOfDeath); // time after enemy will be destroyed. Maybe replace to fadeout
                 var pos = transform.position;
                 pos.y = 1.5f;                
-                FindObjectOfType<LootManager>().CreateLoot(pos, 100f);
+                FindObjectOfType<LootManager>().CreateLoot(pos, 100f);                
             }
         }
     }

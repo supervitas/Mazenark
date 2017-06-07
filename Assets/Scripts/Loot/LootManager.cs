@@ -24,7 +24,7 @@ namespace Loot {
 			if (float.IsNaN(chance)) {
 				chance = Random.Range(0, 101);
 			}
-			if (chance <= chanceOfSpawnLoot) {
+			if (chance >= chanceOfSpawnLoot) {
 				var instantiated = Instantiate((GameObject) _loots.GetRandom(typeof(GameObject)), where, Quaternion.identity);
 				NetworkServer.Spawn(instantiated);
 			}
