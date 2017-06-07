@@ -1,5 +1,4 @@
 using CharacterControllers;
-using Controls;
 using UnityEngine;
 
 namespace Weapons.Spells {
@@ -11,9 +10,10 @@ namespace Weapons.Spells {
                 go.GetComponent<ServerCharacterController>().TakeDamage(100, 3.5f);
                 var rigidBody = go.GetComponent<Rigidbody>();
                 if (rigidBody) {
-                    rigidBody.velocity = go.transform.up * 15;
-                }                
-            }                        
+                    rigidBody.velocity = go.transform.up * 20;
+                }
+                gameObject.GetComponent<Rigidbody>().velocity = gameObject.transform.forward * 13;
+            }            
         }
 
         public void OnDestroy() {        
@@ -22,7 +22,7 @@ namespace Weapons.Spells {
 
 
         public override void Fire() {
-            gameObject.GetComponent<Rigidbody>().velocity = gameObject.transform.forward * 10;
+            gameObject.GetComponent<Rigidbody>().velocity = gameObject.transform.forward * 13;
         }
     }
 }
