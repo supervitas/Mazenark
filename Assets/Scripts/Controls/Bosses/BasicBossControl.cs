@@ -55,6 +55,7 @@ namespace Controls.Bosses {
 
             SetAnimation("isDead", true);
             Agent.enabled = false;
+            gameObject.GetComponent<Collider>().enabled = false;
         }
 
         protected bool TargetInRoom(Vector3 targetPosition) {                
