@@ -11,8 +11,7 @@ namespace Weapons.Spells {
                 var rigidBody = go.GetComponent<Rigidbody>();
                 if (rigidBody) {
                     rigidBody.velocity = go.transform.up * 20;
-                }
-                gameObject.GetComponent<Rigidbody>().velocity = gameObject.transform.forward * 13;
+                }                
             }            
         }
 

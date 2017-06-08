@@ -25,6 +25,7 @@ namespace Controls.Bosses {
         
         protected void Start() {
             if (!isServer) return;
+            Debug.Log("start");
             SetAnimation("Idle", true);
             Agent = GetComponent<NavMeshAgent>();
             PlayersTransform = FindObjectOfType<LobbyGameManager>().PlayersTransforms;

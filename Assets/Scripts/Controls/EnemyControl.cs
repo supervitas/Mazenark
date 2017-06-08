@@ -127,7 +127,7 @@ namespace Controls {
 
                 if (_agent.remainingDistance > 3f) {
                     SetAnimation("Attack", false);
-                } else {               
+                } else {                    
                     SetAnimation("Attack", true);
 //                    Fire(transform.forward); // todo colider to enemy. No raycast
                 }
