@@ -28,8 +28,8 @@ namespace CharacterControllers.Enemies.Bosses {
                     newBoss.transform.localScale = new Vector3(gameObject.transform.localScale.x / 1.5f,
                         gameObject.transform.localScale.y / 1.5f, gameObject.transform.localScale.z / 1.5f);
 
-                    newBoss.transform.position = new Vector3(gameObject.transform.position.x - Random.Range(-10, 10),
-                        gameObject.transform.position.y, gameObject.transform.position.z - Random.Range(-10, 10));
+                    newBoss.transform.position = new Vector3(gameObject.transform.position.x - Random.Range(-5, 5),
+                        gameObject.transform.position.y, gameObject.transform.position.z - Random.Range(-5, 5));
 
                     NetworkServer.Spawn(newBoss);
                 }
