@@ -37,6 +37,10 @@ namespace Controls {
             InvokeRepeating("UpdateEnemy", 0, 0.2f);
         }
 
+        public bool IsAlive() {
+            return _isAlive;
+        }
+
         private void SetAnimation(string animationState, bool value) {
             if (animator.GetBool(animationState) != value) {
                 animator.SetBool(animationState, value);
@@ -69,8 +73,8 @@ namespace Controls {
             if(!isServer) return;
 
             _isAlive = false;
-            CancelInvoke("CheckPlayersNear");
-
+            CancelInvoke("CheckPlayersNear");             
+            
             SetAnimation("isDead", true);
             _agent.enabled = false;
         }

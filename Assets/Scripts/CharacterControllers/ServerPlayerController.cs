@@ -1,4 +1,6 @@
+using App;
 using Controls;
+using Lobby;
 using Loot;
 using UnityEngine;
 
@@ -23,7 +25,19 @@ namespace CharacterControllers {
         
         private void OnDestroy() {            
             CancelInvoke("PlayerUpdate");            
-        }     
+        }
+        
+        public override void TakeDamage(int amount, float timeOfDeath = 2f) {            
+            if (!isServer) return;
+            CurrentHealth -= amount;
+            if (CurrentHealth > 0) return;
+            CurrentHealth = 0; 
+                        
+            FindObjectOfType<LobbyGameManager>().OnGameover(gameObject.name);
+
+            NetworkEventHub.Instance.RpcPublishEvent("PlayerDied", gameObject.name);
+            Destroy(gameObject);                       
+        }
         
         private void OnTriggerEnter(Collider other) { // take loot
             if (!isServer) return;            
