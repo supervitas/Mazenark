@@ -34,10 +34,10 @@ namespace Controls.Bosses {
 
         public void SetSpawnRoom(Room room) {              
             SpawnRoom = room;            
-            RoomBounds[0] = Utils.TransformToWorldCoordinate(new Coordinate(SpawnRoom.BottomLeftCorner.X, SpawnRoom.BottomLeftCorner.Y));            
-            RoomBounds[1] = Utils.TransformToWorldCoordinate(new Coordinate(SpawnRoom.TopLeftCorner.X, SpawnRoom.TopLeftCorner.Y));
-            RoomBounds[2] = Utils.TransformToWorldCoordinate(new Coordinate(SpawnRoom.BottomRightCorner.X, SpawnRoom.BottomRightCorner.Y));
-            RoomBounds[3] = Utils.TransformToWorldCoordinate(new Coordinate(SpawnRoom.TopRightCorner.X, SpawnRoom.TopRightCorner.Y));
+            RoomBounds[0] = Utils.TransformToWorldCoordinate(new Coordinate(SpawnRoom.BottomLeftCorner.X - 1, SpawnRoom.BottomLeftCorner.Y + 1));            
+            RoomBounds[1] = Utils.TransformToWorldCoordinate(new Coordinate(SpawnRoom.TopLeftCorner.X - 1, SpawnRoom.TopLeftCorner.Y - 1));
+            RoomBounds[2] = Utils.TransformToWorldCoordinate(new Coordinate(SpawnRoom.BottomRightCorner.X + 1, SpawnRoom.BottomRightCorner.Y + 1));
+            RoomBounds[3] = Utils.TransformToWorldCoordinate(new Coordinate(SpawnRoom.TopRightCorner.X + 1, SpawnRoom.TopRightCorner.Y - 1));
         }
 
 
