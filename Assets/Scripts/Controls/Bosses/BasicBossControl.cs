@@ -24,8 +24,7 @@ namespace Controls.Bosses {
         protected Vector3[] RoomBounds = new Vector3[4];
         
         protected void Start() {
-            if (!isServer) return;
-            Debug.Log("start");
+            if (!isServer) return;           
             SetAnimation("Idle", true);
             Agent = GetComponent<NavMeshAgent>();
             PlayersTransform = FindObjectOfType<LobbyGameManager>().PlayersTransforms;
