@@ -46,8 +46,8 @@ namespace CharacterControllers.Enemies.Bosses {
 			_shieldsControllers[i].Parent = this;
 
 			var room = _bossControls.GetSpawnRoom();
-			_shields[i].transform.position = new Vector3(gameObject.transform.position.x - Random.Range(-7, 7),
-				gameObject.transform.position.y, gameObject.transform.position.z - Random.Range(-7, 7));
+			_shields[i].transform.position = new Vector3(gameObject.transform.position.x - Random.Range(-12, 12),
+				gameObject.transform.position.y, gameObject.transform.position.z - Random.Range(-12, 12));
 
 			
 		}
