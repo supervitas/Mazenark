@@ -1,5 +1,4 @@
 ﻿using CharacterControllers.Enemies.Bosses;
-using MazeBuilder.Utility;
 using UnityEngine;
 
 
@@ -7,8 +6,7 @@ namespace Controls.Bosses {
     public class BossShieldedControl : BasicBossControl {
 
 		public ServerBossShieldedController Controller { get; set; }
-
-		public Room GetSpawnRoom() { return SpawnRoom; }
+	
 
         protected override void UpdateBoss() {            
             if(!IsAlive) return;            

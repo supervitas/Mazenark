@@ -39,6 +39,8 @@ namespace Controls.Bosses {
             RoomBounds[2] = Utils.TransformToWorldCoordinate(new Coordinate(SpawnRoom.BottomRightCorner.X + 1, SpawnRoom.BottomRightCorner.Y + 1));
             RoomBounds[3] = Utils.TransformToWorldCoordinate(new Coordinate(SpawnRoom.TopRightCorner.X + 1, SpawnRoom.TopRightCorner.Y - 1));
         }
+        
+        public Room GetSpawnRoom() { return SpawnRoom; }
 
 
         protected void SetAnimation(string animationState, bool value) {
