@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using MazeBuilder.Utility;
+using UnityEngine;
 
 
 namespace Controls.Bosses {    
@@ -34,6 +35,10 @@ namespace Controls.Bosses {
 
         }
 
+        public Room GetSpawnRoom() {
+            return SpawnRoom;
+        }
+        
         private void Fire(Vector3 direction) {
             RaycastHit hit;
             var pos = transform.position;

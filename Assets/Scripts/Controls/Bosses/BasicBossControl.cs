@@ -27,7 +27,7 @@ namespace Controls.Bosses {
             if (!isServer) return;           
             SetAnimation("Idle", true);
             Agent = GetComponent<NavMeshAgent>();
-            PlayersTransform = FindObjectOfType<LobbyGameManager>().PlayersTransforms;
+            PlayersTransform = FindObjectOfType<LobbyGameManager>().PlayersTransforms;            
             InvokeRepeating("CheckPlayersNear", 0, 0.3f);
             InvokeRepeating("UpdateBoss", 0, 0.2f);            
         }
@@ -45,7 +45,7 @@ namespace Controls.Bosses {
             if (Animator.GetBool(animationState) != value) {
                 Animator.SetBool(animationState, value);
             }
-        }    
+        }                
 
         public void Die() {
             if(!isServer) return;
