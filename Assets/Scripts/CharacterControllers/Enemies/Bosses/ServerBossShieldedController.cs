@@ -19,9 +19,9 @@ namespace CharacterControllers.Enemies.Bosses {
 
 		private BossShieldedControl _bossControls = null;
 
-		private GameObject[] _shields = new GameObject[MAX_SHIELDS];
-		private BossShieldShieldedControl[] _shieldsControls = new BossShieldShieldedControl[MAX_SHIELDS];
-		private ServerBossShieldShieldedController[] _shieldsControllers = new ServerBossShieldShieldedController[MAX_SHIELDS];
+		private readonly GameObject[] _shields = new GameObject[MAX_SHIELDS];
+		private readonly BossShieldShieldedControl[] _shieldsControls = new BossShieldShieldedControl[MAX_SHIELDS];
+		private readonly ServerBossShieldShieldedController[] _shieldsControllers = new ServerBossShieldShieldedController[MAX_SHIELDS];
 
 		private void Start() {
             IsNpc = true;
@@ -37,18 +37,18 @@ namespace CharacterControllers.Enemies.Bosses {
 		}
 
 		private void SpawnShield(int i) {
-			_shields[i] = Instantiate(_shieldPrefab);
-			NetworkServer.Spawn(_shields[i]);
+			_shields[i] = Instantiate(_shieldPrefab);			
 
 			_shieldsControls[i] = _shields[i].GetComponent<BossShieldShieldedControl>();
 			_shieldsControls[i].Controller = this;
 			_shieldsControllers[i] = _shields[i].GetComponent<ServerBossShieldShieldedController>();
 			_shieldsControllers[i].Parent = this;
 
-			var room = _bossControls.GetSpawnRoom();
+			var room = _bossControls.GetSpawnRoom();			
 			_shields[i].transform.position = new Vector3(gameObject.transform.position.x - Random.Range(-12, 12),
 				gameObject.transform.position.y, gameObject.transform.position.z - Random.Range(-12, 12));
 
+			NetworkServer.Spawn(_shields[i]);
 			
 		}
 

@@ -13,33 +13,42 @@ namespace Cameras {
 
         [SerializeField] private float _bumperDistanceCheck = 2.5f; // length of bumper ray
         [SerializeField] private float _bumperCameraHeight = 1.0f; // adjust camera height while bumping
-
+        
+        private bool _wasColided = false;
 
         public void SetPlayerTransforms(Transform player) {
             _target = player;
             GetComponent<Camera>().transform.parent = _target;
         }
 
-        private void FixedUpdate() {
+        private void OnTriggerStay(Collider other) {
             if (!_target) return;
+            
+            _wasColided = true;
+            
+            var wantedPosition = _target.TransformPoint(0, _height, -_distance);
+            
+            wantedPosition.x = other.transform.position.x;
+            wantedPosition.z = other.transform.position.z;
+            wantedPosition.y = Mathf.Lerp(other.transform.position.y + _bumperCameraHeight, wantedPosition.y, Time.deltaTime * _damping); 
+            
+            MoveCamera(wantedPosition);
+            
+            _wasColided = false;
+        }
 
+        private void FixedUpdate() {
+            if (!_target && _wasColided) return;           
+            
             Vector3 wantedPosition = _target.TransformPoint(0, _height, -_distance);
+            
+            MoveCamera(wantedPosition);                                       
+        }
 
-            // check to see if there is anything behind the target
-            RaycastHit hit;
-            Vector3 back = _target.transform.TransformDirection(-1 * Vector3.forward);
-            // cast the bumper Sphere out from rear and check to see if there is anything behind
-            if (Physics.SphereCast(_target.transform.position, _target.transform.position.y, back, out hit, _bumperDistanceCheck)
-                && !hit.transform.CompareTag("Player") && hit.transform.GetComponent<MeshRenderer>() != null &&
-                hit.transform.GetComponent<MeshRenderer>().bounds.size.y > 2) {
-                wantedPosition.x = hit.point.x;
-                wantedPosition.z = hit.point.z;
-                wantedPosition.y = Mathf.Lerp(hit.point.y + _bumperCameraHeight, wantedPosition.y, Time.deltaTime * _damping);
-            }
+        private void MoveCamera(Vector3 wantedPosition) {
             transform.position = Vector3.Lerp(transform.position, wantedPosition, Time.deltaTime * _damping);
-
             Vector3 lookPosition = _target.TransformPoint(_targetLookAtOffset);
-
+            
             if (_smoothRotation) {
                 Quaternion wantedRotation = Quaternion.LookRotation(lookPosition - transform.position, _target.up);
                 transform.rotation = Quaternion.Slerp(transform.rotation, wantedRotation,
@@ -47,6 +56,7 @@ namespace Cameras {
             } else {
                 transform.rotation = Quaternion.LookRotation(lookPosition - transform.position, _target.up);
             }
+            
         }
 
     }

@@ -24,7 +24,7 @@ namespace Controls.Bosses {
         protected Vector3[] RoomBounds = new Vector3[4];
         
         protected void Start() {
-            if (!isServer) return;           
+            if (!isServer) return;
             SetAnimation("Idle", true);
             Agent = GetComponent<NavMeshAgent>();
             PlayersTransform = FindObjectOfType<LobbyGameManager>().PlayersTransforms;            
@@ -41,7 +41,6 @@ namespace Controls.Bosses {
         }
         
         public Room GetSpawnRoom() { return SpawnRoom; }
-
 
         protected void SetAnimation(string animationState, bool value) {
             if (Animator.GetBool(animationState) != value) {
@@ -62,12 +61,8 @@ namespace Controls.Bosses {
 
         protected bool TargetInRoom(Vector3 targetPosition) {                
             if (SpawnRoom == null) return false;
-            if (targetPosition.z < RoomBounds[0].z && targetPosition.z > RoomBounds[1].z && 
-                targetPosition.x > RoomBounds[0].x && targetPosition.x < RoomBounds[2].x ) {
-                Debug.Log("intercets");
-                return true;
-            }           
-            return false;
+            return targetPosition.z < RoomBounds[0].z && targetPosition.z > RoomBounds[1].z && 
+                   targetPosition.x > RoomBounds[0].x && targetPosition.x < RoomBounds[2].x;
         }
 
         protected void CheckPlayersNear() {            

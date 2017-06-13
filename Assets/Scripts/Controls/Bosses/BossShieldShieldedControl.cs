@@ -1,4 +1,4 @@
-﻿using CharacterControllers.Enemies.Bosses;
+﻿    using CharacterControllers.Enemies.Bosses;
 using UnityEngine;
 
 
@@ -7,8 +7,11 @@ namespace Controls.Bosses {
 
 		public ServerBossShieldedController Controller { get; set; }
 
-        protected override void UpdateBoss() {            
-
+        private new void Start() {
+            if (!isServer) return;
+            SetAnimation("Idle", true);                                                               
         }
+
+        protected override void UpdateBoss() {}
     }
 }
