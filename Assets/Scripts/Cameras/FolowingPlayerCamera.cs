@@ -14,8 +14,7 @@ namespace Cameras {
         [SerializeField] private float _rayMaximum = 2f;
         public LayerMask collisionLayerMask;
 
-        private RaycastHit m_hitWall;
-        private bool wasColided = false;
+        private RaycastHit m_hitWall;        
 
         private void Start() {
             m_hitWall = new RaycastHit();            
@@ -31,27 +30,14 @@ namespace Cameras {
             if (!_target) return;
 
             Vector3 wantedPosition = _target.TransformPoint(0, _height, -_distance);            
-                                   
-            
-            for (var i = 0; i < 4; i++) {
-                var pos = wantedPosition;              
-                pos.x += _distanceBetweenRays * i;
-                pos.z += _distanceBetweenRays * i;
-                
-                if (Physics.Raycast(_target.transform.position, -_target.transform.forward, out m_hitWall, _rayMaximum,
-                        collisionLayerMask)) {                   
-                        wasColided = true;                                                                                         
-                }
-                _distanceBetweenRays = -_distanceBetweenRays;
-            }
-
-            if (wasColided) {                
+                                                                           
+            if (Physics.Raycast(_target.transform.position, -_target.transform.forward, out m_hitWall, _rayMaximum,
+                    collisionLayerMask)) {                   
                 wantedPosition.x = m_hitWall.point.x;
                 wantedPosition.z = m_hitWall.point.z;
                 wantedPosition.y = Mathf.Lerp(m_hitWall.point.y + _height, wantedPosition.y,
-                    Time.deltaTime * _damping);                
-                wasColided = false;
-            }
+                    Time.deltaTime * _damping);                                                                                     
+            }                
             
             transform.position = Vector3.Lerp(transform.position, wantedPosition, Time.deltaTime * _damping);
 
