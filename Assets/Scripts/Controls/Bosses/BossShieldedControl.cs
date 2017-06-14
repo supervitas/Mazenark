@@ -1,4 +1,5 @@
 ﻿using CharacterControllers.Enemies.Bosses;
+using MazeBuilder.Utility;
 using UnityEngine;
 
 
@@ -34,6 +35,8 @@ namespace Controls.Bosses {
                     SetAnimation("Attack", true);
 //                    Fire(transform.forward); // todo colider to enemy. No raycast
                 }
+            } else {            
+                Agent.destination = Utils.GetDefaultPositionVector(SpawnRoom.Center);
             }
 
         }

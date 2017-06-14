@@ -10,45 +10,42 @@ namespace Cameras {
         [SerializeField] private float _rotationDamping = 10.0f;
 
         [SerializeField] private Vector3 _targetLookAtOffset; // allows offsetting of camera lookAt, very useful for low bumper heights
-
-        [SerializeField] private float _bumperDistanceCheck = 2.5f; // length of bumper ray
-        [SerializeField] private float _bumperCameraHeight = 1.0f; // adjust camera height while bumping
+                               
+        private RaycastHit m_hitWall;
+        public LayerMask collisionLayerMask;
         
-        private bool _wasColided = false;
+             
+        private void Start() {
+            m_hitWall = new RaycastHit();
+            
+//            collisionLayerMask = LayerMask.GetMask("Camera"); 
+
+        }
 
         public void SetPlayerTransforms(Transform player) {
             _target = player;
             GetComponent<Camera>().transform.parent = _target;
         }
 
-        private void OnTriggerStay(Collider other) {
-            if (!_target) return;
-            
-            _wasColided = true;
-            
-            var wantedPosition = _target.TransformPoint(0, _height, -_distance);
-            
-            wantedPosition.x = other.transform.position.x;
-            wantedPosition.z = other.transform.position.z;
-            wantedPosition.y = Mathf.Lerp(other.transform.position.y + _bumperCameraHeight, wantedPosition.y, Time.deltaTime * _damping); 
-            
-            MoveCamera(wantedPosition);
-            
-            _wasColided = false;
-        }
-
         private void FixedUpdate() {
-            if (!_target && _wasColided) return;           
-            
-            Vector3 wantedPosition = _target.TransformPoint(0, _height, -_distance);
-            
-            MoveCamera(wantedPosition);                                       
-        }
+            if (!_target) return;
 
-        private void MoveCamera(Vector3 wantedPosition) {
+            Vector3 wantedPosition = _target.TransformPoint(0, _height, -_distance);                                            
+                        
+            if(Physics.Linecast(_target.transform.position, wantedPosition, out m_hitWall, collisionLayerMask) || 
+                Physics.Raycast(_target.transform.position, -_target.transform.forward, 
+                    out m_hitWall, _distance, collisionLayerMask)) {     
+                
+                    wantedPosition.x = m_hitWall.point.x;
+                    wantedPosition.z = m_hitWall.point.z;
+                    wantedPosition.y = Mathf.Lerp(m_hitWall.point.y + _height, wantedPosition.y,
+                        Time.deltaTime * _damping);
+                
+            }
             transform.position = Vector3.Lerp(transform.position, wantedPosition, Time.deltaTime * _damping);
+
             Vector3 lookPosition = _target.TransformPoint(_targetLookAtOffset);
-            
+
             if (_smoothRotation) {
                 Quaternion wantedRotation = Quaternion.LookRotation(lookPosition - transform.position, _target.up);
                 transform.rotation = Quaternion.Slerp(transform.rotation, wantedRotation,
@@ -56,8 +53,8 @@ namespace Cameras {
             } else {
                 transform.rotation = Quaternion.LookRotation(lookPosition - transform.position, _target.up);
             }
-            
         }
-
+             
     }
+    
 }
