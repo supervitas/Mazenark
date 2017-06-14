@@ -8,40 +8,51 @@ namespace Cameras {
         [SerializeField] private float _damping = 5.0f;
         [SerializeField] private bool _smoothRotation = true;
         [SerializeField] private float _rotationDamping = 10.0f;
+        [SerializeField] private float _distanceBetweenRays = 0.2f;
 
-        [SerializeField] private Vector3 _targetLookAtOffset; // allows offsetting of camera lookAt, very useful for low bumper heights
-                               
-        private RaycastHit m_hitWall;
+        [SerializeField] private Vector3 _targetLookAtOffset;
+        [SerializeField] private float _rayMaximum = 2f;
         public LayerMask collisionLayerMask;
-        
-             
-        private void Start() {
-            m_hitWall = new RaycastHit();
-            
-//            collisionLayerMask = LayerMask.GetMask("Camera"); 
 
+        private RaycastHit m_hitWall;
+        private bool wasColided = false;
+
+        private void Start() {
+            m_hitWall = new RaycastHit();            
         }
 
         public void SetPlayerTransforms(Transform player) {
             _target = player;
             GetComponent<Camera>().transform.parent = _target;
         }
+        
 
         private void FixedUpdate() {
             if (!_target) return;
 
-            Vector3 wantedPosition = _target.TransformPoint(0, _height, -_distance);                                            
-                        
-            if(Physics.Linecast(_target.transform.position, wantedPosition, out m_hitWall, collisionLayerMask) || 
-                Physics.Raycast(_target.transform.position, -_target.transform.forward, 
-                    out m_hitWall, _distance, collisionLayerMask)) {     
+            Vector3 wantedPosition = _target.TransformPoint(0, _height, -_distance);            
+                                   
+            
+            for (var i = 0; i < 4; i++) {
+                var pos = wantedPosition;              
+                pos.x += _distanceBetweenRays * i;
+                pos.z += _distanceBetweenRays * i;
                 
-                    wantedPosition.x = m_hitWall.point.x;
-                    wantedPosition.z = m_hitWall.point.z;
-                    wantedPosition.y = Mathf.Lerp(m_hitWall.point.y + _height, wantedPosition.y,
-                        Time.deltaTime * _damping);
-                
+                if (Physics.Raycast(_target.transform.position, -_target.transform.forward, out m_hitWall, _rayMaximum,
+                        collisionLayerMask)) {                   
+                        wasColided = true;                                                                                         
+                }
+                _distanceBetweenRays = -_distanceBetweenRays;
             }
+
+            if (wasColided) {                
+                wantedPosition.x = m_hitWall.point.x;
+                wantedPosition.z = m_hitWall.point.z;
+                wantedPosition.y = Mathf.Lerp(m_hitWall.point.y + _height, wantedPosition.y,
+                    Time.deltaTime * _damping);                
+                wasColided = false;
+            }
+            
             transform.position = Vector3.Lerp(transform.position, wantedPosition, Time.deltaTime * _damping);
 
             Vector3 lookPosition = _target.TransformPoint(_targetLookAtOffset);
