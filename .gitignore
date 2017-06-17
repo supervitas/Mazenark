@@ -4,6 +4,7 @@
 /[Bb]uild/
 /[Bb]uilds/
 /Assets/AssetStoreTools*
+/Assets/Plugins/Editor/
 
 *_nogit*
 
@@ -35,4 +36,3 @@ sysinfo.txt
 *.DS_Store
 
 .idea/
-
