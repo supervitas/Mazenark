@@ -76,7 +76,7 @@ namespace Controls {
             CancelInvoke("CheckPlayersNear");             
             
             SetAnimation("isDead", true);
-            _agent.enabled = false;
+            _agent.isStopped = true;
         }
 
         private void CheckPlayersNear() {
@@ -103,7 +103,7 @@ namespace Controls {
                     return;
                 }
             }
-            if (!_hasTarget) return;
+            if (_hasTarget) return;
             
             GotoNextPoint();
             SetAnimation("Attack", false);
