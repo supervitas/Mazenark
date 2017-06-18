@@ -56,7 +56,7 @@ namespace Controls {
             Points.Add(patroolPoint);
         }
 
-        public void isPatrooling(bool patrool) {
+        public void IsPatrooling(bool patrool) {
             _canPatrool = patrool;
         }
 

@@ -117,7 +117,7 @@ namespace Enemies {
                 foreach (var patroolPoint in GetRandomNearCoordinates(enemyPos, 3)) {
                     controller.AddPatroolPoint(patroolPoint);
                 }               
-                controller.isPatrooling(true);               
+                controller.IsPatrooling(true);               
             }
         }
     }
