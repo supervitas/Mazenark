@@ -36,7 +36,7 @@ namespace Controls {
         [SerializeField] private ControlMode m_controlMode = ControlMode.Direct;
 
         public GameObject PlayerCamera;
-        private Camera _cameraInstanced;       
+        private Camera _camera;       
 
         private GameObject _activeItem;
         private Text _spellText;
@@ -118,7 +118,7 @@ namespace Controls {
 
             var cam = Instantiate(PlayerCamera);
             cam.GetComponent<FolowingPlayerCamera>().SetPlayerTransforms(transform);
-            _cameraInstanced = cam.GetComponent<Camera>();
+            _camera = cam.GetComponent<Camera>();
 
             _uiSpellCast = FindObjectOfType<SpellCast>();
             
@@ -156,20 +156,18 @@ namespace Controls {
             if (timeCasted >= castTime) {
                 timeCasted = 0;
                 _uiSpellCast.Reset();
+                                 
+                var direction = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 25);
+                direction = _camera.ScreenToWorldPoint(direction);
+                
+                CmdFire(direction);
+                _playerItems[_activeItem.name]--;
+                _gameGui.ModifyItemCount(_activeItem.name, _playerItems[_activeItem.name].ToString());
 
-                var ray = _cameraInstanced.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-
-                if (Physics.Raycast(ray, out hit)) {
-                    CmdFire(hit.point);
-                    _playerItems[_activeItem.name]--;
-                    _gameGui.ModifyItemCount(_activeItem.name, _playerItems[_activeItem.name].ToString());
-
-                    if ( _playerItems[_activeItem.name] <= 0) {
-                        _gameGui.DisableItem(_activeItem.name);
-                        _playerItems.Remove(_activeItem.name);
-                        _activeItem = null;
-                    }
+                if ( _playerItems[_activeItem.name] <= 0) {
+                    _gameGui.DisableItem(_activeItem.name);
+                    _playerItems.Remove(_activeItem.name);
+                    _activeItem = null;
                 }
             }
             return true;
@@ -297,7 +295,7 @@ namespace Controls {
         [Command]
         private void CmdFire(Vector3 direction) {
             if (_serverPlayerItems[_activeItem.name] <= 0) return;
-
+            
             _serverPlayerItems[_activeItem.name]--;
             var pos = transform.position;
             pos.y += 2.3f;

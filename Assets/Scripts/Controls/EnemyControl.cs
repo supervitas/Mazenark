@@ -97,7 +97,7 @@ namespace Controls {
                     _agent.autoBraking = true;
 
                     _agent.destination = target.position;
-                    _agent.stoppingDistance = 3f;
+                    _agent.stoppingDistance = 5f;
 
                     _hasTarget = true;
                     return;
@@ -129,7 +129,7 @@ namespace Controls {
                     transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
                 }
 
-                if (_agent.remainingDistance > 3f) {
+                if (_agent.remainingDistance > 5f) {
                     SetAnimation("Attack", false);
                 } else {                    
                     SetAnimation("Attack", true);

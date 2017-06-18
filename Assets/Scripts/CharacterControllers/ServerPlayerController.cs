@@ -14,7 +14,7 @@ namespace CharacterControllers {
             InvokeRepeating("PlayerUpdate", 0, 0.5f);
             
             _characterControl = GetComponent<PlayerControl>();
-            SetPlayerItems("Fireball", 5);
+            SetPlayerItems("Fireball", 50);
             SetPlayerItems("Tornado", 3);
         }
 
