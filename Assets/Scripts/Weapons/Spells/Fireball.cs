@@ -5,7 +5,7 @@ namespace Weapons.Spells {
     public class Fireball : Weapon {
 
         void OnCollisionEnter(Collision other) {
-            var go = other.gameObject;
+            var go = other.gameObject;            
             if (go.CompareTag("Enemy") || go.CompareTag("Player")) {              
                 go.GetComponent<ServerCharacterController>().TakeDamage(100, 3.5f);   
             }            
