@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Controls;
 using Controls.Bosses;
+using Controls.Enemies;
 using MazeBuilder;
 using MazeBuilder.Utility;
 using UnityEngine;
@@ -104,11 +104,11 @@ namespace Enemies {
 
         protected void CreateEnemyBehaivor() {
             foreach (var enemy in SpawnedEnemies) {
-                var controller = enemy.GetComponent<EnemyControl>();
-
+                var controller = enemy.GetComponent<BasicEnemyControl>();
+                
                 if (EnemyIdleBehaivor >= Random.Range(1, 100)) {
-                    controller.SetIdleBehaivor();
-                    controller.Points.Add(enemy.transform.position); // add current position for enemy to go back if player will no longer visible
+                    
+                    controller.AddPatroolPoint(enemy.transform.position); // add current position for enemy to go back if player will no longer visible
                     continue;
                 }
 
@@ -116,8 +116,10 @@ namespace Enemies {
 
                 foreach (var patroolPoint in GetRandomNearCoordinates(enemyPos, 3)) {
                     controller.AddPatroolPoint(patroolPoint);
-                }               
-                controller.IsPatrooling(true);               
+                }
+                
+                controller.SetPatrool(true);
+//                Debug.Log(controller.name);
             }
         }
     }

@@ -1,4 +1,4 @@
-using Controls;
+using Controls.Enemies;
 using Loot;
 
 namespace CharacterControllers.Enemies {
@@ -8,7 +8,7 @@ namespace CharacterControllers.Enemies {
         }
 
         public override void TakeDamage(int amount, float timeOfDeath = 2) {
-            var control = GetComponent<EnemyControl>();
+            var control = GetComponent<BasicEnemyControl>();
             if (!control.IsAlive()) return;                
             control.Die();
             Destroy(gameObject, timeOfDeath); // time after enemy will be destroyed. Maybe replace to fadeout
