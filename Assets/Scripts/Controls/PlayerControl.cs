@@ -83,9 +83,10 @@ namespace Controls {
 
         private void OnDestroy() {
             AppManager.Instance.TurnOnMainCamera();
-            if (isLocalPlayer) {
-                AppManager.Instance.EventHub.CreateEvent("PlayerDead", null);
-            }
+            if (!isLocalPlayer) return;
+            
+            AppManager.Instance.EventHub.CreateEvent("PlayerDead", null);
+            _uiSpellCast.Reset();
         }
 
         private void OnCollisionStay(Collision collision) {
@@ -164,7 +165,7 @@ namespace Controls {
                 _playerItems[_activeItem.name]--;
                 _gameGui.ModifyItemCount(_activeItem.name, _playerItems[_activeItem.name].ToString());
 
-                if ( _playerItems[_activeItem.name] <= 0) {
+                if (_playerItems[_activeItem.name] <= 0) {
                     _gameGui.DisableItem(_activeItem.name);
                     _playerItems.Remove(_activeItem.name);
                     _activeItem = null;
@@ -179,7 +180,6 @@ namespace Controls {
             m_animator.SetBool("Grounded", m_isGrounded);
 
             if (CheckPlayerFire()) return;
-
 
             timeCasted = 0;
             _uiSpellCast.Reset();

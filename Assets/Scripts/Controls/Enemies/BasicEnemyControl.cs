@@ -11,7 +11,7 @@ namespace Controls.Enemies {
         protected NavMeshAgent _agent;
 
         [SerializeField]
-        protected float enemyAgroRange = 40f;
+        protected float enemyAgroRange = 20f;
         [SerializeField]
         private float enemyAngleVisibility = 30f;
 
@@ -31,6 +31,7 @@ namespace Controls.Enemies {
         
         protected float _attackTimePassed = 0f;
 
+        protected Vector3 targetPosition;
         
         protected void Start() {            
             if (!isServer) return;
@@ -83,7 +84,7 @@ namespace Controls.Enemies {
 
                 var angle = Vector3.Angle(direction, transform.forward);
                 //&& angle < enemyAngleVisibility
-                if (distance <= enemyAgroRange){
+                if (distance <= enemyAgroRange) {
                     playerTarget = target.position;
                     return true;
                 }
@@ -100,46 +101,35 @@ namespace Controls.Enemies {
                 SetAnimation("Idle", false);
             } else {         
                 SetAnimation("Idle", true);
-            }
-            
-            var direction = _agent.destination - transform.position;
-
-            if (direction != Vector3.zero) {
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
-            }
-            
-            Vector3 targetPosition;
+            }                        
+                       
             if (CheckPlayersNear(out targetPosition)) {
+                var direction = _agent.destination - transform.position;
+
+                if (direction != Vector3.zero) {
+                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
+                }
+                
                 _agent.autoBraking = true;
                 
                 _agent.destination = targetPosition;
-                _agent.stoppingDistance = 3f;
+                _agent.stoppingDistance = 5f;                                                
 
-                _hasTarget = true;                                
-
-                if (_agent.remainingDistance > 3f) {
+                if (_agent.remainingDistance > 5f) {
                     SetAnimation("Attack", false);
                     _attackTimePassed = 0;
                 } else {                    
-                    SetAnimation("Attack", true);
-                    Attack();                    
+                    SetAnimation("Attack", true);                    
+                    Fire(targetPosition);                    
                 }
+                return;
             }
             
-            if (_canPatrool && !_hasTarget && !_agent.pathPending && _agent.remainingDistance <= 0.5f) {
+            if (_canPatrool && !_agent.pathPending && _agent.remainingDistance <= 0.5f) {
                 GotoNextPoint();
             }
         }
 
-        protected void Attack() {            
-            _attackTimePassed += Time.deltaTime;
-                    
-            if (_attackTimePassed >= TimeForAttack) {
-                Fire(transform.forward);
-                _attackTimePassed = 0f;
-            }
-        }
-         
         protected virtual void Fire(Vector3 direction) {}
     }
 }

@@ -8,10 +8,9 @@ namespace Controls.Enemies {
             RaycastHit hit;
             var pos = transform.position;
 
-            pos.y = 1f;
-
-            if (Physics.Raycast(pos, direction, out hit, 4.5f)) {
-                var go = hit.transform.gameObject;
+            pos.y = 2.5f;           
+            if (Physics.Raycast(pos, direction, out hit, 6f)) {
+                var go = hit.transform.gameObject;                
                 if (go.CompareTag("Player")) {
                     go.GetComponent<ServerCharacterController>().TakeDamage(100);                    
                 }
