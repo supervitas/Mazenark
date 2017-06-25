@@ -12,15 +12,10 @@ namespace App {
             if (isServer == null) return;
 
             var port = GetArg("-port");
-
-            if (port == null) {
-                Debug.LogError("No Port Provided");
-                Application.Quit();
-            }
-
             var instanceId = GetArg("-instanceid");
-            if (instanceId == null) {
-                Debug.LogError("No instanceid provided");
+
+            if (port == null || instanceId == null) {
+                Debug.LogError("No port or instanceid provided");
                 Application.Quit();
             }
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using Constants;
 using Lobby;
 using UnityEngine;
@@ -17,7 +16,7 @@ namespace App {
             }
             _instanceId = FindObjectOfType<LobbyManager>().InstanceId;
         }
-
+        
         public void GetRequest(string url, Action<string> callback, Action<string> error) {
             var request = UnityWebRequest.Get(url);
             StartCoroutine(WaitForRequest(request, callback, error));

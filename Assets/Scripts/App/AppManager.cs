@@ -28,7 +28,6 @@ namespace App {
             MazeInstance = null;
         }
 
-
         public void TurnOffAndSetupMainCamera() { // Here gameover camera will be set
             Camera.main.transform.position = Utils.TransformToWorldCoordinate(new Coordinate(
                 MazeInstance.Height / 2 - 1, MazeInstance.Width / 2 - 2), 10.5f);
