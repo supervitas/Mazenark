@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CharacterControllers;
 using Lobby;
 using UnityEngine;
 using UnityEngine.AI;
@@ -118,7 +119,7 @@ namespace Controls.Enemies {
                 if (_agent.remainingDistance > 5f) {
                     SetAnimation("Attack", false);
                     _attackTimePassed = 0;
-                } else {                    
+                } else if (!_agent.pathPending && _agent.remainingDistance <= 5f) {                    
                     SetAnimation("Attack", true);                    
                     Fire(targetPosition);                    
                 }
@@ -130,6 +131,19 @@ namespace Controls.Enemies {
             }
         }
 
-        protected virtual void Fire(Vector3 direction) {}
+        protected virtual void Fire(Vector3 direction) {
+            RaycastHit hit;
+            var pos = transform.position;
+            pos.y = 1.5f;
+            direction.y = 1.5f;
+            Debug.DrawLine(pos, direction, Color.red);
+            if (Physics.Raycast(pos, direction, out hit, 6f)) {               
+                var go = hit.transform.gameObject;
+                Debug.Log(go.tag);
+                if (go.CompareTag("Player")) {
+//                    go.GetComponent<ServerCharacterController>().TakeDamage(100);                    
+                }
+            }
+        }
     }
 }

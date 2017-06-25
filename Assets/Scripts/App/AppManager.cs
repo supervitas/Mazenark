@@ -12,10 +12,13 @@ namespace App {
 
         private Camera _cam;
 
-        private void Awake() {
+        private void Start() {
             if (Instance == null) {
                 Instance = this;
                 CommonSetUp();
+                DontDestroyOnLoad(gameObject);
+            } else {
+                DestroyImmediate(gameObject);
             }
         }
 
