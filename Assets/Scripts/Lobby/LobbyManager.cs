@@ -313,7 +313,7 @@ namespace Lobby{
         }
 
         public override void OnLobbyServerDisconnect(NetworkConnection conn) {
-            NetworkHttpManager.Instance.SendRoomUpdate(NetworkConstants.RoomPlayerLeft);
+            NetworkHttpManager.Instance.SendRoomUpdate(NetworkConstants.RoomPlayerLeft);            
             FindObjectOfType<LobbyGameManager>().PlayerLefted();
 
             foreach (var t in lobbySlots) {
@@ -335,7 +335,7 @@ namespace Lobby{
             gamePlayer.transform.position = _spawnGenerator.Current;
             _spawnGenerator.MoveNext();
 
-            GetComponent<LobbyGameManager>().PlayersTransforms.Add(gamePlayer.transform);
+            GetComponent<LobbyGameManager>().AddPlayerTransform(gamePlayer.transform);
 
             return true;
         }
@@ -361,7 +361,7 @@ namespace Lobby{
 			}
             if (allready) {
                 NetworkHttpManager.Instance.SendRoomUpdate(NetworkConstants.RoomGameStarted);
-                GetComponent<LobbyGameManager>().SetPlayersCount((byte) lobbySlots.Count(player => player != null));
+                GetComponent<LobbyGameManager>().SetPlayersCount(lobbySlots.Count(player => player != null));
                 StartCoroutine(ServerCountdownCoroutine());
             }
         }

@@ -118,7 +118,7 @@ namespace Controls {
             _spellText = GameObject.FindGameObjectWithTag("UISpellName").GetComponent<Text>();
 
             var cam = Instantiate(PlayerCamera);
-            cam.GetComponent<FolowingPlayerCamera>().SetPlayerTransforms(transform);
+            cam.GetComponent<FolowingPlayerCamera>().SetPlayer(transform);
             _camera = cam.GetComponent<Camera>();
 
             _uiSpellCast = FindObjectOfType<SpellCast>();

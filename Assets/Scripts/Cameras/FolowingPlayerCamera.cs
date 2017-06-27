@@ -20,7 +20,7 @@ namespace Cameras {
             m_hitWall = new RaycastHit();            
         }
 
-        public void SetPlayerTransforms(Transform player) {
+        public void SetPlayer(Transform player) {
             _target = player;
             GetComponent<Camera>().transform.parent = _target;
         }

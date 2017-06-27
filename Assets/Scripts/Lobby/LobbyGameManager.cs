@@ -6,8 +6,16 @@ using Constants;
 
 namespace Lobby {
     public class LobbyGameManager : MonoBehaviour {
-        private byte _playersCount;
-        public List<Transform> PlayersTransforms = new List <Transform>();
+        private int _playersCount;
+        private readonly List<Transform> _playersTransforms = new List <Transform>();
+
+        public void AddPlayerTransform(Transform playerTransform) {
+            _playersTransforms.Add(playerTransform);
+        }
+
+        public List<Transform> GetPlayersTransforms() {
+            return _playersTransforms;
+        }
 
         public void OnGameover(string playerName) {
 //            foreach (var x in LobbyManager.SSingleton.lobbySlots ) {
@@ -24,7 +32,7 @@ namespace Lobby {
             Destroy(player);
         }
 
-        public void SetPlayersCount(byte players) {
+        public void SetPlayersCount(int players) {
             _playersCount = players;
         }
 
@@ -32,10 +40,10 @@ namespace Lobby {
             _playersCount--;
             if (!GameShouldFinish()) return;
 
-            PlayersTransforms.Clear();
+            _playersTransforms.Clear();
 
             GetComponent<LobbyManager>().StopServer();
-            GetComponent<LobbyManager>().StartServer(); // restart server
+            GetComponent<LobbyManager>().StartServer();
             NetworkHttpManager.Instance.SendRoomUpdate(NetworkConstants.RoomGameEnded);
         }
 

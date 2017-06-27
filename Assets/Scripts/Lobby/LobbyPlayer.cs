@@ -4,8 +4,6 @@ using System.Linq;
 using App;
 using Constants;
 using MazeBuilder;
-using Prototype.NetworkLobby;
-using Ui;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -73,8 +71,7 @@ namespace Lobby {
 
             if (isLocalPlayer) {
                 SetupLocalPlayer();
-            }
-            else {
+            } else {
                 SetupOtherPlayer();
             }
 
@@ -343,7 +340,7 @@ namespace Lobby {
 
         [Command]
         public void CmdColorChange() {
-            int idx = System.Array.IndexOf(Colors, playerColor);
+            int idx = Array.IndexOf(Colors, playerColor);
 
             int inUseIdx = _colorInUse.IndexOf(idx);
 
@@ -387,7 +384,7 @@ namespace Lobby {
                 LobbyPlayerList._instance.RemovePlayer(this);
                 if (LobbyManager.SSingleton != null) LobbyManager.SSingleton.OnPlayersNumberModified(-1);
 
-                int idx = System.Array.IndexOf(Colors, playerColor);
+                int idx = Array.IndexOf(Colors, playerColor);
 
                 if (idx < 0)
                     return;

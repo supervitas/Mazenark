@@ -19,7 +19,7 @@ namespace Controls.Enemies {
         protected readonly List <Vector3> Points = new List<Vector3>();
         protected int _destPoint = 0;
 
-        protected List<Transform> _playersTransform;
+        protected List<Transform> _playersTransform; 
 
         protected bool _isAlive = true;
 
@@ -37,7 +37,7 @@ namespace Controls.Enemies {
         protected void Start() {            
             if (!isServer) return;
             _agent = GetComponent<NavMeshAgent>();  
-            _playersTransform = FindObjectOfType<LobbyGameManager>().PlayersTransforms;
+            _playersTransform = FindObjectOfType<LobbyGameManager>().GetPlayersTransforms();
         }
 
         public bool IsAlive() {

@@ -27,7 +27,7 @@ namespace Controls.Bosses {
             if (!isServer) return;
             SetAnimation("Idle", true);
             Agent = GetComponent<NavMeshAgent>();
-            PlayersTransform = FindObjectOfType<LobbyGameManager>().PlayersTransforms;            
+            PlayersTransform = FindObjectOfType<LobbyGameManager>().GetPlayersTransforms();            
             InvokeRepeating("CheckPlayersNear", 0, 0.3f);
             InvokeRepeating("UpdateBoss", 0, 0.2f);            
         }
