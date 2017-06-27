@@ -1,5 +1,4 @@
-﻿    using CharacterControllers.Enemies.Bosses;
-using UnityEngine;
+﻿using CharacterControllers.Enemies.Bosses;
 
 
 namespace Controls.Bosses {    
@@ -12,6 +11,6 @@ namespace Controls.Bosses {
             SetAnimation("Idle", true);                                                               
         }
 
-        protected override void UpdateBoss() {}
+        protected override void Update() {}
     }
 }

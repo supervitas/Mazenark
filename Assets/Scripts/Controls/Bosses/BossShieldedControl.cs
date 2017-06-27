@@ -8,40 +8,43 @@ namespace Controls.Bosses {
 
 		public ServerBossShieldedController Controller { get; set; }
 	
+        protected override void Update() {
+            if (!_isAlive) return;
 
-        protected override void UpdateBoss() {            
-            if(!IsAlive) return;            
-
-            if (Agent.velocity != Vector3.zero) {
+            if (_agent.velocity != Vector3.zero) {
                 SetAnimation("Moving", true);
                 SetAnimation("Idle", false);
             }
-
-            if (Agent.velocity == Vector3.zero) {
+            else {
                 SetAnimation("Idle", true);
             }
 
-            if (HasTarget) {
-                var direction = Agent.destination - transform.position;
+            if (CheckPlayersNear(out targetPosition)) {
+                var direction = _agent.destination - transform.position;
 
                 if (direction != Vector3.zero) {
                     transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
                 }
 
-                if (Agent.remainingDistance > 3f) {
-                    SetAnimation("Attack", false);
-                }
-                if (Agent.remainingDistance <= 3f) {
-                    SetAnimation("Attack", true);
-//                    Fire(transform.forward); // todo colider to enemy. No raycast
-                }
-            } else {            
-                Agent.destination = Utils.GetDefaultPositionVector(SpawnRoom.Center);
-            }
+                _agent.autoBraking = true;
 
+                _agent.destination = targetPosition;
+                _agent.stoppingDistance = 5f;
+
+                if (_agent.remainingDistance > 5f) {
+                    SetAnimation("Attack", false);
+                    _attackTimePassed = 0;
+                }
+                else if (!_agent.pathPending && _agent.remainingDistance <= 5f) {
+                    SetAnimation("Attack", true);
+                    Fire(targetPosition);
+                }               
+            }
+            _agent.destination = Utils.GetDefaultPositionVector(SpawnRoom.Center);
         }
 
-        private void Fire(Vector3 direction) {
+
+        protected override void Fire(Vector3 direction) {
             RaycastHit hit;
             var pos = transform.position;
 
@@ -50,10 +53,10 @@ namespace Controls.Bosses {
             if (Physics.Raycast(pos, direction, out hit, 2.5f)) {
                 var go = hit.transform.gameObject;
                 if (go.CompareTag("Player")) {
-                    go.SendMessage("TakeDamage", 50.0F, SendMessageOptions.DontRequireReceiver); // execute function on colided object.
+                    go.SendMessage("TakeDamage", 50.0F,
+                        SendMessageOptions.DontRequireReceiver); // execute function on colided object.
                 }
             }
-
-        }
+        }      
     }
 }

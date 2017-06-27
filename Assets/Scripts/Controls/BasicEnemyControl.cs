@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Networking;
 
-namespace Controls.Enemies {    
+namespace Controls {    
     public abstract class BasicEnemyControl : NetworkBehaviour {
         [SerializeField]
         protected Animator _animator;
@@ -72,7 +72,7 @@ namespace Controls.Enemies {
             _agent.isStopped = true;
         }
 
-        protected bool CheckPlayersNear(out Vector3 playerTarget) {                        
+        protected virtual bool CheckPlayersNear(out Vector3 playerTarget) {                        
             foreach (var target in _playersTransform) {
                 if (target == null) continue;
 
@@ -94,7 +94,7 @@ namespace Controls.Enemies {
             return false;
         }
 
-        protected void Update() {
+        protected virtual void Update() {
             if(!_isAlive) return;
             
             if (_agent.velocity != Vector3.zero) {

@@ -1,4 +1,4 @@
-using Controls.Enemies;
+using Controls;
 using Loot;
 
 namespace CharacterControllers.Enemies {
