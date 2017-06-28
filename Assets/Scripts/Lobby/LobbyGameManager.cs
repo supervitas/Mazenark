@@ -1,13 +1,31 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using App;
+using App.Eventhub;
 using UnityEngine;
 using Constants;
+using UnityEngine.Networking;
 
 namespace Lobby {
-    public class LobbyGameManager : MonoBehaviour {
+    public class LobbyGameManager : NetworkBehaviour {
         private int _playersCount;
         private readonly List<Transform> _playersTransforms = new List <Transform>();
+
+        private void Start() {
+            if (!isServer) return;
+            AppManager.Instance.EventHub.Subscribe("maze:levelCompleted", PlayerCompletedMaze, this);
+            AppManager.Instance.EventHub.Subscribe("PlayerDied", PlayerDied, this);            
+        }
+
+        private void PlayerCompletedMaze(object sender, EventArguments e) {
+            if (!isServer) return;            
+            Destroy(GameObject.Find(e.Message));
+        }
+
+        private void PlayerDied(object sender, EventArguments e) {
+            if (!isServer) return;
+            Destroy(GameObject.Find(e.Message));
+        }
+
 
         public void AddPlayerTransform(Transform playerTransform) {
             _playersTransforms.Add(playerTransform);
@@ -15,21 +33,6 @@ namespace Lobby {
 
         public List<Transform> GetPlayersTransforms() {
             return _playersTransforms;
-        }
-
-        public void OnGameover(string playerName) {
-//            foreach (var x in LobbyManager.SSingleton.lobbySlots ) {
-//                var player = x as LobbyPlayer;
-//                if (player != null && player.playerName == playerName) {
-////                    Destroy(x.);
-////                    StartCoroutine(DestroyPlayer(player));
-//                }
-//            }
-        }
-
-        IEnumerator DestroyPlayer(LobbyPlayer player) {
-            yield return new WaitForSeconds(2f);
-            Destroy(player);
         }
 
         public void SetPlayersCount(int players) {

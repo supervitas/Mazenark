@@ -8,7 +8,7 @@ namespace App {
         public MazeSizeGenerator MazeSize { get; private set; }
         public MazeBuilder.MazeBuilder MazeInstance { get; set; }
         public Publisher EventHub { get; private set; }
-        public bool IsSinglePlayer = false;
+        [HideInInspector] public bool IsSinglePlayer = false;
 
         private Camera _cam;
 

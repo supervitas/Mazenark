@@ -4,6 +4,7 @@ using System.Linq;
 using App;
 using App.Eventhub;
 using Cameras;
+using Lobby;
 using Loot;
 using Ui;
 using UnityEngine;
@@ -24,8 +25,8 @@ namespace Controls {
         [SyncVar(hook = "OnSetName")] private string playerName;
 
 
-        private Dictionary<string, int> _playerItems = new Dictionary<string, int>();
-        private Dictionary<string, int> _serverPlayerItems = new Dictionary<string, int>();
+        private readonly Dictionary<string, int> _playerItems = new Dictionary<string, int>();
+        private readonly Dictionary<string, int> _serverPlayerItems = new Dictionary<string, int>();
 
         [SerializeField] private float m_moveSpeed = 2;
         [SerializeField] private float m_turnSpeed = 200;
@@ -81,10 +82,9 @@ namespace Controls {
             }
         }
 
-        private void OnDestroy() {
-            AppManager.Instance.TurnOnMainCamera();
+        private void OnDestroy() {            
             if (!isLocalPlayer) return;
-            
+            AppManager.Instance.TurnOnMainCamera();          
             AppManager.Instance.EventHub.CreateEvent("PlayerDead", null);
             _uiSpellCast.Reset();
         }
@@ -305,13 +305,12 @@ namespace Controls {
             activeItem.transform.LookAt(direction);
             weapon.Fire();
             NetworkServer.Spawn(activeItem);
-            Destroy(weapon, 8.0f);
+            Destroy(weapon, 10.0f);
         }
 
         [Command]
         private void CmdSetActiveItem(string itemName) {
-            _activeItem = ItemsCollection.Instance.GetItemByName(itemName);
-            
+            _activeItem = ItemsCollection.Instance.GetItemByName(itemName);            
         }
 
         [Command]

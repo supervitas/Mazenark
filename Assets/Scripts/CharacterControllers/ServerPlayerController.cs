@@ -31,12 +31,8 @@ namespace CharacterControllers {
             if (!isServer) return;
             CurrentHealth -= amount;
             if (CurrentHealth > 0) return;
-            CurrentHealth = 0; 
-                        
-            FindObjectOfType<LobbyGameManager>().OnGameover(gameObject.name);
-
-            NetworkEventHub.Instance.RpcPublishEvent("PlayerDied", gameObject.name);
-            Destroy(gameObject);                       
+            CurrentHealth = 0;                                    
+            NetworkEventHub.Instance.RpcPublishEvent("PlayerDied", gameObject.name);                       
         }
         
         private void OnTriggerEnter(Collider other) { // take loot

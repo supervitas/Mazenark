@@ -62,7 +62,7 @@ namespace Lobby{
 
         private IEnumerator<Vector3> _spawnGenerator;
 
-        public int InstanceId;
+        [HideInInspector] public int InstanceId;
 
         private AppLocalStorage _storage;
 
@@ -335,7 +335,7 @@ namespace Lobby{
             gamePlayer.transform.position = _spawnGenerator.Current;
             _spawnGenerator.MoveNext();
 
-            GetComponent<LobbyGameManager>().AddPlayerTransform(gamePlayer.transform);
+            FindObjectOfType<LobbyGameManager>().AddPlayerTransform(gamePlayer.transform);
 
             return true;
         }
@@ -361,7 +361,7 @@ namespace Lobby{
 			}
             if (allready) {
                 NetworkHttpManager.Instance.SendRoomUpdate(NetworkConstants.RoomGameStarted);
-                GetComponent<LobbyGameManager>().SetPlayersCount(lobbySlots.Count(player => player != null));
+                FindObjectOfType<LobbyGameManager>().SetPlayersCount(lobbySlots.Count(player => player != null));
                 StartCoroutine(ServerCountdownCoroutine());
             }
         }

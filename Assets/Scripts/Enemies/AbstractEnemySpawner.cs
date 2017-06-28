@@ -120,7 +120,6 @@ namespace Enemies {
                 }
                 
                 controller.SetPatrool(true);
-//                Debug.Log(controller.name);
             }
         }
     }
