@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using CharacterControllers;
-using Lobby;
+using GameSystems;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Networking;
@@ -37,7 +36,7 @@ namespace Controls {
         protected void Start() {            
             if (!isServer) return;
             _agent = GetComponent<NavMeshAgent>();  
-            _playersTransform = FindObjectOfType<LobbyGameManager>().GetPlayersTransforms();
+            _playersTransform = FindObjectOfType<GameManager>().GetPlayersTransforms();
         }
 
         public bool IsAlive() {

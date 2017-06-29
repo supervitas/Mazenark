@@ -5,6 +5,7 @@ using System.Linq;
 using App;
 using Constants;
 using Controls;
+using GameSystems;
 using MazeBuilder.Utility;
 using Ui;
 using UnityEngine;
@@ -335,7 +336,7 @@ namespace Lobby{
             gamePlayer.transform.position = _spawnGenerator.Current;
             _spawnGenerator.MoveNext();
 
-            FindObjectOfType<LobbyGameManager>().AddPlayerTransform(gamePlayer.transform);
+            FindObjectOfType<GameManager>().AddPlayerTransform(gamePlayer.transform);
 
             return true;
         }
