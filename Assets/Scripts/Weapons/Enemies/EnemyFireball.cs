@@ -1,12 +1,13 @@
 ﻿using CharacterControllers;
 using UnityEngine;
 
-namespace Weapons.Spells {
-    public class Fireball : Weapon {
+namespace Weapons.Enemies {
+    public class EnemyFireball : Weapon {
+        private new void Start() {}
 
         void OnCollisionEnter(Collision other) {
             var go = other.gameObject;            
-            if (go.CompareTag("Player")) {              
+            if (go.CompareTag("Player")) {                
                 go.GetComponent<ServerCharacterController>().TakeDamage(100, 3.5f);   
             }            
             Destroy(this);

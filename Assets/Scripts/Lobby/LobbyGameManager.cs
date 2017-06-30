@@ -2,6 +2,7 @@
 using App.Eventhub;
 using UnityEngine;
 using Constants;
+using GameSystems;
 using UnityEngine.Networking;
 
 namespace Lobby {
@@ -32,7 +33,8 @@ namespace Lobby {
         public void PlayerLefted() {
             _playersCount--;
             if (!GameShouldFinish()) return;
-            // Send Results
+            FindObjectOfType<GameManager>().GameEnded();
+            
             GetComponent<LobbyManager>().StopServer();
             GetComponent<LobbyManager>().StartServer();
             NetworkHttpManager.Instance.SendRoomUpdate(NetworkConstants.RoomGameEnded);

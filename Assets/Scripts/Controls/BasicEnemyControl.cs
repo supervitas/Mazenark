@@ -1,14 +1,20 @@
 ﻿using System.Collections.Generic;
+using CharacterControllers;
 using GameSystems;
+using Loot;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Networking;
+using Weapons;
 
 namespace Controls {    
     public abstract class BasicEnemyControl : NetworkBehaviour {
         [SerializeField]
         protected Animator _animator;
         protected NavMeshAgent _agent;
+        
+        [SerializeField]
+        protected GameObject _weapon;
 
         [SerializeField]
         protected float enemyAgroRange = 20f;
@@ -32,11 +38,12 @@ namespace Controls {
         protected float _attackTimePassed = 0f;
 
         protected Vector3 targetPosition;
-        
+               
         protected void Start() {            
             if (!isServer) return;
             _agent = GetComponent<NavMeshAgent>();  
             _playersTransform = FindObjectOfType<GameManager>().GetPlayersTransforms();
+//            _animator.Setfl
         }
 
         public bool IsAlive() {
@@ -110,18 +117,24 @@ namespace Controls {
                     transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
                 }
                 
+                var angle = Vector3.Angle(direction, transform.forward);
+                
+                
                 _agent.autoBraking = true;
                 
                 _agent.destination = targetPosition;
-                _agent.stoppingDistance = 5f;                                                
-
-                if (_agent.remainingDistance > 5f) {
-                    SetAnimation("Attack", false);
+                _agent.stoppingDistance = 20f;                                                
+               
+                if (_agent.remainingDistance > 20f) {                    
                     _attackTimePassed = 0;
-                } else if (!_agent.pathPending && _agent.remainingDistance <= 5f) {                    
-                    SetAnimation("Attack", true);                    
-                    Fire(targetPosition);                    
-                }
+                    SetAnimation("Attack", false); 
+                } else if (!_agent.pathPending && _agent.remainingDistance <= 20f && angle <= 60f) {                     
+                    _attackTimePassed += Time.deltaTime;
+                    if(_attackTimePassed < TimeForAttack) return;                    
+                    SetAnimation("Attack", true);
+                    Fire(targetPosition);
+                    _attackTimePassed = 0f;
+                }                 
                 return;
             }
             
@@ -130,19 +143,16 @@ namespace Controls {
             }
         }
 
-        protected virtual void Fire(Vector3 direction) {
-            RaycastHit hit;
+        protected virtual void Fire(Vector3 direction) {                              
             var pos = transform.position;
-            pos.y = 1.5f;
-            direction.y = 1.5f;
-            Debug.DrawLine(pos, direction, Color.red);
-            if (Physics.Raycast(pos, direction, out hit, 6f)) {               
-                var go = hit.transform.gameObject;
-                Debug.Log(go.tag);
-                if (go.CompareTag("Player")) {
-//                    go.GetComponent<ServerCharacterController>().TakeDamage(100);                    
-                }
-            }
+            pos.y += 2f;
+            direction.y += 2f;
+            var activeItem = Instantiate(_weapon, pos, Quaternion.identity);
+            var weapon = activeItem.GetComponent<Weapon>();            
+            activeItem.transform.LookAt(direction);
+            weapon.Fire();
+            NetworkServer.Spawn(activeItem);
+            Destroy(weapon, 10.0f);            
         }
     }
 }

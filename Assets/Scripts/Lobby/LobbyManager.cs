@@ -1,17 +1,14 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using App;
 using Constants;
-using Controls;
 using GameSystems;
 using MazeBuilder.Utility;
 using Ui;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Networking.Match;
-using UnityEngine.Networking.NetworkSystem;
 using UnityEngine.Networking.Types;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -83,7 +80,6 @@ namespace Lobby{
             _storage = FindObjectOfType<AppLocalStorage>();
 
             AuthUiManager.Instance.ToggleAuthPannel(_storage.IsAuthed());
-
 
             SetServerInfo("Offline", "None");
         }
@@ -171,8 +167,7 @@ namespace Lobby{
             player.RemovePlayer();
         }
 
-        public void SimpleBackClbk()
-        {
+        public void SimpleBackClbk() {
             ChangeTo(mainMenuPanel);
         }
                  
@@ -189,12 +184,10 @@ namespace Lobby{
             ChangeTo(mainMenuPanel);
         }
 
-        public void StopClientClbk()
-        {
+        public void StopClientClbk() {
             StopClient();
 
-            if (_isMatchmaking)
-            {
+            if (_isMatchmaking) {
                 StopMatchMaker();
             }
 
@@ -229,7 +222,7 @@ namespace Lobby{
             base.OnStartHost();
             ChangeTo(lobbyPanel);
             backDelegate = StopHostClbk;
-            SetServerInfo("Hosting", networkAddress);         
+            SetServerInfo("Hosting", networkAddress);            
         }
 
         public void StartDedicatedServerInstance(int port, int instanceId) {
@@ -335,8 +328,11 @@ namespace Lobby{
             gamePlayer.name = lobbyPlayer.GetComponent<LobbyPlayer>().playerName;
             gamePlayer.transform.position = _spawnGenerator.Current;
             _spawnGenerator.MoveNext();
-
-            FindObjectOfType<GameManager>().AddPlayerTransform(gamePlayer.transform);
+            
+            var gameManager = FindObjectOfType<GameManager>();
+            
+            gameManager.AddPlayerTransform(gamePlayer.transform);
+            gameManager.AddPlayerData(new User());
 
             return true;
         }

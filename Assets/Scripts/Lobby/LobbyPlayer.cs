@@ -130,7 +130,7 @@ namespace Lobby {
                 return;
             }
 
-//            CmdCheckToken(user.token);
+            CmdCheckToken(user.token);
 
             CmdNameChanged(playerNick);
 
@@ -334,8 +334,13 @@ namespace Lobby {
                 LobbyManager.SSingleton.KickPlayer(connectionToClient);
 
             };
+            
+            Action<string> resultCb = data => {
+                Debug.Log(data);                
 
-            NetworkHttpManager.Instance.GetUserData(NetworkConstants.UserByToken, new Token {token = token}, null, errorCb);
+            };
+
+            NetworkHttpManager.Instance.GetUserData(NetworkConstants.UserByToken, new Token {token = token}, resultCb, errorCb);
         }
 
         [Command]

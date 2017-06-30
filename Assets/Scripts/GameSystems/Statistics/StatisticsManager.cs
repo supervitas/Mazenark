@@ -1,7 +1,14 @@
-﻿using App.Eventhub;
+﻿using System.Collections.Generic;
+using App.Eventhub;
+using Constants;
+using UnityEngine;
 
 namespace GameSystems.Statistics {
     public class StatisticsManager {
+        private List<User> _users;
+        public StatisticsManager(List<User> playersInfo) {
+            _users = playersInfo;
+        }
         
         public void PlayerDied() {
             
