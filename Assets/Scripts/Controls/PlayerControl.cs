@@ -65,6 +65,7 @@ namespace Controls {
         private GameGui _gameGui;
 
         private void OnSetName(string playerName) {
+            Debug.Log(playerName);
             if (isLocalPlayer) return;
             var textMesh = GetComponentInChildren<TextMesh>();
             textMesh.text = playerName;
@@ -281,14 +282,13 @@ namespace Controls {
 
         // Client
         [TargetRpc]
-        public void TargetSetPlayerItems(NetworkConnection target, string name, int count) {
-            if (!_playerItems.ContainsKey(name)) {                
-                _playerItems.Add(name, 0);
-                _gameGui.AddItem(name, count.ToString());
+        public void TargetSetPlayerItems(NetworkConnection target, string itemName, int count) {
+            if (!_playerItems.ContainsKey(itemName)) {                
+                _playerItems.Add(itemName, 0);
+                _gameGui.AddItem(itemName, count.ToString());
             }            
-            _playerItems[name] += count;
-            _gameGui.ModifyItemCount(name, _playerItems[name].ToString());
-           
+            _playerItems[itemName] += count;
+            _gameGui.ModifyItemCount(itemName, _playerItems[itemName].ToString());           
         }
 
         // Server

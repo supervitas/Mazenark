@@ -1,8 +1,6 @@
 using App;
-using App.Eventhub;
 using Controls;
 using GameSystems;
-using Lobby;
 using Loot;
 using UnityEngine;
 
@@ -13,10 +11,12 @@ namespace CharacterControllers {
         
         private void Start() {
             if (!isServer) return;
+            
             IsNpc = false;            
             InvokeRepeating("PlayerUpdate", 0, 0.5f);
             
             _characterControl = GetComponent<PlayerControl>();
+            
             SetPlayerItems("Fireball", 5);
             SetPlayerItems("Tornado", 3);
         }
@@ -26,7 +26,8 @@ namespace CharacterControllers {
             _characterControl.TargetSetPlayerItems(connectionToClient, itemName, itemCount);
         }
         
-        private void OnDestroy() {            
+        private void OnDestroy() {
+            if (!isServer) return;
             CancelInvoke("PlayerUpdate");            
         }
         
@@ -43,13 +44,15 @@ namespace CharacterControllers {
         private void OnTriggerEnter(Collider other) { // take loot
             if (!isServer) return;            
             var go = other.gameObject;
-            if (!go.CompareTag("Pickable")) return;
-            var lootName = go.GetComponent<LootData>().lootName;
-            SetPlayerItems(lootName, 1);          
-            Destroy(go);
+            if (go.CompareTag("Pickable")) {
+                var lootName = go.GetComponent<LootData>().lootName;
+                SetPlayerItems(lootName, 1);
+                Destroy(go);
+            }
         }
         
-        private void PlayerUpdate() {            
+        private void PlayerUpdate() {
+            if (!isServer) return;
             if (transform.position.y < -2.5) {
                 TakeDamage(100);
             }

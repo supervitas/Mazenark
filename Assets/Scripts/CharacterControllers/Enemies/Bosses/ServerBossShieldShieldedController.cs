@@ -8,8 +8,7 @@
 		}
 
         public override void TakeDamage(int amount, float timeOfDeath = 2f) {
-            if (!isServer)
-				return;
+            if (!isServer) return;
 			Parent.TakeDamage(999, gameObject);
         }
 

@@ -50,18 +50,18 @@ namespace GameSystems {
         }
 
         public void PlayerLefted() {
-            _playersCount--;
+            _playersCount--;            
             if (_playersCount != 0) return;
             
             GameEnded();
-            
-            if(AppManager.Instance.IsSinglePlayer) return;
-            
-            GetComponent<LobbyManager>().StopServer();
-            GetComponent<LobbyManager>().StartServer();
+                        
+            if (AppManager.Instance.IsSinglePlayer) return;
+
+            var lobbyManager = FindObjectOfType<LobbyManager>();
+            lobbyManager.StopServer();
+            lobbyManager.StartServer();
             NetworkHttpManager.Instance.SendRoomUpdate(NetworkConstants.RoomGameEnded);           
         }        
     }
                        
-
 }

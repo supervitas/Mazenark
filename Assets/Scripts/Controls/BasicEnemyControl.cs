@@ -147,7 +147,7 @@ namespace Controls {
 
         protected virtual void Fire(Vector3 direction) {                              
             var pos = transform.position;
-            pos.y += 2f;
+            pos.y += 1.5f;
             direction.y += 2f;
             var activeItem = Instantiate(_weapon, pos, Quaternion.identity);
             var weapon = activeItem.GetComponent<Weapon>();            

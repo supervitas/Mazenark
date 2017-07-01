@@ -10,6 +10,7 @@ namespace CharacterControllers.Enemies.Bosses {
         private int Multiplied { get; set; }
 
         private void Start() {
+            if (!isServer) return;
             IsNpc = true;            
         }
 

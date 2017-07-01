@@ -24,6 +24,7 @@ namespace CharacterControllers.Enemies.Bosses {
 		private readonly ServerBossShieldShieldedController[] _shieldsControllers = new ServerBossShieldShieldedController[MAX_SHIELDS];
 
 		private void Start() {
+			if (!isServer) return;
             IsNpc = true;
 			_currentNumberOfShields = _desiredNumberOfShields;
 
@@ -53,14 +54,12 @@ namespace CharacterControllers.Enemies.Bosses {
 		}
 
         public override void TakeDamage(int amount, float timeOfDeath = 2f) {
-            if (!isServer)
-				return;
+            if (!isServer) return;
 			TakeDamage(amount, gameObject);
 		}
 
 		public void TakeDamage(int amount, GameObject target, float timeOfDeath = 2f) {
-			if (!isServer)
-				return;
+			if (!isServer) return;
 
 			if (target == gameObject && _currentNumberOfShields == 0) {
 				_bossControls.Die();

@@ -21,7 +21,7 @@ namespace Weapons.Enemies {
         }
 
         public override void Fire() {            
-            gameObject.GetComponent<Rigidbody>().velocity = gameObject.transform.forward * 6;
+            gameObject.GetComponent<Rigidbody>().velocity = gameObject.transform.forward * 8;
         }
     }
 }
