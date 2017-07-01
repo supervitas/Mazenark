@@ -6,7 +6,7 @@ namespace Weapons {
         [SerializeField]
         [Range(0, 10f)] protected float CastTime = 2.3f;
         
-        private void Start() {
+        protected virtual void Start() {
             foreach (var player in GameObject.FindGameObjectsWithTag("Player")) {
                 if (player.GetComponent<PlayerControl>().isLocalPlayer) {
                     Physics.IgnoreCollision(GetComponent<Collider>(), player.GetComponent<Collider>()); // ignore self colide

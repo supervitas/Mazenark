@@ -130,7 +130,7 @@ namespace Lobby {
                 return;
             }
 
-            CmdCheckToken(user.token);
+//            CmdCheckToken(user.token);
 
             CmdNameChanged(playerNick);
 

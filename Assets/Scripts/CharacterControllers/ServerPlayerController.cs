@@ -1,5 +1,7 @@
 using App;
+using App.Eventhub;
 using Controls;
+using GameSystems;
 using Lobby;
 using Loot;
 using UnityEngine;
@@ -10,6 +12,7 @@ namespace CharacterControllers {
         private PlayerControl _characterControl;
         
         private void Start() {
+            if (!isServer) return;
             IsNpc = false;            
             InvokeRepeating("PlayerUpdate", 0, 0.5f);
             
@@ -31,8 +34,10 @@ namespace CharacterControllers {
             if (!isServer) return;
             CurrentHealth -= amount;
             if (CurrentHealth > 0) return;
-            CurrentHealth = 0;                                    
-            NetworkEventHub.Instance.RpcPublishEvent("PlayerDied", gameObject.name);                       
+            CurrentHealth = 0;
+            
+            FindObjectOfType<GameManager>().PlayerDied(gameObject);
+            NetworkEventHub.Instance.RpcPublishEvent("PlayerDied", gameObject.name);                        
         }
         
         private void OnTriggerEnter(Collider other) { // take loot
@@ -44,7 +49,7 @@ namespace CharacterControllers {
             Destroy(go);
         }
         
-        private void PlayerUpdate() {
+        private void PlayerUpdate() {            
             if (transform.position.y < -2.5) {
                 TakeDamage(100);
             }

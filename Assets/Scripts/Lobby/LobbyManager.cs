@@ -308,7 +308,7 @@ namespace Lobby{
 
         public override void OnLobbyServerDisconnect(NetworkConnection conn) {
             NetworkHttpManager.Instance.SendRoomUpdate(NetworkConstants.RoomPlayerLeft);            
-            FindObjectOfType<LobbyGameManager>().PlayerLefted();
+            FindObjectOfType<GameManager>().PlayerLefted();
 
             foreach (var t in lobbySlots) {
                 LobbyPlayer p = t as LobbyPlayer;
@@ -358,7 +358,7 @@ namespace Lobby{
 			}
             if (allready) {
                 NetworkHttpManager.Instance.SendRoomUpdate(NetworkConstants.RoomGameStarted);
-                FindObjectOfType<LobbyGameManager>().SetPlayersCount(lobbySlots.Count(player => player != null));
+                FindObjectOfType<GameManager>().SetPlayersCount(lobbySlots.Count(player => player != null));
                 StartCoroutine(ServerCountdownCoroutine());
             }
         }

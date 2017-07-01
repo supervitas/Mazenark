@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace Weapons.Enemies {
     public class EnemyFireball : Weapon {
-        private new void Start() {}
+        
+        protected override void Start() {}
 
         void OnCollisionEnter(Collision other) {
             var go = other.gameObject;            
@@ -20,7 +21,7 @@ namespace Weapons.Enemies {
         }
 
         public override void Fire() {            
-            gameObject.GetComponent<Rigidbody>().velocity = gameObject.transform.forward * 15;
+            gameObject.GetComponent<Rigidbody>().velocity = gameObject.transform.forward * 6;
         }
     }
 }

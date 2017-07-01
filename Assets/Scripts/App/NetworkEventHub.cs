@@ -2,8 +2,7 @@
 using UnityEngine.Networking;
 
 
-namespace App {
-    [NetworkSettings(channel = 0, sendInterval = 0.5f)]
+namespace App {   
     public class NetworkEventHub : NetworkBehaviour {
         public static NetworkEventHub Instance { get; private set; }
         

@@ -9,7 +9,7 @@ namespace Controls.Bosses {
 		public ServerBossShieldedController Controller { get; set; }
 	
         protected override void Update() {
-            if (!_isAlive) return;
+            if (!_isAlive || !isServer) return;
 
             if (_agent.velocity != Vector3.zero) {
                 SetAnimation("Moving", true);

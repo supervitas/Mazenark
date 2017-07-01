@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace App.Eventhub {
@@ -9,9 +10,11 @@ namespace App.Eventhub {
 
         public void CreateEvent(string customEvent, EventArguments args) {
            Dictionary<object, EventHandler<EventArguments>> handlers;
+            
             if (!_eventHandlers.TryGetValue(customEvent, out handlers)) return;
+            
             var handlersList = new List<EventHandler<EventArguments>>(handlers.Values); // copy for protection if object change when event trigger
-            foreach (var handler in handlersList) {
+            foreach (var handler in handlersList) {                
                 if (handler ==  null) return;
                 handler(this, args);
             }

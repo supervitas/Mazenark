@@ -56,15 +56,17 @@ namespace Controls {
             }
         }        
 
-        public void AddPatroolPoint(Vector3 patroolPoint) {                        
+        public void AddPatroolPoint(Vector3 patroolPoint) {
+            if (!isServer) return;
             Points.Add(patroolPoint);                        
         }
 
         public void SetPatrool(bool patrool) {
+            if (!isServer) return;
             _canPatrool = patrool;
         }
 
-        public void GotoNextPoint() {                        
+        public void GotoNextPoint() {             
             _agent.destination = Points[_destPoint];
             _destPoint = (_destPoint + 1) % Points.Count;
         }
@@ -101,7 +103,7 @@ namespace Controls {
         }
 
         protected virtual void Update() {
-            if(!_isAlive) return;
+            if(!_isAlive || !isServer) return;
             
             if (_agent.velocity != Vector3.zero) {
                 SetAnimation("Moving", true);
