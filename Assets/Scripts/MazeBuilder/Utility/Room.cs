@@ -10,6 +10,10 @@ namespace MazeBuilder.Utility {
 			Init(topLeftXCoordinate, topLeftYCoordinate, bottomRightXCoordinate, bottomRightYCoordinate);
 		}
 
+		public Room(Coordinate center, int halfWidth, int halfHeight) {
+			Init(center.X - halfWidth, center.Y - halfHeight, center.X + halfWidth, center.Y + halfHeight);
+		}
+
 		private void Init(int topLeftXCoordinate, int topLeftYCoordinate, int bottomRightXCoordinate, int bottomRightYCoordinate) {
 			var lesserX = topLeftXCoordinate < bottomRightXCoordinate ? topLeftXCoordinate : bottomRightXCoordinate;
 			var greaterX = topLeftXCoordinate < bottomRightXCoordinate ? bottomRightXCoordinate : topLeftXCoordinate;
