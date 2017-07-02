@@ -1,32 +1,26 @@
-﻿//using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using App;
 using App.Eventhub;
 using Cameras;
-using Lobby;
+using CharacterControllers;
 using Loot;
 using Ui;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 using Weapons;
-using Weapons.Spells;
 
 namespace Controls {
-    [NetworkSettings(channel = 1, sendInterval = 0.1f)]
+    [NetworkSettings(channel = 1, sendInterval = 0.2f)]
     public class PlayerControl : NetworkBehaviour {
 
         private enum ControlMode {
             Tank,
             Direct
-        }
-
-        [SyncVar(hook = "OnSetName")] private string playerName;
-
-
-        private readonly Dictionary<string, int> _playerItems = new Dictionary<string, int>();
-        private readonly Dictionary<string, int> _serverPlayerItems = new Dictionary<string, int>();
+        }       
+        
+        private readonly Dictionary<string, int> _playerItems = new Dictionary<string, int>();        
 
         [SerializeField] private float m_moveSpeed = 2;
         [SerializeField] private float m_turnSpeed = 200;
@@ -40,6 +34,9 @@ namespace Controls {
         private Camera _camera;       
 
         private GameObject _activeItem;
+
+        private ServerPlayerController _serverPlayerController;
+        
         private Text _spellText;
         private float castTime;
         private float timeCasted;
@@ -63,13 +60,6 @@ namespace Controls {
         private List<Collider> m_collisions = new List<Collider>();
 
         private GameGui _gameGui;
-
-        private void OnSetName(string playerName) {
-            Debug.Log(playerName);
-            if (isLocalPlayer) return;
-            var textMesh = GetComponentInChildren<TextMesh>();
-            textMesh.text = playerName;
-        }
 
         private void OnCollisionEnter(Collision collision) {
             ContactPoint[] contactPoints = collision.contacts;
@@ -114,7 +104,9 @@ namespace Controls {
         public override void OnStartLocalPlayer() {
             // Set up game for client
             AppManager.Instance.EventHub.Subscribe("ItemChanged", OnActiveItemChanged, this);
-            AppManager.Instance.TurnOffAndSetupMainCamera(); // We have 2 cameras, and main should be disabled to stop unnes. render
+            
+            AppManager.Instance.TurnOffAndSetupMainCamera(); 
+            
             _gameGui = FindObjectOfType<GameGui>();
             _spellText = GameObject.FindGameObjectWithTag("UISpellName").GetComponent<Text>();
 
@@ -124,16 +116,17 @@ namespace Controls {
 
             _uiSpellCast = FindObjectOfType<SpellCast>();
             
+            _serverPlayerController = GetComponent<ServerPlayerController>();           
+            _serverPlayerController.CmdNameChanged(AppLocalStorage.Instance.user.username);
             
-            CmdNameChanged(AppLocalStorage.Instance.user.username);
-            GetComponentInChildren<TextMesh>().gameObject.SetActive(false);
+            GetComponentInChildren<TextMesh>().gameObject.SetActive(false); // Player text above head is disabled for him
         }
 
         private void OnActiveItemChanged(object sender, EventArguments e) {
             _activeItem = ItemsCollection.Instance.GetItemByName(e.Message);
             castTime = _activeItem.GetComponent<Weapon>().GetCastTime();
             _spellText.text = e.Message;
-            CmdSetActiveItem(e.Message);
+            _serverPlayerController.CmdSetActiveItem(e.Message);
         }
 
 
@@ -146,7 +139,7 @@ namespace Controls {
             }
         }
 
-        private bool CheckPlayerFire() {
+        private bool CheckAndFire() {
             if (!Input.GetMouseButton(0) || _activeItem == null || _playerItems[_activeItem.name] <= 0) return false;
             m_animator.SetFloat("MoveSpeed", 0);
             timeCasted += Time.deltaTime;
@@ -162,7 +155,7 @@ namespace Controls {
                 var direction = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 25);
                 direction = _camera.ScreenToWorldPoint(direction);
                 
-                CmdFire(direction);
+                _serverPlayerController.CmdFire(direction);
                 _playerItems[_activeItem.name]--;
                 _gameGui.ModifyItemCount(_activeItem.name, _playerItems[_activeItem.name].ToString());
 
@@ -180,7 +173,7 @@ namespace Controls {
 
             m_animator.SetBool("Grounded", m_isGrounded);
 
-            if (CheckPlayerFire()) return;
+            if (CheckAndFire()) return;
 
             timeCasted = 0;
             _uiSpellCast.Reset();
@@ -289,40 +282,6 @@ namespace Controls {
             }            
             _playerItems[itemName] += count;
             _gameGui.ModifyItemCount(itemName, _playerItems[itemName].ToString());           
-        }
-
-        // Server
-        [Command]
-        private void CmdFire(Vector3 direction) {
-            if (_serverPlayerItems[_activeItem.name] <= 0) return;
-            
-            _serverPlayerItems[_activeItem.name]--;
-            var pos = transform.position;
-            pos.y += 2.3f;
-            var activeItem = Instantiate(_activeItem, pos, Quaternion.identity);
-            var weapon = activeItem.GetComponent<Weapon>();
-            Physics.IgnoreCollision(activeItem.GetComponent<Collider>(), GetComponent<Collider>());
-            activeItem.transform.LookAt(direction);
-            weapon.Fire();
-            NetworkServer.Spawn(activeItem);
-            Destroy(weapon, 10.0f);
-        }
-
-        [Command]
-        private void CmdSetActiveItem(string itemName) {
-            _activeItem = ItemsCollection.Instance.GetItemByName(itemName);            
-        }
-
-        [Command]
-        public void CmdNameChanged(string name) {
-            playerName = name;
-        }
-
-        public void ServerSetItems(string name, int count) {          
-            if (!_serverPlayerItems.ContainsKey(name)) {               
-                _serverPlayerItems.Add(name, 0);
-            }
-            _serverPlayerItems[name] += count;
-        }
+        }       
     }
 }

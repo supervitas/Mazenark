@@ -132,13 +132,17 @@ namespace Controls {
                     SetAnimation("Attack", false); 
                 } else if (!_agent.pathPending && _agent.remainingDistance <= 20f && angle <= 60f) {                     
                     _attackTimePassed += Time.deltaTime;
-                    if(_attackTimePassed < TimeForAttack) return;                    
+                    if(_attackTimePassed < TimeForAttack) return;
+                    
                     SetAnimation("Attack", true);
                     Fire(targetPosition);
+                    
                     _attackTimePassed = 0f;
                 }                 
                 return;
             }
+            
+            SetAnimation("Attack", false);
             
             if (_canPatrool && !_agent.pathPending && _agent.remainingDistance <= 0.5f) {
                 GotoNextPoint();
