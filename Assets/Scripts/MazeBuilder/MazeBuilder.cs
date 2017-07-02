@@ -2,6 +2,8 @@
 using MazeBuilder.BiomeStrategies;
 using UnityEngine;
 using Random = System.Random;
+using MazeBuilder.Utility;
+using System.Collections.Generic;
 
 namespace MazeBuilder {
     public class MazeBuilder {
@@ -40,29 +42,46 @@ namespace MazeBuilder {
         }
 
         private void GenerateRooms() {
-            var chunkSize = global::Constants.Maze.ROOM_CHUNK_SIZE;
-            var random = new Random();
-            // split maze into 16x16 chunks and roll a dice to spawn room somewhere in it
-            for (var i = 0; i <= Width - chunkSize; i += chunkSize)   // if maze size is not a multiple of ROOM_CHUNK_SIZE, ignore things left.
-            for (var j = 0; j <= Height - chunkSize; j += chunkSize) {
-                var xWithinChunk = random.Next(0, chunkSize);
-                var yWithinChunk = random.Next(0, chunkSize);
+			Random random = new Random();
 
-                var x = i + xWithinChunk;
-                var y = j + yWithinChunk;
+			Coordinate roomRightCenter = new Coordinate(Maze.Width / 5 * 4, Maze.Height / 2);
+			Coordinate roomUpCenter = new Coordinate(Maze.Width / 2, Maze.Height / 5);
+			Coordinate roomLeftCenter = new Coordinate(Maze.Width / 5, Maze.Height / 2);
+			Coordinate roomDownCenter = new Coordinate(Maze.Width / 2, Maze.Height / 5 * 4);
+			List<Coordinate> cooordinates = new List<Coordinate>();
+			cooordinates.Add(roomRightCenter);
+			cooordinates.Add(roomUpCenter);
+			cooordinates.Add(roomLeftCenter);
+			cooordinates.Add(roomDownCenter);
 
-                if (x > 64 || y > 64)
-                    Console.WriteLine("x: {0}, y: {1}", x, y);
+			bool shouldSpawnRightRoom = random.NextDouble() < Constants.Biome.ROOM_SPAWN_CHANCE;
+			bool shouldSpawnUpRoom = random.NextDouble() < Constants.Biome.ROOM_SPAWN_CHANCE;
+			bool shouldSpawnLeftRoom = random.NextDouble() < Constants.Biome.ROOM_SPAWN_CHANCE;
+			bool shouldSpawnDownRoom = random.NextDouble() < Constants.Biome.ROOM_SPAWN_CHANCE;
+			List<bool> chances = new List<bool>();
+			chances.Add(shouldSpawnRightRoom);
+			chances.Add(shouldSpawnUpRoom);
+			chances.Add(shouldSpawnLeftRoom);
+			chances.Add(shouldSpawnDownRoom);
 
-                var biome = _maze.Tiles[x, y].Biome;
+			int i = 0;
+			foreach (Coordinate coordinate in cooordinates) {
+				var tmp = coordinate;
+				if (chances[i]) {
+					if (tmp.X % 2 == 0)
+						tmp = new Coordinate(tmp.X + 1, tmp.Y);
+					if (tmp.Y % 2 == 0)
+						tmp = new Coordinate(tmp.X, tmp.Y + 1);
 
-                var spawnChance = global::Constants.Biome.ROOM_SPAWN_CHANCE * biome.RoomSpawnChanceModifier;
-                if (random.NextDouble() < spawnChance)
-                    biome.RoomPlacer.PlaceRoom(x: x, y: y, chunkLeftBoundary: i, chunkRightBoundary: i + chunkSize - 1,
-                        chunkTopBoundary: j, chunkBottomBoundary: j + chunkSize - 1, maze: _maze);
+					Room room = new Room(tmp, Constants.Biome.ROOM_MIN_SIZE, Constants.Biome.ROOM_MIN_SIZE);
+					_maze.Rooms.Add(room);
+					_maze.ImportantPlaces.Add(room.Center);
+					_maze.CutWalls(room, _maze[tmp].Biome);
+				}
+				i++;
+			}
 
-            }
-        }
+		}
 
 		private void PlaceTileWeights() {
 			foreach (Tile tile in _maze.Tiles) {
