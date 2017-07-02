@@ -21,10 +21,10 @@ namespace MazeBuilder {
 
 
         public Maze (int width = 10, int height = 10, bool fromServer = false) {
-            if (width < 5)
-                width = 5;
-            if (height < 5)
-                height = 5;
+            if (width < Constants.Maze.MIN_SIZE)
+                width = Constants.Maze.MIN_SIZE;
+            if (height < Constants.Maze.MIN_SIZE)
+                height = Constants.Maze.MIN_SIZE;
 
             tiles = new Tile[width, height];
 
