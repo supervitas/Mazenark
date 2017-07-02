@@ -13,35 +13,21 @@ namespace CharacterControllers {
         [SyncVar(hook = "OnSetName")] private string _playerName;
         
         private PlayerControl _characterControl;
-        private readonly Dictionary<string, int> _playerItems = new Dictionary<string, int>();        
+        private readonly Dictionary<string, int> _serverPlayerItems = new Dictionary<string, int>();        
         private GameObject _activeItem;
                 
         private void Start() {
             if (!isServer) return;
             
             IsNpc = false;            
-            InvokeRepeating("PlayerUpdate", 0, 0.5f);
-            
-            _characterControl = GetComponent<PlayerControl>();
-            
-            SetPlayerItems("Fireball", 5);
-            SetPlayerItems("Tornado", 3);
+            InvokeRepeating("PlayerUpdate", 0, 0.5f);                                               
         }
                 
         private void OnSetName(string playerName) {            
             if (isLocalPlayer) return;
             var textMesh = GetComponentInChildren<TextMesh>();
             textMesh.text = playerName;
-        }
-
-        private void SetPlayerItems(string itemName, int itemCount) {
-            if (!_playerItems.ContainsKey(itemName)) {               
-                _playerItems.Add(itemName, 0);
-            }
-            _playerItems[itemName] += itemCount;
-            
-            _characterControl.TargetSetPlayerItems(connectionToClient, itemName, itemCount);
-        }      
+        }             
         
         private void OnDestroy() {
             if (!isServer) return;
@@ -67,22 +53,38 @@ namespace CharacterControllers {
                 SetPlayerItems(lootName, 1);
                 Destroy(go);
             }
-        }
+        }       
         
-        private void PlayerUpdate() {
-            if (!isServer) return;
-            
+        private void PlayerUpdate() {                        
             if (transform.position.y < -2.5) {
                 TakeDamage(100);
             }
         }
         
-        
+        private void SetPlayerItems(string itemName, int itemCount) {
+            if (!isServer) return;  
+            
+            if (!_serverPlayerItems.ContainsKey(itemName)) {               
+                _serverPlayerItems.Add(itemName, 0);
+            }
+            _serverPlayerItems[itemName] += itemCount;
+            
+            _characterControl.TargetSetPlayerItems(connectionToClient, itemName, itemCount);
+        }
+
+        [Command]
+        public void CmdPlayerLoaded() {
+            _characterControl = GetComponent<PlayerControl>();
+            
+            SetPlayerItems("Fireball", 5);
+            SetPlayerItems("Tornado", 3);
+        }
+
         [Command]
         public void CmdFire(Vector3 direction) {
-            if (_playerItems[_activeItem.name] <= 0) return;
+            if (_serverPlayerItems[_activeItem.name] <= 0) return;
             
-            _playerItems[_activeItem.name]--;
+            _serverPlayerItems[_activeItem.name]--;
             var pos = transform.position;
             pos.y += 2.3f;
             var activeItem = Instantiate(_activeItem, pos, Quaternion.identity);
@@ -92,7 +94,7 @@ namespace CharacterControllers {
             weapon.Fire();
             NetworkServer.Spawn(activeItem);
             Destroy(weapon, 10.0f);
-        }
+        }       
         
         [Command]
         public void CmdSetActiveItem(string itemName) {
@@ -102,7 +104,8 @@ namespace CharacterControllers {
         [Command]
         public void CmdNameChanged(string name) {
             _playerName = name;
-        }
+        }        
+        
     }
     
 }

@@ -14,7 +14,7 @@ namespace Ui {
         [SerializeField] private RawImage ThirdItemImage;
         [SerializeField] private Text ThirdItemCount;
 
-        private List<UiItem> _uiItemsList = new List<UiItem>();
+        private readonly List<UiItem> _uiItemsList = new List<UiItem>();
 
         private Image _activeItem;
 
@@ -26,9 +26,9 @@ namespace Ui {
         }
 
         private void Start() {
-            _uiItemsList.Add(new UiItem{itemImage = FirstItemImage, itemCountText = FirstItemCount, itemNumber = 1});
-            _uiItemsList.Add(new UiItem{itemImage = SecondItemImage, itemCountText = SecondItemCount, itemNumber = 2});
-            _uiItemsList.Add(new UiItem{itemImage = ThirdItemImage, itemCountText = ThirdItemCount, itemNumber = 3});                                  
+            _uiItemsList.Add(new UiItem {itemImage = FirstItemImage, itemCountText = FirstItemCount, itemNumber = 1});
+            _uiItemsList.Add(new UiItem {itemImage = SecondItemImage, itemCountText = SecondItemCount, itemNumber = 2});
+            _uiItemsList.Add(new UiItem {itemImage = ThirdItemImage, itemCountText = ThirdItemCount, itemNumber = 3});                                  
         }
         
         public void AddItem(string itemName, string count) {

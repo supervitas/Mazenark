@@ -18,8 +18,8 @@ namespace Controls {
         private enum ControlMode {
             Tank,
             Direct
-        }       
-        
+        }
+
         private readonly Dictionary<string, int> _playerItems = new Dictionary<string, int>();        
 
         [SerializeField] private float m_moveSpeed = 2;
@@ -75,8 +75,8 @@ namespace Controls {
 
         private void OnDestroy() {            
             if (!isLocalPlayer) return;
-            AppManager.Instance.TurnOnMainCamera();          
-            AppManager.Instance.EventHub.CreateEvent("PlayerDead", null);
+            AppManager.Instance.TurnOnMainCamera();
+            AppManager.Instance.EventHub.UnsubscribeFromAll(this);
             _uiSpellCast.Reset();
         }
 
@@ -102,6 +102,7 @@ namespace Controls {
 
 
         public override void OnStartLocalPlayer() {
+            if (!isLocalPlayer) return;
             // Set up game for client
             AppManager.Instance.EventHub.Subscribe("ItemChanged", OnActiveItemChanged, this);
             
@@ -118,8 +119,10 @@ namespace Controls {
             
             _serverPlayerController = GetComponent<ServerPlayerController>();           
             _serverPlayerController.CmdNameChanged(AppLocalStorage.Instance.user.username);
+            _serverPlayerController.CmdPlayerLoaded();
             
             GetComponentInChildren<TextMesh>().gameObject.SetActive(false); // Player text above head is disabled for him
+                       
         }
 
         private void OnActiveItemChanged(object sender, EventArguments e) {
@@ -271,9 +274,8 @@ namespace Controls {
             if (!m_isGrounded && m_wasGrounded) {
                 m_animator.SetTrigger("Jump");
             }
-        }
-
-        // Client
+        }       
+        
         [TargetRpc]
         public void TargetSetPlayerItems(NetworkConnection target, string itemName, int count) {
             if (!_playerItems.ContainsKey(itemName)) {                

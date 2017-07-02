@@ -66,7 +66,7 @@ namespace Enemies {
             foreach (var emptyTile in EmptyTiles) {
                 if (!(EnemySpawnChance >= Random.Range(1, 100))) continue;
                 var enemy = (GameObject) BiomeEnemies.GetRandom(typeof(GameObject));
-                var inst = Instantiate(enemy, Utils.GetDefaultPositionVector(emptyTile.Position, 0.1f), Quaternion.identity);
+                var inst = Instantiate(enemy, Utils.GetDefaultPositionVector(emptyTile.Position, 0.5f), Quaternion.identity);
                 NetworkServer.Spawn(inst);
                 SpawnedEnemies.Add(inst);                                            
             }
@@ -75,7 +75,7 @@ namespace Enemies {
         protected void SpawnBosses() {
             foreach (var room in Rooms) {
                 var bossGo = (GameObject) BiomeBosses.GetRandom(typeof(GameObject));
-                var boss = Instantiate(bossGo, Utils.GetDefaultPositionVector(room.Center, 0.1f), Quaternion.identity);
+                var boss = Instantiate(bossGo, Utils.GetDefaultPositionVector(room.Center, 0.5f), Quaternion.identity);
                 boss.GetComponent<BasicBossControl>().SetSpawnRoom(room);
                 NetworkServer.Spawn(boss);                   
             }

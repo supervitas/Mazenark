@@ -15,7 +15,7 @@ namespace GameSystems {
         private int _playersCount;
         
         public void Start() {                         
-            _statisticsManager = new StatisticsManager(_playersData);
+            _statisticsManager = new StatisticsManager(_playersData);         
         }
         
         
