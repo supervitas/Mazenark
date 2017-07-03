@@ -66,12 +66,13 @@ namespace CharacterControllers {
         }
 
         [ClientRpc]
-        private void RpcSetPlayerName(string playerName) {
-            if (isLocalPlayer) return;
-            
+        private void RpcSetPlayerName(string playerName) {                       
             var textMesh = GetComponentInChildren<TextMesh>();
             textMesh.text = playerName;
-            Debug.Log(playerName);
+            
+            if (isLocalPlayer) {
+                textMesh.gameObject.SetActive(false);
+            }
         }
 
         [Command]

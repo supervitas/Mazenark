@@ -120,10 +120,7 @@ namespace Controls {
             
             _serverPlayerController = GetComponent<ServerPlayerController>();           
             _serverPlayerController.CmdNameChanged(AppLocalStorage.Instance.user.username);
-            _serverPlayerController.CmdPlayerLoaded();
-            
-            GetComponentInChildren<TextMesh>().gameObject.SetActive(false); // Player text above head is disabled for him
-                       
+            _serverPlayerController.CmdPlayerLoaded();                                                
         }
 
         private void OnActiveItemChanged(object sender, EventArguments e) {
