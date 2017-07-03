@@ -75,6 +75,7 @@ namespace Controls {
 
         private void OnDestroy() {            
             if (!isLocalPlayer) return;
+            
             AppManager.Instance.TurnOnMainCamera();
             AppManager.Instance.EventHub.UnsubscribeFromAll(this);
             _uiSpellCast.Reset();

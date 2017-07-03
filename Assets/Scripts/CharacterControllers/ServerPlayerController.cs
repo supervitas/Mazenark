@@ -9,8 +9,7 @@ using Weapons;
 
 namespace CharacterControllers {
     public class ServerPlayerController : ServerCharacterController {
-        
-        [SyncVar(hook = "OnSetName")] private string _playerName;
+                
         
         private PlayerControl _characterControl;
         private readonly Dictionary<string, int> _serverPlayerItems = new Dictionary<string, int>();        
@@ -21,13 +20,7 @@ namespace CharacterControllers {
             
             IsNpc = false;            
             InvokeRepeating("PlayerUpdate", 0, 0.5f);                                               
-        }
-                
-        private void OnSetName(string playerName) {            
-            if (isLocalPlayer) return;
-            var textMesh = GetComponentInChildren<TextMesh>();
-            textMesh.text = playerName;
-        }             
+        }                       
         
         private void OnDestroy() {
             if (!isServer) return;
@@ -72,6 +65,15 @@ namespace CharacterControllers {
             _characterControl.TargetSetPlayerItems(connectionToClient, itemName, itemCount);
         }
 
+        [ClientRpc]
+        private void RpcSetPlayerName(string playerName) {
+            if (isLocalPlayer) return;
+            
+            var textMesh = GetComponentInChildren<TextMesh>();
+            textMesh.text = playerName;
+            Debug.Log(playerName);
+        }
+
         [Command]
         public void CmdPlayerLoaded() {
             _characterControl = GetComponent<PlayerControl>();
@@ -102,8 +104,8 @@ namespace CharacterControllers {
         }
                         
         [Command]
-        public void CmdNameChanged(string name) {
-            _playerName = name;
+        public void CmdNameChanged(string playerName) {
+            RpcSetPlayerName(playerName);
         }        
         
     }
