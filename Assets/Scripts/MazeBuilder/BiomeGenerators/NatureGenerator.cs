@@ -1,6 +1,4 @@
-﻿using App;
-using App.Eventhub;
-using MazeBuilder.BiomeGenerators.PlacementRules;
+﻿using MazeBuilder.BiomeGenerators.PlacementRules;
 using MazeBuilder.Utility;
 using UnityEngine;
 
@@ -18,11 +16,6 @@ namespace MazeBuilder.BiomeGenerators {
         [Header("Biome floors")]
         [SerializeField]
         private GameObject _floor2;
-
-
-        private new void Awake() {
-            base.Awake();
-        }
 
 
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {

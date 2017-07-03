@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using App;
-using App.Eventhub;
-using MazeBuilder.BiomeGenerators.PlacementRules;
+﻿using MazeBuilder.BiomeGenerators.PlacementRules;
 using MazeBuilder.Utility;
 using UnityEngine;
 
@@ -17,10 +14,6 @@ namespace MazeBuilder.BiomeGenerators {
 		[SerializeField]
 		private PlacementRule _straightWalls;
 
-
-        private new void Awake() {
-            base.Awake();
-        }
 
         public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
             GameObject parent = new GameObject();

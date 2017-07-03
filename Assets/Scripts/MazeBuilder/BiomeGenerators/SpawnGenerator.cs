@@ -11,15 +11,11 @@ namespace MazeBuilder.BiomeGenerators {
         public GameObject SpawnEffect;
         #endregion
 
-        private new void Awake() {
-            base.Awake();
-        }
-
-        protected override void StartPostPlacement(object sender, EventArguments e) {
+        protected override void StartPostPlacement(object sender, EventArguments e) {            
             var spawns = from biome in BiomesCollecton
                 where biome.biome == Biome.Spawn
                 select biome;
-
+                        
             foreach (var spawn in spawns) {
                 Instantiate(SpawnEffect, new Vector3(
                     Utils.TransformToWorldCoordinate(spawn.tiles[spawn.tiles.Count / 2].Position.X),

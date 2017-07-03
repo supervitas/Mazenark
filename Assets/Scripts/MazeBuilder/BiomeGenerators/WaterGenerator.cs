@@ -1,5 +1,4 @@
-﻿using App;
-using App.Eventhub;
+﻿using App.Eventhub;
 using MazeBuilder.Utility;
 using PlayerLocationManager;
 using UnityEngine;
@@ -12,7 +11,7 @@ namespace MazeBuilder.BiomeGenerators {
         private GameObject _instancedRain;
 
 
-        private new void Awake() {
+        protected new void Awake() {
             base.Awake();
             Eventhub.Subscribe("maze:biomeChanged", ToggleBiomeWeather, this);
             InstantiateWeather();
