@@ -25,7 +25,7 @@ namespace CharacterControllers {
             SetPlayerItems("Fireball", 5);
             SetPlayerItems("Tornado", 3);
             
-            RpcSetPlayerName(gameObject.name);
+//            RpcSetPlayerName(gameObject.name);
         }
 
         private void OnDestroy() {
