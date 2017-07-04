@@ -11,13 +11,14 @@ namespace GameSystems {
     public class GameManager : NetworkBehaviour {        
         private readonly List<User> _playersData = new List<User>();
         private readonly List<Transform> _playersTransforms = new List <Transform>();
+        
+        
         private StatisticsManager _statisticsManager;
         private int _playersCount;
         
-        public void Start() {                         
+        public override void OnStartServer() {                              
             _statisticsManager = new StatisticsManager(_playersData);         
         }
-        
         
         public void PlayerCompletedMaze(GameObject player) {                     
             Destroy(player);

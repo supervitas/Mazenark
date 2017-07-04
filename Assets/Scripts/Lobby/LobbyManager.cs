@@ -329,9 +329,7 @@ namespace Lobby{
             gamePlayer.transform.position = _spawnGenerator.Current;
             _spawnGenerator.MoveNext();
             
-            var gameManager = FindObjectOfType<GameManager>();
-            
-            gameManager.AddPlayerTransform(gamePlayer.transform);
+            var gameManager = FindObjectOfType<GameManager>();           
             gameManager.AddPlayerData(new User());
 
             return true;

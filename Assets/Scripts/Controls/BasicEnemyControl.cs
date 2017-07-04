@@ -38,8 +38,8 @@ namespace Controls {
         protected float _attackTimePassed = 0f;
 
         protected Vector3 targetPosition;
-               
-        protected void Start() {            
+
+        public override void OnStartServer() {                    
             if (!isServer) return;
             _agent = GetComponent<NavMeshAgent>();  
             _playersTransform = FindObjectOfType<GameManager>().GetPlayersTransforms();
@@ -81,11 +81,11 @@ namespace Controls {
 
         protected virtual bool CheckPlayersNear(out Vector3 playerTarget) {                        
             foreach (var target in _playersTransform) {
-                if (target == null) continue;
+                if (target == null ) continue;
 
                 var distance = Vector3.Distance(transform.position, target.position);
                 var direction = _agent.destination - transform.position;
-
+                
                 if (direction == Vector3.zero) {
                     direction = transform.forward;
                 }
@@ -126,11 +126,16 @@ namespace Controls {
                 _agent.destination = targetPosition;
                 _agent.stoppingDistance = 15f;                                                
                
-                if (_agent.remainingDistance > 15f) {                    
+                if (_agent.remainingDistance > 15f) {
+                    
                     _attackTimePassed = 0;
-                    SetAnimation("Attack", false); 
-                } else if (!_agent.pathPending && _agent.remainingDistance <= 15f && angle <= 60f) {                     
+                    
+                    SetAnimation("Attack", false);
+                    
+                } else if (!_agent.pathPending && _agent.remainingDistance <= 15f && angle <= 60f) {
+                    
                     _attackTimePassed += Time.deltaTime;
+                    
                     if(_attackTimePassed < TimeForAttack) return;
                     
                     SetAnimation("Attack", true);

@@ -9,22 +9,16 @@ using Weapons;
 
 namespace CharacterControllers {
     public class ServerPlayerController : ServerCharacterController {
-                
-        
+                        
         private PlayerControl _characterControl;
         private readonly Dictionary<string, int> _serverPlayerItems = new Dictionary<string, int>();        
-        private GameObject _activeItem;
+        private GameObject _activeItem;        
 
         public override void OnStartServer() {            
-            IsNpc = false;                                                                                   
+            IsNpc = false;
+            _characterControl = GetComponent<PlayerControl>();
             InvokeRepeating("PlayerUpdate", 0, 0.5f);
         }
-
-//        public override void OnStartClient() {
-//            _characterControl = GetComponent<PlayerControl>();
-//            SetPlayerItems("Fireball", 5);
-//            SetPlayerItems("Tornado", 3);           
-//        }
 
         private void OnDestroy() {
             if (!isServer) return;
@@ -75,10 +69,10 @@ namespace CharacterControllers {
         }
 
         [Command]
-        public void CmdPlayerReady() {
-            _characterControl = GetComponent<PlayerControl>();
+        public void CmdPlayerReady() {            
             SetPlayerItems("Fireball", 5);
-            SetPlayerItems("Tornado", 3); 
+            SetPlayerItems("Tornado", 3);
+            FindObjectOfType<GameManager>().AddPlayerTransform(transform);
         }
 
 
