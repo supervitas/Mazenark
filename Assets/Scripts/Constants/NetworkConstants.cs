@@ -1,9 +1,12 @@
 ﻿namespace Constants {
     public class NetworkConstants {
-//        public static string GameRoomAdress = "mazenark.tk";
-//        public static string ServerApiUrl = "http://mazenark.tk";
-        public static string GameRoomAdress = "localhost"; // change to ip
-        public static string ServerApiUrl = "http://localhost:7000"; // change to domain
+		// ↓ Production
+		public static string GameRoomAdress = "mazenark.tk";
+		public static string ServerApiUrl = "http://mazenark.tk";
+
+		// ↓ Debug
+		// public static string GameRoomAdress = "localhost"; // change to ip
+        // public static string ServerApiUrl = "http://localhost:7000"; // change to domain
         
         public static string UnityServerOnlyUrl = "http://localhost:7000"; // DONT CHANGE
 
