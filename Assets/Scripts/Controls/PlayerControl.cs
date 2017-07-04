@@ -19,6 +19,13 @@ namespace Controls {
             Tank,
             Direct
         }
+        [SyncVar(hook = "OnSetName")] private string playerName;
+        
+        private void OnSetName(string playerName) {
+            if (isLocalPlayer) return;
+            var textMesh = GetComponentInChildren<TextMesh>();
+            textMesh.text = playerName;
+        }
 
         private readonly Dictionary<string, int> _playerItems = new Dictionary<string, int>();        
 
@@ -58,6 +65,7 @@ namespace Controls {
 
         private bool m_isGrounded;
         private List<Collider> m_collisions = new List<Collider>();
+        
 
         private GameGui _gameGui;
 
@@ -119,7 +127,9 @@ namespace Controls {
             _uiSpellCast = FindObjectOfType<SpellCast>();
             
             _serverPlayerController = GetComponent<ServerPlayerController>();
-//            _serverPlayerController.CmdSetPlayerName(AppLocalStorage.Instance.user.username);
+            //CmdNameChanged(AppLocalStorage.Instance.user.username);
+            _serverPlayerController.CmdPlayerReady();
+            
             var textMesh = GetComponentInChildren<TextMesh>();
             textMesh.gameObject.SetActive(false);
         }
@@ -283,6 +293,22 @@ namespace Controls {
             }            
             _playerItems[itemName] += count;
             _gameGui.ModifyItemCount(itemName, _playerItems[itemName].ToString());           
+        }
+        
+        [ClientRpc]
+        public void RpcSetPlayerName(string playerName) {
+            var textMesh = GetComponentInChildren<TextMesh>();
+            Debug.Log(playerName);
+            textMesh.text = playerName;
+            
+            if (isLocalPlayer) {
+                textMesh.gameObject.SetActive(false);
+            }
+        }
+        
+        [Command]
+        public void CmdNameChanged(string name) {
+            playerName = name;
         }
     }
 }

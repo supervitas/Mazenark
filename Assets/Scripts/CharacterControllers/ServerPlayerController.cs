@@ -20,13 +20,11 @@ namespace CharacterControllers {
             InvokeRepeating("PlayerUpdate", 0, 0.5f);
         }
 
-        public override void OnStartClient() {
-            _characterControl = GetComponent<PlayerControl>();
-            SetPlayerItems("Fireball", 5);
-            SetPlayerItems("Tornado", 3);
-            
-//            RpcSetPlayerName(gameObject.name);
-        }
+//        public override void OnStartClient() {
+//            _characterControl = GetComponent<PlayerControl>();
+//            SetPlayerItems("Fireball", 5);
+//            SetPlayerItems("Tornado", 3);           
+//        }
 
         private void OnDestroy() {
             if (!isServer) return;
@@ -69,22 +67,18 @@ namespace CharacterControllers {
             _serverPlayerItems[itemName] += itemCount;
             
             _characterControl.TargetSetPlayerItems(connectionToClient, itemName, itemCount);
-        }
-        
-        [ClientRpc]
-        private void RpcSetPlayerName(string playerName) {
-            var textMesh = GetComponentInChildren<TextMesh>();
-            Debug.Log(playerName);
-            textMesh.text = playerName;
-            
-            if (isLocalPlayer) {
-                textMesh.gameObject.SetActive(false);
-            }
-        }
+        }        
 
         [Command]
         public void CmdSetPlayerName(string playerName) {
-            RpcSetPlayerName(playerName);
+            _characterControl.RpcSetPlayerName(playerName);
+        }
+
+        [Command]
+        public void CmdPlayerReady() {
+            _characterControl = GetComponent<PlayerControl>();
+            SetPlayerItems("Fireball", 5);
+            SetPlayerItems("Tornado", 3); 
         }
 
 
