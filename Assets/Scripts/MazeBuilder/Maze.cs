@@ -146,6 +146,8 @@ namespace MazeBuilder {
 		public void GenerateBiomesList() {
 			biomeList = new List<TileCollection>();
 			int tmpCounter = 0;
+			// TODO: rewrite algorithm to be not using maxBiomeID.
+			MaxBiomeID = 20; // 20 biomes should be enough. 640k even better.
 					
 			for (int i = 0; i <= MaxBiomeID; i++) {
 				TileCollection biome = null;
