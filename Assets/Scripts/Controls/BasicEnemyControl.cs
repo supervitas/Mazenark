@@ -43,7 +43,6 @@ namespace Controls {
             if (!isServer) return;
             _agent = GetComponent<NavMeshAgent>();  
             _playersTransform = FindObjectOfType<GameManager>().GetPlayersTransforms();
-//            _animator.Setfl
         }
 
         public bool IsAlive() {
@@ -125,12 +124,12 @@ namespace Controls {
                 _agent.autoBraking = true;
                 
                 _agent.destination = targetPosition;
-                _agent.stoppingDistance = 20f;                                                
+                _agent.stoppingDistance = 15f;                                                
                
-                if (_agent.remainingDistance > 20f) {                    
+                if (_agent.remainingDistance > 15f) {                    
                     _attackTimePassed = 0;
                     SetAnimation("Attack", false); 
-                } else if (!_agent.pathPending && _agent.remainingDistance <= 20f && angle <= 60f) {                     
+                } else if (!_agent.pathPending && _agent.remainingDistance <= 15f && angle <= 60f) {                     
                     _attackTimePassed += Time.deltaTime;
                     if(_attackTimePassed < TimeForAttack) return;
                     

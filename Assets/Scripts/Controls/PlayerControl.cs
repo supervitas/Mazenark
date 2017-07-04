@@ -118,9 +118,10 @@ namespace Controls {
 
             _uiSpellCast = FindObjectOfType<SpellCast>();
             
-            _serverPlayerController = GetComponent<ServerPlayerController>();           
-            _serverPlayerController.CmdNameChanged(AppLocalStorage.Instance.user.username);
-            _serverPlayerController.CmdPlayerLoaded();                                                
+            _serverPlayerController = GetComponent<ServerPlayerController>();
+//            _serverPlayerController.CmdSetPlayerName(AppLocalStorage.Instance.user.username);
+            var textMesh = GetComponentInChildren<TextMesh>();
+            textMesh.gameObject.SetActive(false);
         }
 
         private void OnActiveItemChanged(object sender, EventArguments e) {
@@ -282,6 +283,6 @@ namespace Controls {
             }            
             _playerItems[itemName] += count;
             _gameGui.ModifyItemCount(itemName, _playerItems[itemName].ToString());           
-        }       
+        }
     }
 }

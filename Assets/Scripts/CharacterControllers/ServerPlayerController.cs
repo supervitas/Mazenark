@@ -14,14 +14,20 @@ namespace CharacterControllers {
         private PlayerControl _characterControl;
         private readonly Dictionary<string, int> _serverPlayerItems = new Dictionary<string, int>();        
         private GameObject _activeItem;
-                
-        private void Start() {
-            if (!isServer) return;
+
+        public override void OnStartServer() {            
+            IsNpc = false;                                                                                   
+            InvokeRepeating("PlayerUpdate", 0, 0.5f);
+        }
+
+        public override void OnStartClient() {
+            _characterControl = GetComponent<PlayerControl>();
+            SetPlayerItems("Fireball", 5);
+            SetPlayerItems("Tornado", 3);
             
-            IsNpc = false;            
-            InvokeRepeating("PlayerUpdate", 0, 0.5f);                                               
-        }                       
-        
+            RpcSetPlayerName(gameObject.name);
+        }
+
         private void OnDestroy() {
             if (!isServer) return;
             CancelInvoke("PlayerUpdate");            
@@ -64,10 +70,11 @@ namespace CharacterControllers {
             
             _characterControl.TargetSetPlayerItems(connectionToClient, itemName, itemCount);
         }
-
+        
         [ClientRpc]
-        private void RpcSetPlayerName(string playerName) {                       
+        private void RpcSetPlayerName(string playerName) {
             var textMesh = GetComponentInChildren<TextMesh>();
+            Debug.Log(playerName);
             textMesh.text = playerName;
             
             if (isLocalPlayer) {
@@ -76,12 +83,10 @@ namespace CharacterControllers {
         }
 
         [Command]
-        public void CmdPlayerLoaded() {
-            _characterControl = GetComponent<PlayerControl>();
-            
-            SetPlayerItems("Fireball", 5);
-            SetPlayerItems("Tornado", 3);
+        public void CmdSetPlayerName(string playerName) {
+            RpcSetPlayerName(playerName);
         }
+
 
         [Command]
         public void CmdFire(Vector3 direction) {
@@ -102,12 +107,7 @@ namespace CharacterControllers {
         [Command]
         public void CmdSetActiveItem(string itemName) {
             _activeItem = ItemsCollection.Instance.GetItemByName(itemName);            
-        }
-                        
-        [Command]
-        public void CmdNameChanged(string playerName) {
-            RpcSetPlayerName(playerName);
-        }        
+        }                                 
         
     }
     
