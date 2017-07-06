@@ -19,12 +19,23 @@ namespace Controls {
             Tank,
             Direct
         }
-        [SyncVar(hook = "OnSetName")] private string playerName;
         
-        private void OnSetName(string playerName) {
-            if (isLocalPlayer) return;
+        [SyncVar(hook = "OnSetName")] 
+        private string _playerName;
+        
+        private void OnSetName(string playerNickName) {            
             var textMesh = GetComponentInChildren<TextMesh>();
-            textMesh.text = playerName;
+            textMesh.text = playerNickName;            
+        }
+        
+        [Command]
+        public void CmdChangeName(string playerName) {            
+            _playerName = playerName;            
+        }
+        
+        public override void OnStartClient() {
+            var textMesh = GetComponentInChildren<TextMesh>();
+            textMesh.text = _playerName;
         }
 
         private readonly Dictionary<string, int> _playerItems = new Dictionary<string, int>();        
@@ -107,7 +118,7 @@ namespace Controls {
                     m_isGrounded = false;
                 }
             }
-        }
+        }       
 
 
         public override void OnStartLocalPlayer() {
@@ -127,11 +138,13 @@ namespace Controls {
             _uiSpellCast = FindObjectOfType<SpellCast>();
             
             _serverPlayerController = GetComponent<ServerPlayerController>();
-            //CmdNameChanged(AppLocalStorage.Instance.user.username);
+            
+            
+            CmdChangeName(AppLocalStorage.Instance.user.username);
             _serverPlayerController.CmdPlayerReady();
             
-            var textMesh = GetComponentInChildren<TextMesh>();
-            textMesh.gameObject.SetActive(false);
+//            var textMesh = GetComponentInChildren<TextMesh>();
+//            textMesh.gameObject.SetActive(false);
         }
 
         private void OnActiveItemChanged(object sender, EventArguments e) {
@@ -293,22 +306,6 @@ namespace Controls {
             }            
             _playerItems[itemName] += count;
             _gameGui.ModifyItemCount(itemName, _playerItems[itemName].ToString());           
-        }
-        
-        [ClientRpc]
-        public void RpcSetPlayerName(string playerName) {
-            var textMesh = GetComponentInChildren<TextMesh>();
-            Debug.Log(playerName);
-            textMesh.text = playerName;
-            
-            if (isLocalPlayer) {
-                textMesh.gameObject.SetActive(false);
-            }
-        }
-        
-        [Command]
-        public void CmdNameChanged(string name) {
-            playerName = name;
-        }
+        }       
     }
 }

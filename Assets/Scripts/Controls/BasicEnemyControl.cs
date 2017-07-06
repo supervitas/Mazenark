@@ -132,16 +132,20 @@ namespace Controls {
                     
                     SetAnimation("Attack", false);
                     
-                } else if (!_agent.pathPending && _agent.remainingDistance <= 15f && angle <= 60f) {
+                } 
+                
+                if (!_agent.pathPending && _agent.remainingDistance <= 15f && angle <= 60f) {
                     
                     _attackTimePassed += Time.deltaTime;
-                    
-                    if(_attackTimePassed < TimeForAttack) return;
-                    
-                    SetAnimation("Attack", true);
-                    Fire(targetPosition);
-                    
-                    _attackTimePassed = 0f;
+
+                    if (_attackTimePassed > TimeForAttack) {
+
+                        SetAnimation("Attack", true);
+                        Fire(targetPosition);
+
+                        _attackTimePassed = 0f;
+                        
+                    }
                 }                 
                 return;
             }
@@ -151,7 +155,7 @@ namespace Controls {
             if (_canPatrool && !_agent.pathPending && _agent.remainingDistance <= 0.5f) {
                 GotoNextPoint();
             }
-        }
+        }                
 
         protected virtual void Fire(Vector3 direction) {                              
             var pos = transform.position;
