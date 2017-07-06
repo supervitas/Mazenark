@@ -23,20 +23,6 @@ namespace Controls {
         [SyncVar(hook = "OnSetName")] 
         private string _playerName;
         
-        private void OnSetName(string playerNickName) {            
-            var textMesh = GetComponentInChildren<TextMesh>();
-            textMesh.text = playerNickName;            
-        }
-        
-        [Command]
-        public void CmdChangeName(string playerName) {            
-            _playerName = playerName;            
-        }
-        
-        public override void OnStartClient() {
-            var textMesh = GetComponentInChildren<TextMesh>();
-            textMesh.text = _playerName;
-        }
 
         private readonly Dictionary<string, int> _playerItems = new Dictionary<string, int>();        
 
@@ -118,8 +104,12 @@ namespace Controls {
                     m_isGrounded = false;
                 }
             }
-        }       
-
+        }
+        
+        public override void OnStartClient() {
+            var textMesh = GetComponentInChildren<TextMesh>();
+            textMesh.text = _playerName;
+        }
 
         public override void OnStartLocalPlayer() {
             if (!isLocalPlayer) return;
@@ -143,8 +133,8 @@ namespace Controls {
             CmdChangeName(AppLocalStorage.Instance.user.username);
             _serverPlayerController.CmdPlayerReady();
             
-//            var textMesh = GetComponentInChildren<TextMesh>();
-//            textMesh.gameObject.SetActive(false);
+            var textMesh = GetComponentInChildren<TextMesh>();
+            textMesh.gameObject.SetActive(false);
         }
 
         private void OnActiveItemChanged(object sender, EventArguments e) {
@@ -297,6 +287,17 @@ namespace Controls {
                 m_animator.SetTrigger("Jump");
             }
         }       
+        
+                
+        private void OnSetName(string playerNickName) {            
+            var textMesh = GetComponentInChildren<TextMesh>();
+            textMesh.text = playerNickName;            
+        }
+        
+        [Command]
+        public void CmdChangeName(string playerName) {            
+            _playerName = playerName;            
+        }
         
         [TargetRpc]
         public void TargetSetPlayerItems(NetworkConnection target, string itemName, int count) {

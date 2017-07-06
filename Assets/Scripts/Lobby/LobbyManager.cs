@@ -222,7 +222,7 @@ namespace Lobby{
             base.OnStartHost();
             ChangeTo(lobbyPanel);
             backDelegate = StopHostClbk;
-            SetServerInfo("Hosting", networkAddress);            
+            SetServerInfo("Hosting", networkAddress);         
         }
 
         public void StartDedicatedServerInstance(int port, int instanceId) {
