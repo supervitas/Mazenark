@@ -6,7 +6,7 @@ namespace Controls.Bosses {
 
 		public ServerBossShieldedController Controller { get; set; }
 
-        private new void Start() {
+        public override void OnStartServer() {   
             if (!isServer) return;
             SetAnimation("Idle", true);                                                               
         }

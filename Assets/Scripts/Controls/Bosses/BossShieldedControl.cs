@@ -9,9 +9,9 @@ namespace Controls.Bosses {
 		public ServerBossShieldedController Controller { get; set; }
 	
         protected override void Update() {
-            if (!_isAlive || !isServer) return;
+            if (!IsAlive || !isServer) return;
 
-            if (_agent.velocity != Vector3.zero) {
+            if (Agent.velocity != Vector3.zero) {
                 SetAnimation("Moving", true);
                 SetAnimation("Idle", false);
             }
@@ -19,28 +19,28 @@ namespace Controls.Bosses {
                 SetAnimation("Idle", true);
             }
 
-            if (CheckPlayersNear(out targetPosition)) {
-                var direction = _agent.destination - transform.position;
+            if (CheckPlayersNear(out TargetPosition)) {
+                var direction = Agent.destination - transform.position;
 
                 if (direction != Vector3.zero) {
                     transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
                 }
 
-                _agent.autoBraking = true;
+                Agent.autoBraking = true;
 
-                _agent.destination = targetPosition;
-                _agent.stoppingDistance = 5f;
+                Agent.destination = TargetPosition;
+                Agent.stoppingDistance = 5f;
 
-                if (_agent.remainingDistance > 5f) {
+                if (Agent.remainingDistance > 5f) {
                     SetAnimation("Attack", false);
-                    _attackTimePassed = 0;
+                    AttackTimePassed = 0;
                 }
-                else if (!_agent.pathPending && _agent.remainingDistance <= 5f) {
+                else if (!Agent.pathPending && Agent.remainingDistance <= 5f) {
                     SetAnimation("Attack", true);
-                    Fire(targetPosition);
+                    Fire(TargetPosition);
                 }               
             }
-            _agent.destination = Utils.GetDefaultPositionVector(SpawnRoom.Center);
+            Agent.destination = Utils.GetDefaultPositionVector(SpawnRoom.Center);
         }
 
 

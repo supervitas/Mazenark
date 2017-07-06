@@ -10,7 +10,7 @@ namespace GameEnv {
 
         private void Start() {
             SpawnSafehouse();
-//            SpawnFog();
+            SpawnFog();
         }
 
         public GameObject ServerSpawn(GameObject go, Vector3 position, Quaternion rotation) {

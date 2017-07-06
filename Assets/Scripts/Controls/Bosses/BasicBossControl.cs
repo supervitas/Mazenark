@@ -28,15 +28,8 @@ namespace Controls.Bosses {
                 if (target == null) continue;
 
                 var distance = Vector3.Distance(transform.position, target.position);
-                var direction = _agent.destination - transform.position;
-
-                if (direction == Vector3.zero) {
-                    direction = transform.forward;
-                }
-
-                var angle = Vector3.Angle(direction, transform.forward);
-                //&& angle < enemyAngleVisibility
-                if (distance <= enemyAgroRange && TargetInRoom(target.position)) {
+                                
+                if (distance <= EnemyAgroRange && TargetInRoom(target.position)) {
                     playerTarget = target.position;
                     return true;
                 }

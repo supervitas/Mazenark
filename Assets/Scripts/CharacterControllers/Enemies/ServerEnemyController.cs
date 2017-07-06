@@ -14,7 +14,7 @@ namespace CharacterControllers.Enemies {
             
             var control = GetComponent<BasicEnemyControl>();
             
-            if (!control.IsAlive()) return;
+            if (!control.IsAlive) return;
             
             control.Die();
             Destroy(gameObject, timeOfDeath);
