@@ -101,7 +101,7 @@ namespace Controls {
             return false;
         }
 
-        protected virtual void Update() {
+        protected virtual void Update() {            
             if(!_isAlive || !isServer) return;
             
             if (_agent.velocity != Vector3.zero) {
