@@ -128,9 +128,7 @@ namespace Controls {
             _uiSpellCast = FindObjectOfType<SpellCast>();
             
             _serverPlayerController = GetComponent<ServerPlayerController>();
-            
-            
-            CmdChangeName(AppLocalStorage.Instance.user.username);
+                       
             _serverPlayerController.CmdPlayerReady();
             
             var textMesh = GetComponentInChildren<TextMesh>();
@@ -289,13 +287,15 @@ namespace Controls {
         }       
         
                 
-        private void OnSetName(string playerNickName) {            
+        private void OnSetName(string playerNickName) {
+            if (isLocalPlayer) return;
+            
             var textMesh = GetComponentInChildren<TextMesh>();
             textMesh.text = playerNickName;            
         }
         
-        [Command]
-        public void CmdChangeName(string playerName) {            
+        
+        public void SetPlayerName(string playerName) {            
             _playerName = playerName;            
         }
         

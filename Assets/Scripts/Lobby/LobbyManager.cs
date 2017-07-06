@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using App;
 using Constants;
+using Controls;
 using GameSystems;
 using MazeBuilder.Utility;
 using Ui;
@@ -326,6 +327,7 @@ namespace Lobby{
                 _lobbyHooks.OnLobbyServerSceneLoadedForPlayer(this, lobbyPlayer, gamePlayer);
 
             gamePlayer.name = lobbyPlayer.GetComponent<LobbyPlayer>().playerName;
+            gamePlayer.GetComponent<PlayerControl>().SetPlayerName(gamePlayer.name);
             gamePlayer.transform.position = _spawnGenerator.Current;
             _spawnGenerator.MoveNext();
             
