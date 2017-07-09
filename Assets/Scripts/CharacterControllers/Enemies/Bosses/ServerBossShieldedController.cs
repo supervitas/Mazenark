@@ -75,7 +75,7 @@ namespace CharacterControllers.Enemies.Bosses {
 	    private void Die() {
 		    
 		    foreach (var button in _buttons) {
-			    Destroy(button);
+			    Destroy(button, 2f);
 		    }
 		    
 		    _bossControls.Die();

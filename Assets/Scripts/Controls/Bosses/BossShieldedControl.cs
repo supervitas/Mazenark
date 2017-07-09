@@ -1,50 +1,46 @@
-﻿using CharacterControllers.Enemies.Bosses;
-using MazeBuilder.Utility;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Networking;
+using Weapons;
 
 
 namespace Controls.Bosses {    
     public class BossShieldedControl : BasicBossControl {
-
-		public ServerBossShieldedController Controller { get; set; }
-	
+        private Vector3 _lookDirection;
+		
         protected override void Update() {
             if (!IsAlive || !isServer) return;
 
-            if (Agent.velocity != Vector3.zero) {
-                SetAnimation("Moving", true);
-                SetAnimation("Idle", false);
-            }
-            else {
-                SetAnimation("Idle", true);
-            }
-
             if (CheckPlayersNear(out TargetPosition)) {
-                var direction = Agent.destination - transform.position;
+                
+                _lookDirection =TargetPosition - transform.position;
+                _lookDirection.Normalize();
+                
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_lookDirection), 0.1f);                    
 
-                if (direction != Vector3.zero) {
-                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
-                }
+                AttackTimePassed += Time.deltaTime;
+
+                if (AttackTimePassed > TimeForAttack) {
+
                     SetAnimation("Attack", true);
                     Fire(TargetPosition);
-                               
-            }            
-        }
 
-
-        protected override void Fire(Vector3 direction) {
-            RaycastHit hit;
-            var pos = transform.position;
-
-            pos.y = 1f;
-
-            if (Physics.Raycast(pos, direction, out hit, 2.5f)) {
-                var go = hit.transform.gameObject;
-                if (go.CompareTag("Player")) {
-                    go.SendMessage("TakeDamage", 50.0F,
-                        SendMessageOptions.DontRequireReceiver); // execute function on colided object.
-                }
+                    AttackTimePassed = 0f;
+                }                
             }
-        }      
+            
+            SetAnimation("Attack", false);
+        }
+        
+        protected override void Fire(Vector3 direction) {
+            var pos = transform.position;
+            pos.y += 3.5f;
+            direction.y += 2f;
+            var activeItem = Instantiate(Weapon, pos, Quaternion.identity);
+            var weapon = activeItem.GetComponent<Weapon>();            
+            activeItem.transform.LookAt(direction);
+            weapon.Fire();
+            NetworkServer.Spawn(activeItem);
+            Destroy(weapon, 10.0f);            
+        }
     }
 }
