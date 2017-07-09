@@ -12,7 +12,7 @@ namespace Controls.Bosses {
 
             if (CheckPlayersNear(out TargetPosition)) {
                 
-                _lookDirection =TargetPosition - transform.position;
+                _lookDirection = TargetPosition - transform.position;
                 _lookDirection.Normalize();
                 
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(_lookDirection), 0.1f);                    
