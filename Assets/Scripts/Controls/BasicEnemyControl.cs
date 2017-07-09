@@ -48,8 +48,7 @@ namespace Controls {
         
         protected Vector3 TargetPosition;
         protected bool WasFolowingPlayer = false;
-        
-        
+                
         
         public override void OnStartServer() {                    
             if (!isServer) return;

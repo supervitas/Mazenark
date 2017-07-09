@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using App;
-using App.Eventhub;
 using Constants;
 using GameSystems.Statistics;
 using Lobby;
@@ -42,13 +41,13 @@ namespace GameSystems {
 
         private void GameEnded() {
             _playersData.Clear();
-            _playersTransforms.Clear();
-            //send stats            
+            _playersTransforms.Clear();            
         }                             
 
         public void SetPlayersCount(int players) {
             _playersCount = players;
         }
+        
 
         public void PlayerLefted() {
             _playersCount--;            
