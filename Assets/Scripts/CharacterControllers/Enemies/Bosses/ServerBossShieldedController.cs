@@ -1,80 +1,91 @@
-﻿using Controls.Bosses;
+﻿using System;
+using Controls.Bosses;
+using GameEnv.Buttons;
 using Loot;
 using UnityEngine;
 using UnityEngine.Networking;
+using Random = UnityEngine.Random;
 
 
 namespace CharacterControllers.Enemies.Bosses {
     public class ServerBossShieldedController : ServerCharacterController {
 	
 	    [SerializeField]
-		private int _maxShieldedButtons = 5;						
+		private int _maxButtons = 4;						
 
 		[SerializeField]
-		private GameObject _shieldPrefab = null;
+		private GameObject _button;
 
 
-		private BossShieldedControl _bossControls = null;
+		private BossShieldedControl _bossControls;
+	    private GameObject[] _buttons;
+	    
+	    private int _countOfActiveButtons = 0;
 		
 		
 		private void Start() {
 			if (!isServer) return;
+			
             IsNpc = true;			
 
-			_bossControls = GetComponent<BossShieldedControl>();			
+			_bossControls = GetComponent<BossShieldedControl>();
 
-			for (int i = 0; i < Random.Range(2, _maxShieldedButtons); i++) {
-				SpawnShield(i);
+			_countOfActiveButtons = Random.Range(1, _maxButtons);
+			
+			_buttons = new GameObject[_countOfActiveButtons];	
+			
+			for (var i = 0; i < _countOfActiveButtons; i++) {
+				SpawnButton(i);
 			}
 
 		}
 
-		private void SpawnShield(int i) {
-//			_shields[i] = Instantiate(_shieldPrefab);			
-//
-//			_shieldsControls[i] = _shields[i].GetComponent<BossShieldShieldedControl>();
-//			_shieldsControls[i].Controller = this;
-//			_shieldsControllers[i] = _shields[i].GetComponent<ServerBossShieldShieldedController>();
-//			_shieldsControllers[i].Parent = this;
-//
-//			var room = _bossControls.GetSpawnRoom();			
-//			_shields[i].transform.position = new Vector3(gameObject.transform.position.x - Random.Range(-12, 12),
-//				gameObject.transform.position.y, gameObject.transform.position.z - Random.Range(-12, 12));
-//
-//			NetworkServer.Spawn(_shields[i]);
+		private void SpawnButton(int position) {
 			
+			var btn = Instantiate(_button);
+
+			_buttons[position] = btn;
+			
+			btn.transform.position = new Vector3(gameObject.transform.position.x - Random.Range(-12, 12),
+				gameObject.transform.position.y, gameObject.transform.position.z - Random.Range(-12, 12));
+			
+			Action onButtonPressed = () => {
+				_countOfActiveButtons--;
+
+				if (_countOfActiveButtons == 0) {
+					Die();
+				}
+			};
+			
+			Action onButtonUnpress= () => {
+				_countOfActiveButtons++;		
+			};
+			
+			var btnController = btn.GetComponent<GameButton>();
+			
+			btnController.UnpressTime = 5f;
+			btnController.SetPressCallback(onButtonPressed);
+			btnController.SetUnpressCallback(onButtonUnpress);
+
+			NetworkServer.Spawn(btn);
 		}
 
-        public override void TakeDamage(int amount, float timeOfDeath = 2f) {
-            if (!isServer) return;
-			TakeDamage(amount, gameObject);
-		}
+        public override void TakeDamage(int amount, float timeOfDeath = 2f) {}
 
-		public void TakeDamage(int amount, GameObject target, float timeOfDeath = 2f) {
-			if (!isServer) return;
-
-//			if (target == gameObject && _currentNumberOfShields == 0) {
-//				_bossControls.Die();
-//				// LootManager
-//				// Statistics
-//				Destroy(this, timeOfDeath);
-//			}
-//
-//			for (int i = 0; i < _desiredNumberOfShields; i++) {
-//				if (target == _shields[i]) {
-//					_currentNumberOfShields--;
-//					_shieldsControls[i].Die();
-//					// LootManager
-//					// Statistics
-//					Destroy(_shields[i], timeOfDeath);
-//					_shields[i] = null;
-//
-//				}
-//			}
-		}
+	    private void Die() {
+		    
+		    foreach (var button in _buttons) {
+			    Destroy(button);
+		    }
+		    
+		    _bossControls.Die();
+		    
+		    Destroy(gameObject, 2f);
+		    
+		    FindObjectOfType<LootManager>().CreateLoot(gameObject.transform.position, 100f);
+	    }
+		
 	}
-
-
 
 }
 
