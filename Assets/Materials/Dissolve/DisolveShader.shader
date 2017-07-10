@@ -32,8 +32,7 @@
               o.Albedo = tex2D (_MainTex, IN.uv_MainTex).rgb;
      
              half test = tex2D (_SliceGuide, IN.uv_MainTex).rgb - _SliceAmount;
-             
-             if(test < _BurnSize && _SliceAmount > 0 && _SliceAmount < 1) {
+             if(test < _BurnSize && _SliceAmount > 0 && _SliceAmount < 1){
                 o.Emission = tex2D(_BurnRamp, float2(test *(1/_BurnSize), 0));
              o.Albedo *= o.Emission;
              }
