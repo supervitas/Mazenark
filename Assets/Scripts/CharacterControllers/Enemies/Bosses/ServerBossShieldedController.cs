@@ -78,7 +78,7 @@ namespace CharacterControllers.Enemies.Bosses {
 			    Destroy(button, 2f);
 		    }
 		    
-		    _bossControls.Die();
+		    _bossControls.Die(2f);
 		    
 		    Destroy(gameObject, 2f);
 		    
