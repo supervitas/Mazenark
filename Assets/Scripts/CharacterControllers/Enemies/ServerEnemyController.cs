@@ -16,7 +16,8 @@ namespace CharacterControllers.Enemies {
             
             if (!control.IsAlive) return;
             
-            control.Die();
+            control.Die(timeOfDeath);
+            
             Destroy(gameObject, timeOfDeath);
             
             var pos = transform.position;

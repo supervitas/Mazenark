@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using CharacterControllers;
+using GameEnv.GameEffects;
 using GameSystems;
 using Loot;
 using UnityEngine;
@@ -19,7 +20,7 @@ namespace Controls {
         [SerializeField]
         protected float EnemyAgroRange = 20f;
         [SerializeField]
-        protected float EnemyAngleVisibility = 30f;
+        protected float EnemyAngleVisibility = 60f;
 
         protected readonly List <Vector3> Points = new List<Vector3>();
         private int _destPoint = 0;
@@ -43,7 +44,7 @@ namespace Controls {
         
         [SerializeField]
         [Range(3, 40)]
-        protected float RangeOfAttack = 5f;
+        protected float RangeOfAttack = 15f;
         
         
         protected Vector3 TargetPosition;
@@ -85,13 +86,15 @@ namespace Controls {
             _destPoint = (_destPoint + 1) % Points.Count;
         }
 
-        public void Die() {
-            if(!isServer) return;
+        public void Die(float timeOfDeath) {
+            if (!isServer) return;
 
             IsAlive = false;                         
             
             SetAnimation("isDead", true);
-            Agent.isStopped = true;
+            Agent.isStopped = true;                       
+            GetComponent<Disolve>().BeginDisolve(timeOfDeath);
+
         }
 
         protected virtual bool CheckPlayersNear(out Vector3 playerTarget) {                        
@@ -107,7 +110,7 @@ namespace Controls {
 
                 var angle = Vector3.Angle(direction, transform.forward);
                 
-                if (distance <= EnemyAgroRange && angle < EnemyAngleVisibility) {
+                if (distance <= EnemyAgroRange && angle < EnemyAngleVisibility) {                    
                     playerTarget = target.position;
                     return true;
                 }
