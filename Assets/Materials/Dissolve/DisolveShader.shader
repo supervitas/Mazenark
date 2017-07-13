@@ -2,8 +2,8 @@
     Properties {
         _MainTex ("Texture (RGB)", 2D) = "white" {}
         _SliceGuide ("Slice Guide (RGB)", 2D) = "white" {}
-        _SliceAmount ("Slice Amount", Range(0.0, 1.0)) = 0.5     
-        _BurnSize ("Burn Size", Range(0.0, 1.0)) = 0.15
+        _SliceAmount ("Slice Amount", Range(0.0, 1.0)) = 0.0     
+        _BurnSize ("Burn Size", Range(0.0, 1.0)) = 0.4
         _BurnRamp ("Burn Ramp (RGB)", 2D) = "white" {}
     }
         
