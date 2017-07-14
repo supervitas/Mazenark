@@ -91,6 +91,9 @@ namespace Controls {
 
             IsAlive = false;                         
             
+            SetAnimation("Idle", false);
+            SetAnimation("Moving", false);
+            
             SetAnimation("isDead", true);
             Agent.isStopped = true;                       
             GetComponent<Disolve>().BeginDisolve(timeOfDeath);

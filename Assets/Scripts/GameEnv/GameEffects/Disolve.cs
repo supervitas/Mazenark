@@ -22,11 +22,14 @@ namespace GameEnv.GameEffects {
         }
 
         private IEnumerator BeginDisolve(Material mat, float time) {
-            var disolveValue =  0.1f / time;            
+            yield return new WaitForSeconds(0.5f);
+            
+            var disolveValue = 0.1f / (time - 0.5f);
+            
             for (float f = 0f; f <= time; f += 0.1f) {
                 _currentValue += disolveValue;                
                 mat.SetFloat("_SliceAmount", _currentValue);               
-                yield return new WaitForSeconds(.1f);
+                yield return new WaitForSeconds(0.1f);
             }
         }        
     }

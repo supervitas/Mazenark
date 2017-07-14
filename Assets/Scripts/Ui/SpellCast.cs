@@ -1,5 +1,4 @@
-﻿using App.Eventhub;
-using ProgressBar;
+﻿using ProgressBar;
 using UnityEngine;
 
 namespace Ui {
