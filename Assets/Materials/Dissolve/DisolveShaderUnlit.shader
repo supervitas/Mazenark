@@ -8,7 +8,7 @@
          _Color ("Diffuse", Color) = (1,1,1,1)
      }
 	SubShader {
-		Tags { "IgnoreProjector"="True" "RenderType"="TransparentCutout" }
+		Tags { "IgnoreProjector"="True" "Queue" = "Transparent" }
 		LOD 300
 		
 		CGPROGRAM
@@ -42,8 +42,8 @@
 		
         void vert (inout appdata_full v) {
         
-           v.vertex.x -= (_SliceAmount * _SliceAmount);
-           v.vertex.z -= (_SliceAmount * _BurnSize);  
+           v.vertex.x -= _SliceAmount;
+           v.vertex.z -= _SliceAmount;  
              
         }
 

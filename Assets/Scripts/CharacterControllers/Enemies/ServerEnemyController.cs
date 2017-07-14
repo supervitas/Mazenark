@@ -1,5 +1,6 @@
 using Controls;
 using Loot;
+using UnityEngine;
 
 namespace CharacterControllers.Enemies {
     public class ServerEnemyController : ServerCharacterController {
@@ -13,6 +14,8 @@ namespace CharacterControllers.Enemies {
             if (!isServer) return;
             
             var control = GetComponent<BasicEnemyControl>();
+
+            GetComponent<Collider>().enabled = false;
             
             if (!control.IsAlive) return;
             
