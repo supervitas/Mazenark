@@ -43,8 +43,12 @@ namespace Controls {
         private ServerPlayerController _serverPlayerController;
         
         private Text _spellText;
-        private float castTime;
-        private float timeCasted;
+        private float _castTime;
+        private float _timeCasted;
+        private float _timeCooled;
+        private float _coolDown = 0.2f;
+        
+        
         private SpellCast _uiSpellCast;
         private GameObject _spellEffect;
 
@@ -114,7 +118,7 @@ namespace Controls {
 
         public override void OnStartLocalPlayer() {
             if (!isLocalPlayer) return;
-            // Set up game for client
+            
             AppManager.Instance.EventHub.Subscribe("ItemChanged", OnActiveItemChanged, this);
             
             AppManager.Instance.TurnOffAndSetupMainCamera(); 
@@ -144,7 +148,7 @@ namespace Controls {
 
         private void OnActiveItemChanged(object sender, EventArguments e) {
             _activeItem = ItemsCollection.Instance.GetItemByName(e.Message);
-            castTime = _activeItem.GetComponent<Weapon>().GetCastTime();
+            _castTime = _activeItem.GetComponent<Weapon>().GetCastTime();
             _spellText.text = e.Message;
             _serverPlayerController.CmdSetActiveItem(e.Message);
         }
@@ -162,15 +166,15 @@ namespace Controls {
         private bool CheckAndFire() {
             if (!Input.GetMouseButton(0) || _activeItem == null || _playerItems[_activeItem.name] <= 0) return false;
             m_animator.SetFloat("MoveSpeed", 0);
-            timeCasted += Time.deltaTime;
+            _timeCasted += Time.deltaTime;
             _spellEffect.SetActive(true);
 
-            if (timeCasted > 0.2) {
-                _uiSpellCast.SetProgress(timeCasted / castTime * 100);
+            if (_timeCasted > 0.2) {
+                _uiSpellCast.SetProgress(_timeCasted / _castTime * 100);
             }
 
-            if (timeCasted >= castTime) {
-                timeCasted = 0;
+            if (_timeCasted >= _castTime) {
+                _timeCasted = 0;
                 _uiSpellCast.Reset();
                                  
                 var direction = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 25);
@@ -179,6 +183,8 @@ namespace Controls {
                 _serverPlayerController.CmdFire(direction);
                 _playerItems[_activeItem.name]--;
                 _gameGui.ModifyItemCount(_activeItem.name, _playerItems[_activeItem.name].ToString());
+
+                _timeCooled = 0;
 
                 if (_playerItems[_activeItem.name] <= 0) {
                     _gameGui.DisableItem(_activeItem.name);
@@ -189,14 +195,22 @@ namespace Controls {
             return true;
         }
 
+        private bool CheckCooldown() {
+            if (_timeCooled <= _coolDown) {
+                _timeCooled += Time.deltaTime;
+                return false;
+            }
+            return true;
+        }
+
         private void Update() {
             if (!isLocalPlayer) return;
 
             m_animator.SetBool("Grounded", m_isGrounded);
 
-            if (CheckAndFire()) return;
-
-            timeCasted = 0;
+            if (CheckCooldown() && CheckAndFire()) return;                            
+            
+            _timeCasted = 0;
             _uiSpellCast.Reset();
             _spellEffect.SetActive(false);
 
