@@ -31,6 +31,7 @@ namespace Controls {
         [SerializeField] private float m_jumpForce = 4;
         [SerializeField] private Animator m_animator;
         [SerializeField] private Rigidbody m_rigidBody;
+        [SerializeField] private GameObject spellCastEffect;
 
         [SerializeField] private ControlMode m_controlMode = ControlMode.Direct;
 
@@ -45,6 +46,7 @@ namespace Controls {
         private float castTime;
         private float timeCasted;
         private SpellCast _uiSpellCast;
+        private GameObject _spellEffect;
 
         private float m_currentV = 0;
         private float m_currentH = 0;
@@ -61,8 +63,7 @@ namespace Controls {
         private float m_minJumpInterval = 0.25f;
 
         private bool m_isGrounded;
-        private List<Collider> m_collisions = new List<Collider>();
-        
+        private List<Collider> m_collisions = new List<Collider>();              
 
         private GameGui _gameGui;
 
@@ -133,6 +134,12 @@ namespace Controls {
             
             var textMesh = GetComponentInChildren<TextMesh>();
             textMesh.gameObject.SetActive(false);
+
+            _spellEffect = Instantiate(spellCastEffect, gameObject.transform);
+            var pos = _spellEffect.transform.position;
+            pos.y += 1f;
+            _spellEffect.transform.position = pos; 
+            _spellEffect.SetActive(false);
         }
 
         private void OnActiveItemChanged(object sender, EventArguments e) {
@@ -156,6 +163,7 @@ namespace Controls {
             if (!Input.GetMouseButton(0) || _activeItem == null || _playerItems[_activeItem.name] <= 0) return false;
             m_animator.SetFloat("MoveSpeed", 0);
             timeCasted += Time.deltaTime;
+            _spellEffect.SetActive(true);
 
             if (timeCasted > 0.2) {
                 _uiSpellCast.SetProgress(timeCasted / castTime * 100);
@@ -190,6 +198,7 @@ namespace Controls {
 
             timeCasted = 0;
             _uiSpellCast.Reset();
+            _spellEffect.SetActive(false);
 
             switch (m_controlMode) {
                 case ControlMode.Direct:
