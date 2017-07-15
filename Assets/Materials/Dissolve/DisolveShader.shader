@@ -1,4 +1,4 @@
-﻿Shader "Custom/Dissolving" {
+﻿Shader "Custom/Dissolve" {
     Properties {
         _MainTex ("Texture (RGB)", 2D) = "white" {}
         _SliceGuide ("Slice Guide (RGB)", 2D) = "white" {}

@@ -77,6 +77,7 @@ namespace CharacterControllers.Enemies.Bosses {
 		    
 		    foreach (var button in _buttons) {
 			    button.GetComponent<Disolve>().BeginDisolve();
+			    button.GetComponent<Collider>().enabled = false;
 			    Destroy(button, 2f);			   
 		    }
 		    
