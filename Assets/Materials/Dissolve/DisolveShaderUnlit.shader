@@ -8,7 +8,7 @@
          _Color ("Diffuse", Color) = (1,1,1,1)
      }
 	SubShader {
-		Tags { "IgnoreProjector"="True" "Queue" = "Transparent" }
+		Tags { "IgnoreProjector" = "True" "Queue" = "Transparent" }
 		LOD 300
 		
 		CGPROGRAM
@@ -36,28 +36,24 @@
             float2 uv_SliceGuide;            
 		};
 		
-       float rand(float3 myVector)  {
-            return frac(sin( dot(myVector ,float3(12.9898,78.233,45.5432) )) * 43758.5453);
-        }
 		
-        void vert (inout appdata_full v) {
-        
-           v.vertex.x -= _SliceAmount;
-           v.vertex.z -= _SliceAmount;  
-             
-        }
+       void vert (inout appdata_full v) {       
+           v.vertex.x += v.vertex.x * _SliceAmount;
+           v.vertex.z += v.vertex.z * _SliceAmount;
+           v.vertex.y += v.vertex.y * _SliceAmount;    
+       }
 
-		 void surf (Input IN, inout SurfaceOutput o) {
-             clip(tex2D (_SliceGuide, IN.uv_SliceGuide).rgb - _SliceAmount);
-             o.Albedo = tex2D (_MainTex, IN.uv_MainTex) * _Color;
-     
-             half test = tex2D (_SliceGuide, IN.uv_MainTex).rgb - _SliceAmount;
-             
-             if(test < _BurnSize && _SliceAmount > 0 && _SliceAmount < 1) {
-                o.Emission = tex2D(_BurnRamp, float2(test * (1 / _BurnSize), 0));
-                o.Albedo *= o.Emission;
-             }
+	   void surf (Input IN, inout SurfaceOutput o) {
+         clip(tex2D (_SliceGuide, IN.uv_SliceGuide).rgb - _SliceAmount);
+         o.Albedo = tex2D (_MainTex, IN.uv_MainTex) * _Color;
+ 
+         half test = tex2D (_SliceGuide, IN.uv_MainTex).rgb - _SliceAmount;
+         
+         if (test < _BurnSize && _SliceAmount > 0 && _SliceAmount < 1) {
+            o.Emission = tex2D(_BurnRamp, float2(test * (1 / _BurnSize), 0));
+            o.Albedo *= o.Emission;
          }
+       }
          
 		ENDCG
 	} 

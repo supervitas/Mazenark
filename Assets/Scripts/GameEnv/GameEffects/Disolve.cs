@@ -3,8 +3,8 @@
 using UnityEngine;
 
 namespace GameEnv.GameEffects {
-    public class Disolve : MonoBehaviour {
-        private float _currentValue = 0f;
+    public class Disolve : MonoBehaviour {        
+        private float _currentValue = 0f;        
         
         public void BeginDisolve (float time = 2f) {
             var materials = GetComponentInChildren<Renderer>().materials;
@@ -16,18 +16,14 @@ namespace GameEnv.GameEffects {
                     continue;
                 }
                 
-                StartCoroutine(BeginDisolve(mat, time));                
+                StartCoroutine(StartDisolve(mat));                
                 
             }
         }
 
-        private IEnumerator BeginDisolve(Material mat, float time) {
-            yield return new WaitForSeconds(0.5f);
-            
-            var disolveValue = 0.1f / (time - 0.5f);
-            
-            for (float f = 0f; f <= time; f += 0.1f) {
-                _currentValue += disolveValue;                
+        private IEnumerator StartDisolve(Material mat) {                                              
+            for (var i = 0; i < 20; i++) {
+                _currentValue += 0.05f;                
                 mat.SetFloat("_SliceAmount", _currentValue);               
                 yield return new WaitForSeconds(0.1f);
             }

@@ -37,7 +37,7 @@ namespace CharacterControllers.Enemies.Bosses {
                     NetworkServer.Spawn(newBoss);
                 }
             }
-            gameObject.GetComponent<BossMultiplierControl>().Die(timeOfDeath);                
+            gameObject.GetComponent<BossMultiplierControl>().Die(timeOfDeath);            
             Destroy(gameObject, timeOfDeath);                   
         }
     }

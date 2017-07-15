@@ -1,6 +1,7 @@
 ﻿using System;
 using Controls.Bosses;
 using GameEnv.Buttons;
+using GameEnv.GameEffects;
 using Loot;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -63,7 +64,7 @@ namespace CharacterControllers.Enemies.Bosses {
 			
 			var btnController = btn.GetComponent<GameButton>();
 			
-			btnController.UnpressTime = 5f;
+			btnController.UnpressTime = 7f;
 			btnController.SetPressCallback(onButtonPressed);
 			btnController.SetUnpressCallback(onButtonUnpress);
 
@@ -75,9 +76,11 @@ namespace CharacterControllers.Enemies.Bosses {
 	    private void Die() {
 		    
 		    foreach (var button in _buttons) {
-			    Destroy(button, 2f);
+			    button.GetComponent<Disolve>().BeginDisolve();
+			    Destroy(button, 2f);			   
 		    }
 		    
+		    _bossControls.GetComponent<Disolve>().BeginDisolve();
 		    _bossControls.Die(2f);
 		    
 		    Destroy(gameObject, 2f);
