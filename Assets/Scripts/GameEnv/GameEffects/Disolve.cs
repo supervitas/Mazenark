@@ -1,14 +1,14 @@
 ﻿using System.Collections;
-
+using System.Linq;
 using UnityEngine;
 
-namespace GameEnv.GameEffects {
+namespace GameEnv.GameEffects {    
     public class Disolve : MonoBehaviour {        
         private float _currentValue = 0f;        
         
-        public void BeginDisolve (float time = 2f) {
-            var materials = GetComponentInChildren<Renderer>().materials;
-            foreach (var mat in materials) {
+        public void BeginDisolve (float time = 2f) {                       
+                        
+            foreach (var mat in GetComponentsInChildren<Renderer>().Select(render => render.material)) {
                 
                 if (!mat.HasProperty("_SliceAmount")) {
                     Debug.LogError(string.Format("{0} gameobject with {1} dosent have disolve shader in material",
@@ -27,6 +27,6 @@ namespace GameEnv.GameEffects {
                 mat.SetFloat("_SliceAmount", _currentValue);               
                 yield return new WaitForSeconds(0.1f);
             }
-        }        
+        }   
     }
 }
