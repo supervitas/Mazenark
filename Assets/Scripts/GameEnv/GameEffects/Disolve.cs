@@ -21,11 +21,13 @@ namespace GameEnv.GameEffects {
             }
         }
 
-        private IEnumerator StartDisolve(Material mat) {                                              
+        private IEnumerator StartDisolve(Material mat) {
+            yield return new WaitForSeconds(1.2f); // wait for death animation
+            
             for (var i = 0; i < 20; i++) {
                 _currentValue += 0.05f;                
                 mat.SetFloat("_SliceAmount", _currentValue);               
-                yield return new WaitForSeconds(0.1f);
+                yield return new WaitForSeconds(0.02f);
             }
         }   
     }
