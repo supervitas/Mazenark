@@ -11,13 +11,9 @@ namespace MazeBuilder {
         // |
         // ↓
         // y
-        private Tile[,] tiles;
-		private List<Coordinate> importantPlaces = new List<Coordinate>();  // Should have at least one path leading to them.
-        private List<Room> rooms = new List<Room>();
-		private List<Room> spawns = new List<Room>();
-		public Dictionary<Biome, Coordinate> BiomesSize = new Dictionary<Biome, Coordinate>();
-		private List<TileCollection> biomeList = null;
-		public int MaxBiomeID { get; set; }
+
+	    public Dictionary<Biome, Coordinate> BiomesSize = new Dictionary<Biome, Coordinate>();
+	    public int MaxBiomeID { get; set; }
 
 
         public Maze (int width = 10, int height = 10, bool fromServer = false) {
@@ -26,11 +22,11 @@ namespace MazeBuilder {
             if (height < Constants.Maze.MIN_SIZE)
                 height = Constants.Maze.MIN_SIZE;
 
-            tiles = new Tile[width, height];
+            Tiles = new Tile[width, height];
 
             for (var i = 0; i < width; i++)
 				for (var j = 0; j < height; j++)
-					tiles[i, j] = new Tile(new Coordinate(i, j));
+					Tiles[i, j] = new Tile(new Coordinate(i, j));
 
             if (fromServer) {
                 return;
@@ -39,46 +35,25 @@ namespace MazeBuilder {
 			AsRoom = new Room(new Coordinate(0, 0), new Coordinate(width - 1, height - 1));
 		}
 
-        public Tile[,] Tiles {
-            get {
-                return tiles;
-            }
-        }
+        public Tile[,] Tiles { get; }
 
-		public List<Coordinate> ImportantPlaces{
-            get {
-                return importantPlaces;
-            }
-        }
+	    public List<Coordinate> ImportantPlaces { get; } = new List<Coordinate>();
 
-        public List<Room> Rooms {
-            get {
-                return rooms;
-            }
-        }
-		public List<Room> Spawns {
-			get {
-				return spawns;
-			}
-		}
+	    public List<Room> Rooms { get; } = new List<Room>();
 
-		public int Width {
-            get { return tiles.GetLength(0); }
-        }
+	    public List<Room> Spawns { get; } = new List<Room>();
 
-        public int Height {
-            get { return tiles.GetLength(1); }
-        }
+	    public int Width => Tiles.GetLength(0);
 
-		public Room AsRoom {
+	    public int Height => Tiles.GetLength(1);
+
+	    public Room AsRoom {
 			get; private set;
 		}
 
-		public List<TileCollection> Biomes {
-			get { return biomeList; }
-		}
+		public List<TileCollection> Biomes { get; private set; } = null;
 
-		public void CutPassage(Coordinate topLeft, Coordinate bottomRight) {
+	    public void CutPassage(Coordinate topLeft, Coordinate bottomRight) {
             CutWalls(new Room(topLeft, bottomRight), type:Tile.Variant.Empty);
         }
 
@@ -106,9 +81,9 @@ namespace MazeBuilder {
 		    }
             for (var i = room.TopLeftCorner.X; i <= room.TopRightCorner.X; i++)
 				for (var j = room.TopLeftCorner.Y; j <= room.BottomLeftCorner.Y; j++) {
-					tiles[i, j].Type = type;
+					Tiles[i, j].Type = type;
 				    if (fillWith != null) {
-				        tiles[i, j].Biome = fillWith;
+				        Tiles[i, j].Biome = fillWith;
 				    }
 				}
         }
@@ -122,8 +97,8 @@ namespace MazeBuilder {
 		public List<Tile> GetTilesWithinRoom(Room room) {
 			var tiles = new List<Tile>();
 
-			for (int i = room.TopLeftCorner.X; i <= room.TopRightCorner.X; i++) {
-				for (int j = room.TopLeftCorner.Y; j <= room.BottomLeftCorner.Y; j++) {
+			for (var i = room.TopLeftCorner.X; i <= room.TopRightCorner.X; i++) {
+				for (var j = room.TopLeftCorner.Y; j <= room.BottomLeftCorner.Y; j++) {
 					if (IsPointWithin(i, j)) {
 						tiles.Add(Tiles[i, j]);
 					}
@@ -144,7 +119,7 @@ namespace MazeBuilder {
 		}
 
 		public void GenerateBiomesList() {
-			biomeList = new List<TileCollection>();
+			Biomes = new List<TileCollection>();
 			int tmpCounter = 0;
 			// TODO: rewrite algorithm to be not using maxBiomeID.
 			MaxBiomeID = 20; // 20 biomes should be enough. 640k even better.

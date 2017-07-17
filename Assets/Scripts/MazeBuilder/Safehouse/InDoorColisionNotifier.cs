@@ -1,5 +1,4 @@
-﻿using App.Eventhub;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MazeBuilder.Safehouse {
     public class InDoorColisionNotifier : MonoBehaviour {

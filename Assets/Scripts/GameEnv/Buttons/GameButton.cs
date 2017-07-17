@@ -43,11 +43,8 @@ namespace GameEnv.Buttons {
         }
 
         private void Unpress() {
-            
-            if (_unpressCallback != null) {
-                _unpressCallback();
-            }
-            
+            _unpressCallback?.Invoke();
+
             _isPressed = false;
             _animator.SetBool("Pressed", false);
         }

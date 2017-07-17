@@ -16,9 +16,9 @@ namespace MazeBuilder.BiomeGenerators {
 
 
 		public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
-			GameObject parent = new GameObject();
+			var parent = new GameObject();
 
-			foreach (Edge edge in Edge.Edges) {
+			foreach (var edge in Edge.Edges) {
 				var edgeMeshTemplate = outerEdges.GetMeshForPlacement(maze, coordinate, edge);
 				if (edgeMeshTemplate == null)
 					edgeMeshTemplate = innerEdges.GetMeshForPlacement(maze, coordinate, edge);
@@ -31,7 +31,7 @@ namespace MazeBuilder.BiomeGenerators {
 				}
 			}
 
-			parent.name = string.Format("Cube at {0}:{1}", coordinate.X, coordinate.Y);
+			parent.name = $"Cube at {coordinate.X}:{coordinate.Y}";
 		}
     }
 }

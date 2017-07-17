@@ -1,4 +1,5 @@
 ﻿using App;
+using GameEnv.Teleports;
 using MazeBuilder.Utility;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -11,6 +12,7 @@ namespace GameEnv {
         private void Start() {
             SpawnSafehouse();
 //            SpawnFog();
+            CreateTeleports();
         }
 
         public GameObject ServerSpawn(GameObject go, Vector3 position, Quaternion rotation) {
@@ -29,6 +31,10 @@ namespace GameEnv {
             ServerSpawn(Safehouse,
                 Utils.GetDefaultPositionVector(new Coordinate(AppManager.Instance.MazeInstance.Height / 2,
                     AppManager.Instance.MazeInstance.Width / 2), 0.1f), Quaternion.identity);
+        }
+
+        private void CreateTeleports() {
+            GetComponent<TeleportManager>().CreateTeleports(8);
         }
 
     }

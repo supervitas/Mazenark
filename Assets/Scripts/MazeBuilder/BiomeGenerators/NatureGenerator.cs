@@ -35,7 +35,7 @@ namespace MazeBuilder.BiomeGenerators {
                 }
             }
 
-            parent.name = string.Format("Cube at {0}:{1}", coordinate.X, coordinate.Y);
+            parent.name = $"Cube at {coordinate.X}:{coordinate.Y}";
         }
 
     }

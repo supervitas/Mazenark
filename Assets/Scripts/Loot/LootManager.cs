@@ -20,10 +20,8 @@ namespace Loot {
 			}		
 		}
 
-		public void CreateLoot(Vector3 where, float chance = float.NaN ) {
-			if (float.IsNaN(chance)) {
-				chance = Random.Range(0, 101);
-			}
+		public void CreateLoot(Vector3 where, float chance = 33 ) {						
+			
 			if (chance >= chanceOfSpawnLoot) {
 				var instantiated = Instantiate((GameObject) _loots.GetRandom(typeof(GameObject)), where, Quaternion.identity);
 				NetworkServer.Spawn(instantiated);
