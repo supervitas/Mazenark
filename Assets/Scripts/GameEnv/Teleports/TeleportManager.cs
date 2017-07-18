@@ -37,14 +37,14 @@ namespace GameEnv.Teleports {
                 var randBiome = Random.Range(0, count);
                
                
-                var randTile = Random.Range(0, _maze.Biomes[randBiome].tiles.Count);
+                var randTile = Random.Range(0, _maze.Biomes[randBiome].tiles.Count);                
 
-                if (_maze.Biomes[randBiome].tiles[randTile].Type == Tile.Variant.Empty) {
+                if (_maze.Biomes[randBiome].tiles[randTile].Type == Tile.Variant.Empty &&
+                    _maze.Biomes[randBiome].tiles[randTile].Biome != Biome.Spawn && 
+                    _maze.Biomes[randBiome].tiles[randTile].Biome != Biome.Safehouse) {
                     return Utils.GetDefaultPositionVector(_maze.Biomes[randBiome].tiles[randTile].Position);
                 }
             }            
-//            if(_maze.Biomes[randBiome].biome.Name != '')
-
         }
     }
 }
