@@ -14,11 +14,11 @@ namespace PlayerLocationManager {
 
             _target = target;
             GetComponentInChildren<ParticleSystem>().Play();
-            InvokeRepeating("UpdateEffectPosition", 0, UpdateTime);
+            InvokeRepeating(nameof(UpdateEffectPosition), 0, UpdateTime);
         }
 
         public void StopEffect() {
-            CancelInvoke("UpdateEffectPosition");
+            CancelInvoke(nameof(UpdateEffectPosition));
             GetComponentInChildren<ParticleSystem>().Stop();
         }
 

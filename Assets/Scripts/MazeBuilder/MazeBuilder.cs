@@ -21,14 +21,9 @@ namespace MazeBuilder {
             }
         }
 
-        public Maze Maze {
-            get {
-                return _maze ?? CreateNewMaze();
-            }
+        public Maze Maze => _maze ?? CreateNewMaze();
 
-        }
-
-        private Maze CreateNewMaze() {
+	    private Maze CreateNewMaze() {
             _maze = new Maze(Width, Height);
             BiomePlacer.PlaceBiomes(_maze);
             GenerateRooms();

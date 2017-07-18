@@ -17,12 +17,12 @@ namespace CharacterControllers {
         public override void OnStartServer() {            
             IsNpc = false;
             _characterControl = GetComponent<PlayerControl>();
-            InvokeRepeating("PlayerUpdate", 0, 0.5f);
+            InvokeRepeating(nameof(PlayerUpdate), 0, 0.5f);
         }
 
         private void OnDestroy() {
             if (!isServer) return;
-            CancelInvoke("PlayerUpdate");            
+            CancelInvoke(nameof(PlayerUpdate));            
         }
         
         public override void TakeDamage(int amount, float timeOfDeath = 2f) {            

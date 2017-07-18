@@ -20,7 +20,7 @@ namespace Controls {
             Direct
         }
         
-        [SyncVar(hook = "OnSetName")] 
+        [SyncVar(hook = nameof(OnSetName))] 
         private string _playerName;
         
 
@@ -165,6 +165,7 @@ namespace Controls {
 
         private bool CheckAndFire() {
             if (!Input.GetMouseButton(0) || _activeItem == null || _playerItems[_activeItem.name] <= 0) return false;
+            
             m_animator.SetFloat("MoveSpeed", 0);
             _timeCasted += Time.deltaTime;
             _spellEffect.SetActive(true);

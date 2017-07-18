@@ -25,7 +25,7 @@ namespace GameEnv.Buttons {
             if (!isServer) return;
             
             if (other.CompareTag("Player")) {
-                CancelInvoke("Unpress");
+                CancelInvoke(nameof(Unpress));
                          
                 if (_pressCallback != null && _isPressed == false) {
                     _pressCallback();
@@ -39,7 +39,7 @@ namespace GameEnv.Buttons {
         private void OnTriggerExit(Collider other) {
             if (!isServer) return;  
             
-            Invoke("Unpress", UnpressTime);
+            Invoke(nameof(Unpress), UnpressTime);
         }
 
         private void Unpress() {
@@ -50,7 +50,7 @@ namespace GameEnv.Buttons {
         }
 
         private void OnDestroy() {
-           CancelInvoke("Unpress");
+           CancelInvoke(nameof(Unpress));
         }
     }
 }

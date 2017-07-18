@@ -38,23 +38,7 @@ namespace Controls.Bosses {
                 }               
             }
             Agent.destination = Utils.GetDefaultPositionVector(SpawnRoom.Center);
-        }
-
-
-        protected override void Fire(Vector3 direction) {
-            RaycastHit hit;
-            var pos = transform.position;
-
-            pos.y = 1f;
-
-            if (Physics.Raycast(pos, direction, out hit, 2.5f)) {
-                var go = hit.transform.gameObject;
-                if (go.CompareTag("Player")) {
-                    go.SendMessage("TakeDamage", 50.0F,
-                        SendMessageOptions.DontRequireReceiver); // execute function on colided object.
-                }
-            }
-        }
+        }     
     }
 }
 
