@@ -21,6 +21,7 @@ namespace GameEnv.Teleports {
             var pos = _teleportTo.transform.position;
             pos.x += 2f;
             pos.z += 2f;
+            pos.y = 0f;
             player.transform.position = pos;
         }
     }

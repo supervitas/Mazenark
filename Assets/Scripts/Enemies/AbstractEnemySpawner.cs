@@ -32,7 +32,7 @@ namespace Enemies {
             SetUpRandomEnemies();
         }
 
-        protected void InitBiomeEnemies(Biome biomeType) {
+        protected void InitBiomeEnemies(Biome biomeType) {            
             CreateEnemyPlaces(biomeType);
             SpawnEnemies();
             CreateEnemyBehaivor();

@@ -1,6 +1,4 @@
-﻿using System;
-using MazeBuilder.BiomeStrategies;
-using UnityEngine;
+﻿using MazeBuilder.BiomeStrategies;
 using Random = System.Random;
 using MazeBuilder.Utility;
 using System.Collections.Generic;
