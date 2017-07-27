@@ -4,6 +4,7 @@ using App;
 using App.Eventhub;
 using Cameras;
 using CharacterControllers;
+using Items;
 using Loot;
 using Ui;
 using UnityEngine;

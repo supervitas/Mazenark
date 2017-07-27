@@ -2,6 +2,7 @@
 using CharacterControllers;
 using GameEnv.GameEffects;
 using GameSystems;
+using Items;
 using Loot;
 using UnityEngine;
 using UnityEngine.AI;
@@ -120,7 +121,7 @@ namespace Controls {
             }
             playerTarget = Vector3.zero;           
             return false;
-        }
+        }        
 
         protected virtual void Update() {            
             if (!IsAlive || !isServer) return;
@@ -152,7 +153,8 @@ namespace Controls {
                     SetAnimation("Attack", false);
 
                 }
-
+                
+                
                 if (!Agent.pathPending && Agent.remainingDistance <= RangeOfAttack) {
 
                     AttackTimePassed += Time.deltaTime;
@@ -178,7 +180,6 @@ namespace Controls {
             if (CanPatrool && !Agent.pathPending && Agent.remainingDistance <= 0.5f || WasFolowingPlayer) {
                 WasFolowingPlayer = false;
                 GotoNextPoint();
-
             }
         }                
 

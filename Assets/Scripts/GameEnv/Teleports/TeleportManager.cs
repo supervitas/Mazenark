@@ -15,7 +15,7 @@ namespace GameEnv.Teleports {
         public void CreateTeleports(int count = 6) {           
             for (var i = 0; i < count; i++) {
                 var enterTeleportPosition = GetTeleportPosition();
-                var exitTeleportPosition = GetTeleportPosition();
+                var exitTeleportPosition = GetTeleportPosition();               
                 
                 var enterTeleport = Instantiate(TeleportGo, enterTeleportPosition, Quaternion.identity);
                 var exitTeleport = Instantiate(TeleportGo, exitTeleportPosition, Quaternion.identity);

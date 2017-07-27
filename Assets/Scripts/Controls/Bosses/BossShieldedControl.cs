@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using Items;
+using UnityEngine;
 using UnityEngine.Networking;
-using Weapons;
 
 
 namespace Controls.Bosses {    

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using App;
 using Controls;
 using GameSystems;
+using Items;
 using Loot;
 using UnityEngine;
 using UnityEngine.Networking;
