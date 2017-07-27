@@ -102,18 +102,18 @@ namespace Controls {
 
         protected virtual bool CheckPlayersNear(out Vector3 playerTarget) {                        
             foreach (var target in _playersTransform) {
-                if (target == null ) continue;
+                if (target == null) continue;
 
                 var distance = Vector3.Distance(transform.position, target.position);
-                var direction = Agent.destination - transform.position;
+//                var direction = Agent.destination - transform.position;
+//                
+//                if (direction == Vector3.zero) {
+//                    direction = transform.forward;
+//                }
+//
+//                var angle = Vector3.Angle(direction, transform.forward);
                 
-                if (direction == Vector3.zero) {
-                    direction = transform.forward;
-                }
-
-                var angle = Vector3.Angle(direction, transform.forward);
-                
-                if (distance <= EnemyAgroRange && angle < EnemyAngleVisibility) {                    
+                if (distance <= EnemyAgroRange) {                    
                     playerTarget = target.position;
                     return true;
                 }
@@ -134,7 +134,7 @@ namespace Controls {
                 var direction = Agent.destination - transform.position;
 
                 Agent.speed = RegularSpeed * SpeedBoostOnAgro;
-
+                
                 if (direction != Vector3.zero) {
                     transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
                 }
