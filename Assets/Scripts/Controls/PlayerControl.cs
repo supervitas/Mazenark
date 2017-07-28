@@ -49,6 +49,8 @@ namespace Controls {
         private float _timeCooled;
         private float _coolDown = 0.2f;
         
+        private readonly Vector3 _zeroVector = Vector3.zero;
+        
         
         private SpellCast _uiSpellCast;
         private GameObject _spellEffect;
@@ -68,9 +70,9 @@ namespace Controls {
         private float m_minJumpInterval = 0.25f;
 
         private bool m_isGrounded;
-        private List<Collider> m_collisions = new List<Collider>();              
+        private readonly List<Collider> m_collisions = new List<Collider>();              
 
-        private GameGui _gameGui;
+        private GameGui _gameGui;       
 
         private void OnCollisionEnter(Collision collision) {
             ContactPoint[] contactPoints = collision.contacts;
@@ -282,7 +284,7 @@ namespace Controls {
             direction.y = 0;
             direction = direction.normalized * directionLength;
 
-            if (direction != Vector3.zero) {
+            if (direction != _zeroVector) {
                 m_currentDirection = Vector3.Slerp(m_currentDirection, direction, Time.deltaTime * m_interpolation);
 
                 transform.rotation = Quaternion.LookRotation(m_currentDirection);

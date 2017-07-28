@@ -5,6 +5,8 @@ namespace Controls.Bosses {
     public abstract class BasicBossControl : BasicEnemyControl {
         protected Room SpawnRoom;                                                                            
         protected Vector3[] RoomBounds = new Vector3[4];
+        private  readonly Vector3 _zeroVector = Vector3.zero;
+
         
         public void SetSpawnRoom(Room room) {              
             SpawnRoom = room;            
@@ -34,7 +36,7 @@ namespace Controls.Bosses {
                     return true;
                 }
             }
-            playerTarget = Vector3.zero;           
+            playerTarget = _zeroVector;           
             return false;
         }
        

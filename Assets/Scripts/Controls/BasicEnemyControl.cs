@@ -49,7 +49,9 @@ namespace Controls {
         
         
         protected Vector3 TargetPosition;
-        protected bool WasFolowingPlayer = false;        
+        protected bool WasFolowingPlayer = false;
+        
+        private readonly Vector3 _zeroVector = Vector3.zero;
                 
         
         public override void OnStartServer() {                    
@@ -119,14 +121,14 @@ namespace Controls {
                     return true;
                 }
             }
-            playerTarget = Vector3.zero;           
+            playerTarget = _zeroVector;           
             return false;
         }        
 
         protected virtual void Update() {            
             if (!IsAlive || !isServer) return;
 
-            SetAnimation(Agent.velocity != Vector3.zero ? "Moving" : "Idle", true);
+            SetAnimation(Agent.velocity != _zeroVector ? "Moving" : "Idle", true);
 
             if (CheckPlayersNear(out TargetPosition)) {
 
@@ -136,7 +138,7 @@ namespace Controls {
 
                 Agent.speed = RegularSpeed * SpeedBoostOnAgro;
                 
-                if (direction != Vector3.zero) {
+                if (direction != _zeroVector) {
                     transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
                 }
                 

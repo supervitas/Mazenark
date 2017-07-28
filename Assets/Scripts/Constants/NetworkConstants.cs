@@ -5,39 +5,39 @@
 //		public static string ServerApiUrl = "http://mazenark.tk";
 
 		// ↓ Debug
-		 public static string GameRoomAdress = "localhost"; // change to ip
-         public static string ServerApiUrl = "http://localhost:7000"; // change to domain
+		public static string GameRoomAdress = "localhost"; // change to ip
+        public static string ServerApiUrl = "http://localhost:7000"; // change to domain
         
         public static string UnityServerOnlyUrl = "http://localhost:7000"; // DONT CHANGE
 
         #region Room
 
-        public static string RoomGetRoom = string.Format("{0}/api/getRoom", ServerApiUrl);
+        public static string RoomGetRoom = $"{ServerApiUrl}/api/getRoom";
 
-        public static string RoomPlayerLeft = string.Format("{0}/api/room/playerLeft", UnityServerOnlyUrl);
-        public static string RoomPlayerJoined = string.Format("{0}/api/room/playerJoined", UnityServerOnlyUrl);
-        public static string RoomGameStarted = string.Format("{0}/api/room/gameStarted", UnityServerOnlyUrl);
-        public static string RoomGameEnded = string.Format("{0}/api/room/gameEnded", UnityServerOnlyUrl);
+        public static string RoomPlayerLeft = $"{UnityServerOnlyUrl}/api/room/playerLeft";
+        public static string RoomPlayerJoined = $"{UnityServerOnlyUrl}/api/room/playerJoined";
+        public static string RoomGameStarted = $"{UnityServerOnlyUrl}/api/room/gameStarted";
+        public static string RoomGameEnded = $"{UnityServerOnlyUrl}/api/room/gameEnded";
 
         #endregion
 
         #region Auth
 
-        public static string Register = string.Format("{0}/api/auth/register", ServerApiUrl);
-        public static string Login = string.Format("{0}/api/auth/login", ServerApiUrl);
-        public static string Logout = string.Format("{0}/api/auth/logout", ServerApiUrl);
-        public static string RegisterAsGuest = string.Format("{0}/api/auth/guest", ServerApiUrl);
+        public static string Register = $"{ServerApiUrl}/api/auth/register";
+        public static string Login = $"{ServerApiUrl}/api/auth/login";
+        public static string Logout = $"{ServerApiUrl}/api/auth/logout";
+        public static string RegisterAsGuest = $"{ServerApiUrl}/api/auth/guest";
 
         #endregion
 
         #region User
 
-        public static string UserByToken = string.Format("{0}/api/user/token", ServerApiUrl);
-        public static string UserById = string.Format("{0}/api/user/id", ServerApiUrl);
+        public static string UserByToken = $"{ServerApiUrl}/api/user/token";
+        public static string UserById = $"{ServerApiUrl}/api/user/id";
 
 
         #endregion
 
-        public static string GameResultUrl = string.Format("{0}/api/gameresult", UnityServerOnlyUrl);
+        public static string GameResultUrl = $"{UnityServerOnlyUrl}/api/gameresult";
     }
 }
