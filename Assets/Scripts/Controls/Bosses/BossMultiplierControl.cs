@@ -8,13 +8,8 @@ namespace Controls.Bosses {
         protected override void Update() {
             if (!IsAlive || !isServer) return;
 
-            if (Agent.velocity != Vector3.zero) {
-                SetAnimation("Moving", true);
-                SetAnimation("Idle", false);
-            }
-            else {
-                SetAnimation("Idle", true);
-            }
+            SetAnimation(Agent.velocity != _zeroVector ? _movingAnimation : _idleAnimation, true);
+
 
             if (CheckPlayersNear(out TargetPosition)) {
                 var direction = Agent.destination - transform.position;
@@ -29,11 +24,11 @@ namespace Controls.Bosses {
                 Agent.stoppingDistance = 5f;
 
                 if (Agent.remainingDistance > 5f) {
-                    SetAnimation("Attack", false);
+                    SetAnimation(_attackAnimation, false);
                     AttackTimePassed = 0;
                 }
                 else if (!Agent.pathPending && Agent.remainingDistance <= 5f) {
-                    SetAnimation("Attack", true);
+                    SetAnimation(_attackAnimation, true);
                     Fire(TargetPosition);
                 }               
             }

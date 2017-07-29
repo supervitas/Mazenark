@@ -22,13 +22,11 @@ namespace CharacterControllers.Enemies.Bosses {
 	    private GameObject[] _buttons;
 	    
 	    private int _countOfActiveButtons = 0;
-		
-		
-		private void Start() {
-			if (!isServer) return;
-			
-            IsNpc = true;			
 
+
+	    public override void OnStartServer() {		
+            IsNpc = true;
+		    
 			_bossControls = GetComponent<BossShieldedControl>();
 
 			_countOfActiveButtons = Random.Range(1, _maxButtons);
@@ -51,8 +49,7 @@ namespace CharacterControllers.Enemies.Bosses {
 				gameObject.transform.position.y, gameObject.transform.position.z - Random.Range(-12, 12));
 			
 			Action onButtonPressed = () => {
-				_countOfActiveButtons--;
-
+				_countOfActiveButtons--;				
 				if (_countOfActiveButtons == 0) {
 					Die();
 				}

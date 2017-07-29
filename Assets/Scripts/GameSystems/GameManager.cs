@@ -15,16 +15,19 @@ namespace GameSystems {
         private StatisticsManager _statisticsManager;
         private int _playersCount;
         
-        public override void OnStartServer() {                              
+        public override void OnStartServer() {
+            _playersTransforms.Clear();
             _statisticsManager = new StatisticsManager(_playersData);         
         }
         
-        public void PlayerCompletedMaze(GameObject player) {                     
+        public void PlayerCompletedMaze(GameObject player) {
+            _playersTransforms.Remove(player.transform);
             Destroy(player);
         }
 
-        public void PlayerDied(GameObject player) {                        
-            Destroy(player);
+        public void PlayerDied(GameObject player) {
+            _playersTransforms.Remove(player.transform);
+            Destroy(player);            
         }        
         
         public void AddPlayerTransform(Transform playerTransform) {
@@ -50,7 +53,15 @@ namespace GameSystems {
         
 
         public void PlayerLefted() {
-            _playersCount--;            
+            _playersCount--;
+            
+            for (var i = 0; i < _playersTransforms.Count; i++) {
+                if (_playersTransforms[i] == null) {
+                    _playersTransforms.RemoveAt(i);
+                }
+            }
+            
+            
             if (_playersCount != 0) return;
             
             GameEnded();
@@ -61,7 +72,9 @@ namespace GameSystems {
             lobbyManager.StopServer();
             lobbyManager.StartServer();
             NetworkHttpManager.Instance.SendRoomUpdate(NetworkConstants.RoomGameEnded);           
-        }        
+        }
+        
+        
     }
                        
 }

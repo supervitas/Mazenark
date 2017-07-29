@@ -26,7 +26,7 @@ namespace CharacterControllers.Enemies {
             var pos = transform.position;
             pos.y = 1.5f;
             
-            FindObjectOfType<LootManager>().CreateLoot(pos);
+            FindObjectOfType<LootManager>().CreateLoot(pos);            
         }
     }
 }

@@ -34,7 +34,7 @@ namespace EnemiesManager {
             if (!isServer) return;
             SetUpRandomEnemies();
             _playersTransform = FindObjectOfType<GameManager>().GetPlayersTransforms();
-            Invoke(nameof(CheckAndActivateEnemies), 1.5f);
+            InvokeRepeating(nameof(CheckAndActivateEnemies), 0f, 1.5f);
         }
 
         protected void InitBiomeEnemies(Biome biomeType) {            
@@ -133,10 +133,9 @@ namespace EnemiesManager {
         private void CheckAndActivateEnemies() {
             foreach (var enemy in SpawnedEnemies) {
                 
-                foreach (var playerTransform in _playersTransform) {
-                                       
-                    var distance = Vector3.Distance(playerTransform.position, enemy.transform.position);
-
+                if (enemy == null) continue;                
+                foreach (var playerTransform in _playersTransform) {                                            
+                    var distance = Vector3.Distance(playerTransform.position, enemy.transform.position);                    
                     enemy.SetActive(!(distance > 100f));
                 }                
             }                        

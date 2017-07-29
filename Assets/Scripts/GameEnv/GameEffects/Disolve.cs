@@ -11,8 +11,8 @@ namespace GameEnv.GameEffects {
             foreach (var mat in GetComponentsInChildren<Renderer>().Select(render => render.material)) {
                 
                 if (!mat.HasProperty("_SliceAmount")) {
-                    Debug.LogError(string.Format("{0} gameobject with {1} dosent have disolve shader in material",
-                        gameObject.name, mat.name));
+                    Debug.LogError(
+                        $"{gameObject.name} gameobject with {mat.name} dosent have disolve shader in material");
                     continue;
                 }
                 
@@ -23,10 +23,11 @@ namespace GameEnv.GameEffects {
 
         private IEnumerator StartDisolve(Material mat) {
             yield return new WaitForSeconds(1.2f); // wait for death animation
+            var slice = Shader.PropertyToID("_SliceAmount");
             
             for (var i = 0; i < 20; i++) {
                 _currentValue += 0.05f;                
-                mat.SetFloat("_SliceAmount", _currentValue);               
+                mat.SetFloat(slice, _currentValue);               
                 yield return new WaitForSeconds(0.02f);
             }
         }   

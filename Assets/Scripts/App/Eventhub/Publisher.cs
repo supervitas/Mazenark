@@ -43,5 +43,9 @@ namespace App.Eventhub {
                 }
             }
         }
+
+        public void ClearHandlers() {
+            _eventHandlers.Clear();
+        }
     }
 }

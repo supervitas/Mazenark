@@ -21,14 +21,14 @@ namespace Controls.Bosses {
 
                 if (AttackTimePassed > TimeForAttack) {
 
-                    SetAnimation("Attack", true);
+                    SetAnimation(_attackAnimation, true);
                     Fire(TargetPosition);
 
                     AttackTimePassed = 0f;
                 }                
             }
             
-            SetAnimation("Attack", false);
+            SetAnimation(_attackAnimation, false);
         }
         
         protected override void Fire(Vector3 direction) {

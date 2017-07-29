@@ -26,9 +26,7 @@ namespace Controls {
         protected readonly List <Vector3> Points = new List<Vector3>();
         private int _destPoint = 0;
 
-        protected List<Transform> _playersTransform;
-
-        public bool IsAlive { get; private set; }        
+        public bool IsAlive = true;      
 
         protected bool CanPatrool = false;
         
@@ -50,27 +48,39 @@ namespace Controls {
         
         protected Vector3 TargetPosition;
         protected bool WasFolowingPlayer = false;
+                        
         
-        private readonly Vector3 _zeroVector = Vector3.zero;
+        private static readonly Vector3 _zeroVector = Vector3.zero;
+
+        protected static List<Transform> _playersTransform;
+        
+        protected static readonly int _idleAnimation = Animator.StringToHash("Idle");
+        protected static readonly int _attackAnimation = Animator.StringToHash("Attack");
+        protected static readonly int _movingAnimation = Animator.StringToHash("Moving");
+        protected static readonly int _deathAnimation = Animator.StringToHash("isDead");
+
+
                 
         
         public override void OnStartServer() {                    
             if (!isServer) return;
             
             Agent = GetComponent<NavMeshAgent>();
-            
-            _playersTransform = FindObjectOfType<GameManager>().GetPlayersTransforms();
-            
+
+            if (_playersTransform == null) {
+                _playersTransform = FindObjectOfType<GameManager>().GetPlayersTransforms();
+            }
+
             RegularSpeed = Agent.speed;
             
             IsAlive = true;
         }
 
-        protected void SetAnimation(string animationState, bool value) {
-            if (Animator.GetBool(animationState) != value) {
-                Animator.SetBool(animationState, value);
+        protected void SetAnimation(int animation, bool value) {
+            if (Animator.GetBool(animation) != value) {
+                Animator.SetBool(animation, value);
             }
-        }        
+        }                
 
         public void AddPatroolPoint(Vector3 patroolPoint) {
             if (!isServer) return;
@@ -94,10 +104,10 @@ namespace Controls {
 
             IsAlive = false;                         
             
-            SetAnimation("Idle", false);
-            SetAnimation("Moving", false);
+            SetAnimation(_idleAnimation, false);
+            SetAnimation(_movingAnimation, false);
             
-            SetAnimation("isDead", true);
+            SetAnimation(_deathAnimation, true);
             Agent.isStopped = true;                       
             GetComponent<Disolve>().BeginDisolve(timeOfDeath);
 
@@ -128,7 +138,7 @@ namespace Controls {
         protected virtual void Update() {            
             if (!IsAlive || !isServer) return;
 
-            SetAnimation(Agent.velocity != _zeroVector ? "Moving" : "Idle", true);
+            SetAnimation(Agent.velocity != _zeroVector ? _movingAnimation : _idleAnimation, true);
 
             if (CheckPlayersNear(out TargetPosition)) {
 
@@ -152,18 +162,18 @@ namespace Controls {
 
                     AttackTimePassed = 0;
 
-                    SetAnimation("Attack", false);
+                    SetAnimation(_attackAnimation, false);
 
                 }
                 
                 
-                if (!Agent.pathPending && Agent.remainingDistance <= RangeOfAttack) {
+                if (!Agent.pathPending && Agent.remainingDistance <= RangeOfAttack && CanAttack(TargetPosition)) {
 
                     AttackTimePassed += Time.deltaTime;
 
                     if (AttackTimePassed > TimeForAttack) {
 
-                        SetAnimation("Attack", true);
+                        SetAnimation(_attackAnimation, true);
                         Fire(TargetPosition);
 
                         AttackTimePassed = 0f;
@@ -176,27 +186,33 @@ namespace Controls {
                         
             Agent.speed = RegularSpeed;
             
-            SetAnimation("Attack", false);
+            SetAnimation(_attackAnimation, false);
         
             
             if (CanPatrool && !Agent.pathPending && Agent.remainingDistance <= 0.5f || WasFolowingPlayer) {
                 WasFolowingPlayer = false;
                 GotoNextPoint();
             }
-        }                
+        }
+
+        protected bool CanAttack(Vector3 direction) {            
+            RaycastHit hit;
+            var pos = transform.position;
+            var dir = direction;
+            pos.y += 2.5f;           
+            dir.y += 2f;
+            Debug.DrawLine(pos, dir);
+
+            if (Physics.Raycast(pos, dir, out hit, 2f)) {
+                
+                Debug.Log(hit.transform.gameObject.name);
+                return false;
+
+            }
+            return true;
+        }
 
         protected virtual void Fire(Vector3 direction) {
-//            Debug.DrawLine(transform.position, direction);
-//            RaycastHit hit;
-//            var pos = transform.position;
-//            pos.y += 2.5f;
-//            direction.y += 2f;
-
-//            if (Physics.Raycast(transform.position, direction, out hit)) {
-                
-//                Debug.Log(hit.transform.gameObject.name);
-                
-//            }
             var pos = transform.position;
             pos.y += 1.5f;
             direction.y += 2f;

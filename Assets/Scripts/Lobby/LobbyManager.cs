@@ -230,14 +230,14 @@ namespace Lobby{
             InstanceId = instanceId;
             networkPort = port;
             StartServer();
-            Debug.Log(string.Format("instance started  {0}:{1}", networkAddress, networkPort));
+            Debug.Log($"instance started  {networkAddress}:{networkPort}");
             SetServerInfo("Dedicated Server", networkAddress);
         }
 
         public override void OnStartServer() {
             base.OnStartServer();
 
-            AppManager.Instance.CommonSetUp();
+            AppManager.Instance.Init();
             AppManager.Instance.MazeSize.GenerateRandomSize();
             AppManager.Instance.MazeInstance = new MazeBuilder.MazeBuilder(AppManager.Instance.MazeSize.X, AppManager.Instance.MazeSize.Y);
 

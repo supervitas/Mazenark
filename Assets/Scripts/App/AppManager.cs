@@ -15,16 +15,18 @@ namespace App {
         private void Start() {
             if (Instance == null) {
                 Instance = this;
-                CommonSetUp();
+                
+                EventHub = new Publisher();
+                MazeSize = new MazeSizeGenerator();
+                
                 DontDestroyOnLoad(gameObject);
             } else {
                 DestroyImmediate(gameObject);
             }
         }
 
-        public void CommonSetUp() { // also used from LobbyManager to remove all eventhandlers registered in previous game by reiniting
-            EventHub = new Publisher();
-            MazeSize = new MazeSizeGenerator();
+        public void Init() { // used from LobbyManager to remove all eventhandlers registered in previous game and maze instance
+            EventHub.ClearHandlers();
             MazeInstance = null;
         }
 
