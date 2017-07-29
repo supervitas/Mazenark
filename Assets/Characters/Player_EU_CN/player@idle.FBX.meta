@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-guid: 8936e754719814f218fd8389e291ffd6
-timeCreated: 1499982540
+guid: 436a1bc47dd1d8e44ae4597c82b81eaf
+timeCreated: 1501345414
 licenseType: Free
 ModelImporter:
-  serializedVersion: 21
+  serializedVersion: 19
   fileIDToRecycleName:
     100000: Ass_root
     100002: CN_Backpack
@@ -21,8 +21,8 @@ ModelImporter:
     100026: Left_Leg_Upper
     100028: Left_Shoulder
     100030: Neck
-    100032: Player_body
-    100034: //RootNode
+    100032: //RootNode
+    100034: Player_body
     100036: Right_Arm_Lower
     100038: Right_Arm_Upper
     100040: Right_Fingers
@@ -50,8 +50,8 @@ ModelImporter:
     400026: Left_Leg_Upper
     400028: Left_Shoulder
     400030: Neck
-    400032: Player_body
-    400034: //RootNode
+    400032: //RootNode
+    400034: Player_body
     400036: Right_Arm_Lower
     400038: Right_Arm_Upper
     400040: Right_Fingers
@@ -68,6 +68,7 @@ ModelImporter:
     4300004: CN_Hat
     4300006: CN_Backpack
     4300008: EU_Backpack
+    7400000: Take 001
     9500000: //RootNode
     13700000: CN_Backpack
     13700002: CN_Hat
@@ -96,7 +97,6 @@ ModelImporter:
     animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
-    extraUserProperties: []
     clipAnimations: []
     isReadable: 1
   meshes:
@@ -104,10 +104,7 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
-    importVisibility: 1
     importBlendShapes: 1
-    importCameras: 1
-    importLights: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
@@ -123,7 +120,6 @@ ModelImporter:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
-    normalCalculationMode: 4
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
