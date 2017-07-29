@@ -30,6 +30,10 @@ ModelImporter:
     100044: Right_Shoulder
     100046: Spine_Lower
     100048: Spine_Upper
+    100050: CN_Backpack
+    100052: CN_Hat
+    100054: EU_Backpack
+    100056: EU_Hat
     400000: Ass_root
     400002: Head
     400004: Left_Arm_Lower
@@ -55,10 +59,22 @@ ModelImporter:
     400044: Right_Shoulder
     400046: Spine_Lower
     400048: Spine_Upper
+    400050: CN_Backpack
+    400052: CN_Hat
+    400054: EU_Backpack
+    400056: EU_Hat
     4300000: Player_body
+    4300002: EU_Hat
+    4300004: CN_Hat
+    4300006: CN_Backpack
+    4300008: EU_Backpack
     7400000: Take 001
     9500000: //RootNode
     13700000: Player_body
+    13700002: CN_Backpack
+    13700004: CN_Hat
+    13700006: EU_Backpack
+    13700008: EU_Hat
   materials:
     importMaterials: 1
     materialName: 0
