@@ -1,8 +1,7 @@
 ﻿using CharacterControllers;
-using Items;
 using UnityEngine;
 
-namespace Weapons.Enemies {
+namespace Items.Enemies {
     public class EnemyFireball : Weapon {
         
         protected override void Start() {}

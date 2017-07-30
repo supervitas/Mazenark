@@ -1,13 +1,10 @@
 ﻿using System.Collections.Generic;
-using CharacterControllers;
 using GameEnv.GameEffects;
 using GameSystems;
 using Items;
-using Loot;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Networking;
-using Weapons;
 
 namespace Controls {    
     public abstract class BasicEnemyControl : NetworkBehaviour {
@@ -108,9 +105,12 @@ namespace Controls {
             SetAnimation(_movingAnimation, false);
             
             SetAnimation(_deathAnimation, true);
-            Agent.isStopped = true;                       
-            GetComponent<Disolve>().BeginDisolve(timeOfDeath);
 
+            if (Agent != null) {               
+                Agent.isStopped = true;
+            }
+            
+            GetComponent<Disolve>().BeginDisolve(timeOfDeath);
         }
 
         protected virtual bool CheckPlayersNear(out Vector3 playerTarget) {                        

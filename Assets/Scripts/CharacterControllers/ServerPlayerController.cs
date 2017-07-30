@@ -6,7 +6,6 @@ using Items;
 using Loot;
 using UnityEngine;
 using UnityEngine.Networking;
-using Weapons;
 
 namespace CharacterControllers {
     public class ServerPlayerController : ServerCharacterController {

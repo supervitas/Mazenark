@@ -10,7 +10,6 @@ using Ui;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using Weapons;
 
 namespace Controls {
     [NetworkSettings(channel = 1, sendInterval = 0.2f)]
