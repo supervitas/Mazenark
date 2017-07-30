@@ -28,7 +28,7 @@ namespace EnemiesManager {
         protected List<Room> Rooms;
         protected List<GameObject> SpawnedEnemies = new List<GameObject>();
         
-        private List<Transform> _playersTransform;
+        private static List<Transform> _playersTransform;
 
         protected void Start() { 
             if (!isServer) return;

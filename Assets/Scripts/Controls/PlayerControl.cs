@@ -210,7 +210,7 @@ namespace Controls {
         private void Update() {
             if (!isLocalPlayer) return;
 
-            m_animator.SetBool("Grounded", m_isGrounded);
+//            m_animator.SetBool("Grounded", m_isGrounded);
 
             if (CheckCooldown() && CheckAndFire()) return;                            
             
@@ -238,19 +238,10 @@ namespace Controls {
         private void TankUpdate() {
             float v = Input.GetAxis("Vertical");
             float h = Input.GetAxis("Horizontal");
+            
 
-            bool walk = Input.GetKey(KeyCode.LeftShift);
-
-            if (v < 0) {
-                if (walk) {
-                    v *= m_backwardsWalkScale;
-                }
-                else {
-                    v *= m_backwardRunScale;
-                }
-            }
-            else if (walk) {
-                v *= m_walkScale;
+            if (v < 0) {                    
+                v *= m_backwardRunScale;                
             }
 
             m_currentV = Mathf.Lerp(m_currentV, v, Time.deltaTime * m_interpolation);
@@ -268,12 +259,8 @@ namespace Controls {
             float v = Input.GetAxis("Vertical");
             float h = Input.GetAxis("Horizontal");
 
-            Transform camera = Camera.main.transform;
-
-            if (Input.GetKey(KeyCode.LeftShift)) {
-                v *= m_walkScale;
-                h *= m_walkScale;
-            }
+            Transform camera = _camera.transform;
+  
 
             m_currentV = Mathf.Lerp(m_currentV, v, Time.deltaTime * m_interpolation);
             m_currentH = Mathf.Lerp(m_currentH, h, Time.deltaTime * m_interpolation);

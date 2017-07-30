@@ -9,7 +9,7 @@ using UnityEngine.Networking;
 namespace GameSystems {
     public class GameManager : NetworkBehaviour {        
         private readonly List<User> _playersData = new List<User>();
-        private readonly List<Transform> _playersTransforms = new List <Transform>();
+        private static readonly List<Transform> _playersTransforms = new List <Transform>();
         
         
         private StatisticsManager _statisticsManager;
