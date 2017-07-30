@@ -16,6 +16,9 @@ namespace CharacterControllers.Enemies.Bosses {
 
 		[SerializeField]
 		private GameObject _button;
+	    
+	    [SerializeField]
+	    private GameObject _well;
 
 
 		private BossShieldedControl _bossControls;
@@ -37,7 +40,11 @@ namespace CharacterControllers.Enemies.Bosses {
 				SpawnButton(i);
 			}
 
-		}
+		    var wellPos = transform.position;
+		    wellPos.y = 1.63f;
+		    NetworkServer.Spawn(Instantiate(_well, wellPos, _well.transform.rotation));
+
+	    }
 
 		private void SpawnButton(int position) {
 			
