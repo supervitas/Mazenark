@@ -159,7 +159,7 @@ namespace Controls {
                 Agent.autoBraking = true;
                 
                 Agent.destination = TargetPosition;
-                Agent.stoppingDistance = RangeOfAttack;
+                Agent.isStopped = false;
                                 
 
                 if (Agent.remainingDistance > RangeOfAttack) {
@@ -172,7 +172,8 @@ namespace Controls {
                 
                 
                 if (!Agent.pathPending && Agent.remainingDistance <= RangeOfAttack && CanAttack(TargetPosition)) {
-
+                    
+                    Agent.isStopped = true;
                     AttackTimePassed += Time.deltaTime;
 
                     if (AttackTimePassed > TimeForAttack) {
