@@ -32,7 +32,7 @@ namespace CharacterControllers.Enemies.Bosses {
 		    
 			_bossControls = GetComponent<BossShieldedControl>();
 
-			_countOfActiveButtons = Random.Range(1, _maxButtons);
+			_countOfActiveButtons = Random.Range(2, _maxButtons);
 			
 			_buttons = new GameObject[_countOfActiveButtons];	
 			
@@ -46,14 +46,20 @@ namespace CharacterControllers.Enemies.Bosses {
 
 	    }
 
+	    private static float GetRandomFloat(bool needNegative) {
+		    return needNegative ? Random.Range(-24, -6) : Random.Range(6, 24);
+	    }
+
 		private void SpawnButton(int position) {
 			
 			var btn = Instantiate(_button);
 
 			_buttons[position] = btn;
+
+			var isNegative = Random.Range(-1, 1) < 0;				
 			
-			btn.transform.position = new Vector3(gameObject.transform.position.x - Random.Range(-12, 12),
-				gameObject.transform.position.y, gameObject.transform.position.z - Random.Range(-12, 12));
+			btn.transform.position = new Vector3(gameObject.transform.position.x - GetRandomFloat(isNegative),
+				gameObject.transform.position.y, gameObject.transform.position.z - GetRandomFloat(isNegative));
 			
 			Action onButtonPressed = () => {
 				_countOfActiveButtons--;				

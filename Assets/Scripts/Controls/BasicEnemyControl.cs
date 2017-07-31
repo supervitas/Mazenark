@@ -48,6 +48,7 @@ namespace Controls {
                         
         
         private static readonly Vector3 _zeroVector = Vector3.zero;
+        private static LayerMask _obstacleMask;
 
         protected static List<Transform> _playersTransform;
         
@@ -63,13 +64,16 @@ namespace Controls {
             if (!isServer) return;
             
             Agent = GetComponent<NavMeshAgent>();
+            _obstacleMask = LayerMask.GetMask("Obstacles");            
 
             if (_playersTransform == null) {
                 _playersTransform = FindObjectOfType<GameManager>().GetPlayersTransforms();
             }
 
-            RegularSpeed = Agent.speed;
-            
+            if (Agent != null) {
+                RegularSpeed = Agent.speed;
+            }
+
             IsAlive = true;
         }
 
@@ -203,11 +207,9 @@ namespace Controls {
             dir.y += 2f;
             Debug.DrawLine(pos, dir);
 
-            if (Physics.Raycast(pos, dir, out hit, 2f)) {
-                
+            if (Physics.Raycast(pos, dir, out hit, 2f, _obstacleMask)) {               
                 Debug.Log(hit.transform.gameObject.name);
                 return false;
-
             }
             return true;
         }

@@ -17,7 +17,7 @@ namespace Cameras {
         private RaycastHit m_hitWall;        
 
         private void Start() {
-            m_hitWall = new RaycastHit();            
+            m_hitWall = new RaycastHit();                        
         }
 
         public void SetPlayer(Transform player) {

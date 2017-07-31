@@ -115,7 +115,7 @@ namespace Controls {
         
         public override void OnStartClient() {
             var textMesh = GetComponentInChildren<TextMesh>();
-            textMesh.text = _playerName;
+            textMesh.text = _playerName;            
         }
 
         public override void OnStartLocalPlayer() {

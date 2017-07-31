@@ -13,6 +13,7 @@ namespace Items.Enemies {
             }            
             Destroy(this);
         }
+                
 
         public void OnDestroy() {
             transform.GetChild(0).gameObject.SetActive(false);

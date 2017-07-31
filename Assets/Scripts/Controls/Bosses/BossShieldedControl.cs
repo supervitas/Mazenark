@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 namespace Controls.Bosses {    
     public class BossShieldedControl : BasicBossControl {
-        private Vector3 _lookDirection;
+        private Vector3 _lookDirection;        
 		
         protected override void Update() {
             if (!IsAlive || !isServer) return;
@@ -25,6 +25,8 @@ namespace Controls.Bosses {
                     Fire(TargetPosition);
 
                     AttackTimePassed = 0f;
+                    
+                    return;
                 }                
             }
             
@@ -33,7 +35,7 @@ namespace Controls.Bosses {
         
         protected override void Fire(Vector3 direction) {
             var pos = transform.position;
-            pos.y += 3.5f;
+            pos.y += 5;
             direction.y += 2f;
             var activeItem = Instantiate(Weapon, pos, Quaternion.identity);
             var weapon = activeItem.GetComponent<Weapon>();            
