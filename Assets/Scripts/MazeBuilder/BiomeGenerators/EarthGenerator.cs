@@ -34,6 +34,22 @@ namespace MazeBuilder.BiomeGenerators {
 
             parent.name = $"Cube at {coordinate.X}:{coordinate.Y}";
         }
+	    
+	    public override void CreateFloor(Biome biome, Coordinate coordinate, Maze maze) {
+		    if (FloorEnviromentSpawnChance >= Random.Range(1, 100)) {
+			    var position = Utils.GetDefaultPositionVector(coordinate, 0.3f);
+			    position.x += Random.Range(-0.7f, 0.7f);
+			    position.z += Random.Range(-0.7f, 0.7f);
+			    Instantiate((GameObject) BiomeFloorsEnviroment.GetRandom(typeof(GameObject)),
+				    position, Quaternion.identity);
+		    }
+
+		    Instantiate(Floor, Utils.GetDefaultPositionVector(coordinate),
+			    Edge.GetRandomEdgeRotation().Rotation);
+		    
+//		    Instantiate(Floor, Utils.GetDefaultPositionVector(coordinate, 8f),
+//			    Quaternion.Euler(90, 0, 0));
+	    }
 
 
 

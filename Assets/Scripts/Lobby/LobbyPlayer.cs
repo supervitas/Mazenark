@@ -130,7 +130,7 @@ namespace Lobby {
                 return;
             }
 
-//            CmdCheckToken(user.token);
+            CmdGetUser(user.token);
 
             CmdNameChanged(playerNick);
 
@@ -325,13 +325,13 @@ namespace Lobby {
         }
 
         [Command]
-        private void CmdCheckToken(string token) {
+        private void CmdGetUser(string token) {
             if (!isServer)
                 return;
 
             Action<string> errorCb = error => {
-                TargetDropAuth(connectionToClient);
-                LobbyManager.SSingleton.KickPlayer(connectionToClient);
+//                TargetDropAuth(connectionToClient);
+//                LobbyManager.SSingleton.KickPlayer(connectionToClient);
 
             };
             

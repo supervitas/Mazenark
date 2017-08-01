@@ -26,7 +26,6 @@ namespace Controls.Bosses {
 
                     AttackTimePassed = 0f;
                     
-                    return;
                 }                
             }
             

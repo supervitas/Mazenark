@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CharacterControllers;
 using GameEnv.GameEffects;
 using GameSystems;
 using Items;
@@ -38,9 +39,9 @@ namespace Controls {
         [SerializeField]
         protected float SpeedBoostOnAgro = 0.7f;
         
-        [SerializeField]
-        [Range(3, 40)]
-        protected float RangeOfAttack = 15f;
+//        [SerializeField]
+//        [Range(3, 40)]
+        protected float RangeOfAttack = 7f;
         
         
         protected Vector3 TargetPosition;
@@ -49,6 +50,8 @@ namespace Controls {
         
         private static readonly Vector3 _zeroVector = Vector3.zero;
         private static LayerMask _obstacleMask;
+
+        protected RaycastHit RaycastHit;
 
         protected static List<Transform> _playersTransform;
         
@@ -64,7 +67,8 @@ namespace Controls {
             if (!isServer) return;
             
             Agent = GetComponent<NavMeshAgent>();
-            _obstacleMask = LayerMask.GetMask("Obstacles");            
+            
+            _obstacleMask = LayerMask.GetMask("Obstacles");                     
 
             if (_playersTransform == null) {
                 _playersTransform = FindObjectOfType<GameManager>().GetPlayersTransforms();
@@ -184,11 +188,10 @@ namespace Controls {
                         AttackTimePassed = 0f;
 
                     }
-                }
+                }                
                 return;
             }
-     
-                        
+                                         
             Agent.speed = RegularSpeed;
             
             SetAnimation(_attackAnimation, false);
@@ -200,27 +203,38 @@ namespace Controls {
             }
         }
 
-        protected bool CanAttack(Vector3 direction) {            
-            RaycastHit hit;
+        protected bool CanAttack(Vector3 direction) {                        
+            var pos = transform.position;
+            var dir = direction;
+            pos.y += 2.5f;           
+            dir.y += 1.5f;           
+            
+            return !Physics.Linecast(pos, dir, out RaycastHit, _obstacleMask);
+        }
+
+        protected virtual void Fire(Vector3 direction) {            
             var pos = transform.position;
             var dir = direction;
             pos.y += 2.5f;           
             dir.y += 1.5f;
             Debug.DrawLine(pos, dir);
-
-            return !Physics.Linecast(pos, dir, out hit, _obstacleMask);
-        }
-
-        protected virtual void Fire(Vector3 direction) {
-            var pos = transform.position;
-            pos.y += 1.5f;
-            direction.y += 2f;
-            var activeItem = Instantiate(Weapon, pos, Quaternion.identity);
-            var weapon = activeItem.GetComponent<Weapon>();            
-            activeItem.transform.LookAt(direction);
-            weapon.Fire();
-            NetworkServer.Spawn(activeItem);
-            Destroy(weapon, 10.0f);            
+            
+            if (Physics.Linecast(pos, direction, out RaycastHit)) {                
+                var go = RaycastHit.transform.gameObject;
+            
+                if (go.CompareTag("Player")) {           
+                    go.GetComponent<ServerCharacterController>().TakeDamage(100);                    
+                }
+            }
+//            var pos = transform.position;
+//            pos.y += 1.5f;
+//            direction.y += 2f;
+//            var activeItem = Instantiate(Weapon, pos, Quaternion.identity);
+//            var weapon = activeItem.GetComponent<Weapon>();            
+//            activeItem.transform.LookAt(direction);
+//            weapon.Fire();
+//            NetworkServer.Spawn(activeItem);
+//            Destroy(weapon, 10.0f);            
         }
     }
 }

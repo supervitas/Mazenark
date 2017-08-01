@@ -12,12 +12,12 @@ namespace GameSystems {
         private static readonly List<Transform> _playersTransforms = new List <Transform>();
         
         
-        private StatisticsManager _statisticsManager;
+        private StatisticSystem _statisticsManager;
         private int _playersCount;
         
         public override void OnStartServer() {
             _playersTransforms.Clear();
-            _statisticsManager = new StatisticsManager(_playersData);         
+            _statisticsManager = new StatisticSystem(_playersData);         
         }
         
         public void PlayerCompletedMaze(GameObject player) {
@@ -27,6 +27,7 @@ namespace GameSystems {
 
         public void PlayerDied(GameObject player) {
             _playersTransforms.Remove(player.transform);
+            _statisticsManager.PlayerCompletedLevel(player.name);
             Destroy(player);            
         }        
         
@@ -39,13 +40,8 @@ namespace GameSystems {
         }       
 
         public void AddPlayerData(User user) {
-            _playersData.Add(user);
-        }
-
-        private void GameEnded() {
-            _playersData.Clear();
-            _playersTransforms.Clear();            
-        }                             
+            _playersData.Add(user);           
+        }                          
 
         public void SetPlayersCount(int players) {
             _playersCount = players;
@@ -59,8 +55,7 @@ namespace GameSystems {
                 if (_playersTransforms[i] == null) {
                     _playersTransforms.RemoveAt(i);
                 }
-            }
-            
+            }            
             
             if (_playersCount != 0) return;
             
@@ -74,6 +69,15 @@ namespace GameSystems {
             NetworkHttpManager.Instance.SendRoomUpdate(NetworkConstants.RoomGameEnded);           
         }
         
+        private void GameEnded() {
+            _playersData.Clear();
+            _playersTransforms.Clear();
+            SendStatistics();
+        }
+
+        private void SendStatistics() {
+            
+        }
         
     }
                        

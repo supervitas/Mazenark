@@ -332,7 +332,7 @@ namespace Lobby{
             _spawnGenerator.MoveNext();
             
             var gameManager = FindObjectOfType<GameManager>();           
-            gameManager.AddPlayerData(new User());
+//            gameManager.AddPlayerData(new User{username = gamePlayer.name});
 
             return true;
         }
