@@ -205,14 +205,10 @@ namespace Controls {
             var pos = transform.position;
             var dir = direction;
             pos.y += 2.5f;           
-            dir.y += 2f;
+            dir.y += 1.5f;
             Debug.DrawLine(pos, dir);
 
-            if (Physics.Raycast(pos, dir, out hit, 2f, _obstacleMask)) {               
-                Debug.Log(hit.transform.gameObject.name);
-                return false;
-            }
-            return true;
+            return !Physics.Linecast(pos, dir, out hit, _obstacleMask);
         }
 
         protected virtual void Fire(Vector3 direction) {
