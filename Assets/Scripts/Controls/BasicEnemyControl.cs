@@ -92,6 +92,11 @@ namespace Controls {
             
             Points.Add(patroolPoint);                        
         }
+        
+        [ClientRpc]
+        protected void RpcStartDisolve(float timeOfDeath) {
+            GetComponent<Disolve>().BeginDisolve(timeOfDeath);                                    
+        }
 
         public void SetPatrool(bool patrool) {
             if (!isServer) return;
@@ -118,7 +123,7 @@ namespace Controls {
                 Agent.isStopped = true;
             }
             
-            GetComponent<Disolve>().BeginDisolve(timeOfDeath);
+            RpcStartDisolve(timeOfDeath);       
         }
 
         protected virtual bool CheckPlayersNear(out Vector3 playerTarget) {                        
@@ -201,7 +206,7 @@ namespace Controls {
                 WasFolowingPlayer = false;
                 GotoNextPoint();
             }
-        }
+        }               
 
         protected bool CanAttack(Vector3 direction) {                        
             var pos = transform.position;

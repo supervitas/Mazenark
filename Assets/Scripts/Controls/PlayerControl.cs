@@ -4,6 +4,7 @@ using App;
 using App.Eventhub;
 using Cameras;
 using CharacterControllers;
+using GameEnv.GameEffects;
 using Items;
 using Loot;
 using Ui;
@@ -275,6 +276,10 @@ namespace Controls {
         
         public void SetPlayerName(string playerName) {            
             _playerName = playerName;            
+        }
+        
+        public void Die() {            
+            GetComponent<Disolve>().BeginDisolve();            
         }
         
         [TargetRpc]
