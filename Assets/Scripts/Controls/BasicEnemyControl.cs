@@ -39,9 +39,9 @@ namespace Controls {
         [SerializeField]
         protected float SpeedBoostOnAgro = 0.7f;
         
-//        [SerializeField]
-//        [Range(3, 40)]
-        protected float RangeOfAttack = 7f;
+        [SerializeField]
+        [Range(3, 40)]
+        protected float RangeOfAttack = 6f;
         
         
         protected Vector3 TargetPosition;
@@ -214,27 +214,16 @@ namespace Controls {
 
         protected virtual void Fire(Vector3 direction) {            
             var pos = transform.position;
-            var dir = direction;
-            pos.y += 2.5f;           
-            dir.y += 1.5f;
-            Debug.DrawLine(pos, dir);
-            
-            if (Physics.Linecast(pos, direction, out RaycastHit)) {                
-                var go = RaycastHit.transform.gameObject;
-            
-                if (go.CompareTag("Player")) {           
-                    go.GetComponent<ServerCharacterController>().TakeDamage(100);                    
-                }
-            }
-//            var pos = transform.position;
-//            pos.y += 1.5f;
-//            direction.y += 2f;
-//            var activeItem = Instantiate(Weapon, pos, Quaternion.identity);
-//            var weapon = activeItem.GetComponent<Weapon>();            
-//            activeItem.transform.LookAt(direction);
-//            weapon.Fire();
-//            NetworkServer.Spawn(activeItem);
-//            Destroy(weapon, 10.0f);            
+            pos.y += 1.5f;
+            direction.y += 2f;
+            direction.z += Random.Range(-2, 3);
+            direction.x += Random.Range(-2, 3);
+            var activeItem = Instantiate(Weapon, pos, Quaternion.identity);
+            var weapon = activeItem.GetComponent<Weapon>();            
+            activeItem.transform.LookAt(direction);
+            weapon.Fire();
+            NetworkServer.Spawn(activeItem);
+            Destroy(weapon, 10.0f);            
         }
     }
 }

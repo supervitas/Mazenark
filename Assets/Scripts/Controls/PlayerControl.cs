@@ -35,7 +35,8 @@ namespace Controls {
         private GameObject _activeItem;
 
         private ServerPlayerController _serverPlayerController;
-        
+
+        public float whomuch = 2000;
         private Text _spellText;
         private float _castTime;
         private float _timeCasted;
@@ -134,7 +135,11 @@ namespace Controls {
             
             var textMesh = GetComponentInChildren<TextMesh>();
             textMesh.gameObject.SetActive(false);
+            
+            CreateCastEffect();
+        }
 
+        private void CreateCastEffect() {
             _spellEffect = Instantiate(spellCastEffect, gameObject.transform);
             var pos = _spellEffect.transform.position;
             pos.y += 1f;
@@ -220,7 +225,12 @@ namespace Controls {
         private void TankUpdate() {
             float v = Input.GetAxis("Vertical");
             float h = Input.GetAxis("Horizontal");
-            
+
+            var e = Input.GetKeyDown("space");
+
+            if (e) {
+                GetComponent<Rigidbody>().AddForce(0, 0, whomuch, ForceMode.Impulse);
+            }
 
             if (v < 0) {                    
                 v *= m_backwardRunScale;                
