@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using CharacterControllers;
 using GameEnv.GameEffects;
 using GameSystems;
@@ -94,8 +95,8 @@ namespace Controls {
         }
         
         [ClientRpc]
-        protected void RpcStartDisolve(float timeOfDeath) {
-            GetComponent<Disolve>().BeginDisolve(timeOfDeath);                                    
+        protected void RpcStartDisolve() {
+            GetComponent<Disolve>().BeginDisolve();                                    
         }
 
         public void SetPatrool(bool patrool) {
@@ -123,8 +124,8 @@ namespace Controls {
                 Agent.isStopped = true;
             }
             
-            RpcStartDisolve(timeOfDeath);       
-        }
+            Invoke(nameof(RpcStartDisolve), 1.5f);       
+        }  
 
         protected virtual bool CheckPlayersNear(out Vector3 playerTarget) {                        
             foreach (var target in _playersTransform) {

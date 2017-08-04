@@ -67,7 +67,8 @@ namespace Controls {
         private bool m_isGrounded;
         private readonly List<Collider> m_collisions = new List<Collider>();              
 
-        private GameGui _gameGui;       
+        private GameGui _gameGui;
+        private bool isAlive = true;
 
         private void OnCollisionEnter(Collision collision) {
             ContactPoint[] contactPoints = collision.contacts;
@@ -207,7 +208,7 @@ namespace Controls {
         }
 
         private void Update() {
-            if (!isLocalPlayer) return;
+            if (!isLocalPlayer || !isAlive) return;
 
 //            m_animator.SetBool("Grounded", m_isGrounded);
 
@@ -278,8 +279,14 @@ namespace Controls {
             _playerName = playerName;            
         }
         
-        public void Die() {            
-            GetComponent<Disolve>().BeginDisolve();            
+        public void Die() {
+            if (!isServer) return;
+            RpcStartDisolve();        
+        }
+        
+        [ClientRpc]
+        private void RpcStartDisolve() {
+            GetComponent<Disolve>().BeginDisolve();                                    
         }
         
         [TargetRpc]

@@ -10,9 +10,11 @@ namespace GameSystems.Statistics {
             _users = playersInfo;
         }
         
-        public void PlayerDied(string playerName) {
+        public void PlayerDied(string playerName) {                       
             var player = _users.Find(user => user.username == playerName);
-            player.score -= 20;
+            if (player != null) {
+                player.score -= 20;
+            }            
 
         }
 
@@ -26,7 +28,9 @@ namespace GameSystems.Statistics {
         
         public void PlayerCompletedLevel(string playerName) {
             var player = _users.Find(user => user.username == playerName);
-            player.score += 200;
+            if (player != null) {
+                player.score += 200;
+            }
         }
                        
     }

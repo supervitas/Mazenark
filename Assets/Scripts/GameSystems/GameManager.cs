@@ -22,13 +22,14 @@ namespace GameSystems {
         
         public void PlayerCompletedMaze(GameObject player) {
             _playersTransforms.Remove(player.transform);
+            _statisticsManager.PlayerCompletedLevel(player.name);
             Destroy(player);
         }
 
         public void PlayerDied(GameObject player) {
             _playersTransforms.Remove(player.transform);
-            _statisticsManager.PlayerCompletedLevel(player.name);
-            Destroy(player);            
+            _statisticsManager.PlayerDied(player.name);
+            Destroy(player, 2f);            
         }        
         
         public void AddPlayerTransform(Transform playerTransform) {
@@ -39,7 +40,7 @@ namespace GameSystems {
             return _playersTransforms;
         }       
 
-        public void AddPlayerData(User user) {
+        public void AddPlayerData(User user) {            
             _playersData.Add(user);           
         }                          
 
