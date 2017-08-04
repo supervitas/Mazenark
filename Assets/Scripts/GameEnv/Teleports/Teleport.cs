@@ -17,7 +17,9 @@ namespace GameEnv.Teleports {
             }
         }                
 
-        private void TeleportPlayer(GameObject player) {
+        private void TeleportPlayer(GameObject player) {           
+            if (!isServer) return;
+            
             var pos = _teleportTo.transform.position;
             pos.x += 2f;
             pos.z += 2f;

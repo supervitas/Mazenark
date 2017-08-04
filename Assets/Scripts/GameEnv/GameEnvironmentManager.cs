@@ -34,7 +34,7 @@ namespace GameEnv {
         }
 
         private void CreateTeleports() {
-            GetComponent<TeleportManager>().CreateTeleports(8);
+            GetComponent<TeleportManager>().CreateTeleports(4);
         }
 
     }
