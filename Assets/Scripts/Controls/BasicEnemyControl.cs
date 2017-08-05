@@ -27,8 +27,7 @@ namespace Controls {
 
         public bool IsAlive = true;      
 
-        protected bool CanPatrool = false;
-        
+        protected bool CanPatrool = false;        
 
         protected float RegularSpeed;
 
@@ -43,11 +42,9 @@ namespace Controls {
         [SerializeField]
         [Range(3, 40)]
         protected float RangeOfAttack = 6f;
-        
-        
+                
         protected Vector3 TargetPosition;
-        protected bool WasFolowingPlayer = false;
-                        
+        protected bool WasFolowingPlayer = false;                        
         
         private static readonly Vector3 _zeroVector = Vector3.zero;
         private static LayerMask _obstacleMask;
@@ -60,10 +57,7 @@ namespace Controls {
         protected static readonly int _attackAnimation = Animator.StringToHash("Attack");
         protected static readonly int _movingAnimation = Animator.StringToHash("Moving");
         protected static readonly int _deathAnimation = Animator.StringToHash("isDead");
-
-
-                
-        
+                        
         public override void OnStartServer() {                    
             if (!isServer) return;
             
@@ -94,7 +88,7 @@ namespace Controls {
             Points.Add(patroolPoint);                        
         }
         
-        [ClientRpc]
+        [ClientRpc (channel = 0)]
         protected void RpcStartDisolve() {
             GetComponent<Disolve>().BeginDisolve();                                    
         }
@@ -169,8 +163,7 @@ namespace Controls {
                 Agent.autoBraking = true;
                 
                 Agent.destination = TargetPosition;
-                Agent.isStopped = false;
-                                
+                Agent.isStopped = false;                                
 
                 if (Agent.remainingDistance > RangeOfAttack) {
 
@@ -178,8 +171,7 @@ namespace Controls {
 
                     SetAnimation(_attackAnimation, false);
 
-                }
-                
+                }                
                 
                 if (!Agent.pathPending && Agent.remainingDistance <= RangeOfAttack && CanAttack(TargetPosition)) {
                     
@@ -197,12 +189,12 @@ namespace Controls {
                 }                
                 return;
             }
-                                         
+            
+            Agent.isStopped = false;                              
             Agent.speed = RegularSpeed;
             
             SetAnimation(_attackAnimation, false);
-        
-            
+                    
             if (CanPatrool && !Agent.pathPending && Agent.remainingDistance <= 0.5f || WasFolowingPlayer) {
                 WasFolowingPlayer = false;
                 GotoNextPoint();

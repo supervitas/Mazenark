@@ -22,7 +22,6 @@ namespace Cameras {
 
         public void SetPlayer(Transform player) {
             _target = player;
-//            GetComponent<Camera>().transform.parent = _target;
         }
         
 

@@ -27,7 +27,7 @@ namespace CharacterControllers {
         
         public override void TakeDamage(int amount, float timeOfDeath = 2f) {            
             if (!isServer) return;
-//            return;
+            return;
             CurrentHealth -= amount;
             if (CurrentHealth > 0) return;
             CurrentHealth = 0;

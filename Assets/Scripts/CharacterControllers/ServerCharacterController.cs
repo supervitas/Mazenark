@@ -8,6 +8,5 @@ namespace CharacterControllers {
         protected bool IsNpc;
 
         public abstract void TakeDamage(int amount, float timeOfDeath = 2f);
-
     }
 }
