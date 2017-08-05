@@ -12,7 +12,7 @@ namespace GameEnv.Teleports {
         private readonly List<Teleport> _teleports = new List<Teleport>();
         private readonly Maze _maze = App.AppManager.Instance.MazeInstance.Maze;
         
-        public void CreateTeleports(int count = 3) {           
+        public void CreateTeleports(int count = 3) {
             for (var i = 0; i < count; i++) {
                 var enterTeleportPosition = GetTeleportPosition();
                 var exitTeleportPosition = GetTeleportPosition();               
@@ -27,7 +27,7 @@ namespace GameEnv.Teleports {
 
                 NetworkServer.Spawn(enterTeleport);
                 NetworkServer.Spawn(exitTeleport);
-            }                        
+            }
         }
         
         private Vector3 GetTeleportPosition() {

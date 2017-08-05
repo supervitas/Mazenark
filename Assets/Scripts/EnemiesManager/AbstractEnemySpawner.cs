@@ -30,8 +30,9 @@ namespace EnemiesManager {
         
         private static List<Transform> _playersTransform;
 
-        protected void Start() { 
+        protected void Start() {            
             if (!isServer) return;
+            
             SetUpRandomEnemies();
             _playersTransform = FindObjectOfType<GameManager>().GetPlayersTransforms();
             InvokeRepeating(nameof(CheckAndActivateEnemies), 0f, 1.5f);
@@ -41,7 +42,7 @@ namespace EnemiesManager {
             CreateEnemyPlaces(biomeType);
             SpawnEnemies();
             CreateEnemyBehaivor();
-            SpawnBosses();
+            SpawnBosses();                        
         }
 
         private void SetUpRandomEnemies() {
@@ -66,13 +67,13 @@ namespace EnemiesManager {
                 select room).ToList();
         }
 
-        protected void SpawnEnemies() {            
+        protected void SpawnEnemies() {
             foreach (var emptyTile in EmptyTiles) {
                 if (!(EnemySpawnChance >= Random.Range(1, 100))) continue;
                 var enemy = (GameObject) BiomeEnemies.GetRandom(typeof(GameObject));
                 var inst = Instantiate(enemy, Utils.GetDefaultPositionVector(emptyTile.Position, 0.5f), Quaternion.identity);
                 NetworkServer.Spawn(inst);
-                SpawnedEnemies.Add(inst);                                            
+                SpawnedEnemies.Add(inst);
             }
         }
 
@@ -115,7 +116,6 @@ namespace EnemiesManager {
                 var controller = enemy.GetComponent<BasicEnemyControl>();
                 
                 if (EnemyIdleBehaivor >= Random.Range(1, 100)) {
-                    
                     controller.AddPatroolPoint(enemy.transform.position); // add current position for enemy to go back if player will no longer visible
                     continue;
                 }
@@ -130,14 +130,24 @@ namespace EnemiesManager {
             }
         }
 
-        private void CheckAndActivateEnemies() {
+        private void CheckAndActivateEnemies() {           
             foreach (var enemy in SpawnedEnemies) {
+                if (enemy == null) continue;
                 
-                if (enemy == null) continue;                
-                foreach (var playerTransform in _playersTransform) {                                            
-                    var distance = Vector3.Distance(playerTransform.position, enemy.transform.position);                    
-                    enemy.SetActive(!(distance > 100f));
-                }                
+                foreach (var playerTransform in _playersTransform) {
+                    if(playerTransform == null) continue;
+                    
+                    var distance = Vector3.Distance(playerTransform.position, enemy.transform.position);
+
+                    if (distance < 100f) {
+                        enemy.SetActive(true);
+                        break;
+                    }
+                    
+                    if (distance > 100f) {
+                        enemy.SetActive(false);
+                    }
+                }
             }                        
         }
     }

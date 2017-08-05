@@ -9,6 +9,7 @@ using Items;
 using Loot;
 using Ui;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
@@ -167,7 +168,8 @@ namespace Controls {
         }
 
         private bool CheckAndFire() {
-            if (!Input.GetMouseButton(0) || _activeItem == null || _playerItems[_activeItem.name] <= 0) return false;
+            if (!Input.GetMouseButton(0) || _activeItem == null || _playerItems[_activeItem.name] <= 0 || 
+                EventSystem.current.IsPointerOverGameObject()) return false;        
             
             m_animator.SetFloat("MoveSpeed", 0);
             _timeCasted += Time.deltaTime;

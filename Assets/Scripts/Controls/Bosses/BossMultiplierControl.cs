@@ -1,7 +1,6 @@
 ﻿using MazeBuilder.Utility;
 using UnityEngine;
 
-
 namespace Controls.Bosses {    
     public class BossMultiplierControl : BasicBossControl {
         
@@ -23,14 +22,21 @@ namespace Controls.Bosses {
                 Agent.destination = TargetPosition;
                 Agent.stoppingDistance = 5f;
 
-                if (Agent.remainingDistance > 5f) {
-                    SetAnimation(_attackAnimation, false);
+                if (Agent.remainingDistance > RangeOfAttack) {
                     AttackTimePassed = 0;
+                    SetAnimation(_attackAnimation, false);
                 }
-                else if (!Agent.pathPending && Agent.remainingDistance <= 5f) {
-                    SetAnimation(_attackAnimation, true);
-                    Fire(TargetPosition);
-                }               
+                if (!Agent.pathPending && Agent.remainingDistance <= RangeOfAttack ) {
+                    AttackTimePassed += Time.deltaTime;
+
+                    if (AttackTimePassed > TimeForAttack) {
+
+                        SetAnimation(_attackAnimation, true);
+                        Fire(TargetPosition);
+
+                        AttackTimePassed = 0f;
+                    }
+                }
             }
             Agent.destination = Utils.GetDefaultPositionVector(SpawnRoom.Center);
         }     

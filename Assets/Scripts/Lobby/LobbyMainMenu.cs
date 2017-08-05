@@ -103,6 +103,7 @@ namespace Lobby {
         }
 
         public void OnClickHost() {
+            AppManager.Instance.IsSinglePlayer = false;
             lobbyManager.StartHost();
         }
 

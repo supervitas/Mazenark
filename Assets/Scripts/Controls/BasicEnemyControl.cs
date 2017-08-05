@@ -88,7 +88,7 @@ namespace Controls {
             Points.Add(patroolPoint);                        
         }
         
-        [ClientRpc (channel = 0)]
+        [ClientRpc]
         protected void RpcStartDisolve() {
             GetComponent<Disolve>().BeginDisolve();                                    
         }
@@ -118,7 +118,7 @@ namespace Controls {
                 Agent.isStopped = true;
             }
             
-            Invoke(nameof(RpcStartDisolve), 1.5f);       
+            Invoke(nameof(RpcStartDisolve), 1.1f);       
         }  
 
         protected virtual bool CheckPlayersNear(out Vector3 playerTarget) {                        
@@ -141,11 +141,13 @@ namespace Controls {
             }
             playerTarget = _zeroVector;           
             return false;
-        }        
+        }
 
         protected virtual void Update() {            
             if (!IsAlive || !isServer) return;
 
+            Agent.isStopped = false;
+            
             SetAnimation(Agent.velocity != _zeroVector ? _movingAnimation : _idleAnimation, true);
 
             if (CheckPlayersNear(out TargetPosition)) {
@@ -188,9 +190,7 @@ namespace Controls {
                     }
                 }                
                 return;
-            }
-            
-            Agent.isStopped = false;                              
+            }                                                   
             Agent.speed = RegularSpeed;
             
             SetAnimation(_attackAnimation, false);

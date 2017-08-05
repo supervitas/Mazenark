@@ -48,12 +48,12 @@ namespace GameSystems {
             _playersCount = players;
         }
         
-
         public void PlayerLefted() {
             _playersCount--;
             
             for (var i = 0; i < _playersTransforms.Count; i++) {
                 if (_playersTransforms[i] == null) {
+                    Debug.Log(_playersTransforms[i]);
                     _playersTransforms.RemoveAt(i);
                 }
             }            
