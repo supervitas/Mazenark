@@ -143,10 +143,7 @@ namespace EnemiesManager {
                         enemy.SetActive(true);
                         break;
                     }
-                    
-                    if (distance > 100f) {
-                        enemy.SetActive(false);
-                    }
+                    enemy.SetActive(false);
                 }
             }                        
         }
