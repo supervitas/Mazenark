@@ -87,7 +87,7 @@ namespace CharacterControllers.Enemies.Bosses {
 		    
 		    foreach (var button in _buttons) {
 			    button.GetComponent<Collider>().enabled = false;
-			    button.GetComponent<GameButton>().Destruct();
+			    button.GetComponent<GameButton>().RpcDestruct();
 			    Destroy(button, 2f);			   
 		    }
 		    

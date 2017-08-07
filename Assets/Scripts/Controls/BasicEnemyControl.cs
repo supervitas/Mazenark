@@ -114,7 +114,7 @@ namespace Controls {
             
             SetAnimation(_deathAnimation, true);
 
-            if (Agent != null) {               
+            if (Agent != null) {
                 Agent.isStopped = true;
             }
             
@@ -125,9 +125,16 @@ namespace Controls {
             foreach (var target in _playersTransform) {
                 if (target == null) continue;
 
-                var distance = Vector3.Distance(transform.position, target.position);                                              
+                var distance = Vector3.Distance(transform.position, target.position);
                 
-                if (distance <= EnemyAgroRange && CanAttack(transform.position, target.position)) {                    
+                var pos = transform.position;
+                var dir = target.position;
+                pos.y += 2.5f;
+                dir.y += 1.5f;
+                                
+                Debug.DrawLine(pos, dir);
+                
+                if (distance <= EnemyAgroRange && !Physics.Linecast(pos, dir, out RaycastHit, _obstacleMask)) {                    
                     playerTarget = target.position;
                     
                     return true;
@@ -164,7 +171,7 @@ namespace Controls {
                     SetAnimation(_attackAnimation, false);
                 }
                 
-                if (CanAttack(transform.position, TargetPosition)) {
+                if (CanAttack(TargetPosition)) {
                     Attack();
                 }
                 return;
@@ -194,9 +201,9 @@ namespace Controls {
             
         }
 
-        protected bool CanAttack(Vector3 fromWhere, Vector3 direction) {
+        protected bool CanAttack(Vector3 direction) {
             if (!Agent.pathPending && Agent.remainingDistance <= RangeOfAttack) {
-                var pos = fromWhere;
+                var pos = transform.position;
                 var dir = direction;
                 pos.y += 2.5f;
                 dir.y += 1.5f;

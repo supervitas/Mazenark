@@ -55,7 +55,7 @@ namespace GameEnv.Buttons {
         }
 
         [ClientRpc]
-        public void Destruct() {
+        public void RpcDestruct() {
             GetComponent<Collider>().enabled = false;
             GetComponent<Disolve>().BeginDisolve();
         }
