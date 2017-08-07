@@ -144,14 +144,17 @@ namespace Controls {
         }
 
         protected virtual void Update() {            
-            if (!IsAlive || !isServer) return;
+            if (!isServer || !IsAlive) return;
 
             Agent.isStopped = false;
             
             SetAnimation(Agent.velocity != _zeroVector ? _movingAnimation : _idleAnimation, true);
 
-            if (CheckPlayersNear(out TargetPosition)) {
-
+            if (CheckPlayersNear(out TargetPosition)) {                   
+                Agent.autoBraking = true;                
+                Agent.destination = TargetPosition;
+                Agent.isStopped = false; 
+                
                 WasFolowingPlayer = true;
                 
                 var direction = Agent.destination - transform.position;
@@ -161,36 +164,18 @@ namespace Controls {
                 if (direction != _zeroVector) {
                     transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
                 }
-                
-                Agent.autoBraking = true;
-                
-                Agent.destination = TargetPosition;
-                Agent.isStopped = false;                                
 
                 if (Agent.remainingDistance > RangeOfAttack) {
-
                     AttackTimePassed = 0;
-
                     SetAnimation(_attackAnimation, false);
-
-                }                
+                }
                 
-                if (!Agent.pathPending && Agent.remainingDistance <= RangeOfAttack && CanAttack(TargetPosition)) {
-                    
-                    Agent.isStopped = true;
-                    AttackTimePassed += Time.deltaTime;
-
-                    if (AttackTimePassed > TimeForAttack) {
-
-                        SetAnimation(_attackAnimation, true);
-                        Fire(TargetPosition);
-
-                        AttackTimePassed = 0f;
-
-                    }
-                }                
+                if (CanAttack(TargetPosition)) {
+                    Attack();
+                }
                 return;
-            }                                                   
+            }
+            
             Agent.speed = RegularSpeed;
             
             SetAnimation(_attackAnimation, false);
@@ -199,15 +184,31 @@ namespace Controls {
                 WasFolowingPlayer = false;
                 GotoNextPoint();
             }
-        }               
+        }
 
-        protected bool CanAttack(Vector3 direction) {                        
-            var pos = transform.position;
-            var dir = direction;
-            pos.y += 2.5f;           
-            dir.y += 1.5f;           
+        protected void Attack() {
+            Agent.isStopped = true;
+            AttackTimePassed += Time.deltaTime;
+
+            if (AttackTimePassed > TimeForAttack) {
+
+                SetAnimation(_attackAnimation, true);
+                Fire(TargetPosition);
+
+                AttackTimePassed = 0f;
+            }
             
-            return !Physics.Linecast(pos, dir, out RaycastHit, _obstacleMask);
+        }
+
+        protected bool CanAttack(Vector3 direction) {
+            if (!Agent.pathPending && Agent.remainingDistance <= RangeOfAttack) {
+                var pos = transform.position;
+                var dir = direction;
+                pos.y += 2.5f;
+                dir.y += 1.5f;
+                return !Physics.Linecast(pos, dir, out RaycastHit, _obstacleMask);
+            }
+            return false;
         }
 
         protected virtual void Fire(Vector3 direction) {            

@@ -37,15 +37,14 @@ namespace Controls {
         private GameObject _activeItem;
 
         private ServerPlayerController _serverPlayerController;
-
-        public float whomuch = 2000;
+        
         private Text _spellText;
         private float _castTime;
         private float _timeCasted;
         private float _timeCooled;
         private const float _coolDown = 0.2f;
 
-        private readonly Vector3 _zeroVector = Vector3.zero;
+        private readonly Vector3 _zeroVector = Vector3.zero;        
         
         
         private SpellCast _uiSpellCast;
@@ -230,10 +229,10 @@ namespace Controls {
             float v = Input.GetAxis("Vertical");
             float h = Input.GetAxis("Horizontal");
 
-            var e = Input.GetKeyDown("space");
+            var e = Input.GetKey(KeyCode.Space);
 
             if (e) {
-                GetComponent<Rigidbody>().AddForce(0, 0, whomuch, ForceMode.Impulse);
+                m_rigidBody.AddForce(_camera.transform.forward * 2000, ForceMode.Impulse);
             }
 
             if (v < 0) {                    
@@ -248,7 +247,7 @@ namespace Controls {
 
             m_animator.SetFloat("MoveSpeed", m_currentV);
 
-            JumpingAndLanding();
+//            JumpingAndLanding();
         }
         
         private void JumpingAndLanding() {
