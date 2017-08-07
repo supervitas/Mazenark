@@ -178,67 +178,56 @@ namespace Controls {
                 }
                 return;
             }
+            
             if (WasFolowingPlayer) { // Target disapeared. Need to gather
                 Agent.speed = RegularSpeed;
+                SetAnimation(_attackAnimation, false);
                 
-                if (_gatherPointsVisited == 0) {
-                    _gatherPointsVisited++;                   
-//                    GoToNextGatherPoint();
-//                    return;
-                }
                 if (!Agent.pathPending && Agent.remainingDistance <= 0.5f) {
-                    
+                    _gatherPointsVisited++;
                     IdleTimePassed += Time.deltaTime;
 
-                    if (IdleTimePassed > 0.5f) {
-//                        transform.rotation = Quaternion.Slerp(transform.rotation,
-//                            Quaternion.LookRotation(transform.position - Agent.destination), 0.1f);
-                    }
-                    
-                    if (IdleTimePassed > 1.0f) {
-//                        transform.rotation = Quaternion.Slerp(transform.rotation,
-//                            Quaternion.LookRotation(2 * transform.position - lookingAt.position), 0.1f);
-                    }
-                    
-                    if (IdleTimePassed > 2.5f) {
+                    if (_gatherPointsVisited > 3) {
+                        
                         WasFolowingPlayer = false;
-                        _gatherPointsVisited = 0;
                         IdleTimePassed = 0;
+                        _gatherPointsVisited = 0;
+                        
+                        return;
+                    }
+                    
+                    if (IdleTimePassed > 0.8f) {
+                        Agent.destination = GetGatherPoint();
+                        IdleTimePassed = 0f;
                     }
                 }
 
-
                 return;
-            }
-            
-            Agent.speed = RegularSpeed;
-            
-            SetAnimation(_attackAnimation, false);
+            }                                                
                     
-            if (CanPatrool && !Agent.pathPending && Agent.remainingDistance <= 0.5f || WasFolowingPlayer) { // Continue patrool
-                WasFolowingPlayer = false;
-                
+            if (CanPatrool && !Agent.pathPending && Agent.remainingDistance <= 0.5f) { // Continue patrool                                
                 Agent.destination = Points[_destPoint];
                 _destPoint = (_destPoint + 1) % Points.Count;
             }
         }
 
-        protected void GoToNextGatherPoint() {
-            var coord = Utils.TransformWorldToLocalCoordinate(transform.position.x, transform.position.z);
-            var position = GetRandomEmptyCoordinate(coord);
-            Agent.destination = position;
+        private void Gather() {
+            _gatherPointsVisited++;
+            Agent.destination = GetGatherPoint();            
         }
-        protected Vector3 GetRandomEmptyCoordinate(Coordinate coordinate) {
-            var x = coordinate.X + Random.Range(-2, 2);
-            var y = coordinate.Y + Random.Range(-2, 2);
-            try {
-                return App.AppManager.Instance.MazeInstance.Maze[x, y].Type == Tile.Variant.Empty ?
-                    Utils.TransformToWorldCoordinate(App.AppManager.Instance.MazeInstance.Maze[x, y].Position) :
-                    GetRandomEmptyCoordinate(coordinate);
-            }
-            catch (IndexOutOfRangeException) {
-                return GetRandomEmptyCoordinate(coordinate);
-            }
+
+        protected Vector3 GetGatherPoint() {
+            var coord = Utils.TransformWorldToLocalCoordinate(transform.position.x, transform.position.z);            
+            while (true) {
+                 var x = coord.X + Random.Range(-2, 2);
+                 var y = coord.Y + Random.Range(-2, 2);
+                  try {
+                      if (App.AppManager.Instance.MazeInstance.Maze[x, y].Type == Tile.Variant.Empty) {
+                          return Utils.TransformToWorldCoordinate(App.AppManager.Instance.MazeInstance.Maze[x, y].Position);
+                      }                      
+                  }
+                  catch (IndexOutOfRangeException) {}
+            }                        
         }
 
         protected void Attack() {

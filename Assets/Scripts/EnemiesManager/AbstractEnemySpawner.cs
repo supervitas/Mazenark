@@ -90,15 +90,16 @@ namespace EnemiesManager {
         }
 
         protected Vector3 GetRandomEmptyCoordinate(Coordinate coordinate) {
-            var x = coordinate.X + Random.Range(-12, 12);
-            var y = coordinate.Y + Random.Range(-12, 12);
-            try {
-                return App.AppManager.Instance.MazeInstance.Maze[x, y].Type == Tile.Variant.Empty ?
-                    Utils.TransformToWorldCoordinate(App.AppManager.Instance.MazeInstance.Maze[x, y].Position) :
-                    GetRandomEmptyCoordinate(coordinate);
-            }
-            catch (IndexOutOfRangeException) {
-                return GetRandomEmptyCoordinate(coordinate);
+            while (true) {
+                var x = coordinate.X + Random.Range(-12, 12);
+                var y = coordinate.Y + Random.Range(-12, 12);
+                try {
+                    if (App.AppManager.Instance.MazeInstance.Maze[x, y].Type == Tile.Variant.Empty) {
+                        return Utils.TransformToWorldCoordinate(
+                            App.AppManager.Instance.MazeInstance.Maze[x, y].Position);
+                    }
+                }
+                catch (IndexOutOfRangeException) {}
             }
         }
 
