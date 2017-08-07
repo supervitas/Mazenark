@@ -125,17 +125,11 @@ namespace Controls {
             foreach (var target in _playersTransform) {
                 if (target == null) continue;
 
-                var distance = Vector3.Distance(transform.position, target.position);
-//                var direction = Agent.destination - transform.position;
-//                
-//                if (direction == Vector3.zero) {
-//                    direction = transform.forward;
-//                }
-//
-//                var angle = Vector3.Angle(direction, transform.forward);
+                var distance = Vector3.Distance(transform.position, target.position);                                              
                 
-                if (distance <= EnemyAgroRange) {                    
+                if (distance <= EnemyAgroRange && CanAttack(transform.position, target.position)) {                    
                     playerTarget = target.position;
+                    
                     return true;
                 }
             }
@@ -150,7 +144,7 @@ namespace Controls {
             
             SetAnimation(Agent.velocity != _zeroVector ? _movingAnimation : _idleAnimation, true);
 
-            if (CheckPlayersNear(out TargetPosition)) {                   
+            if (CheckPlayersNear(out TargetPosition)) {
                 Agent.autoBraking = true;                
                 Agent.destination = TargetPosition;
                 Agent.isStopped = false; 
@@ -164,13 +158,13 @@ namespace Controls {
                 if (direction != _zeroVector) {
                     transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.1f);
                 }
-
+                
                 if (Agent.remainingDistance > RangeOfAttack) {
                     AttackTimePassed = 0;
                     SetAnimation(_attackAnimation, false);
                 }
                 
-                if (CanAttack(TargetPosition)) {
+                if (CanAttack(transform.position, TargetPosition)) {
                     Attack();
                 }
                 return;
@@ -200,9 +194,9 @@ namespace Controls {
             
         }
 
-        protected bool CanAttack(Vector3 direction) {
+        protected bool CanAttack(Vector3 fromWhere, Vector3 direction) {
             if (!Agent.pathPending && Agent.remainingDistance <= RangeOfAttack) {
-                var pos = transform.position;
+                var pos = fromWhere;
                 var dir = direction;
                 pos.y += 2.5f;
                 dir.y += 1.5f;
@@ -213,12 +207,15 @@ namespace Controls {
 
         protected virtual void Fire(Vector3 direction) {            
             var pos = transform.position;
-            pos.y += 1.5f;
+            pos.y += 1.5f;            
             direction.y += 2f;
-            direction.z += Random.Range(-2, 3);
+            
+            direction.z += Random.Range(-2, 3); // Разброс
             direction.x += Random.Range(-2, 3);
+            
             var activeItem = Instantiate(Weapon, pos, Quaternion.identity);
-            var weapon = activeItem.GetComponent<Weapon>();            
+            var weapon = activeItem.GetComponent<Weapon>();
+            
             activeItem.transform.LookAt(direction);
             weapon.Fire();
             NetworkServer.Spawn(activeItem);

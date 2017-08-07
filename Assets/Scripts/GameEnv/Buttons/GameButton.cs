@@ -1,4 +1,5 @@
 using System;
+using GameEnv.GameEffects;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -51,6 +52,12 @@ namespace GameEnv.Buttons {
 
         private void OnDestroy() {
            CancelInvoke(nameof(Unpress));
+        }
+
+        [ClientRpc]
+        public void Destruct() {
+            GetComponent<Collider>().enabled = false;
+            GetComponent<Disolve>().BeginDisolve();
         }
     }
 }

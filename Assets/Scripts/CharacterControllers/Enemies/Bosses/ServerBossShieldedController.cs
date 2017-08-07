@@ -86,8 +86,8 @@ namespace CharacterControllers.Enemies.Bosses {
 	    private void Die() {
 		    
 		    foreach (var button in _buttons) {
-			    button.GetComponent<Disolve>().BeginDisolve();
 			    button.GetComponent<Collider>().enabled = false;
+			    button.GetComponent<GameButton>().Destruct();
 			    Destroy(button, 2f);			   
 		    }
 		    
@@ -98,6 +98,7 @@ namespace CharacterControllers.Enemies.Bosses {
 		    
 		    FindObjectOfType<LootManager>().CreateLoot(gameObject.transform.position, 100f);
 	    }
+	   
 		
 	}
 
