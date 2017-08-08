@@ -184,6 +184,7 @@ namespace Controls {
                 SetAnimation(_attackAnimation, false);
                 
                 if (!Agent.pathPending && Agent.remainingDistance <= 0.5f) {
+                    
                     _gatherPointsVisited++;
                     IdleTimePassed += Time.deltaTime;
 
