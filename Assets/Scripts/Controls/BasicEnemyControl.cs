@@ -184,8 +184,7 @@ namespace Controls {
                 SetAnimation(_attackAnimation, false);
                 
                 if (!Agent.pathPending && Agent.remainingDistance <= 0.5f) {
-                    
-                    _gatherPointsVisited++;
+                                        
                     IdleTimePassed += Time.deltaTime;
 
                     if (_gatherPointsVisited > 3) {
@@ -196,8 +195,13 @@ namespace Controls {
                         
                         return;
                     }
+
+                    if (Math.Abs(IdleTimePassed - 0.4f) < 0.1) { // look oposite
+                        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Inverse(transform.rotation), 0.1f);
+                    }
                     
                     if (IdleTimePassed > 0.8f) {
+                        _gatherPointsVisited++;
                         Agent.destination = GetGatherPoint();
                         IdleTimePassed = 0f;
                     }
