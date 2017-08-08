@@ -229,6 +229,9 @@ namespace Controls {
             float v = Input.GetAxis("Vertical");
             float h = Input.GetAxis("Horizontal");
 
+			if (v < -0.5f)
+				v = -0.5f;
+
             var e = Input.GetKey(KeyCode.Space);
 
             if (e) {
