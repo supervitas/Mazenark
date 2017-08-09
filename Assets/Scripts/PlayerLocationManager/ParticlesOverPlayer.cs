@@ -16,11 +16,11 @@ namespace PlayerLocationManager {
             effects.UpdateTime = 0.3f;
             effects.StartEffect(Target);
             
-            _instancedGroundFog = Instantiate(GroundFog, Vector3.back, Quaternion.Euler(90, 0, 0));
-            var fogEffects = _instancedGroundFog.GetComponent<EffectsNearPlayer>();
-            fogEffects.Y = -12f;
-            fogEffects.UpdateTime = 0.3f;
-            fogEffects.StartEffect(Target);
+//            _instancedGroundFog = Instantiate(GroundFog, Vector3.back, Quaternion.Euler(90, 0, 0));
+//            var fogEffects = _instancedGroundFog.GetComponent<EffectsNearPlayer>();
+//            fogEffects.Y = -12f;
+//            fogEffects.UpdateTime = 0.3f;
+//            fogEffects.StartEffect(Target);
         }
     }
 }

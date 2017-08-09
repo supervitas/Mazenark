@@ -62,7 +62,7 @@ namespace CharacterControllers {
             _serverPlayerItems[itemName] += itemCount;
             
             _characterControl.TargetSetPlayerItems(connectionToClient, itemName, itemCount);
-        }        
+        }
 
         [Command]
         public void CmdPlayerReady() {            

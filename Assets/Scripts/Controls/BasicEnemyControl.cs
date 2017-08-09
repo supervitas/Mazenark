@@ -119,6 +119,9 @@ namespace Controls {
                 if (target == null) continue;
 
                 var distance = Vector3.Distance(transform.position, target.position);
+
+                var direction = target.position - transform.position;
+                var angle = Vector3.Angle(direction, transform.forward);                
                 
                 var pos = transform.position;
                 var dir = target.position;
@@ -126,8 +129,10 @@ namespace Controls {
                 dir.y += 1.5f;
                                 
                 Debug.DrawLine(pos, dir);
-                
-                if (distance <= EnemyAgroRange && !Physics.Linecast(pos, dir, out RaycastHit, _obstacleMask)) {                    
+               
+                if ((distance <= EnemyAgroRange && angle < 30 || distance < 7)
+                    && !Physics.Linecast(pos, dir, out RaycastHit, _obstacleMask)) {
+                                 
                     playerTarget = target.position;
                     
                     return true;
@@ -210,14 +215,22 @@ namespace Controls {
         protected Vector3 GetGatherPoint() {
             var coord = Utils.TransformWorldToLocalCoordinate(transform.position.x, transform.position.z);            
             while (true) {
-                 var x = coord.X + Random.Range(-3, 3);
-                 var y = coord.Y + Random.Range(-3, 3);
-                  try {
+                var positive = Random.Range(-1, 1) <= 0;
+                int x;
+                int y;
+                if (positive) {
+                    x = coord.X + Random.Range(1, 4);
+                    y = coord.Y + Random.Range(1, 3);
+                } else {
+                    x = coord.X + Random.Range(-4, 0);
+                    y = coord.X + Random.Range(-3, 0);
+                }
+                try {
                       if (App.AppManager.Instance.MazeInstance.Maze[x, y].Type == Tile.Variant.Empty) {
                           return Utils.TransformToWorldCoordinate(App.AppManager.Instance.MazeInstance.Maze[x, y].Position);
                       }                      
-                  }
-                  catch (IndexOutOfRangeException) {}
+                }
+                catch (IndexOutOfRangeException) {}
             }                        
         }
 
