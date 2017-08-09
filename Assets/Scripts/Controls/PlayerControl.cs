@@ -235,7 +235,7 @@ namespace Controls {
             var e = Input.GetKey(KeyCode.Space);
 
             if (e) {
-                m_rigidBody.AddForce(_camera.transform.forward * 2000, ForceMode.Impulse);
+                m_rigidBody.AddForce(transform.forward * 2000, ForceMode.Impulse);
             }
 
             if (v < 0) {                    
@@ -288,7 +288,7 @@ namespace Controls {
             
             _isAlive = false;
             
-            RpcDie();        
+            RpcDie();
         }
         
         [ClientRpc]

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using CharacterControllers;
 using GameEnv.GameEffects;
 using GameSystems;
 using Items;
@@ -93,12 +91,7 @@ namespace Controls {
             if (!isServer) return;
             
             Points.Add(patroolPoint);                        
-        }
-        
-        [ClientRpc]
-        protected void RpcStartDisolve() {
-            GetComponent<Disolve>().BeginDisolve();                                    
-        }
+        }         
 
         public void SetPatrool(bool patrool) {
             if (!isServer) return;
@@ -118,9 +111,7 @@ namespace Controls {
 
             if (Agent != null) {
                 Agent.isStopped = true;
-            }
-            
-            Invoke(nameof(RpcStartDisolve), 1.1f);       
+            }               
         }  
 
         protected virtual bool CheckPlayersNear(out Vector3 playerTarget) {                        
@@ -179,34 +170,8 @@ namespace Controls {
                 return;
             }
             
-            if (WasFolowingPlayer) { // Target disapeared. Need to gather
-                Agent.speed = RegularSpeed;
-                SetAnimation(_attackAnimation, false);
-                
-                if (!Agent.pathPending && Agent.remainingDistance <= 0.5f) {
-                                        
-                    IdleTimePassed += Time.deltaTime;
-
-                    if (_gatherPointsVisited > 3) {
-                        
-                        WasFolowingPlayer = false;
-                        IdleTimePassed = 0;
-                        _gatherPointsVisited = 0;
-                        
-                        return;
-                    }
-
-                    if (Math.Abs(IdleTimePassed - 0.4f) < 0.1) { // look oposite
-                        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Inverse(transform.rotation), 0.1f);
-                    }
-                    
-                    if (IdleTimePassed > 0.8f) {
-                        _gatherPointsVisited++;
-                        Agent.destination = GetGatherPoint();
-                        IdleTimePassed = 0f;
-                    }
-                }
-
+            if (WasFolowingPlayer) { // Target disapeared. Need to gather              
+                Gather();
                 return;
             }                                                
                     
@@ -216,16 +181,37 @@ namespace Controls {
             }
         }
 
-        private void Gather() {
-            _gatherPointsVisited++;
-            Agent.destination = GetGatherPoint();            
+        protected void Gather() {
+            Agent.speed = RegularSpeed;
+            SetAnimation(_attackAnimation, false);
+                
+            if (!Agent.pathPending && Agent.remainingDistance <= 0.1f) {
+                                        
+                IdleTimePassed += Time.deltaTime;
+
+                if (_gatherPointsVisited > 3) {
+                        
+                    WasFolowingPlayer = false;
+                    IdleTimePassed = 0;
+                    _gatherPointsVisited = 0;
+                        
+                    return;
+                }
+            
+                if (IdleTimePassed > 0.8f) {
+                    _gatherPointsVisited++;
+                    Agent.destination = GetGatherPoint();
+                    IdleTimePassed = 0f;
+                }
+            }
+            
         }
 
         protected Vector3 GetGatherPoint() {
             var coord = Utils.TransformWorldToLocalCoordinate(transform.position.x, transform.position.z);            
             while (true) {
-                 var x = coord.X + Random.Range(-2, 2);
-                 var y = coord.Y + Random.Range(-2, 2);
+                 var x = coord.X + Random.Range(-3, 3);
+                 var y = coord.Y + Random.Range(-3, 3);
                   try {
                       if (App.AppManager.Instance.MazeInstance.Maze[x, y].Type == Tile.Variant.Empty) {
                           return Utils.TransformToWorldCoordinate(App.AppManager.Instance.MazeInstance.Maze[x, y].Position);
@@ -265,7 +251,7 @@ namespace Controls {
             pos.y += 1.5f;            
             direction.y += 2f;
             
-            direction.z += Random.Range(-2, 3); // Разброс
+            direction.z += Random.Range(-2, 3);
             direction.x += Random.Range(-2, 3);
             
             var activeItem = Instantiate(Weapon, pos, Quaternion.identity);

@@ -14,7 +14,7 @@ namespace Items {
             }
         }
 
-        public abstract void Fire();
+        public abstract void Fire();       
 
         public float GetCastTime() {
             return CastTime;
