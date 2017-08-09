@@ -252,6 +252,19 @@ namespace Controls {
 
 //            JumpingAndLanding();
         }
+
+		// Just because root motion modifies pitch-roll-yaw and modified roll looks weird.
+		//void OnAnimatorMove() {
+		//	var rootBone = transform.Find("Ass_root").gameObject;
+
+		//	if (System.Math.Abs(m_animator.GetFloat("MoveSpeed")) <= 0.01) {
+		//		//m_animator.bodyRotation.SetAxisAngle(new Vector3(0, 0, 1), -90);
+		//		rootBone.transform.rotation.SetAxisAngle(new Vector3(0, 0, 1), -90);
+		//		//m_animator.applyRootMotion = false;
+		//	} else {
+		//		//m_animator.applyRootMotion = true;
+		//	}
+		//}
         
         private void JumpingAndLanding() {
             bool jumpCooldownOver = (Time.time - m_jumpTimeStamp) >= m_minJumpInterval;
