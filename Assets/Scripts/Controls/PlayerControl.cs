@@ -226,8 +226,8 @@ namespace Controls {
         }
 
         private void TankUpdate() {
-            float v = Input.GetAxis("Vertical");
-            float h = Input.GetAxis("Horizontal");
+            float v = Input.GetAxis("Vertical");	// w↔s
+            float h = Input.GetAxis("Horizontal");	// a↔d
 
 			if (v < -0.5f)
 				v = -0.5f;
@@ -245,6 +245,8 @@ namespace Controls {
             m_currentV = Mathf.Lerp(m_currentV, v, Time.deltaTime * m_interpolation);
             m_currentH = Mathf.Lerp(m_currentH, h, Time.deltaTime * m_interpolation);
 
+			StopMovingIfAngleTooSteep(ref m_currentV, 28);
+
             transform.position += transform.forward * m_currentV * m_moveSpeed * Time.deltaTime;
             transform.Rotate(0, m_currentH * m_turnSpeed * Time.deltaTime, 0);
 
@@ -252,6 +254,15 @@ namespace Controls {
 
 //            JumpingAndLanding();
         }
+
+		private void StopMovingIfAngleTooSteep(ref float verticalAxisWS, double maxAngle = 45) {
+			RaycastHit hit;
+			if (Physics.Raycast(transform.position, transform.forward, out hit, 1.0f)) {
+				if (Vector3.Dot(Vector3.up, hit.normal) < System.Math.Sin(System.Math.PI * maxAngle / 180)) {
+					verticalAxisWS = 0;
+				}
+			}
+		}
 
 		// Just because root motion modifies pitch-roll-yaw and modified roll looks weird.
 		//void OnAnimatorMove() {
