@@ -70,6 +70,8 @@ namespace Controls {
         private GameGui _gameGui;
         
         private bool _isAlive = true;
+        
+        private RaycastHit _raycastHit;
 
         private void OnCollisionEnter(Collision collision) {
             ContactPoint[] contactPoints = collision.contacts;
@@ -268,10 +270,9 @@ namespace Controls {
 //            JumpingAndLanding();
         }
 
-		private void StopMovingIfAngleTooSteep(ref float verticalAxisWS, double maxAngle = 45) {
-			RaycastHit hit;
-			if (Physics.Raycast(transform.position, transform.forward, out hit, 1.0f)) {
-				if (Vector3.Dot(Vector3.up, hit.normal) < System.Math.Sin(System.Math.PI * maxAngle / 180)) {
+		private void StopMovingIfAngleTooSteep(ref float verticalAxisWS, double maxAngle = 45) {			
+			if (Physics.Raycast(transform.position, transform.forward, out _raycastHit, 1.0f)) {
+				if (Vector3.Dot(Vector3.up, _raycastHit.normal) < System.Math.Sin(System.Math.PI * maxAngle / 180)) {
 					verticalAxisWS = 0;
 				}
 			}

@@ -10,7 +10,8 @@ namespace Items.Enemies {
         void OnCollisionEnter(Collision other) {
             var go = other.gameObject;
             if (go.CompareTag("Player")) {
-                go.GetComponent<ServerCharacterController>().TakeDamage(100, 3.5f);   
+                go.GetComponent<ServerCharacterController>().TakeDamage(100, 3.5f);
+                Destroy(gameObject);
             }
             gameObject.GetComponent<Rigidbody>().isKinematic = true;
             ContactPoint contact = other.contacts[0];
