@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Items.Spells {
     public class Fireball : Weapon {
 
-        void OnCollisionEnter(Collision other) {
+        private void OnCollisionEnter(Collision other) {
             var go = other.gameObject;            
             if (go.CompareTag("Player") || go.CompareTag("Enemy")) {              
                 go.GetComponent<ServerCharacterController>().TakeDamage(100, 2.5f);   

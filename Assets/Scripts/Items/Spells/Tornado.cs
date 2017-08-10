@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Items.Spells {
     public class Tornado : Weapon {               
         
-        void OnCollisionEnter(Collision other) {
+        private void OnCollisionEnter(Collision other) {
             var go = other.gameObject;                        
             if (go.CompareTag("Enemy") || go.CompareTag("Player")) {
                 go.GetComponent<ServerCharacterController>().TakeDamage(100);                            

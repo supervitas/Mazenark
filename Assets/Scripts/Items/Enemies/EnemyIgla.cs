@@ -7,14 +7,14 @@ namespace Items.Enemies {
         
         protected override void Start() {}
 
-        void OnCollisionEnter(Collision other) {
+        private void OnCollisionEnter(Collision other) {
             var go = other.gameObject;
             if (go.CompareTag("Player")) {
                 go.GetComponent<ServerCharacterController>().TakeDamage(100, 3.5f);
                 Destroy(gameObject);
             }
             gameObject.GetComponent<Rigidbody>().isKinematic = true;
-            ContactPoint contact = other.contacts[0];
+            var contact = other.contacts[0];
             gameObject.transform.position = contact.point;
 
             Destroy(gameObject, 1.5f);

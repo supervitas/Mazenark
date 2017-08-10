@@ -6,7 +6,7 @@ namespace Items.Enemies {
         
         protected override void Start() {}
 
-        void OnCollisionEnter(Collision other) {
+        private void OnCollisionEnter(Collision other) {
             var go = other.gameObject;            
             if (go.CompareTag("Player")) {                
                 go.GetComponent<ServerCharacterController>().TakeDamage(100, 3.5f);   
