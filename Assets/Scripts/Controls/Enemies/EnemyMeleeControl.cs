@@ -3,7 +3,11 @@ using UnityEngine;
 
 namespace Controls.Enemies {   
     public class EnemyMeleeControl : BasicEnemyControl {
-              
+        public override void OnStartServer() {
+            base.OnStartServer();
+            RangeOfAttack = 6f;
+        }
+
         protected override void Fire(Vector3 direction) {
             var pos = transform.position;
             var dir = direction;

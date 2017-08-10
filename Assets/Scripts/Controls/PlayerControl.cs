@@ -29,8 +29,8 @@ namespace Controls {
         [SerializeField] private Animator m_animator;
         [SerializeField] private Rigidbody m_rigidBody;
         [SerializeField] private GameObject spellCastEffect;
-       
 
+        public GameObject igla;
         public GameObject PlayerCamera;
         private Camera _camera;       
 
@@ -235,7 +235,20 @@ namespace Controls {
             var e = Input.GetKey(KeyCode.Space);
 
             if (e) {
-                m_rigidBody.AddForce(transform.forward * 2000, ForceMode.Impulse);
+//                m_rigidBody.AddForce(transform.forward * 2000, ForceMode.Impulse);
+                var pos = transform.position;
+                var direction = _camera.transform.forward;
+                pos.y += 1.5f;            
+                direction.y += 2f;                                           
+            
+                var activeItem = Instantiate(igla, pos, Quaternion.identity);
+                var weapon = activeItem.GetComponent<Weapon>();
+
+                Physics.IgnoreCollision(activeItem.GetComponent<Collider>(), GetComponent<Collider>());
+                activeItem.transform.LookAt(direction);
+                weapon.Fire();
+//                NetworkServer.Spawn(activeItem);
+                Destroy(weapon, 10.0f);            
             }
 
             if (v < 0) {                    

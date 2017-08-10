@@ -3,8 +3,8 @@
 namespace EnemiesManager {
     public class FireBiomeEnemySpawner : AbstractEnemySpawner {
 
-        private new void Start() {
-            base.Start();
+        public override void OnStartServer() {  
+            base.OnStartServer();
             InitBiomeEnemies(Biome.Fire);           
         }
 

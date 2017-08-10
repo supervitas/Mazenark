@@ -30,7 +30,7 @@ namespace EnemiesManager {
         
         private static List<Transform> _playersTransform;
 
-        protected void Start() {            
+        public override void OnStartServer() {
             if (!isServer) return;
             
             SetUpRandomEnemies();

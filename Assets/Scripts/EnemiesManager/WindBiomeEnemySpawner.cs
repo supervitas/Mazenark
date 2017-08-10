@@ -2,8 +2,8 @@
 
 namespace EnemiesManager {
     public class WindBiomeEnemySpawner : AbstractEnemySpawner {
-        private new void Start() {
-            base.Start();
+        public override void OnStartServer() {
+            base.OnStartServer();            
             InitBiomeEnemies(Biome.Wind);            
         }
     }

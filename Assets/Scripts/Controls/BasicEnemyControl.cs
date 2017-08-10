@@ -130,7 +130,7 @@ namespace Controls {
                                 
                 Debug.DrawLine(pos, dir);
                
-                if ((distance <= EnemyAgroRange && angle < 30 || distance < 7)
+                if ((distance <= EnemyAgroRange && angle < 30 || distance < 10)
                     && !Physics.Linecast(pos, dir, out RaycastHit, _obstacleMask)) {
                                  
                     playerTarget = target.position;
