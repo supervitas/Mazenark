@@ -260,7 +260,7 @@ namespace Controls {
             m_currentV = Mathf.Lerp(m_currentV, v, Time.deltaTime * m_interpolation);
             m_currentH = Mathf.Lerp(m_currentH, h, Time.deltaTime * m_interpolation);
 
-			StopMovingIfAngleTooSteep(ref m_currentV, 28);
+//			StopMovingIfAngleTooSteep(ref m_currentV, 28);
 
             transform.position += transform.forward * m_currentV * m_moveSpeed * Time.deltaTime;
             transform.Rotate(0, m_currentH * m_turnSpeed * Time.deltaTime, 0);

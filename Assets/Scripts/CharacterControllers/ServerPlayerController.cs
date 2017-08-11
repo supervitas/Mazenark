@@ -53,7 +53,7 @@ namespace CharacterControllers {
             }
         }
         
-        private void SetPlayerItems(string itemName, int itemCount) {
+        public void SetPlayerItems(string itemName, int itemCount) {
             if (!isServer) return;  
             
             if (!_serverPlayerItems.ContainsKey(itemName)) {               
