@@ -20,7 +20,7 @@ namespace Loot {
                 }
 
                 RpcChestOpened();
-                Destroy(gameObject, 2f);
+                Destroy(gameObject, 3f);
             }
             
         }
@@ -36,7 +36,7 @@ namespace Loot {
         }
 
         private void BeginDisolve() {
-            GetComponent<Disolve>().BeginDisolve();
+            GetComponent<Disolve>().BeginDisolve(1.0f);
         }
     }
 }
