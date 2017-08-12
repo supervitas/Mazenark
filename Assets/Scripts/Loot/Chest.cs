@@ -19,8 +19,8 @@ namespace Loot {
                     controller.SetPlayerItems(item.Key, item.Value);
                 }
 
-                RpcChestOpened();
-                Destroy(gameObject, 3f);
+//                RpcChestOpened();
+//                Destroy(gameObject, 3f);
             }
             
         }

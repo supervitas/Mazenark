@@ -1,11 +1,12 @@
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Loot {
     public class ItemsCollection : MonoBehaviour {
         public static ItemsCollection Instance; 
         public GameObject[] items;
-        public Texture[] itemIcons;
+        public Sprite[] itemIcons;
 
         private void Start() {
             if (Instance == null) {
@@ -17,7 +18,7 @@ namespace Loot {
             return items.FirstOrDefault(item => item.name == itemName);
         }
 
-        public Texture GetIconByName(string itemName) {
+        public Sprite GetIconByName(string itemName) {
             return itemIcons.FirstOrDefault(item => item.name == itemName);
         }
     }

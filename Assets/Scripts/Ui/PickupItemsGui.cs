@@ -6,7 +6,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Ui {
-    public class GameGui: MonoBehaviour {
+    public class PickupItemsGui: MonoBehaviour {
+        
         [SerializeField] private Image FirstItemImage;
         [SerializeField] private Text FirstItemCount;
         [SerializeField] private Image SecondItemImage;
@@ -25,13 +26,13 @@ namespace Ui {
             public int itemNumber;
         }
 
-        private void Awake() {            
+        private void Start() {
             _uiItemsList.Add(new UiItem {itemImage = FirstItemImage, itemCountText = FirstItemCount, itemNumber = 1});
             _uiItemsList.Add(new UiItem {itemImage = SecondItemImage, itemCountText = SecondItemCount, itemNumber = 2});
-            _uiItemsList.Add(new UiItem {itemImage = ThirdItemImage, itemCountText = ThirdItemCount, itemNumber = 3});            
+            _uiItemsList.Add(new UiItem {itemImage = ThirdItemImage, itemCountText = ThirdItemCount, itemNumber = 3});                                  
         }
         
-        public void AddItem(string itemName, string count) {            
+        public void AddItem(string itemName, string count) {
             var item = GetEmptyUiItem();
             item.itemName = itemName;
             CreateItem(itemName, count,item);
@@ -70,7 +71,11 @@ namespace Ui {
         }
 
         private UiItem GetEmptyUiItem() {
-            return _uiItemsList.FirstOrDefault(item => !item.itemImage.enabled);
+            foreach (var item in _uiItemsList) {
+                if (item.itemImage.enabled) continue;                
+                return item;
+            }
+            return new UiItem();
         }
 
         private UiItem GetItem(string itemName) {
