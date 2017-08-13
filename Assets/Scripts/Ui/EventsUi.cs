@@ -19,16 +19,16 @@ namespace Ui {
         private void OnLevelComplete(object sender, EventArguments args) {
             CanvasObject.enabled = true;
             Text t = transform.GetChild(0).GetChild(0).GetComponent<Text>();
-            t.text = string.Format("{0} finished game", args.Message);
+            t.text = $"{args.Message} finished game";
             t.color = Color.green;
-            Invoke("TurnOffCanvas", 3);
+            Invoke(nameof(TurnOffCanvas), 3);
         }
         private void OnPlayerDied(object sender, EventArguments args) {
             CanvasObject.enabled = true;
             Text t = transform.GetChild(0).GetChild(0).GetComponent<Text>();
-            t.text = string.Format("{0} died", args.Message);
+            t.text = $"{args.Message} died";
             t.color = Color.red;
-            Invoke("TurnOffCanvas", 3);
+            Invoke(nameof(TurnOffCanvas), 3);
         }
 
 

@@ -25,6 +25,10 @@ namespace Ui {
             public Text itemCountText;
             public string itemName;
             public int itemNumber;
+
+            public override string ToString() {
+                return  $"{itemName} with {itemCountText.text} is {itemNumber}";
+            }
         }
 
         private void Awake() {
@@ -83,8 +87,8 @@ namespace Ui {
             return (from uiItem in _uiItemsList where uiItem.itemNumber == number select uiItem).FirstOrDefault();
         }
         
-        private UiItem GetItem(Sprite sprite) {            
-            return (from uiItem in _uiItemsList where uiItem.itemImage.sprite == sprite select uiItem).FirstOrDefault();
+        private UiItem GetItem(Image image) {
+            return _uiItemsList.FirstOrDefault(uiItem => uiItem.itemImage == image);
         }
 
         public void OnItemPlace(DragAndDropCell.DropDescriptor desc) {
@@ -92,29 +96,37 @@ namespace Ui {
             
             _previusDropDescriptor = desc;
                 
-            var sourceSprite = desc.destinationCell.GetItem().GetComponent<Image>().sprite;
-            var destinationSprite = desc.sourceCell.GetItem().GetComponent<Image>().sprite;
-
+            var sourceSprite = desc.sourceCell.GetItem().GetComponent<Image>();
+            var destinationSprite = desc.item.GetComponent<Image>();
             
             var sourceUiItem = GetItem(sourceSprite);
-            UiItem destinationUiItem = GetItem(destinationSprite);
+            var destinationUiItem = GetItem(destinationSprite);
 
             var sourceItemCount = sourceUiItem.itemCountText.text;
             var destinationItemCount = destinationUiItem.itemCountText.text;
 
             var sourceItemName = sourceUiItem.itemName;
-            var destinationItemName = destinationUiItem.itemName;            
-
-            if (!destinationUiItem.itemCountText.enabled) {
-                destinationUiItem.itemCountText.enabled = true;
-                sourceUiItem.itemCountText.enabled = false;
-            }
-            
-            sourceUiItem.itemName = destinationItemName;
-            destinationUiItem.itemName = sourceItemName;
+            var destinationItemName = destinationUiItem.itemName;
+                 
+            sourceUiItem.itemName = destinationItemName;            
+            destinationUiItem.itemName = sourceItemName;                                                      
             
             sourceUiItem.itemCountText.text = destinationItemCount;
-            destinationUiItem.itemCountText.text = sourceItemCount;            
+            destinationUiItem.itemCountText.text = sourceItemCount;
+
+            sourceUiItem.itemImage = destinationSprite;
+            destinationUiItem.itemImage = sourceSprite;
+
+
+            if (sourceUiItem.itemCountText.enabled == false) {
+                destinationUiItem.itemCountText.enabled = false;
+                sourceUiItem.itemCountText.enabled = true;
+            } else {
+                if (destinationUiItem.itemCountText.enabled == false) {
+                    sourceUiItem.itemCountText.enabled = false;
+                    destinationUiItem.itemCountText.enabled = true;
+                }
+            }
             
         }
     }
