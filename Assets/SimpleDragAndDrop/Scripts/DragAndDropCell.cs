@@ -42,7 +42,7 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
 
     void Start()
     {
-        SetBackgroundState(GetComponentInChildren<DragAndDropItem>() == null ? false : true);
+        SetBackgroundState(GetComponentInChildren<DragAndDropItem>() != null);
     }
 
     /// <summary>
@@ -104,7 +104,7 @@ public class DragAndDropCell : MonoBehaviour, IDropHandler
     {
         if (DragAndDropItem.icon != null)
         {
-            if (DragAndDropItem.icon.activeSelf == true)                    // If icon inactive do not need to drop item in cell
+            if (DragAndDropItem.icon.activeSelf)                    // If icon inactive do not need to drop item in cell
             {
                 DragAndDropItem item = DragAndDropItem.draggedItem;
                 DragAndDropCell sourceCell = DragAndDropItem.sourceCell;

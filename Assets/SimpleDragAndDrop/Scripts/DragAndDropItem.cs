@@ -9,13 +9,13 @@ using System.Collections;
 [RequireComponent(typeof(Image))]
 public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    static public DragAndDropItem draggedItem;                                      // Item that is dragged now
-    static public GameObject icon;                                                  // Icon of dragged item
-    static public DragAndDropCell sourceCell;                                       // From this cell dragged item is
+    public static DragAndDropItem draggedItem;                                      // Item that is dragged now
+    public static GameObject icon;                                                  // Icon of dragged item
+    public static DragAndDropCell sourceCell;                                       // From this cell dragged item is
 
     public delegate void DragEvent(DragAndDropItem item);
-    static public event DragEvent OnItemDragStartEvent;                             // Drag start event
-    static public event DragEvent OnItemDragEndEvent;                               // Drag end event
+    public static event DragEvent OnItemDragStartEvent;                             // Drag start event
+    public static event DragEvent OnItemDragEndEvent;                               // Drag end event
 
     /// <summary>
     /// This item is dragged
@@ -40,10 +40,7 @@ public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             icon.transform.SetParent(canvas.transform, true);                       // Set canvas as parent
             icon.transform.SetAsLastSibling();                                      // Set as last child in canvas transform
         }
-        if (OnItemDragStartEvent != null)
-        {
-            OnItemDragStartEvent(this);                                             // Notify all about item drag start
-        }
+        OnItemDragStartEvent?.Invoke(this);                                             // Notify all about item drag start
     }
 
     /// <summary>
@@ -69,10 +66,7 @@ public class DragAndDropItem : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             Destroy(icon);                                                          // Destroy icon on item drop
         }
         MakeVisible(true);                                                          // Make item visible in cell
-        if (OnItemDragEndEvent != null)
-        {
-            OnItemDragEndEvent(this);                                               // Notify all cells about item drag end
-        }
+        OnItemDragEndEvent?.Invoke(this);                                               // Notify all cells about item drag end
         draggedItem = null;
         icon = null;
         sourceCell = null;
