@@ -2,6 +2,7 @@
 using System.Linq;
 using App.Eventhub;
 using Loot;
+using Ui.Drag;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -97,8 +98,20 @@ namespace Ui {
 
         private void DragFromChest(DragAndDropCell.DropDescriptor desc) {
             var image = desc.destinationCell.GetItem().GetComponent<Image>();
+            image.enabled = false;
+            var pickedItem = _pickupItemsGui.GetRelatedUiItem(image);
+            var uiItem = GetItem(pickedItem.itemName);
+
+            if (uiItem != null) {
+                var prevCountOfItems = int.Parse(uiItem.itemCountText.text);
+                var pickedItemCount = int.Parse(pickedItem.itemCountText.text);
+                uiItem.itemCountText.text = (prevCountOfItems + pickedItemCount).ToString();
+            } else {
+                var newUiItem = GetEmptyUiItem();
+                CreateItem(pickedItem.itemName, pickedItem.itemCountText.text, newUiItem);
+            }
+            _pickupItemsGui.UiItemWasDragedToPlayer(pickedItem);
             
-            _pickupItemsGui.UiItemWasDragedToPlayer(image);  
         }
 
         public void OnItemPlace(DragAndDropCell.DropDescriptor desc) {
@@ -106,11 +119,10 @@ namespace Ui {
 
             _previusDropDescriptor = desc;
             
-            if (desc.sourceCell.cellType == DragAndDropCell.CellType.DragOnly) { // drag From Chest
+            if (desc.sourceCell.cellType == DragAndDropCell.CellType.DragOnly) { // dump check if draging from Chest.
                 DragFromChest(desc);
                 return;
             }
-
 
             var sourceSprite = desc.sourceCell.GetItem().GetComponent<Image>();
             var destinationSprite = desc.item.GetComponent<Image>();

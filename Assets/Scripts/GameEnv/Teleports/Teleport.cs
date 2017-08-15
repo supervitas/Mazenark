@@ -1,9 +1,11 @@
-﻿using UnityEngine;
+﻿using CharacterControllers;
+using UnityEngine;
 using UnityEngine.Networking;
 
 namespace GameEnv.Teleports {
     public class Teleport : NetworkBehaviour {
         private Teleport _teleportTo;
+        public GameObject TeleportedPlayer;
 
         public void SetTeleportTo(Teleport teleport) {
             _teleportTo = teleport;
@@ -11,9 +13,18 @@ namespace GameEnv.Teleports {
         
         private void OnTriggerEnter(Collider other) {
             if (!isServer) return;
-            
-            if (other.CompareTag("Player")) {
+                         
+            if (other.CompareTag("Player") && other.gameObject != TeleportedPlayer) {
+                _teleportTo.TeleportedPlayer = other.gameObject;
                 TeleportPlayer(other.gameObject);
+            }
+        }
+
+        private void OnTriggerExit(Collider other) {
+            if (!isServer) return;
+            
+            if (other.CompareTag("Player") && other.gameObject == TeleportedPlayer) {
+                TeleportedPlayer = null;
             }
         }
 

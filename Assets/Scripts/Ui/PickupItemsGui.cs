@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using App.Eventhub;
+using Constants;
 using Loot;
+using Ui.Drag;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,12 +24,7 @@ namespace Ui {
 
         private DragAndDropCell.DropDescriptor _previusDropDescriptor;
         private Chest _activeChest;
-        
-        internal class UiItem {
-            public Image itemImage;
-            public Text itemCountText;
-            public string itemName;            
-        }
+           
         
         private void Awake() {
             _uiItemsList.Add(new UiItem {itemImage = FirstItemImage, itemCountText = FirstItemCount});
@@ -71,12 +68,16 @@ namespace Ui {
         
         private UiItem GetItem(Image image) {
             return _uiItemsList.FirstOrDefault(uiItem => uiItem.itemImage == image);
-        }                
+        }
         
-        public void UiItemWasDragedToPlayer(Image draggedImage) {                                                         
-            var sourceUiItem = GetItem(draggedImage);
-            sourceUiItem.itemCountText.enabled = false;
-            _activeChest.ItemPicked(sourceUiItem.itemName);
+        public void UiItemWasDragedToPlayer(UiItem item) {                                                         
+                     
+            item.itemCountText.enabled = false;
+            _activeChest.ItemPicked(item.itemName);
+        }
+
+        public UiItem GetRelatedUiItem(Image image) {
+            return GetItem(image);
         }
        
     }

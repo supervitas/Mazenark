@@ -9,6 +9,7 @@ namespace Loot {
    
         private readonly Dictionary<string, int> _serverChestItems = new Dictionary<string, int>();
         private readonly Dictionary<string, int> _clientChestItems = new Dictionary<string, int>();
+        
 
         private static PickupItemsGui _pickupItemsGui;
 
@@ -19,13 +20,14 @@ namespace Loot {
         [Command]
         private void CmdSendChestItems() {
             foreach (var item in _serverChestItems) {
-                RpcSetPlayerItems(item.Key, item.Value);
+                RpcSetChestItems(item.Key, item.Value);
             }
         }
         
         [Command]
         private void CmdItemPicked(string itemName) {
             _serverChestItems.Remove(itemName);
+            RpcItemPicked(itemName);
             if (_serverChestItems.Count == 0) {
                 RpcDestruct(2f);
                 Destroy(gameObject, 3f);
@@ -36,11 +38,6 @@ namespace Loot {
         [Client]
         public void ItemPicked(string itemName) {
             CmdItemPicked(itemName);
-            _clientChestItems.Remove(itemName);
-            
-            if (_clientChestItems.Count == 0) {
-                _pickupItemsGui.TurnOff();                
-            }
         }   
         
         [Client]
@@ -67,17 +64,26 @@ namespace Loot {
 
         [ClientRpc]
         private void RpcDestruct(float timeOfDestruct) {
+            gameObject.GetComponent<Collider>().enabled = false;
             Invoke(nameof(BeginDisolve), timeOfDestruct / 2);
         }
 
         [ClientRpc]
-        private void RpcSetPlayerItems(string item, int count) {            
+        private void RpcSetChestItems(string item, int count) {
             _clientChestItems.Add(item, count);
+        }
+
+        [ClientRpc]
+        private void RpcItemPicked(string itemName) {
+            _clientChestItems.Remove(itemName);
+            if (_clientChestItems.Count == 0) {
+                _pickupItemsGui.TurnOff();
+            }
         }
            
 
         private void BeginDisolve() {
             GetComponent<Disolve>().BeginDisolve(1.5f);
-        }        
+        }
     }
 }
