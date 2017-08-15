@@ -27,9 +27,9 @@ namespace Ui {
            
         
         private void Awake() {
-            _uiItemsList.Add(new UiItem {itemImage = FirstItemImage, itemCountText = FirstItemCount});
-            _uiItemsList.Add(new UiItem {itemImage = SecondItemImage, itemCountText = SecondItemCount});
-            _uiItemsList.Add(new UiItem {itemImage = ThirdItemImage, itemCountText = ThirdItemCount});            
+            _uiItemsList.Add(new UiItem {itemImage = FirstItemImage, itemCountText = FirstItemCount, itemNumber = 1});
+            _uiItemsList.Add(new UiItem {itemImage = SecondItemImage, itemCountText = SecondItemCount, itemNumber = 2});
+            _uiItemsList.Add(new UiItem {itemImage = ThirdItemImage, itemCountText = ThirdItemCount, itemNumber = 3});            
         }
 
         public void TurnOn(Dictionary<string, int> items, Chest chest) {
@@ -70,15 +70,92 @@ namespace Ui {
             return _uiItemsList.FirstOrDefault(uiItem => uiItem.itemImage == image);
         }
         
-        public void UiItemWasDragedToPlayer(UiItem item) {                                                         
-                     
-            item.itemCountText.enabled = false;
+        private UiItem GetItem(int number) {
+            return (from uiItem in _uiItemsList where uiItem.itemNumber == number select uiItem).FirstOrDefault();
+        }
+        
+        public void UiItemWasDragedToPlayer(UiItem item) {
+            
+//            item.itemCountText.enabled = false;
+//            item.itemImage.enabled = false;            
             _activeChest.ItemPicked(item.itemName);
         }
 
         public UiItem GetRelatedUiItem(Image image) {
             return GetItem(image);
+        }          
+
+        public void OnSheetChange(DragAndDropCell.DropDescriptor desc) {
+            if (desc.destinationCell == _previusDropDescriptor.sourceCell) return;
+            _previusDropDescriptor = desc;
+            
+            var image = desc.sourceCell.GetItem().GetComponent<Image>();
+            image.enabled = false;            
+
+            var parent = desc.sourceCell.GetItem().transform.parent.gameObject;
+            switch (parent.name) {
+                case "FirstItem": {
+                    var item = GetItem(1);
+                    item.itemImage = image;
+                    break;
+                }
+                case "SecondItem": {
+                    var item = GetItem(2);
+                    item.itemImage = image;
+                    break;
+                }
+                case "ThirdItem": {
+                    var item = GetItem(2);
+                    item.itemImage = image;
+                    break;
+                }
+            }
         }
-       
+        
+        public void OnItemPlace(DragAndDropCell.DropDescriptor desc) {
+            if (desc.destinationCell == _previusDropDescriptor.sourceCell) return;
+
+            _previusDropDescriptor = desc;
+                           
+
+            if (desc.sourceCell.GetComponentInParent<DummyControlUnit>() !=
+                desc.destinationCell.GetComponentInParent<DummyControlUnit>()) {       
+                return;
+            }
+            
+            var sourceSprite = desc.sourceCell.GetItem().GetComponent<Image>();
+            var destinationSprite = desc.item.GetComponent<Image>();
+            
+            var sourceUiItem = GetItem(sourceSprite);
+            var destinationUiItem = GetItem(destinationSprite);
+
+            var sourceItemCount = sourceUiItem.itemCountText.text;
+            var destinationItemCount = destinationUiItem.itemCountText.text;
+
+            var sourceItemName = sourceUiItem.itemName;
+            var destinationItemName = destinationUiItem.itemName;
+                 
+            sourceUiItem.itemName = destinationItemName;            
+            destinationUiItem.itemName = sourceItemName;                                                      
+            
+            sourceUiItem.itemCountText.text = destinationItemCount;
+            destinationUiItem.itemCountText.text = sourceItemCount;
+
+            sourceUiItem.itemImage = destinationSprite;
+            destinationUiItem.itemImage = sourceSprite;
+
+
+            if (sourceUiItem.itemCountText.enabled == false) {
+                destinationUiItem.itemCountText.enabled = false;
+                sourceUiItem.itemCountText.enabled = true;
+            } else {
+                if (destinationUiItem.itemCountText.enabled == false) {
+                    sourceUiItem.itemCountText.enabled = false;
+                    destinationUiItem.itemCountText.enabled = true;
+                }
+            }
+            
+        }
+
     }
 }

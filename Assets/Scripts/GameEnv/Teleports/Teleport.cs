@@ -1,5 +1,4 @@
-﻿using CharacterControllers;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Networking;
 
 namespace GameEnv.Teleports {

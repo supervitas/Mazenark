@@ -18,7 +18,7 @@ namespace Controls {
     public class PlayerControl : NetworkBehaviour {
 
         [SyncVar(hook = nameof(OnSetName))] 
-        private string _playerName;
+        public string _playerName;
         
 
         private readonly Dictionary<string, int> _playerItems = new Dictionary<string, int>();        
@@ -105,7 +105,7 @@ namespace Controls {
                     m_isGrounded = false;
                 }
             }
-        }
+        }                
         
         public override void OnStartClient() {
             var textMesh = GetComponentInChildren<TextMesh>();

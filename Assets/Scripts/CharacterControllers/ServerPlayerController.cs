@@ -36,6 +36,7 @@ namespace CharacterControllers {
             FindObjectOfType<GameManager>().PlayerDied(gameObject);
             NetworkEventHub.Instance.RpcPublishEvent("PlayerDied", gameObject.name);                        
         }
+                
         
         private void OnTriggerEnter(Collider other) { // take loot
             if (!isServer) return;            

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using CharacterControllers;
+using Controls;
 using GameEnv.GameEffects;
 using Ui;
 using UnityEngine;
@@ -9,8 +11,9 @@ namespace Loot {
    
         private readonly Dictionary<string, int> _serverChestItems = new Dictionary<string, int>();
         private readonly Dictionary<string, int> _clientChestItems = new Dictionary<string, int>();
-        
 
+        private string _activePlayer;
+        
         private static PickupItemsGui _pickupItemsGui;
 
         public void SetChestItems(string itemName, int count) {            
@@ -25,7 +28,9 @@ namespace Loot {
         }
         
         [Command]
-        private void CmdItemPicked(string itemName) {
+        private void CmdItemPicked(string itemName, string playerName) {
+            var playerController = GameObject.Find(playerName).GetComponent<ServerPlayerController>();
+            playerController.SetPlayerItems(itemName, _serverChestItems[itemName]);
             _serverChestItems.Remove(itemName);
             RpcItemPicked(itemName);
             if (_serverChestItems.Count == 0) {
@@ -37,7 +42,7 @@ namespace Loot {
         
         [Client]
         public void ItemPicked(string itemName) {
-            CmdItemPicked(itemName);
+            CmdItemPicked(itemName, _activePlayer);
         }   
         
         [Client]
@@ -51,6 +56,7 @@ namespace Loot {
             if (_clientChestItems.Count == 0) return;
             
             if (other.CompareTag("Player")) {
+                _activePlayer = other.GetComponent<PlayerControl>()._playerName;
                 _pickupItemsGui.TurnOn(_clientChestItems, this);                
             }            
         }
@@ -58,7 +64,7 @@ namespace Loot {
         [Client]
         private void OnTriggerExit(Collider other) {
             if (other.CompareTag("Player")) {
-                _pickupItemsGui.TurnOff();
+                _pickupItemsGui.TurnOff();                
             }
         }
 
