@@ -15,15 +15,12 @@ namespace GameEnv.Teleports {
             if (other.CompareTag("Player")) {
                 TeleportPlayer(other.gameObject);
             }
-        }                
+        }
 
         private void TeleportPlayer(GameObject player) {           
             if (!isServer) return;
             
-            var pos = _teleportTo.transform.position;
-            pos.x += 2f;
-            pos.z += 2f;
-            pos.y = 0f;
+            var pos = _teleportTo.transform.position;            
             player.transform.position = pos;
         }
     }

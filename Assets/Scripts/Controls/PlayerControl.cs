@@ -70,8 +70,7 @@ namespace Controls {
         private GameGui _gameGui;
         
         private bool _isAlive = true;
-        
-        private RaycastHit _raycastHit;
+                
 
         private void OnCollisionEnter(Collision collision) {
             ContactPoint[] contactPoints = collision.contacts;
@@ -232,26 +231,7 @@ namespace Controls {
             float h = Input.GetAxis("Horizontal");	// a↔d
 
 			if (v < -0.5f)
-				v = -0.5f;
-
-            var e = Input.GetKey(KeyCode.Space);
-
-            if (e) {
-//                m_rigidBody.AddForce(transform.forward * 2000, ForceMode.Impulse);
-                var pos = transform.position;
-                var direction = _camera.transform.forward;
-                pos.y += 1.5f;            
-                direction.y += 2f;                                           
-            
-                var activeItem = Instantiate(igla, pos, Quaternion.identity);
-                var weapon = activeItem.GetComponent<Weapon>();
-
-                Physics.IgnoreCollision(activeItem.GetComponent<Collider>(), GetComponent<Collider>());
-                activeItem.transform.LookAt(direction);
-                weapon.Fire();
-//                NetworkServer.Spawn(activeItem);
-                Destroy(weapon, 10.0f);            
-            }
+				v = -0.5f;   
 
             if (v < 0) {                    
                 v *= m_backwardRunScale;                
@@ -260,7 +240,6 @@ namespace Controls {
             m_currentV = Mathf.Lerp(m_currentV, v, Time.deltaTime * m_interpolation);
             m_currentH = Mathf.Lerp(m_currentH, h, Time.deltaTime * m_interpolation);
 
-//			StopMovingIfAngleTooSteep(ref m_currentV, 28);
 
             transform.position += transform.forward * m_currentV * m_moveSpeed * Time.deltaTime;
             transform.Rotate(0, m_currentH * m_turnSpeed * Time.deltaTime, 0);
@@ -270,26 +249,6 @@ namespace Controls {
 //            JumpingAndLanding();
         }
 
-		private void StopMovingIfAngleTooSteep(ref float verticalAxisWS, double maxAngle = 45) {			
-			if (Physics.Raycast(transform.position, transform.forward, out _raycastHit, 1.0f)) {
-				if (Vector3.Dot(Vector3.up, _raycastHit.normal) < System.Math.Sin(System.Math.PI * maxAngle / 180)) {
-					verticalAxisWS = 0;
-				}
-			}
-		}
-
-		// Just because root motion modifies pitch-roll-yaw and modified roll looks weird.
-		//void OnAnimatorMove() {
-		//	var rootBone = transform.Find("Ass_root").gameObject;
-
-		//	if (System.Math.Abs(m_animator.GetFloat("MoveSpeed")) <= 0.01) {
-		//		//m_animator.bodyRotation.SetAxisAngle(new Vector3(0, 0, 1), -90);
-		//		rootBone.transform.rotation.SetAxisAngle(new Vector3(0, 0, 1), -90);
-		//		//m_animator.applyRootMotion = false;
-		//	} else {
-		//		//m_animator.applyRootMotion = true;
-		//	}
-		//}
         
         private void JumpingAndLanding() {
             bool jumpCooldownOver = (Time.time - m_jumpTimeStamp) >= m_minJumpInterval;

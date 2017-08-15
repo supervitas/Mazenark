@@ -99,11 +99,11 @@ namespace Loot {
 
 		private void SpawnChest(Coordinate coordinate, Quaternion rotation) {			
 			var chest = Instantiate(_chest, Utils.GetDefaultPositionVector(coordinate, 1.33f), rotation);
-			chest.GetComponent<Chest>().SetChestItems("Fireball", 5);
+			chest.GetComponent<Chest>().SetChestItems("Fireball", 5); //random here
 			NetworkServer.Spawn(chest);
 		}
 
-		private void SpawnChests() {
+		private void SpawnChests() {			
 			var width = _maze.Width;
 			var height = _maze.Height;
 			

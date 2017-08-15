@@ -92,10 +92,16 @@ namespace Ui {
         }
 
         public void OnItemPlace(DragAndDropCell.DropDescriptor desc) {
-            if (desc.destinationCell == _previusDropDescriptor.sourceCell) return;                        
-            
+            if (desc.destinationCell == _previusDropDescriptor.sourceCell) return;
+
             _previusDropDescriptor = desc;
-                
+            
+            if (desc.sourceCell.cellType == DragAndDropCell.CellType.DragOnly) { // drag From Chest
+                Debug.Log(123);
+                return;
+            }
+
+
             var sourceSprite = desc.sourceCell.GetItem().GetComponent<Image>();
             var destinationSprite = desc.item.GetComponent<Image>();
             

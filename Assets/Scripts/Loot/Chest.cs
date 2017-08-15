@@ -1,42 +1,61 @@
 ﻿using System.Collections.Generic;
-using CharacterControllers;
 using GameEnv.GameEffects;
+using Ui;
 using UnityEngine;
 using UnityEngine.Networking;
 
 namespace Loot {
-    public class Chest : NetworkBehaviour {
+    public class Chest : NetworkBehaviour {   
+   
+        private readonly Dictionary<string, int> _serverChestItems = new Dictionary<string, int>();
+        private readonly Dictionary<string, int> _clientChestItems = new Dictionary<string, int>();
+  
 
-        private readonly Dictionary<string, int> _chestItems = new Dictionary<string, int>();
+        public void SetChestItems(string itemName, int count) {            
+            _serverChestItems.Add(itemName, count);
+        }
+
+        [Command]
+        private void CmdSendChestItems() {
+            foreach (var item in _serverChestItems) {
+                RpcSetPlayerItems(item.Key, item.Value);
+            }
+        }
         
-        private void OnTriggerEnter(Collider other) {
-            if (!isServer || _chestItems.Count == 0) return;
+        [Client]
+        private void Start() {
+            CmdSendChestItems();
+        }
+
+
+        [Client]
+        private void OnTriggerEnter(Collider other) {                       
+            if (_clientChestItems.Count == 0) return;
             
             if (other.CompareTag("Player")) {
-                var controller = other.GetComponent<ServerPlayerController>();
+                FindObjectOfType<PickupItemsGui>().TurnOn(_clientChestItems);
                 
-                foreach (var item in _chestItems) {                    
-                    controller.SetPlayerItems(item.Key, item.Value);
-                }
-
-//                RpcChestOpened();
 //                Destroy(gameObject, 3f);
             }
             
         }
-
-        public void SetChestItems(string itemName, int count) {
-            _chestItems.Add(itemName, count);
+        
+        [Client]
+        private void OnTriggerExit(Collider other) {
+            if (other.CompareTag("Player")) {
+                FindObjectOfType<PickupItemsGui>().TurnOff();
+            }
         }
 
         [ClientRpc]
-        private void RpcChestOpened() {
-            GetComponent<Collider>().enabled = false;
-            Invoke(nameof(BeginDisolve), 1.0f);
+        private void RpcSetPlayerItems(string item, int count) {            
+            _clientChestItems.Add(item, count);
         }
+           
 
         private void BeginDisolve() {
             GetComponent<Disolve>().BeginDisolve(1.0f);
         }
+        
     }
 }
