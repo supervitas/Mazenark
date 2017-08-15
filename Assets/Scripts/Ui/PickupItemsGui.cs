@@ -68,48 +68,16 @@ namespace Ui {
         
         private UiItem GetItem(Image image) {
             return _uiItemsList.FirstOrDefault(uiItem => uiItem.itemImage == image);
-        }
+        }       
         
-        private UiItem GetItem(int number) {
-            return (from uiItem in _uiItemsList where uiItem.itemNumber == number select uiItem).FirstOrDefault();
-        }
-        
-        public void UiItemWasDragedToPlayer(UiItem item) {
-            
-//            item.itemCountText.enabled = false;
-//            item.itemImage.enabled = false;            
+        public void UiItemWasDragedToPlayer(UiItem item, Image sprite) {
+            item.itemImage = sprite;
+            item.itemCountText.enabled = false;       
             _activeChest.ItemPicked(item.itemName);
         }
 
         public UiItem GetRelatedUiItem(Image image) {
             return GetItem(image);
-        }          
-
-        public void OnSheetChange(DragAndDropCell.DropDescriptor desc) {
-            if (desc.destinationCell == _previusDropDescriptor.sourceCell) return;
-            _previusDropDescriptor = desc;
-            
-            var image = desc.sourceCell.GetItem().GetComponent<Image>();
-            image.enabled = false;            
-
-            var parent = desc.sourceCell.GetItem().transform.parent.gameObject;
-            switch (parent.name) {
-                case "FirstItem": {
-                    var item = GetItem(1);
-                    item.itemImage = image;
-                    break;
-                }
-                case "SecondItem": {
-                    var item = GetItem(2);
-                    item.itemImage = image;
-                    break;
-                }
-                case "ThirdItem": {
-                    var item = GetItem(2);
-                    item.itemImage = image;
-                    break;
-                }
-            }
         }
         
         public void OnItemPlace(DragAndDropCell.DropDescriptor desc) {

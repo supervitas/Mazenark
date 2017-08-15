@@ -33,7 +33,7 @@ namespace Ui {
         
         
         public void AddItem(string itemName, string count) {
-            var item = GetEmptyUiItem(itemName);
+            var item = GetEmptyUiItem();
             item.itemName = itemName;            
             CreateItem(itemName, count,item);
         }
@@ -71,12 +71,7 @@ namespace Ui {
         }
                 
 
-        private UiItem GetEmptyUiItem(string itemName) {
-//            foreach (var item in _uiItemsList) {
-//                if (item.itemName == itemName) {
-//                    return item;
-//                }
-//            }
+        private UiItem GetEmptyUiItem() {
             return _uiItemsList.FirstOrDefault(item => !item.itemCountText.enabled);
         }
 
@@ -89,18 +84,6 @@ namespace Ui {
         }
         
         private UiItem GetItem(Image image) {
-//            foreach (var item in _uiItemsList) {
-//                if (item.itemImage != null) {
-//                    if (item.itemImage == image) {
-//                        return item;
-//                    }
-//                }
-//                if (item.itemImage == null) {
-//                    Debug.Log("NULL");
-//                    return item;
-//                }
-//            }
-//            return null;
             return _uiItemsList.FirstOrDefault(uiItem => uiItem.itemImage == image);
         }
 
@@ -108,40 +91,37 @@ namespace Ui {
             if (desc.destinationCell == _previusDropDescriptor.sourceCell) return;
             _previusDropDescriptor = desc;
             
-            var image = desc.destinationCell.GetItem().GetComponent<Image>();
-            image.enabled = false;
-            var pickedItem = _pickupItemsGui.GetRelatedUiItem(image);
-
+            var sourceSprite = desc.sourceCell.GetItem().GetComponent<Image>();
+            var destinationSprite = desc.item.GetComponent<Image>();
+                        
+            destinationSprite.enabled = false;
+            var pickedItem = _pickupItemsGui.GetRelatedUiItem(destinationSprite);
+            
             var parent = desc.destinationCell.GetItem().transform.parent.gameObject;
+
+            UiItem item = null;
+            
             switch (parent.name) {
                 case "FirstItemHolder": {
-                    var item = GetItem(1);
-                    item.itemImage = image;
+                    item = GetItem(1);                                         
                     break;
                 }
                 case "SecondItemHolder": {
-                    var item = GetItem(2);
-                    item.itemImage = image;
+                    item = GetItem(2);                    
                     break;
                 }
                 case "ThirdItemHolder": {
-                    var item = GetItem(2);
-                    item.itemImage = image;
+                    item = GetItem(3);                    
                     break;
                 }
-            }            
-            _pickupItemsGui.UiItemWasDragedToPlayer(pickedItem);
-        }
-
-        private void DragFromChest(DragAndDropCell.DropDescriptor desc) {
+            }
             
-            var image = desc.destinationCell.GetItem().GetComponent<Image>();            
-//            image.enabled = false;
+            if (item != null) {
+                item.itemImage = destinationSprite;
+                item.itemImage.transform.Rotate(0, 0, 90);    
+            }
             
-            var pickedItem = _pickupItemsGui.GetRelatedUiItem(image);            
-//            var whereItDroped = GetItem(image);
-            
-            _pickupItemsGui.UiItemWasDragedToPlayer(pickedItem);
+            _pickupItemsGui.UiItemWasDragedToPlayer(pickedItem, sourceSprite);
         }
 
         public void OnItemPlace(DragAndDropCell.DropDescriptor desc) {

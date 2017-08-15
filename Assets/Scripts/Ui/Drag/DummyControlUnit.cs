@@ -13,7 +13,6 @@ namespace Ui.Drag {
 
             if (sourceSheet != destinationSheet) {
                 destinationSheet.gameObject.SendMessageUpwards("OnSheetChange", desc, SendMessageOptions.DontRequireReceiver);
-//                sourceSheet.gameObject.SendMessageUpwards("OnSheetChange", desc, SendMessageOptions.DontRequireReceiver);
             }
         }
     }
