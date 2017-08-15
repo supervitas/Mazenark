@@ -2,6 +2,7 @@
 using System.Linq;
 using App.Eventhub;
 using Loot;
+using Ui.Drag;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,8 +18,9 @@ namespace Ui {
         private readonly List<UiItem> _uiItemsList = new List<UiItem>();
 
         private Image _activeItem;
+        private PickupItemsGui _pickupItemsGui;
 
-        private DragAndDropCell.DropDescriptor _previusDropDescriptor;
+        private DragAndDropCell.DropDescriptor _previusDropDescriptor;                
         
         internal class UiItem {
             public Image itemImage;
@@ -34,8 +36,11 @@ namespace Ui {
         private void Awake() {
             _uiItemsList.Add(new UiItem {itemImage = FirstItemImage, itemCountText = FirstItemCount, itemNumber = 1});
             _uiItemsList.Add(new UiItem {itemImage = SecondItemImage, itemCountText = SecondItemCount, itemNumber = 2});
-            _uiItemsList.Add(new UiItem {itemImage = ThirdItemImage, itemCountText = ThirdItemCount, itemNumber = 3});            
+            _uiItemsList.Add(new UiItem {itemImage = ThirdItemImage, itemCountText = ThirdItemCount, itemNumber = 3});
+            
+            _pickupItemsGui = FindObjectOfType<PickupItemsGui>();            
         }
+        
         
         public void AddItem(string itemName, string count) {
             var item = GetEmptyUiItem();
@@ -91,11 +96,34 @@ namespace Ui {
             return _uiItemsList.FirstOrDefault(uiItem => uiItem.itemImage == image);
         }
 
-        public void OnItemPlace(DragAndDropCell.DropDescriptor desc) {
-            if (desc.destinationCell == _previusDropDescriptor.sourceCell) return;                        
+        private void DragFromChest(DragAndDropCell.DropDescriptor desc) {
+            var image = desc.destinationCell.GetItem().GetComponent<Image>();
+            image.enabled = false;
+            var pickedItem = _pickupItemsGui.GetRelatedUiItem(image);
+            var uiItem = GetItem(pickedItem.itemName);
+
+            if (uiItem != null) {
+                var prevCountOfItems = int.Parse(uiItem.itemCountText.text);
+                var pickedItemCount = int.Parse(pickedItem.itemCountText.text);
+                uiItem.itemCountText.text = (prevCountOfItems + pickedItemCount).ToString();
+            } else {
+                var newUiItem = GetEmptyUiItem();
+                CreateItem(pickedItem.itemName, pickedItem.itemCountText.text, newUiItem);
+            }
+            _pickupItemsGui.UiItemWasDragedToPlayer(pickedItem);
             
+        }
+
+        public void OnItemPlace(DragAndDropCell.DropDescriptor desc) {
+            if (desc.destinationCell == _previusDropDescriptor.sourceCell) return;
+
             _previusDropDescriptor = desc;
-                
+            
+            if (desc.sourceCell.cellType == DragAndDropCell.CellType.DragOnly) { // dump check if draging from Chest.
+                DragFromChest(desc);
+                return;
+            }
+
             var sourceSprite = desc.sourceCell.GetItem().GetComponent<Image>();
             var destinationSprite = desc.item.GetComponent<Image>();
             

@@ -8,8 +8,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 namespace CharacterControllers {
-    public class ServerPlayerController : ServerCharacterController {
-                        
+    public class ServerPlayerController : ServerCharacterController {        
+        
         private PlayerControl _characterControl;
         private readonly Dictionary<string, int> _serverPlayerItems = new Dictionary<string, int>();        
         private GameObject _activeItem;        
@@ -67,7 +67,7 @@ namespace CharacterControllers {
         [Command]
         public void CmdPlayerReady() {            
             SetPlayerItems("Fireball", 5);
-            SetPlayerItems("Tornado", 3);
+//            SetPlayerItems("Tornado", 3);
             FindObjectOfType<GameManager>().AddPlayerTransform(transform);
         }
 

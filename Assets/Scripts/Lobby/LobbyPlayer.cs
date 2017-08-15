@@ -336,8 +336,7 @@ namespace Lobby {
             };
             
             Action<string> resultCb = data => {
-                Debug.Log(data);                
-
+                Debug.Log(data);
             };
 
             NetworkHttpManager.Instance.GetUserData(NetworkConstants.UserByToken, new Token {token = token}, resultCb, errorCb);

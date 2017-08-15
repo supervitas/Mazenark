@@ -24,7 +24,7 @@ namespace Lobby {
                 warningDirectPlayServer.SetActive(enabled);
         }
 
-        void Update() {
+        private void Update() {
             //this dirty the layout to force it to recompute evryframe (a sync problem between client/server
             //sometime to child being assigned before layout was enabled/init, leading to broken layouting)
             
@@ -55,8 +55,7 @@ namespace Lobby {
 
         public void PlayerListModified(){
             int i = 0;
-            foreach (LobbyPlayer p in _players)
-            {
+            foreach (LobbyPlayer p in _players) {
                 p.OnPlayerListChanged(i);
                 ++i;
             }
