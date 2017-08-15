@@ -17,8 +17,9 @@ namespace Ui {
         private readonly List<UiItem> _uiItemsList = new List<UiItem>();
 
         private Image _activeItem;
+        private PickupItemsGui _pickupItemsGui;
 
-        private DragAndDropCell.DropDescriptor _previusDropDescriptor;
+        private DragAndDropCell.DropDescriptor _previusDropDescriptor;                
         
         internal class UiItem {
             public Image itemImage;
@@ -34,8 +35,11 @@ namespace Ui {
         private void Awake() {
             _uiItemsList.Add(new UiItem {itemImage = FirstItemImage, itemCountText = FirstItemCount, itemNumber = 1});
             _uiItemsList.Add(new UiItem {itemImage = SecondItemImage, itemCountText = SecondItemCount, itemNumber = 2});
-            _uiItemsList.Add(new UiItem {itemImage = ThirdItemImage, itemCountText = ThirdItemCount, itemNumber = 3});            
+            _uiItemsList.Add(new UiItem {itemImage = ThirdItemImage, itemCountText = ThirdItemCount, itemNumber = 3});
+            
+            _pickupItemsGui = FindObjectOfType<PickupItemsGui>();            
         }
+        
         
         public void AddItem(string itemName, string count) {
             var item = GetEmptyUiItem();
@@ -91,13 +95,19 @@ namespace Ui {
             return _uiItemsList.FirstOrDefault(uiItem => uiItem.itemImage == image);
         }
 
+        private void DragFromChest(DragAndDropCell.DropDescriptor desc) {
+            var image = desc.destinationCell.GetItem().GetComponent<Image>();
+            
+            _pickupItemsGui.UiItemWasDragedToPlayer(image);  
+        }
+
         public void OnItemPlace(DragAndDropCell.DropDescriptor desc) {
             if (desc.destinationCell == _previusDropDescriptor.sourceCell) return;
 
             _previusDropDescriptor = desc;
             
             if (desc.sourceCell.cellType == DragAndDropCell.CellType.DragOnly) { // drag From Chest
-                Debug.Log(123);
+                DragFromChest(desc);
                 return;
             }
 

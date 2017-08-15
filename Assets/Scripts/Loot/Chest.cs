@@ -9,12 +9,13 @@ namespace Loot {
    
         private readonly Dictionary<string, int> _serverChestItems = new Dictionary<string, int>();
         private readonly Dictionary<string, int> _clientChestItems = new Dictionary<string, int>();
-  
+
+        private static PickupItemsGui _pickupItemsGui;
 
         public void SetChestItems(string itemName, int count) {            
             _serverChestItems.Add(itemName, count);
-        }
-
+        }            
+        
         [Command]
         private void CmdSendChestItems() {
             foreach (var item in _serverChestItems) {
@@ -22,29 +23,51 @@ namespace Loot {
             }
         }
         
+        [Command]
+        private void CmdItemPicked(string itemName) {
+            _serverChestItems.Remove(itemName);
+            if (_serverChestItems.Count == 0) {
+                RpcDestruct(2f);
+                Destroy(gameObject, 3f);
+            }
+        }
+
+        
+        [Client]
+        public void ItemPicked(string itemName) {
+            CmdItemPicked(itemName);
+            _clientChestItems.Remove(itemName);
+            
+            if (_clientChestItems.Count == 0) {
+                _pickupItemsGui.TurnOff();                
+            }
+        }   
+        
         [Client]
         private void Start() {
             CmdSendChestItems();
+            _pickupItemsGui = FindObjectOfType<PickupItemsGui>();
         }
-
 
         [Client]
         private void OnTriggerEnter(Collider other) {                       
             if (_clientChestItems.Count == 0) return;
             
             if (other.CompareTag("Player")) {
-                FindObjectOfType<PickupItemsGui>().TurnOn(_clientChestItems);
-                
-//                Destroy(gameObject, 3f);
-            }
-            
+                _pickupItemsGui.TurnOn(_clientChestItems, this);                
+            }            
         }
         
         [Client]
         private void OnTriggerExit(Collider other) {
             if (other.CompareTag("Player")) {
-                FindObjectOfType<PickupItemsGui>().TurnOff();
+                _pickupItemsGui.TurnOff();
             }
+        }
+
+        [ClientRpc]
+        private void RpcDestruct(float timeOfDestruct) {
+            Invoke(nameof(BeginDisolve), timeOfDestruct / 2);
         }
 
         [ClientRpc]
@@ -54,8 +77,7 @@ namespace Loot {
            
 
         private void BeginDisolve() {
-            GetComponent<Disolve>().BeginDisolve(1.0f);
-        }
-        
+            GetComponent<Disolve>().BeginDisolve(1.5f);
+        }        
     }
 }

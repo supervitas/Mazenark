@@ -21,6 +21,7 @@ namespace Ui {
         private Image _activeItem;
 
         private DragAndDropCell.DropDescriptor _previusDropDescriptor;
+        private Chest _activeChest;
         
         internal class UiItem {
             public Image itemImage;
@@ -34,12 +35,8 @@ namespace Ui {
             _uiItemsList.Add(new UiItem {itemImage = ThirdItemImage, itemCountText = ThirdItemCount});            
         }
 
-        public void TurnOn(Dictionary<string, int> items) {
-            foreach (var uiItem in _uiItemsList) {
-                uiItem.itemImage.enabled = false;
-                uiItem.itemCountText.enabled = false;                               
-            }          
-            
+        public void TurnOn(Dictionary<string, int> items, Chest chest) {
+            _activeChest = chest;
             foreach (var item in items) {
                 AddItem(item.Key, item.Value.ToString());
             }
@@ -49,7 +46,11 @@ namespace Ui {
 
         public void TurnOff() {
             CanvasObject.enabled = false;
-        }       
+            foreach (var uiItem in _uiItemsList) {
+                uiItem.itemImage.enabled = false;
+                uiItem.itemCountText.enabled = false;
+            }
+        }
         
         public void AddItem(string itemName, string count) {
             var item = GetEmptyUiItem();
@@ -66,6 +67,16 @@ namespace Ui {
 
         private UiItem GetEmptyUiItem() {
             return _uiItemsList.FirstOrDefault(item => !item.itemImage.enabled);
+        }
+        
+        private UiItem GetItem(Image image) {
+            return _uiItemsList.FirstOrDefault(uiItem => uiItem.itemImage == image);
+        }                
+        
+        public void UiItemWasDragedToPlayer(Image draggedImage) {                                                         
+            var sourceUiItem = GetItem(draggedImage);
+            sourceUiItem.itemCountText.enabled = false;
+            _activeChest.ItemPicked(sourceUiItem.itemName);
         }
        
     }

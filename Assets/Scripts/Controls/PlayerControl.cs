@@ -42,10 +42,7 @@ namespace Controls {
         private float _castTime;
         private float _timeCasted;
         private float _timeCooled;
-        private const float _coolDown = 0.2f;
-
-        private readonly Vector3 _zeroVector = Vector3.zero;        
-        
+        private const float _coolDown = 0.2f;                
         
         private SpellCast _uiSpellCast;
         private GameObject _spellEffect;
@@ -58,8 +55,7 @@ namespace Controls {
         private readonly float m_backwardsWalkScale = 0.16f;
         private readonly float m_backwardRunScale = 0.66f;
 
-        private bool m_wasGrounded;
-        private Vector3 m_currentDirection = Vector3.zero;
+        private bool m_wasGrounded;        
 
         private float m_jumpTimeStamp = 0;
         private float m_minJumpInterval = 0.25f;
