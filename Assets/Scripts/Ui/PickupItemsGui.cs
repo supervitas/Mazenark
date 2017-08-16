@@ -84,16 +84,15 @@ namespace Ui {
             if (desc.destinationCell == _previusDropDescriptor.sourceCell) return;
 
             _previusDropDescriptor = desc;
-                           
 
             if (desc.sourceCell.GetComponentInParent<DummyControlUnit>() !=
                 desc.destinationCell.GetComponentInParent<DummyControlUnit>()) {       
                 return;
             }
-            
+
             var sourceSprite = desc.sourceCell.GetItem().GetComponent<Image>();
             var destinationSprite = desc.item.GetComponent<Image>();
-            
+
             var sourceUiItem = GetItem(sourceSprite);
             var destinationUiItem = GetItem(destinationSprite);
 
@@ -102,10 +101,10 @@ namespace Ui {
 
             var sourceItemName = sourceUiItem.itemName;
             var destinationItemName = destinationUiItem.itemName;
-                 
+
             sourceUiItem.itemName = destinationItemName;            
             destinationUiItem.itemName = sourceItemName;                                                      
-            
+
             sourceUiItem.itemCountText.text = destinationItemCount;
             destinationUiItem.itemCountText.text = sourceItemCount;
 
@@ -122,8 +121,6 @@ namespace Ui {
                     destinationUiItem.itemCountText.enabled = true;
                 }
             }
-            
         }
-
     }
 }

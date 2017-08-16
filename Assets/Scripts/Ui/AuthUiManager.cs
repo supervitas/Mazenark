@@ -15,6 +15,29 @@ namespace Ui {
         private Text _playerName;
         private Text _playerScore;
 
+        private string GetUserRang(int score) {
+            if (score < 100) {
+                return "Beginner";
+            }
+            if (score < 150) {
+                return "Bronze Explorer";
+            }
+            if (score < 300) {
+                return "Silver Explorer";
+            }
+            if (score < 500) {
+                return "Golden Explorer";               
+            }
+            if (score < 750) {
+                return "Master";
+            }
+            if (score < 1000) {
+                return "Grandmaster";
+            }
+
+            return "Beginner";
+        }
+
         private void Start() {
             if (Instance == null) {
                 Instance = this;
@@ -38,7 +61,7 @@ namespace Ui {
         private void SetPlayerData() {
             var user = AppLocalStorage.Instance.GetUserData();
             _playerName.text = user.username;
-            _playerScore.text = string.Format("Score: {0}", user.score);
+            _playerScore.text = $"Rang: {GetUserRang(user.score)}";
         }
 
     }
