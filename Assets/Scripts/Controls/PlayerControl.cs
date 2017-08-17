@@ -18,7 +18,7 @@ namespace Controls {
     public class PlayerControl : NetworkBehaviour {
 
         [SyncVar(hook = nameof(OnSetName))] 
-        public string _playerName;
+        private string _playerName;
         
 
         private readonly Dictionary<string, int> _playerItems = new Dictionary<string, int>();        
@@ -29,8 +29,7 @@ namespace Controls {
         [SerializeField] private Animator m_animator;
         [SerializeField] private Rigidbody m_rigidBody;
         [SerializeField] private GameObject spellCastEffect;
-
-        public GameObject igla;
+        
         public GameObject PlayerCamera;
         private Camera _camera;       
 
@@ -64,9 +63,8 @@ namespace Controls {
         private readonly List<Collider> m_collisions = new List<Collider>();              
 
         private GameGui _gameGui;
-        
-        private bool _isAlive = true;
-                
+//        private PickupItemsGui _pickupItemsGui;
+        private bool _isAlive = true;        
 
         private void OnCollisionEnter(Collision collision) {
             ContactPoint[] contactPoints = collision.contacts;
@@ -120,6 +118,7 @@ namespace Controls {
             AppManager.Instance.TurnOffAndSetupMainCamera(); 
             
             _gameGui = FindObjectOfType<GameGui>();
+//            _pickupItemsGui = FindObjectOfType<PickupItemsGui>();
             _spellText = GameObject.FindGameObjectWithTag("UISpellName").GetComponent<Text>();
 
             var cam = Instantiate(PlayerCamera);
@@ -283,12 +282,16 @@ namespace Controls {
             
             RpcDie();
         }
+
         
         [ClientRpc]
         private void RpcDie() {
             _isAlive = false;
             GetComponent<Disolve>().BeginDisolve();                                    
         }
+
+//        [TargetRpc]
+//        public void TurnOn
         
         [TargetRpc]
         public void TargetSetPlayerItems(NetworkConnection target, string itemName, int count) {

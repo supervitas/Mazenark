@@ -1,93 +1,105 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using CharacterControllers;
-using Controls;
 using GameEnv.GameEffects;
 using Ui;
 using UnityEngine;
 using UnityEngine.Networking;
 
 namespace Loot {
-    public class Chest : NetworkBehaviour {   
-   
-        private readonly Dictionary<string, int> _serverChestItems = new Dictionary<string, int>();
-        private readonly Dictionary<string, int> _clientChestItems = new Dictionary<string, int>();
+    public class Chest : NetworkBehaviour {
+        private struct ChestItems {
+            public string ItemName;
+            public int Count;
+        }
+        private class SyncListChestItems : SyncListStruct<ChestItems> {}
+        private readonly SyncListChestItems _chestItems = new SyncListChestItems();        
+      
 
-        private string _activePlayer;
+        private ServerPlayerController _activePlayer;
         
         private static PickupItemsGui _pickupItemsGui;
 
-        public void SetChestItems(string itemName, int count) {            
-            _serverChestItems.Add(itemName, count);
-        }            
+        public void SetChestItems(string itemName, int count) {         
+            _chestItems.Add(new ChestItems {
+                Count = count,
+                ItemName = itemName
+            });            
+        }                    
         
         [Command]
-        private void CmdSendChestItems() {
-            foreach (var item in _serverChestItems) {
-                RpcSetChestItems(item.Key, item.Value);
-            }
+        private void CmdItemPlaced(string itemName, int itemCount) {
         }
         
         [Command]
-        private void CmdItemPicked(string itemName, string playerName) {
-            var playerController = GameObject.Find(playerName).GetComponent<ServerPlayerController>();
-            playerController.SetPlayerItems(itemName, _serverChestItems[itemName]);
-            _serverChestItems.Remove(itemName);
-            RpcItemPicked(itemName);
-            if (_serverChestItems.Count == 0) {
+        private void CmdItemPicked(string itemName) {
+            var item = _chestItems.FirstOrDefault(it => it.ItemName == itemName);
+            _activePlayer.SetPlayerItems(item.ItemName, item.Count);
+            _chestItems.Remove(item);
+            
+            if (_chestItems.Count == 0) {
+                TargetTurnOffGui(_activePlayer.connectionToClient);
                 RpcDestruct(2f);
                 Destroy(gameObject, 3f);
-            }
-        }
-
-        
-        [Client]
-        public void ItemPicked(string itemName) {
-            CmdItemPicked(itemName, _activePlayer);
-        }   
-        
-        [Client]
-        private void Start() {
-            CmdSendChestItems();
-            _pickupItemsGui = FindObjectOfType<PickupItemsGui>();
-        }
-
-        [Client]
-        private void OnTriggerEnter(Collider other) {                       
-            if (_clientChestItems.Count == 0) return;
-            
-            if (other.CompareTag("Player")) {
-                _activePlayer = other.GetComponent<PlayerControl>()._playerName;
-                _pickupItemsGui.TurnOn(_clientChestItems, this);                
             }            
         }
+
         
-        [Client]
-        private void OnTriggerExit(Collider other) {
+        public void ItemPlaced(string itemName, int itemCount) {
+            
+        }
+                
+        public void ItemPicked(string itemName) {
+            CmdItemPicked(itemName);
+        }
+
+        private void Start() {
+            if (_pickupItemsGui == null) {
+                _pickupItemsGui = FindObjectOfType<PickupItemsGui>();
+            }            
+        }
+
+
+        private void OnTriggerEnter(Collider other) {            
+            if (!isServer || _chestItems.Count == 0) return;            
+           
             if (other.CompareTag("Player")) {
-                _pickupItemsGui.TurnOff();                
+                gameObject.GetComponent<NetworkIdentity>().AssignClientAuthority(other.gameObject.GetComponent<NetworkIdentity>().connectionToClient);
+                
+                _activePlayer = other.gameObject.GetComponent<ServerPlayerController>();
+                
+                TargetTurnOnGui(_activePlayer.connectionToClient);
+            }
+        }
+        
+        
+        private void OnTriggerExit(Collider other) {
+            if (!isServer) return;
+            
+            if (other.CompareTag("Player")) {
+                gameObject.GetComponent<NetworkIdentity>().RemoveClientAuthority(other.gameObject.GetComponent<NetworkIdentity>().connectionToClient);
+
+                TargetTurnOffGui(_activePlayer.connectionToClient);               
             }
         }
 
         [ClientRpc]
-        private void RpcDestruct(float timeOfDestruct) {
+        private void RpcDestruct(float timeOfDestruct) {           
             gameObject.GetComponent<Collider>().enabled = false;
             Invoke(nameof(BeginDisolve), timeOfDestruct / 2);
         }
+          
 
-        [ClientRpc]
-        private void RpcSetChestItems(string item, int count) {
-            _clientChestItems.Add(item, count);
+        [TargetRpc]
+        private void TargetTurnOnGui(NetworkConnection target) {            
+            _pickupItemsGui.TurnOn(_chestItems.ToDictionary(t => t.ItemName, t => t.Count), this);
         }
-
-        [ClientRpc]
-        private void RpcItemPicked(string itemName) {
-            _clientChestItems.Remove(itemName);
-            if (_clientChestItems.Count == 0) {
-                _pickupItemsGui.TurnOff();
-            }
+        
+        [TargetRpc]
+        private void TargetTurnOffGui(NetworkConnection target) {            
+            _pickupItemsGui.TurnOff();
         }
-           
-
+        
         private void BeginDisolve() {
             GetComponent<Disolve>().BeginDisolve(1.5f);
         }

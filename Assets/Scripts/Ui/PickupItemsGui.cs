@@ -76,6 +76,10 @@ namespace Ui {
             _activeChest.ItemPicked(item.itemName);
         }
 
+        public void UiItemWasDraggedToChest(UiItem item) {
+            
+        }
+
         public UiItem GetRelatedUiItem(Image image) {
             return GetItem(image);
         }
