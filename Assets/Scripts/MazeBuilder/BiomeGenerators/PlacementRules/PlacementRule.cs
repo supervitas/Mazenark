@@ -1,18 +1,33 @@
 ﻿using MazeBuilder.Utility;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MazeBuilder.BiomeGenerators.PlacementRules {
     internal abstract class PlacementRule : MonoBehaviour {
 		[Tooltip("List of meshes can be placed on tile edge with this placement rule")]
 		[SerializeField]
-		//public CollectionRandom MeshesCanBePlaced = new CollectionRandom();
-		/// temporary.
-		protected GameObject mesh;
+		protected List<GameObject> meshes;
+		[Tooltip("List of spawn chances for these meshes.")]
+		[SerializeField]
+		protected List<float> weights;
+
+		private CollectionRandom _meshes = null;
+
+		private GameObject GetRandomMesh() {
+			if (_meshes == null) {
+				_meshes = new CollectionRandom();
+				for (int i = 0; i < meshes.Count; i++) {
+					_meshes.Add(meshes[i], typeof(GameObject), weights[i], $"Mesh #{i}");
+				}
+			}
+
+			return (GameObject) _meshes.GetRandom(typeof(GameObject));
+		}
 
 		public GameObject GetMeshForPlacement(Maze maze, Coordinate where, Edge whereExactly) {
 			//var randomMesh = (GameObject) MeshesCanBePlaced.GetRandom(typeof(GameObject));
-			var randomMesh = mesh;
-			if (mesh != null && CanPlaceSomething(maze, where, whereExactly, true)) {
+			var randomMesh = GetRandomMesh();
+			if (CanPlaceSomething(maze, where, whereExactly, true)) {
 				return randomMesh;
 			} else {
 				return null;
