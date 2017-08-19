@@ -4,6 +4,7 @@ using App;
 using App.Eventhub;
 using Cameras;
 using CharacterControllers;
+using CnControls;
 using GameEnv.GameEffects;
 using Items;
 using Loot;
@@ -218,8 +219,8 @@ namespace Controls {
         }
 
         private void TankUpdate() {
-            float v = Input.GetAxis("Vertical");	// w↔s
-            float h = Input.GetAxis("Horizontal");	// a↔d
+            float v = CnInputManager.GetAxis("Vertical");	// w↔s
+            float h = CnInputManager.GetAxis("Horizontal");	// a↔d
 
 			if (v < -0.5f)
 				v = -0.5f;   
