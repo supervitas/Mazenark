@@ -19,13 +19,11 @@ namespace Controls {
 
         [SyncVar(hook = nameof(OnSetName))] 
         private string _playerName;
-        
 
         private readonly Dictionary<string, int> _playerItems = new Dictionary<string, int>();        
 
         [SerializeField] private float m_moveSpeed = 2;
-        [SerializeField] private float m_turnSpeed = 200;
-        [SerializeField] private float m_jumpForce = 4;
+        [SerializeField] private float m_turnSpeed = 200;       
         [SerializeField] private Animator m_animator;
         [SerializeField] private Rigidbody m_rigidBody;
         [SerializeField] private GameObject spellCastEffect;
@@ -63,7 +61,6 @@ namespace Controls {
         private readonly List<Collider> m_collisions = new List<Collider>();              
 
         private GameGui _gameGui;
-//        private PickupItemsGui _pickupItemsGui;
         private bool _isAlive = true;        
 
         private void OnCollisionEnter(Collision collision) {
@@ -118,7 +115,6 @@ namespace Controls {
             AppManager.Instance.TurnOffAndSetupMainCamera(); 
             
             _gameGui = FindObjectOfType<GameGui>();
-//            _pickupItemsGui = FindObjectOfType<PickupItemsGui>();
             _spellText = GameObject.FindGameObjectWithTag("UISpellName").GetComponent<Text>();
 
             var cam = Instantiate(PlayerCamera);
@@ -207,8 +203,6 @@ namespace Controls {
         private void Update() {
             if (!isLocalPlayer || !_isAlive) return;
 
-//            m_animator.SetBool("Grounded", m_isGrounded);
-
             if (CheckCooldown() && CheckAndFire()) return;                            
             
             _timeCasted = 0;
@@ -235,33 +229,12 @@ namespace Controls {
             m_currentV = Mathf.Lerp(m_currentV, v, Time.deltaTime * m_interpolation);
             m_currentH = Mathf.Lerp(m_currentH, h, Time.deltaTime * m_interpolation);
 
-
             transform.position += transform.forward * m_currentV * m_moveSpeed * Time.deltaTime;
             transform.Rotate(0, m_currentH * m_turnSpeed * Time.deltaTime, 0);
 
-            m_animator.SetFloat("MoveSpeed", m_currentV);            
-
-//            JumpingAndLanding();
+            m_animator.SetFloat("MoveSpeed", m_currentV);
         }
-
-        
-        private void JumpingAndLanding() {
-            bool jumpCooldownOver = (Time.time - m_jumpTimeStamp) >= m_minJumpInterval;
-
-            if (jumpCooldownOver && m_isGrounded && Input.GetKey(KeyCode.Space)) {
-                m_jumpTimeStamp = Time.time;
-                m_rigidBody.AddForce(Vector3.up * m_jumpForce, ForceMode.Impulse);
-            }
-
-            if (!m_wasGrounded && m_isGrounded) {
-                m_animator.SetTrigger("Land");
-            }
-
-            if (!m_isGrounded && m_wasGrounded) {
-                m_animator.SetTrigger("Jump");
-            }
-        }       
-        
+       
                 
         private void OnSetName(string playerNickName) {
             if (isLocalPlayer) return;
@@ -277,9 +250,7 @@ namespace Controls {
         
         public void Die() {
             if (!isServer) return;
-            
             _isAlive = false;
-            
             RpcDie();
         }
 
@@ -289,9 +260,6 @@ namespace Controls {
             _isAlive = false;
             GetComponent<Disolve>().BeginDisolve();                                    
         }
-
-//        [TargetRpc]
-//        public void TurnOn
         
         [TargetRpc]
         public void TargetSetPlayerItems(NetworkConnection target, string itemName, int count) {
@@ -301,6 +269,16 @@ namespace Controls {
             }            
             _playerItems[itemName] += count;
             _gameGui.ModifyItemCount(itemName, _playerItems[itemName].ToString());           
-        }       
+        }
+        
+        [TargetRpc]
+        public void TargetRemovePlayerItem(NetworkConnection target, string itemName) {
+            _playerItems.Remove(itemName);            
+            _gameGui.DisableItem(itemName);
+            
+            if (_activeItem && _activeItem.name == itemName) {
+                _activeItem = null;
+            }
+        }
     }
 }

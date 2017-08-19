@@ -74,7 +74,7 @@ namespace CharacterControllers.Enemies.Bosses {
 			
 			var btnController = btn.GetComponent<GameButton>();
 			
-			btnController.UnpressTime = 7f;
+			btnController.UnpressTime = 15f;
 			btnController.SetPressCallback(onButtonPressed);
 			btnController.SetUnpressCallback(onButtonUnpress);
 

@@ -29,6 +29,26 @@ namespace Loot {
         
         [Command]
         private void CmdItemPlaced(string itemName, int itemCount) {
+            _activePlayer.RemovePlayerItem(itemName);
+            var item = _chestItems.FirstOrDefault(it => it.ItemName == itemName);
+            var index = _chestItems.IndexOf(item);
+            var count = item.Count;
+
+            if (item.ItemName == itemName) {
+                var newItem = new ChestItems {
+                    Count = count + itemCount,
+                    ItemName = itemName
+                };
+                _chestItems.Remove(item);
+                _chestItems.Insert(index, newItem);
+            } else {
+                _chestItems.Add(new ChestItems {
+                    Count = itemCount,
+                    ItemName = itemName
+                }); 
+            }        
+            
+            TargetUpdateGui(_activePlayer.connectionToClient);
         }
         
         [Command]
@@ -45,8 +65,8 @@ namespace Loot {
         }
 
         
-        public void ItemPlaced(string itemName, int itemCount) {
-            
+        public void ItemPlaced(string itemName, int itemCount) {                        
+            CmdItemPlaced(itemName, itemCount);
         }
                 
         public void ItemPicked(string itemName) {
@@ -58,7 +78,6 @@ namespace Loot {
                 _pickupItemsGui = FindObjectOfType<PickupItemsGui>();
             }            
         }
-
 
         private void OnTriggerEnter(Collider other) {            
             if (!isServer || _chestItems.Count == 0) return;            
@@ -94,6 +113,12 @@ namespace Loot {
         private void TargetTurnOnGui(NetworkConnection target) {            
             _pickupItemsGui.TurnOn(_chestItems.ToDictionary(t => t.ItemName, t => t.Count), this);
         }
+        
+        [TargetRpc]
+        private void TargetUpdateGui(NetworkConnection target) {                       
+            _pickupItemsGui.UpdateGui(_chestItems.ToDictionary(t => t.ItemName, t => t.Count));
+        }
+        
         
         [TargetRpc]
         private void TargetTurnOffGui(NetworkConnection target) {            

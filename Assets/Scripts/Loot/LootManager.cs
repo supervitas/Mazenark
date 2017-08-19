@@ -67,7 +67,7 @@ namespace Loot {
 					return true;
 				}
 			}
-			catch (IndexOutOfRangeException) { }		
+			catch (IndexOutOfRangeException) {}		
 			return false;
 		}
 
@@ -100,7 +100,7 @@ namespace Loot {
 		private void SpawnChest(Coordinate coordinate, Quaternion rotation) {			
 			var chest = Instantiate(_chest, Utils.GetDefaultPositionVector(coordinate, 1.33f), rotation);
 			chest.GetComponent<Chest>().SetChestItems("Fireball", 2); //random here
-			chest.GetComponent<Chest>().SetChestItems("Tornado", 1); //random here
+//			chest.GetComponent<Chest>().SetChestItems("Tornado", 1); //random here
 			NetworkServer.Spawn(chest);
 		}
 

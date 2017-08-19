@@ -24,21 +24,34 @@ namespace Ui {
 
         private DragAndDropCell.DropDescriptor _previusDropDescriptor;
         private Chest _activeChest;
-           
         
+        private GameGui _gameGui;
+
         private void Awake() {
             _uiItemsList.Add(new UiItem {itemImage = FirstItemImage, itemCountText = FirstItemCount, itemNumber = 1});
             _uiItemsList.Add(new UiItem {itemImage = SecondItemImage, itemCountText = SecondItemCount, itemNumber = 2});
-            _uiItemsList.Add(new UiItem {itemImage = ThirdItemImage, itemCountText = ThirdItemCount, itemNumber = 3});            
+            _uiItemsList.Add(new UiItem {itemImage = ThirdItemImage, itemCountText = ThirdItemCount, itemNumber = 3});
+            
+            _gameGui = FindObjectOfType<GameGui>(); 
         }
 
         public void TurnOn(Dictionary<string, int> items, Chest chest) {
             _activeChest = chest;
-            foreach (var item in items) {
+            foreach (var item in items) {                
                 AddItem(item.Key, item.Value.ToString());
+            }            
+            CanvasObject.enabled = true;            
+        }
+
+        public void UpdateGui(Dictionary<string, int> items) {
+            foreach (var uiItem in _uiItemsList) {
+                uiItem.itemImage.enabled = false;
+                uiItem.itemCountText.enabled = false;
             }
             
-            CanvasObject.enabled = true;            
+            foreach (var item in items) {                               
+                AddItem(item.Key, item.Value.ToString());
+            }
         }
 
         public void TurnOff() {
@@ -66,6 +79,10 @@ namespace Ui {
             return _uiItemsList.FirstOrDefault(item => !item.itemImage.enabled);
         }
         
+        private UiItem GetItem(int number) {
+            return (from uiItem in _uiItemsList where uiItem.itemNumber == number select uiItem).FirstOrDefault();
+        }
+        
         private UiItem GetItem(Image image) {
             return _uiItemsList.FirstOrDefault(uiItem => uiItem.itemImage == image);
         }       
@@ -75,24 +92,57 @@ namespace Ui {
             item.itemCountText.enabled = false;       
             _activeChest.ItemPicked(item.itemName);
         }
-
-        public void UiItemWasDraggedToChest(UiItem item) {
-            
+        
+        public void UiItemWasDragedToChest(UiItem item, Image sprite) {
+            item.itemImage = sprite;
+            item.itemCountText.enabled = false;
+            _activeChest.ItemPlaced(item.itemName, int.Parse(item.itemCountText.text));
         }
 
         public UiItem GetRelatedUiItem(Image image) {
             return GetItem(image);
         }
         
-        public void OnItemPlace(DragAndDropCell.DropDescriptor desc) {
-            if (desc.destinationCell == _previusDropDescriptor.sourceCell) return;
+        public void OnSheetChange(DragAndDropCell.DropDescriptor desc) { // Drag to chest            
+            var sourceSprite = desc.sourceCell.GetItem().GetComponent<Image>();
+            var destinationSprite = desc.item.GetComponent<Image>();
+            
+            destinationSprite.enabled = false;
+            
+            var pickedItem = _gameGui.GetRelatedUiItem(destinationSprite);
+            
+            var parent = desc.destinationCell.GetItem().transform.parent.gameObject;
 
-            _previusDropDescriptor = desc;
-
-            if (desc.sourceCell.GetComponentInParent<DummyControlUnit>() !=
-                desc.destinationCell.GetComponentInParent<DummyControlUnit>()) {       
-                return;
+            UiItem item = null;
+            
+            switch (parent.name) {
+                case "FirstItem": {
+                    item = GetItem(1);                                         
+                    break;
+                }
+                case "SecondItem": {
+                    item = GetItem(2);                    
+                    break;
+                }
+                case "ThirdItem": {
+                    item = GetItem(3);                    
+                    break;
+                }
             }
+
+            if (item != null) {
+                item.itemImage = destinationSprite;
+                item.itemImage.transform.Rotate(0, 0, 0);    
+            }
+            UiItemWasDragedToChest(pickedItem, sourceSprite);
+        }
+        
+        public void OnItemPlace(DragAndDropCell.DropDescriptor desc) {
+            if (desc.destinationCell == _previusDropDescriptor.sourceCell ||               
+                desc.sourceCell.GetComponentInParent<DummyControlUnit>() !=
+                desc.destinationCell.GetComponentInParent<DummyControlUnit>()) return;
+
+            _previusDropDescriptor = desc;         
 
             var sourceSprite = desc.sourceCell.GetItem().GetComponent<Image>();
             var destinationSprite = desc.item.GetComponent<Image>();

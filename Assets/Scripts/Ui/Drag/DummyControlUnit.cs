@@ -6,8 +6,12 @@ namespace Ui.Drag {
     /// </summary>
     public class DummyControlUnit : MonoBehaviour
     {
+        private DragAndDropCell.DropDescriptor _previusDropDescriptor;
         void OnItemPlace(DragAndDropCell.DropDescriptor desc)
         {
+            if (desc.destinationCell == _previusDropDescriptor.sourceCell) return;
+            _previusDropDescriptor = desc;
+            
             DummyControlUnit sourceSheet = desc.sourceCell.GetComponentInParent<DummyControlUnit>();
             DummyControlUnit destinationSheet = desc.destinationCell.GetComponentInParent<DummyControlUnit>();
 

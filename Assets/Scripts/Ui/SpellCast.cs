@@ -7,7 +7,8 @@ namespace Ui {
         // Use this for initialization
 
         private ProgressBarBehaviour _progressBar;
-        void Start () {
+
+        private void Start () {
             _progressBar = transform.GetChild(0).GetComponent<ProgressBarBehaviour>();
         }
 
@@ -21,6 +22,5 @@ namespace Ui {
             _progressBar.Value = 0;
             CanvasObject.enabled = false;
         }
-
     }
 }
