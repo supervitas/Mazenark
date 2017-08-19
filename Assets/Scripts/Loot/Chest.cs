@@ -12,8 +12,7 @@ namespace Loot {
             public int Count;
         }
         private class SyncListChestItems : SyncListStruct<ChestItems> {}
-        private readonly SyncListChestItems _chestItems = new SyncListChestItems();        
-      
+        private readonly SyncListChestItems _chestItems = new SyncListChestItems();
 
         private ServerPlayerController _activePlayer;
         
@@ -23,7 +22,7 @@ namespace Loot {
             _chestItems.Add(new ChestItems {
                 Count = count,
                 ItemName = itemName
-            });            
+            });
         }
 
         public override void OnStartClient() {
@@ -88,7 +87,7 @@ namespace Loot {
             }            
         }
 
-        private void OnTriggerEnter(Collider other) {            
+        private void OnTriggerEnter(Collider other) {
             if (!isServer || _chestItems.Count == 0) return;            
            
             if (other.CompareTag("Player")) {
@@ -116,7 +115,6 @@ namespace Loot {
             gameObject.GetComponent<Collider>().enabled = false;
             Invoke(nameof(BeginDisolve), timeOfDestruct / 2);
         }
-          
 
         [TargetRpc]
         private void TargetTurnOnGui(NetworkConnection target) {            

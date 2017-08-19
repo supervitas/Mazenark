@@ -89,7 +89,7 @@ namespace Ui {
         
         public void UiItemWasDragedToPlayer(UiItem item, Image sprite) {
             item.itemImage = sprite;
-            item.itemCountText.enabled = false;       
+            item.itemCountText.enabled = false;
             _activeChest.ItemPicked(item.itemName);
         }
         
@@ -132,7 +132,7 @@ namespace Ui {
 
             if (item != null) {
                 item.itemImage = destinationSprite;
-                item.itemImage.transform.Rotate(0, 0, 0);    
+                item.itemImage.transform.rotation = Quaternion.Euler(0, 0, 0);                
             }
             UiItemWasDragedToChest(pickedItem, sourceSprite);
         }

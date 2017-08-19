@@ -121,9 +121,9 @@ namespace Ui {
                 }
             }
 
-            if (item != null) {
+            if (item != null) {                
                 item.itemImage = destinationSprite;
-                item.itemImage.transform.rotation = Quaternion.Euler(0, 0, 90);    
+                item.itemImage.transform.rotation = Quaternion.Euler(0, 0, 0);
             }            
 
             _pickupItemsGui.UiItemWasDragedToPlayer(pickedItem, sourceSprite);
