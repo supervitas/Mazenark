@@ -107,6 +107,9 @@ namespace Ui {
             var sourceSprite = desc.sourceCell.GetItem().GetComponent<Image>();
             var destinationSprite = desc.item.GetComponent<Image>();
             
+            Debug.Log(sourceSprite.sprite);
+            Debug.Log(destinationSprite.sprite);
+            
             destinationSprite.enabled = false;
             
             var pickedItem = _gameGui.GetRelatedUiItem(destinationSprite);

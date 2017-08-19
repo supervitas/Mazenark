@@ -79,8 +79,8 @@ namespace CharacterControllers {
 
         [Command]
         public void CmdPlayerReady() {            
-            SetPlayerItems("Fireball", 5);
-            SetPlayerItems("Tornado", 1);
+//            SetPlayerItems("Fireball", 5);
+            SetPlayerItems("Tornado", 3);
             FindObjectOfType<GameManager>().AddPlayerTransform(transform);
         }
 
