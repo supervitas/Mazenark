@@ -3,8 +3,7 @@ using UnityEngine;
 
 namespace Ui {
     public class SpellCast : MonoBehaviour {
-        public Canvas CanvasObject;
-        // Use this for initialization
+        public Canvas CanvasObject;        
 
         private ProgressBarBehaviour _progressBar;
 

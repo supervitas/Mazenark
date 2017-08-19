@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using CharacterControllers;
 using GameEnv.GameEffects;
 using Ui;
@@ -30,15 +29,15 @@ namespace Loot {
         [Command]
         private void CmdItemPlaced(string itemName, int itemCount) {
             _activePlayer.RemovePlayerItem(itemName);
-            var item = _chestItems.FirstOrDefault(it => it.ItemName == itemName);
-            var index = _chestItems.IndexOf(item);
-            var count = item.Count;
+            var item = _chestItems.FirstOrDefault(it => it.ItemName == itemName);            
 
             if (item.ItemName == itemName) {
+                var index = _chestItems.IndexOf(item);
+                
                 var newItem = new ChestItems {
-                    Count = count + itemCount,
+                    Count = item.Count + itemCount,
                     ItemName = itemName
-                };
+                };                
                 _chestItems.Remove(item);
                 _chestItems.Insert(index, newItem);
             } else {
@@ -68,7 +67,7 @@ namespace Loot {
         public void ItemPlaced(string itemName, int itemCount) {                        
             CmdItemPlaced(itemName, itemCount);
         }
-                
+
         public void ItemPicked(string itemName) {
             CmdItemPicked(itemName);
         }
