@@ -119,6 +119,18 @@ namespace Ui {
                     item = GetItem(3);
                     break;
                 }
+            }     
+            
+            if (item.itemName != null && pickedItem.itemName != item.itemName) { // swap items;                
+                item.itemImage = destinationSprite;
+                item.itemImage.transform.rotation = Quaternion.Euler(0, 0, 0);
+                
+                pickedItem.itemImage = sourceSprite;
+                pickedItem.itemImage.transform.rotation = Quaternion.Euler(0, 0, 0);     
+
+                _pickupItemsGui.UiItemWasDragedToChest(item, destinationSprite);
+                _pickupItemsGui.UiItemWasDragedToPlayer(pickedItem, sourceSprite);
+                return;
             }
 
             if (item != null) {                

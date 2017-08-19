@@ -107,16 +107,13 @@ namespace Ui {
             var sourceSprite = desc.sourceCell.GetItem().GetComponent<Image>();
             var destinationSprite = desc.item.GetComponent<Image>();
             
-            Debug.Log(sourceSprite.sprite);
-            Debug.Log(destinationSprite.sprite);
-            
             destinationSprite.enabled = false;
             
             var pickedItem = _gameGui.GetRelatedUiItem(destinationSprite);
             
             var parent = desc.destinationCell.GetItem().transform.parent.gameObject;
 
-            UiItem item = null;
+            UiItem item = null;                                 
             
             switch (parent.name) {
                 case "FirstItem": {
@@ -131,6 +128,18 @@ namespace Ui {
                     item = GetItem(3);                    
                     break;
                 }
+            }                     
+          
+            if (item.itemName != null && pickedItem.itemName != item.itemName) { // swap items;                                 
+                item.itemImage = destinationSprite;
+                item.itemImage.transform.rotation = Quaternion.Euler(0, 0, 0);
+                
+                pickedItem.itemImage = sourceSprite;
+                pickedItem.itemImage.transform.rotation = Quaternion.Euler(0, 0, 0);
+                
+                UiItemWasDragedToChest(pickedItem, sourceSprite);
+                UiItemWasDragedToPlayer(item, destinationSprite);                                                                                     
+                return;
             }
 
             if (item != null) {
