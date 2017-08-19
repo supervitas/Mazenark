@@ -108,15 +108,15 @@ namespace Ui {
             
             switch (parent.name) {
                 case "FirstItemHolder": {
-                    item = GetItem(1);                                         
+                    item = GetItem(1);
                     break;
                 }
                 case "SecondItemHolder": {
-                    item = GetItem(2);                    
+                    item = GetItem(2);
                     break;
                 }
                 case "ThirdItemHolder": {
-                    item = GetItem(3);                    
+                    item = GetItem(3);
                     break;
                 }
             }
