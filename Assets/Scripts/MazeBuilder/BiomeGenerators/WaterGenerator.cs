@@ -23,7 +23,7 @@ namespace MazeBuilder.BiomeGenerators {
         }
 
         private void ToggleBiomeWeather(object sender, EventArguments e) {
-            if (e.BiomeName == "Water Biome") {
+            if (e.BiomeName == "Water") {
                 _instancedRain.GetComponent<EffectsNearPlayer>().StartEffect(e.Transform);
             } else {
                 _instancedRain.GetComponent<EffectsNearPlayer>().StopEffect();

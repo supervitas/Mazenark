@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using CharacterControllers;
 using GameEnv.GameEffects;
 using Ui;
@@ -25,10 +24,40 @@ namespace Loot {
                 Count = count,
                 ItemName = itemName
             });            
-        }                    
-        
+        }
+
+        public override void OnStartClient() {
+            _chestItems.Callback = OnChestChanged;
+        }
+
+        private void OnChestChanged(SyncList<ChestItems>.Operation op, int itemindex) {
+            if (_activePlayer) {
+                TargetUpdateGui(_activePlayer.connectionToClient);
+            }
+        }
+
+
         [Command]
         private void CmdItemPlaced(string itemName, int itemCount) {
+            _activePlayer.RemovePlayerItem(itemName);
+            var item = _chestItems.FirstOrDefault(it => it.ItemName == itemName);            
+
+            if (item.ItemName == itemName) {
+                var index = _chestItems.IndexOf(item);
+                
+                var newItem = new ChestItems {
+                    Count = item.Count + itemCount,
+                    ItemName = itemName
+                };                
+                _chestItems.Remove(item);
+                _chestItems.Insert(index, newItem);
+            } else {
+                _chestItems.Add(new ChestItems {
+                    Count = itemCount,
+                    ItemName = itemName
+                }); 
+            }        
+                       
         }
         
         [Command]
@@ -45,10 +74,10 @@ namespace Loot {
         }
 
         
-        public void ItemPlaced(string itemName, int itemCount) {
-            
+        public void ItemPlaced(string itemName, int itemCount) {                        
+            CmdItemPlaced(itemName, itemCount);
         }
-                
+
         public void ItemPicked(string itemName) {
             CmdItemPicked(itemName);
         }
@@ -58,7 +87,6 @@ namespace Loot {
                 _pickupItemsGui = FindObjectOfType<PickupItemsGui>();
             }            
         }
-
 
         private void OnTriggerEnter(Collider other) {            
             if (!isServer || _chestItems.Count == 0) return;            
@@ -94,6 +122,12 @@ namespace Loot {
         private void TargetTurnOnGui(NetworkConnection target) {            
             _pickupItemsGui.TurnOn(_chestItems.ToDictionary(t => t.ItemName, t => t.Count), this);
         }
+        
+        [TargetRpc]
+        private void TargetUpdateGui(NetworkConnection target) {
+            _pickupItemsGui.UpdateGui(_chestItems.ToDictionary(t => t.ItemName, t => t.Count));
+        }
+        
         
         [TargetRpc]
         private void TargetTurnOffGui(NetworkConnection target) {            

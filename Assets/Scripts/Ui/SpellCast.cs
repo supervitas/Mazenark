@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace Ui {
     public class SpellCast : MonoBehaviour {
-        public Canvas CanvasObject;
-        // Use this for initialization
+        public Canvas CanvasObject;        
 
         private ProgressBarBehaviour _progressBar;
-        void Start () {
+
+        private void Start () {
             _progressBar = transform.GetChild(0).GetComponent<ProgressBarBehaviour>();
         }
 
@@ -21,6 +21,5 @@ namespace Ui {
             _progressBar.Value = 0;
             CanvasObject.enabled = false;
         }
-
     }
 }

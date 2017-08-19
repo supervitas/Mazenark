@@ -17,6 +17,8 @@ namespace Ui.Drag {
         public static event DragEvent OnItemDragStartEvent;                             // Drag start event
         public static event DragEvent OnItemDragEndEvent;                               // Drag end event
 
+        private Canvas _canvas;
+
         /// <summary>
         /// This item is dragged
         /// </summary>
@@ -33,14 +35,18 @@ namespace Ui.Drag {
             // Set icon's dimensions
             iconRect.sizeDelta = new Vector2(   GetComponent<RectTransform>().sizeDelta.x,
                 GetComponent<RectTransform>().sizeDelta.y);
-            Canvas canvas = GetComponentInParent<Canvas>();                             // Get parent canvas
+            Canvas canvas = GetComponentInParent<Canvas>();                             // Get parent canvas            
             if (canvas != null)
             {
                 // Display on top of all GUI (in parent canvas)
                 icon.transform.SetParent(canvas.transform, true);                       // Set canvas as parent
                 icon.transform.SetAsLastSibling();                                      // Set as last child in canvas transform
+                _canvas = canvas;
+                _canvas.sortingOrder = 1;
+                
             }
             OnItemDragStartEvent?.Invoke(this);                                             // Notify all about item drag start
+                        
         }
 
         /// <summary>
@@ -65,11 +71,12 @@ namespace Ui.Drag {
             {
                 Destroy(icon);                                                          // Destroy icon on item drop
             }
-            MakeVisible(true);                                                          // Make item visible in cell
-            OnItemDragEndEvent?.Invoke(this);                                               // Notify all cells about item drag end
+            MakeVisible(true);                                                          // Make item visible in cell                        
+            _canvas.sortingOrder = 0;            
+            OnItemDragEndEvent?.Invoke(this);                                               // Notify all cells about item drag end            
             draggedItem = null;
             icon = null;
-            sourceCell = null;
+            sourceCell = null;            
         }
 
         /// <summary>

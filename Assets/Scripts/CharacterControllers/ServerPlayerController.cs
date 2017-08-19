@@ -65,11 +65,22 @@ namespace CharacterControllers {
             
             _characterControl.TargetSetPlayerItems(connectionToClient, itemName, itemCount);
         }
+        
+        public void RemovePlayerItem(string itemName) {
+            if (!isServer) return;
+            
+            if (!_serverPlayerItems.ContainsKey(itemName)) {
+                return;
+            }
+            _serverPlayerItems.Remove(itemName);
+            
+            _characterControl.TargetRemovePlayerItem(connectionToClient, itemName);
+        }
 
         [Command]
         public void CmdPlayerReady() {            
             SetPlayerItems("Fireball", 5);
-//            SetPlayerItems("Tornado", 3);
+            SetPlayerItems("Tornado", 1);
             FindObjectOfType<GameManager>().AddPlayerTransform(transform);
         }
 

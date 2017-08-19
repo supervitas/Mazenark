@@ -51,7 +51,7 @@ namespace Ui.Drag {
         /// </summary>
         /// <param name="item"> dragged item </param>
         private void OnAnyItemDragStart(DragAndDropItem item)
-        {
+        {                        
             DragAndDropItem myItem = GetComponentInChildren<DragAndDropItem>(); // Get item from current cell
             if (myItem != null)
             {
@@ -81,7 +81,7 @@ namespace Ui.Drag {
         /// </summary>
         /// <param name="item"> dragged item </param>
         private void OnAnyItemDragEnd(DragAndDropItem item)
-        {
+        {         
             DragAndDropItem myItem = GetComponentInChildren<DragAndDropItem>(); // Get item from current cell
             if (myItem != null)
             {

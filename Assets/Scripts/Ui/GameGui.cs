@@ -50,16 +50,19 @@ namespace Ui {
         }
 
         public void ModifyItemCount(string itemName, string count) {
-            var uiItem = GetItem(itemName);       
+            var uiItem = GetItem(itemName);
+            uiItem.itemImage.enabled = true;
             uiItem.itemCountText.text = count;
         }
         
         public void DisableItem(string itemName) {            
-            var uiItem = GetItem(itemName);
+            var uiItem = GetItem(itemName);            
             uiItem.itemImage.enabled = false;
             uiItem.itemCountText.enabled = false;
-            _activeItem.color = new Color32(197, 184, 204, 81);
-            _activeItem = null;
+            if (_activeItem != null) {
+                _activeItem.color = new Color32(197, 184, 204, 81);
+                _activeItem = null;
+            }
             uiItem.itemName = null;
         }
 
@@ -86,15 +89,17 @@ namespace Ui {
         private UiItem GetItem(Image image) {
             return _uiItemsList.FirstOrDefault(uiItem => uiItem.itemImage == image);
         }
+        
+        public UiItem GetRelatedUiItem(Image image) {
+            return GetItem(image);
+        }
 
-        public void OnSheetChange(DragAndDropCell.DropDescriptor desc) {
-            if (desc.destinationCell == _previusDropDescriptor.sourceCell) return;
-            _previusDropDescriptor = desc;
-            
+        public void OnSheetChange(DragAndDropCell.DropDescriptor desc) { // draged from chest
             var sourceSprite = desc.sourceCell.GetItem().GetComponent<Image>();
             var destinationSprite = desc.item.GetComponent<Image>();
-                        
+            
             destinationSprite.enabled = false;
+            
             var pickedItem = _pickupItemsGui.GetRelatedUiItem(destinationSprite);
             
             var parent = desc.destinationCell.GetItem().transform.parent.gameObject;
@@ -115,25 +120,21 @@ namespace Ui {
                     break;
                 }
             }
-            
+
             if (item != null) {
                 item.itemImage = destinationSprite;
-                item.itemImage.transform.Rotate(0, 0, 90);    
-            }
-            
+                item.itemImage.transform.rotation = Quaternion.Euler(0, 0, 90);    
+            }            
+
             _pickupItemsGui.UiItemWasDragedToPlayer(pickedItem, sourceSprite);
         }
 
         public void OnItemPlace(DragAndDropCell.DropDescriptor desc) {
-            if (desc.destinationCell == _previusDropDescriptor.sourceCell) return;
+            if (desc.destinationCell == _previusDropDescriptor.sourceCell ||               
+                desc.sourceCell.GetComponentInParent<DummyControlUnit>() !=
+                desc.destinationCell.GetComponentInParent<DummyControlUnit>()) return;
 
-            _previusDropDescriptor = desc;
-                           
-
-            if (desc.sourceCell.GetComponentInParent<DummyControlUnit>() !=
-                desc.destinationCell.GetComponentInParent<DummyControlUnit>()) { // from chest                
-                return;
-            }
+            _previusDropDescriptor = desc;                                          
             
             var sourceSprite = desc.sourceCell.GetItem().GetComponent<Image>();
             var destinationSprite = desc.item.GetComponent<Image>();
