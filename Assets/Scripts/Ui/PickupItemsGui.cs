@@ -129,7 +129,7 @@ namespace Ui {
                     break;
                 }
             }                     
-          
+
             if (item.itemName != null && pickedItem.itemName != item.itemName) { // swap items;                                 
                 item.itemImage = destinationSprite;
                 item.itemImage.transform.rotation = Quaternion.Euler(0, 0, 0);
@@ -138,7 +138,8 @@ namespace Ui {
                 pickedItem.itemImage.transform.rotation = Quaternion.Euler(0, 0, 0);
                 
                 UiItemWasDragedToChest(pickedItem, sourceSprite);
-                UiItemWasDragedToPlayer(item, destinationSprite);                                                                                     
+                UiItemWasDragedToPlayer(item, destinationSprite);
+                
                 return;
             }
 

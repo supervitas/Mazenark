@@ -163,6 +163,7 @@ namespace Controls {
                 EventSystem.current.IsPointerOverGameObject()) return false;        
             
             m_animator.SetFloat("MoveSpeed", 0);
+            m_animator.SetBool("Attack", true);
             _timeCasted += Time.deltaTime;
             _spellEffect.SetActive(true);
 
@@ -205,6 +206,7 @@ namespace Controls {
 
             if (CheckCooldown() && CheckAndFire()) return;                            
             
+            m_animator.SetBool("Attack", false);
             _timeCasted = 0;
             _uiSpellCast.Reset();
             _spellEffect.SetActive(false);
