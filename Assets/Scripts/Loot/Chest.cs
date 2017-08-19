@@ -24,8 +24,19 @@ namespace Loot {
                 Count = count,
                 ItemName = itemName
             });            
-        }                    
-        
+        }
+
+        public override void OnStartClient() {
+            _chestItems.Callback = OnChestChanged;
+        }
+
+        private void OnChestChanged(SyncList<ChestItems>.Operation op, int itemindex) {
+            if (_activePlayer) {
+                TargetUpdateGui(_activePlayer.connectionToClient);
+            }
+        }
+
+
         [Command]
         private void CmdItemPlaced(string itemName, int itemCount) {
             _activePlayer.RemovePlayerItem(itemName);
@@ -46,8 +57,7 @@ namespace Loot {
                     ItemName = itemName
                 }); 
             }        
-            
-            TargetUpdateGui(_activePlayer.connectionToClient);
+                       
         }
         
         [Command]
@@ -114,7 +124,7 @@ namespace Loot {
         }
         
         [TargetRpc]
-        private void TargetUpdateGui(NetworkConnection target) {                       
+        private void TargetUpdateGui(NetworkConnection target) {
             _pickupItemsGui.UpdateGui(_chestItems.ToDictionary(t => t.ItemName, t => t.Count));
         }
         
