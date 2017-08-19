@@ -111,6 +111,10 @@ namespace Controls {
         public override void OnStartLocalPlayer() {
             if (!isLocalPlayer) return;
             
+            #if UNITY_STANDALONE
+                FindObjectOfType<SimpleJoystick>().GetComponentInParent<Canvas>().enabled = false;
+            #endif
+            
             AppManager.Instance.EventHub.Subscribe("ItemChanged", OnActiveItemChanged, this);
             
             AppManager.Instance.TurnOffAndSetupMainCamera(); 
