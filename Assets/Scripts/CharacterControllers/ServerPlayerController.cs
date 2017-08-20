@@ -39,10 +39,17 @@ namespace CharacterControllers {
             CurrentHealth -= amount;
             if (CurrentHealth > 0) return;
             CurrentHealth = 0;
-
+            
             GetComponent<PlayerControl>().Die();
             FindObjectOfType<GameManager>().PlayerDied(gameObject);
-            NetworkEventHub.Instance.RpcPublishEvent("PlayerDied", gameObject.name);                        
+            NetworkEventHub.Instance.RpcPublishEvent("PlayerDied", gameObject.name);
+            
+  
+            var posForChest = gameObject.transform.position;
+            posForChest.y = 1.33f;
+            if(_serverPlayerItems.Count != 0) {
+                FindObjectOfType<LootManager>().SpawnChest(posForChest, _serverPlayerItems);               
+            }
         }
                 
         

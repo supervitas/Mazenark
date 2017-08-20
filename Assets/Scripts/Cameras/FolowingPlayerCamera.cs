@@ -23,6 +23,10 @@ namespace Cameras {
         public void SetPlayer(Transform player) {
             _target = player;
         }
+
+        public void PlayerDied() {
+            _target = null;
+        }
         
 
         private void FixedUpdate() {

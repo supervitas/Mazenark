@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using App;
 using MazeBuilder;
 using MazeBuilder.Utility;
@@ -101,6 +102,17 @@ namespace Loot {
 			var chest = Instantiate(_chest, Utils.GetDefaultPositionVector(coordinate, 1.33f), rotation);
 			chest.GetComponent<Chest>().SetChestItems("Fireball", 2); //random here
 //			chest.GetComponent<Chest>().SetChestItems("Tornado", 1); //random here
+			NetworkServer.Spawn(chest);
+		}
+
+		public void SpawnChest(Vector3 position, Dictionary<string, int> items) {
+			var chest = Instantiate(_chest, position, Quaternion.identity);
+			var chestScript = chest.GetComponent<Chest>();
+			
+			foreach (var item in items) {
+				chestScript.SetChestItems(item.Key, item.Value);				
+			}
+			
 			NetworkServer.Spawn(chest);
 		}
 

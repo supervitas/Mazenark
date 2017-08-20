@@ -258,6 +258,7 @@ namespace Controls {
         public void Die() {
             if (!isServer) return;
             _isAlive = false;
+            GetComponent<Collider>().enabled = false;
             RpcDie();
         }
 
@@ -265,6 +266,7 @@ namespace Controls {
         [ClientRpc]
         private void RpcDie() {
             _isAlive = false;
+            _camera.GetComponent<FolowingPlayerCamera>().PlayerDied();
             GetComponent<Disolve>().BeginDisolve();                                    
         }
         
