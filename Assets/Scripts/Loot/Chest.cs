@@ -105,8 +105,8 @@ namespace Loot {
             
             if (other.CompareTag("Player")) {
                 gameObject.GetComponent<NetworkIdentity>().RemoveClientAuthority(other.gameObject.GetComponent<NetworkIdentity>().connectionToClient);
-
-                TargetTurnOffGui(_activePlayer.connectionToClient);               
+                TargetTurnOffGui(_activePlayer.connectionToClient);
+                _activePlayer = null;
             }
         }
 

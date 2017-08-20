@@ -60,6 +60,10 @@ namespace App {
                     token = PlayerPrefs.GetString("token"),
                     username = PlayerPrefs.GetString("username")
                 };
+                
+                if (user.username == "") {
+                    user.username = "You";
+                }
             }
         }
     }

@@ -43,10 +43,8 @@ namespace GameSystems {
 
         public void PlayerDied(GameObject player) {
             _playersTransforms.Remove(player.transform);
-            _statisticsManager.PlayerDied(player.name);
-            Destroy(player, 2f);            
+            Destroy(player, 2f);
         }        
-        
         
         public void AddPlayerTransform(Transform playerTransform) {
             _playersTransforms.Add(playerTransform);

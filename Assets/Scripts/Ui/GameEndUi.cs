@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using App;
+﻿using App;
 using App.Eventhub;
 using Lobby;
 using UnityEngine;
@@ -40,7 +38,7 @@ namespace Ui {
             Invoke(nameof(GoBackToMenu), 5);
         }
 
-        private void GoBackToMenu() {
+        private void GoBackToMenu() { 
             FindObjectOfType<LobbyManager>().GoBackButton();
         }
 

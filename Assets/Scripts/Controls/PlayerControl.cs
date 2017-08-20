@@ -265,9 +265,12 @@ namespace Controls {
         
         [ClientRpc]
         private void RpcDie() {
-            _isAlive = false;
-            _camera.GetComponent<FolowingPlayerCamera>().PlayerDied();
-            GetComponent<Disolve>().BeginDisolve();                                    
+            if (isLocalPlayer) {
+                _camera.GetComponent<FolowingPlayerCamera>().PlayerDied();
+            }
+            
+            GetComponent<Disolve>().BeginDisolve();            
+            _isAlive = false;            
         }
         
         [TargetRpc]
