@@ -7,6 +7,6 @@ namespace CharacterControllers {
         protected int CurrentHealth = 100;
         protected bool IsNpc;
 
-        public abstract void TakeDamage(int amount, float timeOfDeath = 2f);
+        public abstract void TakeDamage(int amount, float timeOfDeath = 2f, string whoCasted = "Enemy");
     }
 }

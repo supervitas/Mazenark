@@ -26,9 +26,16 @@ namespace CharacterControllers {
             CancelInvoke(nameof(PlayerUpdate));            
         }
         
-        public override void TakeDamage(int amount, float timeOfDeath = 2f) {            
+        public override void TakeDamage(int amount, float timeOfDeath = 2f, string whoCasted = "Enemy") {
             if (!isServer) return;
-            return;
+//            return;
+            if (whoCasted == "Enemy") {
+                FindObjectOfType<GameManager>().EnemyKilledPlayer(gameObject.name);
+            }
+            if (whoCasted != "Enemy") {
+                FindObjectOfType<GameManager>().PlayerKilledPlayer(whoCasted, gameObject.name);
+            }
+
             CurrentHealth -= amount;
             if (CurrentHealth > 0) return;
             CurrentHealth = 0;
@@ -94,6 +101,7 @@ namespace CharacterControllers {
             pos.y += 2.3f;
             var activeItem = Instantiate(_activeItem, pos, Quaternion.identity);
             var weapon = activeItem.GetComponent<Weapon>();
+            weapon.PlayerCasted = gameObject.name;
             Physics.IgnoreCollision(activeItem.GetComponent<Collider>(), GetComponent<Collider>());
             activeItem.transform.LookAt(direction);
             weapon.Fire();

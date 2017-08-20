@@ -1,5 +1,6 @@
 using Controls;
 using GameEnv.GameEffects;
+using GameSystems;
 using Loot;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -12,8 +13,10 @@ namespace CharacterControllers.Enemies {
             IsNpc = true;                 
         }
 
-        public override void TakeDamage(int amount, float timeOfDeath = 2) {
+        public override void TakeDamage(int amount, float timeOfDeath = 2, string whoCasted = "Enemy") {
             if (!isServer) return;
+
+            FindObjectOfType<GameManager>().PlayerKilledEnemy(whoCasted);
             
             var control = GetComponent<BasicEnemyControl>();
 

@@ -7,7 +7,7 @@ namespace Items.Spells {
         private void OnCollisionEnter(Collision other) {
             var go = other.gameObject;                        
             if (go.CompareTag("Enemy") || go.CompareTag("Player")) {
-                go.GetComponent<ServerCharacterController>().TakeDamage(100);                            
+                go.GetComponent<ServerCharacterController>().TakeDamage(100, 2f, PlayerCasted);                            
             }            
         }
 

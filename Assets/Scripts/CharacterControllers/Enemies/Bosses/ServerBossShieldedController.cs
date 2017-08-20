@@ -81,7 +81,7 @@ namespace CharacterControllers.Enemies.Bosses {
 			NetworkServer.Spawn(btn);
 		}
 
-        public override void TakeDamage(int amount, float timeOfDeath = 2f) {}
+        public override void TakeDamage(int amount, float timeOfDeath = 2f, string whoCasted = "Enemy") {}
 
 	    private void Die() {
 		    

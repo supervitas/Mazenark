@@ -15,15 +15,33 @@ namespace GameSystems.Statistics {
             if (player != null) {
                 player.score -= 20;
             }            
-
         }
 
-        public void PlayerKilledEnemy() {
-            
+        public void EnemyKilledPlayer(string playerName) {
+            var player = _users.Find(user => user.username == playerName);
+            if (player != null) {
+                player.score -= 10;
+            }
+        }
+        
+        public void PlayerKilledEnemy(string playerName, int scoreToAdd = 2) {
+            var player = _users.Find(user => user.username == playerName);
+            if (player != null) {
+                player.score += scoreToAdd;
+            }
         }
 
-        public void PlayerKilledPlayer(string player) {
+        public void PlayerKilledPlayer(string playerKilled, string playerDead) {
+            var whoKilled = _users.Find(user => user.username == playerKilled);
+            var whoDied = _users.Find(user => user.username == playerDead);
             
+            if (whoDied != null) {
+                whoDied.score -= 25;
+            }
+            
+            if (whoKilled != null) {
+                whoKilled.score += 25;
+            }
         }
         
         public void PlayerCompletedLevel(string playerName) {

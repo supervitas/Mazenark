@@ -14,7 +14,7 @@ namespace CharacterControllers.Enemies.Bosses {
             IsNpc = true;            
         }
 
-        public override void TakeDamage(int amount, float timeOfDeath = 2f) {
+        public override void TakeDamage(int amount, float timeOfDeath = 2f, string whoCasted = "Enemy") {
             if (!isServer) return;
             Multiplied++;
             if (Multiplied == _countOfMultiply) {

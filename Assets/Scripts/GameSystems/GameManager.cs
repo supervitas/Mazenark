@@ -11,13 +11,28 @@ namespace GameSystems {
         private readonly List<User> _playersData = new List<User>();
         private static readonly List<Transform> _playersTransforms = new List <Transform>();
         
-        
         private StatisticSystem _statisticsManager;
         private int _playersCount;
         
         public override void OnStartServer() {
             _playersTransforms.Clear();
             _statisticsManager = new StatisticSystem(_playersData);         
+        }
+
+        public void PlayerKilledEnemy(string playerName) {
+            _statisticsManager.PlayerKilledEnemy(playerName);
+        }
+        
+        public void EnemyKilledPlayer(string playerName) {
+            _statisticsManager.PlayerKilledEnemy(playerName);
+        }
+         
+        public void PlayerKilledPlayer(string playerKilled, string playerDied) {
+            _statisticsManager.PlayerKilledPlayer(playerKilled, playerDied);
+        }
+
+        public void PlayerKilledBoss(string playerName) {
+            _statisticsManager.PlayerKilledEnemy(playerName, 20);
         }
         
         public void PlayerCompletedMaze(GameObject player) {
@@ -31,6 +46,7 @@ namespace GameSystems {
             _statisticsManager.PlayerDied(player.name);
             Destroy(player, 2f);            
         }        
+        
         
         public void AddPlayerTransform(Transform playerTransform) {
             _playersTransforms.Add(playerTransform);
