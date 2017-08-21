@@ -40,9 +40,6 @@ namespace Lobby{
 
         public Button backButton;
 
-        public Text statusInfo;
-        public Text hostInfo;
-
 
         //Client numPlayers from NetworkManager is always 0, so we count (throught connect/destroy in LobbyPlayer) the number
         //of players, so that even client know how many player there is.
@@ -82,7 +79,6 @@ namespace Lobby{
 
             AuthUiManager.Instance.ToggleAuthPannel(_storage.IsAuthed());
 
-            SetServerInfo("Offline", "None");
         }
 
         public override void OnLobbyClientSceneChanged(NetworkConnection conn) {
@@ -134,8 +130,7 @@ namespace Lobby{
             if (currentPanel != mainMenuPanel) {
                 backButton.gameObject.SetActive(true);
             } else {
-                backButton.gameObject.SetActive(false);
-                SetServerInfo("Offline", "None");
+                backButton.gameObject.SetActive(false);                
                 _isMatchmaking = false;
             }
         }
@@ -144,12 +139,6 @@ namespace Lobby{
             var _this = this;
             infoPanel.Display("Connecting...", "Cancel", () => { _this.backDelegate(); });
         }
-
-        public void SetServerInfo(string status, string host) {
-            statusInfo.text = status;
-            hostInfo.text = host;
-        }
-
 
         public delegate void BackButtonDelegate();
         public BackButtonDelegate backDelegate;
@@ -222,16 +211,14 @@ namespace Lobby{
         public override void OnStartHost() {
             base.OnStartHost();
             ChangeTo(lobbyPanel);
-            backDelegate = StopHostClbk;
-            SetServerInfo("Hosting", networkAddress);         
+            backDelegate = StopHostClbk;                  
         }
 
         public void StartDedicatedServerInstance(int port, int instanceId) {
             InstanceId = instanceId;
             networkPort = port;
             StartServer();
-            Debug.Log($"instance started  {networkAddress}:{networkPort}");
-            SetServerInfo("Dedicated Server", networkAddress);
+            Debug.Log($"instance started  {networkAddress}:{networkPort}");            
         }
 
         public override void OnStartServer() {
@@ -411,7 +398,6 @@ namespace Lobby{
             if (!NetworkServer.active) {//only to do on pure client (not self hosting client)
                 ChangeTo(lobbyPanel);
                 backDelegate = StopClientClbk;
-                SetServerInfo("Client", networkAddress);
             }
         }
 

@@ -121,7 +121,6 @@ namespace Lobby {
             lobbyManager.backDelegate = lobbyManager.StopClientClbk;
             lobbyManager.DisplayIsConnecting();
 
-            lobbyManager.SetServerInfo("Connecting...", lobbyManager.networkAddress);
         }
 
         public void OnClickDedicated() {
@@ -129,8 +128,6 @@ namespace Lobby {
             lobbyManager.StartServer();
 
             lobbyManager.backDelegate = lobbyManager.StopServerClbk;
-
-            lobbyManager.SetServerInfo("Dedicated Server", lobbyManager.networkAddress);
         }
 
         public void OnClickCreateMatchmakingGame() {
@@ -145,8 +142,6 @@ namespace Lobby {
             lobbyManager.backDelegate = lobbyManager.StopHost;
             lobbyManager._isMatchmaking = true;
             lobbyManager.DisplayIsConnecting();
-
-            lobbyManager.SetServerInfo("Matchmaker Host", lobbyManager.matchHost);
         }
 
         public void OnClickPlayOnline() {
@@ -162,8 +157,6 @@ namespace Lobby {
 
                 lobbyManager.backDelegate = lobbyManager.StopClientClbk;
                 lobbyManager.DisplayIsConnecting();
-
-                lobbyManager.SetServerInfo("Connecting...", lobbyManager.networkAddress);
             };
 
             Action<string> errorCb = error => { // callback which takes result http body as a param
