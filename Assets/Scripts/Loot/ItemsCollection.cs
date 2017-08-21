@@ -21,5 +21,10 @@ namespace Loot {
         public Sprite GetIconByName(string itemName) {
             return itemIcons.FirstOrDefault(item => item.name == itemName);
         }
+
+        public GameObject GetRandomLoot() {
+            var random = Random.Range(0, items.Length);            
+            return items[random];
+        }
     }
 }

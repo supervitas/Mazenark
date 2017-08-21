@@ -18,7 +18,10 @@ namespace Loot {
         
         private static PickupItemsGui _pickupItemsGui;
 
-        public void SetChestItems(string itemName, int count) {         
+        public void SetChestItems(string itemName, int count) {
+            var item = _chestItems.FirstOrDefault(it => it.ItemName == itemName);  
+            if (item.ItemName == itemName) return;
+                
             _chestItems.Add(new ChestItems {
                 Count = count,
                 ItemName = itemName

@@ -59,13 +59,13 @@ namespace App {
         private IEnumerator WaitForRequest(UnityWebRequest www, Action<string> callback = null,  Action<string> error = null) {
             yield return www.Send();
             
-            if (www.isNetworkError && error != null) {
-                error(JsonUtility.ToJson(new Error {error = "Network error, try again latter"}));
+            if (www.isNetworkError) {
+                error?.Invoke(JsonUtility.ToJson(new Error {error = "Network error, try again latter"}));
                 yield break;
             }
             
-            if (www.responseCode == 400 && error != null) {
-                error(www.downloadHandler.text);
+            if (www.responseCode == 400) {
+                error?.Invoke(www.downloadHandler.text);
             } else {
                 callback?.Invoke(www.downloadHandler.text);
             }

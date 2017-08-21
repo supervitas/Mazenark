@@ -100,8 +100,13 @@ namespace Loot {
 
 		private void SpawnChest(Coordinate coordinate, Quaternion rotation) {			
 			var chest = Instantiate(_chest, Utils.GetDefaultPositionVector(coordinate, 1.33f), rotation);
-			chest.GetComponent<Chest>().SetChestItems("Fireball", 2); //random here
-//			chest.GetComponent<Chest>().SetChestItems("Tornado", 1); //random here
+			var chestScript = chest.GetComponent<Chest>();
+			var itemCount = Random.Range(0, 3);
+			
+			for (var i = 0; i < itemCount; i++) {
+				chestScript.SetChestItems(ItemsCollection.Instance.GetRandomLoot().name, Random.Range(1, 4));				
+			}
+			
 			NetworkServer.Spawn(chest);
 		}
 
@@ -123,7 +128,7 @@ namespace Loot {
 			for (var i = 0; i < width; i++) {
 				for (var j = 0; j < height; j++) {
 					
-//					if (Random.Range(0, 101) >= _chanceOfSpawnChest) continue;					
+					if (Random.Range(0, 101) >= _chanceOfSpawnChest) continue;					
 					
 					if (CanSpawnBottom(i, j)) {
 						SpawnChest(_maze[i,j].Position, Quaternion.Euler(0, 90, 0));						
