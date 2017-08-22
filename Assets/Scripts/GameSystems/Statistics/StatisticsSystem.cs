@@ -38,13 +38,5 @@ namespace GameSystems.Statistics {
                 whoKilled.score += 25;
             }
         }
-        
-        public void PlayerCompletedLevel(string playerName) {
-            var player = _users.Find(user => user.username == playerName);
-            if (player != null) {
-                player.score += 200;
-            }
-        }
-                       
     }
 }

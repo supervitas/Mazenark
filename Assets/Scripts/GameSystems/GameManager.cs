@@ -19,21 +19,18 @@ namespace GameSystems {
         
         public override void OnStartServer() {
             _playersTransforms.Clear();
-            _statisticsManager = new StatisticSystem(_playersData);
-            AppManager.Instance.EventHub.Subscribe("maze:levelCompleted", OnPlayerCompletedLevel, this);
+            _statisticsManager = new StatisticSystem(_playersData);            
         }
 
-        private void OnPlayerCompletedLevel(object sender, EventArguments e) {
-            _statisticsManager.PlayerCompletedLevel(e.Message);
-            
-            var player = GameObject.Find(e.Message);            
+        public void PlayerCompletedLevel(string playerName) {                       
+            var player = GameObject.Find(playerName);            
             var playerController = player.GetComponent<ServerPlayerController>();
             
             var playerItems = playerController.GetPlayerItems();
             
-            var playerData = _playersData.Find(user => user.username == e.Message);           
+            var playerData = _playersData.Find(user => user.username == playerName);           
             
-            if (playerData != null) {                
+            if (playerData != null) {
                 playerData.itemsInInventories = new ItemsInInventory[playerItems.Count];
                 var itemList = playerItems.ToArray();
                 
@@ -41,9 +38,11 @@ namespace GameSystems {
                     playerData.itemsInInventories[i] = new ItemsInInventory{itemName = itemList[i].Key, 
                         itemCount = itemList[i].Value.ToString()};
                 }
+                playerData.score += 100;                
                 NetworkHttpManager.Instance.UpdateUser(playerData);
             }
-            Destroy(player, 0.2f);
+            _playersTransforms.Remove(player.transform); 
+            Destroy(player);
         }
 
         #region Statistics
@@ -62,13 +61,7 @@ namespace GameSystems {
     
             public void PlayerKilledBoss(string playerName) {
                 _statisticsManager.PlayerKilledEnemy(playerName, 20);
-            }
-            
-            public void PlayerCompletedMaze(GameObject player) {
-                _playersTransforms.Remove(player.transform);
-                _statisticsManager.PlayerCompletedLevel(player.name);
-                Destroy(player);
-            }
+            }                   
     
             public void PlayerDied(GameObject player) {
                 _playersTransforms.Remove(player.transform);
