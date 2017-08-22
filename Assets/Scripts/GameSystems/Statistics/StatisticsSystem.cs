@@ -8,12 +8,13 @@ namespace GameSystems.Statistics {
         
         public StatisticSystem(List<User> playersInfo) {
             _users = playersInfo;
-        }
+        }                
 
         public void EnemyKilledPlayer(string playerName) {
             var player = _users.Find(user => user.username == playerName);
             if (player != null) {
                 player.score -= 10;
+                player.itemsInInventories = new ItemsInInventory[0];
             }
         }
         
@@ -30,6 +31,7 @@ namespace GameSystems.Statistics {
             
             if (whoDied != null) {
                 whoDied.score -= 25;
+                whoDied.itemsInInventories = new ItemsInInventory[0];
             }
             
             if (whoKilled != null) {

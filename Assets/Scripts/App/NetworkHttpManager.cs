@@ -44,7 +44,12 @@ namespace App {
 
         public void GetUserData(string url, Token token, Action<string> callback, Action<string> error) {
             var request = UnityWebRequest.Post(url, "");
-            MakeRequest(request,JsonUtility.ToJson(token), callback, error);
+            MakeRequest(request, JsonUtility.ToJson(token), callback, error);
+        }
+
+        public void UpdateUser(User user) {
+            var request = UnityWebRequest.Post(NetworkConstants.UpdateUser, "");
+            MakeRequest(request, JsonUtility.ToJson(user));
         }
 
         private void MakeRequest(UnityWebRequest request, string json = null, Action<string> callback = null, Action<string> error = null) {

@@ -34,10 +34,8 @@
 
         public static string UserByToken = $"{ServerApiUrl}/api/user/token";
         public static string UserById = $"{ServerApiUrl}/api/user/id";
-
+	    public static string UpdateUser = $"{ServerApiUrl}/api/user/updateData";
 
         #endregion
-
-        public static string GameResultUrl = $"{UnityServerOnlyUrl}/api/gameresult";
     }
 }

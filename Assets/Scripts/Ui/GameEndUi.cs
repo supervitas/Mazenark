@@ -33,7 +33,7 @@ namespace Ui {
             if (args.Message != playerName) return;
             CanvasObject.enabled = true;
             Text t = transform.GetChild(0).GetChild(0).GetComponent<Text>();
-            t.text = "Success! Take this award";
+            t.text = "Level Complete!";
             t.color = Color.green;
             Invoke(nameof(GoBackToMenu), 5);
         }

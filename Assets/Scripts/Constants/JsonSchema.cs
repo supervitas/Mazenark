@@ -23,6 +23,10 @@
         public string token;
         public int score;
         public ItemsInInventory[] itemsInInventories;
+
+        public override string ToString() {
+            return $"{username}  with {score} points has {itemsInInventories.Length} items";
+        }
     }
 
     public class ItemsInInventory {

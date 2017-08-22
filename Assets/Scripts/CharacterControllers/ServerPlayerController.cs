@@ -22,6 +22,10 @@ namespace CharacterControllers {
             InvokeRepeating(nameof(PlayerUpdate), 0, 0.5f);
         }
 
+        public Dictionary<string, int> GetPlayerItems() {
+            return _serverPlayerItems;
+        }
+
         private void OnDestroy() {
             if (!isServer) return;
             CancelInvoke(nameof(PlayerUpdate));            
@@ -51,7 +55,6 @@ namespace CharacterControllers {
                 FindObjectOfType<LootManager>().SpawnChest(posForChest, _serverPlayerItems);
             }
         }
-                
         
         private void OnTriggerEnter(Collider other) { // take loot
             if (!isServer) return;            
@@ -96,8 +99,10 @@ namespace CharacterControllers {
             var gm = FindObjectOfType<GameManager>();
             var userData = gm.GetPlayerData(gameObject.name);
 
-            if (userData != null) {
+            if (userData?.itemsInInventories != null) {
                 for (var i = 0; i < userData.itemsInInventories.Length; i++) {
+                    if (i > 2) break;
+
                     SetPlayerItems(userData.itemsInInventories[i].itemName,
                         int.Parse(userData.itemsInInventories[i].itemCount));
                 }
