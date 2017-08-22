@@ -1,4 +1,6 @@
-﻿namespace Constants {
+﻿using System;
+
+namespace Constants {
     // Json Serialisation classes here
     public class JsonPort {
         public int port;
@@ -21,17 +23,13 @@
         public string username;
         public int id;
         public string token;
-        public int score;
-        public ItemsInInventory[] itemsInInventories;
-
-        public override string ToString() {
-            return $"{username}  with {score} points has {itemsInInventories.Length} items";
-        }
+        public int score;        
+        public ItemsInInventory[] itemsInInventory;
     }
 
-    public class ItemsInInventory {
-        public string itemName;
-        public string itemCount;
+    [Serializable] public class ItemsInInventory {
+        public string id;
+        public string chargesLeft;
     }
 
     public class Token {

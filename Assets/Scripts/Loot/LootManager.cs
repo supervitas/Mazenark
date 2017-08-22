@@ -101,7 +101,7 @@ namespace Loot {
 		private void SpawnChest(Coordinate coordinate, Quaternion rotation) {			
 			var chest = Instantiate(_chest, Utils.GetDefaultPositionVector(coordinate, 1.33f), rotation);
 			var chestScript = chest.GetComponent<Chest>();
-			var itemCount = Random.Range(0, 3);
+			var itemCount = Random.Range(1, 3);
 			
 			for (var i = 0; i < itemCount; i++) {
 				chestScript.SetChestItems(ItemsCollection.Instance.GetRandomLoot().name, Random.Range(1, 4));

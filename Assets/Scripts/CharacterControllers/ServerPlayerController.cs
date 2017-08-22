@@ -99,12 +99,12 @@ namespace CharacterControllers {
             var gm = FindObjectOfType<GameManager>();
             var userData = gm.GetPlayerData(gameObject.name);
 
-            if (userData?.itemsInInventories != null) {
-                for (var i = 0; i < userData.itemsInInventories.Length; i++) {
+            if (userData?.itemsInInventory != null) {
+                for (var i = 0; i < userData.itemsInInventory.Length; i++) {
                     if (i > 2) break;
 
-                    SetPlayerItems(userData.itemsInInventories[i].itemName,
-                        int.Parse(userData.itemsInInventories[i].itemCount));
+                    SetPlayerItems(userData.itemsInInventory[i].id,
+                        int.Parse(userData.itemsInInventory[i].chargesLeft));
                 }
             }
 

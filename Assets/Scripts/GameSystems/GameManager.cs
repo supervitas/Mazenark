@@ -31,12 +31,12 @@ namespace GameSystems {
             var playerData = _playersData.Find(user => user.username == playerName);           
             
             if (playerData != null) {
-                playerData.itemsInInventories = new ItemsInInventory[playerItems.Count];
+                playerData.itemsInInventory = new ItemsInInventory[playerItems.Count];
                 var itemList = playerItems.ToArray();
                 
                 for (var i = 0; i < playerItems.Count; i++) {                   
-                    playerData.itemsInInventories[i] = new ItemsInInventory{itemName = itemList[i].Key, 
-                        itemCount = itemList[i].Value.ToString()};
+                    playerData.itemsInInventory[i] = new ItemsInInventory{id = itemList[i].Key, 
+                        chargesLeft = itemList[i].Value.ToString()};
                 }
                 playerData.score += 100;                
                 NetworkHttpManager.Instance.UpdateUser(playerData);
@@ -116,6 +116,7 @@ namespace GameSystems {
         #endregion               
         
         private void GameEnded() {
+            Debug.Log(123);
             _playersData.Clear();
             _playersTransforms.Clear();
             SendStatistics();

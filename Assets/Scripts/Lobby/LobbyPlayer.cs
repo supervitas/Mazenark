@@ -341,7 +341,6 @@ namespace Lobby {
 
             Action<string> resultCb = data => {
                 var user = JsonUtility.FromJson<User>(data);
-                Debug.Log(user.score);
                 _gameManager.AddPlayerData(user);
             };
 
