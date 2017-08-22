@@ -7,7 +7,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 using Random = UnityEngine.Random;
 
-
 namespace CharacterControllers.Enemies.Bosses {
     public class ServerBossShieldedController : ServerCharacterController {
 	
@@ -56,7 +55,7 @@ namespace CharacterControllers.Enemies.Bosses {
 
 			_buttons[position] = btn;
 
-			var isNegative = Random.Range(-1, 1) < 0;				
+			var isNegative = Random.Range(-1, 1) < 0;
 			
 			btn.transform.position = new Vector3(gameObject.transform.position.x - GetRandomFloat(isNegative),
 				gameObject.transform.position.y, gameObject.transform.position.z - GetRandomFloat(isNegative));
@@ -69,7 +68,7 @@ namespace CharacterControllers.Enemies.Bosses {
 			};
 			
 			Action onButtonUnpress= () => {
-				_countOfActiveButtons++;		
+				_countOfActiveButtons++;
 			};
 			
 			var btnController = btn.GetComponent<GameButton>();
@@ -98,9 +97,6 @@ namespace CharacterControllers.Enemies.Bosses {
 		    
 		    FindObjectOfType<LootManager>().CreateLoot(gameObject.transform.position, 100f);
 	    }
-	   
-		
 	}
-
 }
 

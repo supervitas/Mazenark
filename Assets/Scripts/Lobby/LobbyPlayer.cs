@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using App;
 using Constants;
+using GameSystems;
 using MazeBuilder;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -42,6 +43,7 @@ namespace Lobby {
         static Color TransparentColor = new Color(0, 0, 0, 0);
 
         private Maze _fetchedMaze;
+        private static GameManager _gameManager;
 
         public struct MazeStruct {
             public int X;
@@ -59,7 +61,11 @@ namespace Lobby {
             }
         }
 
-
+        public override void OnStartServer() {
+            if (_gameManager == null) {
+                _gameManager = FindObjectOfType<GameManager>();
+            }
+        }
 
         public override void OnClientEnterLobby() {
             base.OnClientEnterLobby();
@@ -326,18 +332,16 @@ namespace Lobby {
 
         [Command]
         private void CmdGetUser(string token) {
-            if (!isServer)
-                return;
+            if (!isServer) return;
 
             Action<string> errorCb = error => {
-//                TargetDropAuth(connectionToClient);
-//                LobbyManager.SSingleton.KickPlayer(connectionToClient);
-                Debug.Log(error);
-
+                TargetDropAuth(connectionToClient);
+                LobbyManager.SSingleton.KickPlayer(connectionToClient);
             };
-            
+
             Action<string> resultCb = data => {
-                Debug.Log(data);
+                var user = JsonUtility.FromJson<User>(data);                
+                _gameManager.AddPlayerData(user);
             };
 
             NetworkHttpManager.Instance.GetUserData(NetworkConstants.UserByToken, new Token {token = token}, resultCb, errorCb);

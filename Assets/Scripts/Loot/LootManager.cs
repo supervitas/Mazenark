@@ -16,7 +16,7 @@ namespace Loot {
 		[Range(0, 100f)] private float _chanceOfSpawnLoot = 30f;
 		
 		[SerializeField]
-		[Range(0, 100f)] private float _chanceOfSpawnChest = 33f;
+		[Range(0, 100f)] private float _chanceOfSpawnChest = 50f;
 
 		[SerializeField]
 		private GameObject[] _loot;
@@ -104,7 +104,7 @@ namespace Loot {
 			var itemCount = Random.Range(0, 3);
 			
 			for (var i = 0; i < itemCount; i++) {
-				chestScript.SetChestItems(ItemsCollection.Instance.GetRandomLoot().name, Random.Range(1, 4));				
+				chestScript.SetChestItems(ItemsCollection.Instance.GetRandomLoot().name, Random.Range(1, 4));
 			}
 			
 			NetworkServer.Spawn(chest);
@@ -115,7 +115,7 @@ namespace Loot {
 			var chestScript = chest.GetComponent<Chest>();
 			
 			foreach (var item in items) {
-				chestScript.SetChestItems(item.Key, item.Value);				
+				chestScript.SetChestItems(item.Key, item.Value);
 			}
 			
 			NetworkServer.Spawn(chest);

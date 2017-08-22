@@ -44,12 +44,11 @@ namespace CharacterControllers {
             GetComponent<PlayerControl>().Die();
             FindObjectOfType<GameManager>().PlayerDied(gameObject);
             NetworkEventHub.Instance.RpcPublishEvent("PlayerDied", gameObject.name);
-            
-  
-            var posForChest = gameObject.transform.position;
-            posForChest.y = 1.33f;
-            if(_serverPlayerItems.Count != 0) {
-                FindObjectOfType<LootManager>().SpawnChest(posForChest, _serverPlayerItems);               
+                       
+            if (_serverPlayerItems.Count != 0) {
+                var posForChest = gameObject.transform.position;
+                posForChest.y = 1.33f;
+                FindObjectOfType<LootManager>().SpawnChest(posForChest, _serverPlayerItems);
             }
         }
                 
@@ -93,9 +92,17 @@ namespace CharacterControllers {
         }
 
         [Command]
-        public void CmdPlayerReady() {            
-//            SetPlayerItems("Fireball", 5);
-            SetPlayerItems("Tornado", 3);
+        public void CmdPlayerReady() {
+            var gm = FindObjectOfType<GameManager>();
+            var userData = gm.GetPlayerData(gameObject.name);
+
+            if (userData != null) {
+                for (var i = 0; i < userData.itemsInInventories.Length; i++) {
+                    SetPlayerItems(userData.itemsInInventories[i].itemName,
+                        int.Parse(userData.itemsInInventories[i].itemCount));
+                }
+            }
+
             FindObjectOfType<GameManager>().AddPlayerTransform(transform);
         }
 

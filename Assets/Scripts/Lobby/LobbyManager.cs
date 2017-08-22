@@ -322,9 +322,6 @@ namespace Lobby{
             gamePlayer.GetComponent<PlayerControl>().SetPlayerName(gamePlayer.name);
             gamePlayer.transform.position = _spawnGenerator.Current;
             _spawnGenerator.MoveNext();
-            
-            var gameManager = FindObjectOfType<GameManager>();           
-            gameManager.AddPlayerData(new User{username = gamePlayer.name});
 
             return true;
         }

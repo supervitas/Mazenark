@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Constants {
+﻿namespace Constants {
     // Json Serialisation classes here
     public class JsonPort {
         public int port;
@@ -24,7 +22,12 @@ namespace Constants {
         public int id;
         public string token;
         public int score;
-//        public Dictionary<string, int> playerItems;
+        public ItemsInInventory[] itemsInInventories;
+    }
+
+    public class ItemsInInventory {
+        public string itemName;
+        public string itemCount;
     }
 
     public class Token {
