@@ -107,7 +107,7 @@ namespace CharacterControllers {
 //                        int.Parse(userData.itemsInInventory[i].chargesLeft));
 //                }
 //            }
-            SetPlayerItems("Tornado", 1);
+            SetPlayerItems("Lighting", 5);
 
             FindObjectOfType<GameManager>().AddPlayerTransform(transform);
         }

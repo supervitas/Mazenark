@@ -40,8 +40,9 @@ namespace GameSystems {
                 }
                 playerData.score += 100;                
                 NetworkHttpManager.Instance.UpdateUser(playerData);
+                _playersData.Remove(playerData);
             }
-            _playersTransforms.Remove(player.transform); 
+            _playersTransforms.Remove(player.transform);            
             Destroy(player);
         }
 
