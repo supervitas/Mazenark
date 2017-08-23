@@ -30,11 +30,11 @@ namespace GameSystems {
             
             var playerData = _playersData.Find(user => user.username == playerName);           
             
-            if (playerData != null) {
-                playerData.itemsInInventory = new ItemsInInventory[playerItems.Count];
-                var itemList = playerItems.ToArray();
-                
-                for (var i = 0; i < playerItems.Count; i++) {                   
+            if (playerData != null) {               
+                var itemList = playerItems.Where(f => f.Value != 0).ToArray();               
+                playerData.itemsInInventory = new ItemsInInventory[itemList.Length];
+
+                for (var i = 0; i < itemList.Length; i++) {                   
                     playerData.itemsInInventory[i] = new ItemsInInventory{id = itemList[i].Key, 
                         chargesLeft = itemList[i].Value.ToString()};
                 }

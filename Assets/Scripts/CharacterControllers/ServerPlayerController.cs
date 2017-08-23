@@ -99,9 +99,9 @@ namespace CharacterControllers {
             var gm = FindObjectOfType<GameManager>();
             var userData = gm.GetPlayerData(gameObject.name);
 
-            if (userData != null) {
+            if (userData != null) {                
                 for (var i = 0; i < userData.itemsInInventory.Length; i++) {
-                    if (int.Parse(userData.itemsInInventory[i].chargesLeft) == 0) continue;
+                    if (i > 2) break;
                     
                     SetPlayerItems(userData.itemsInInventory[i].id,
                         int.Parse(userData.itemsInInventory[i].chargesLeft));
