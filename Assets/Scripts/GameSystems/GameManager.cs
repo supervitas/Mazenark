@@ -78,20 +78,20 @@ namespace GameSystems {
     
             public List<Transform> GetPlayersTransforms() {
                 return _playersTransforms;
-            }       
-    
+            }
+
             public void AddPlayerData(User user) {            
                 _playersData.Add(user);
             }
-    
+
             public User GetPlayerData(string playerName) {
                 return _playersData.FirstOrDefault(player => player.username == playerName);
             }
-    
+
             public void SetPlayersCount(int players) {
                 _playersCount = players;
             }
-            
+
             public void PlayerLefted() {
                 _playersCount--;
 

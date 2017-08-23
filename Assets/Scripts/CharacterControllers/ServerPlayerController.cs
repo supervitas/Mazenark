@@ -99,18 +99,18 @@ namespace CharacterControllers {
             var gm = FindObjectOfType<GameManager>();
             var userData = gm.GetPlayerData(gameObject.name);
 
-            if (userData?.itemsInInventory != null) {
-                for (var i = 0; i < userData.itemsInInventory.Length; i++) {
-                    if (i > 2) break;
-
-                    SetPlayerItems(userData.itemsInInventory[i].id,
-                        int.Parse(userData.itemsInInventory[i].chargesLeft));
-                }
-            }
+//            if (userData != null) {
+//                for (var i = 0; i < userData.itemsInInventory.Length; i++) {
+//                    if (i > 2) break;
+//
+//                    SetPlayerItems(userData.itemsInInventory[i].id,
+//                        int.Parse(userData.itemsInInventory[i].chargesLeft));
+//                }
+//            }
+            SetPlayerItems("Tornado", 1);
 
             FindObjectOfType<GameManager>().AddPlayerTransform(transform);
         }
-
 
         [Command]
         public void CmdFire(Vector3 direction) {
@@ -132,8 +132,6 @@ namespace CharacterControllers {
         [Command]
         public void CmdSetActiveItem(string itemName) {
             _activeItem = ItemsCollection.Instance.GetItemByName(itemName);            
-        }                                 
-        
+        }
     }
-    
 }
