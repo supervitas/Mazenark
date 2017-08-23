@@ -116,8 +116,7 @@ namespace GameSystems {
         
         #endregion               
         
-        private void GameEnded() {
-            Debug.Log(123);
+        private void GameEnded() {            
             _playersData.Clear();
             _playersTransforms.Clear();
             SendStatistics();

@@ -8,7 +8,7 @@ namespace Items.Spells {
             var go = other.gameObject;                        
             if (go.CompareTag("Enemy") || go.CompareTag("Player")) {
                 go.GetComponent<ServerCharacterController>().TakeDamage(100, 2f, PlayerCasted);                            
-            }            
+            }
         }
 
         public void OnDestroy() {        

@@ -33,7 +33,7 @@ namespace CharacterControllers {
         
         public override void TakeDamage(int amount, float timeOfDeath = 2f, string whoCasted = "Enemy") {
             if (!isServer) return;
-//            return;
+            return;
             if (whoCasted == "Enemy") {
                 FindObjectOfType<GameManager>().EnemyKilledPlayer(gameObject.name);
             }
@@ -99,15 +99,15 @@ namespace CharacterControllers {
             var gm = FindObjectOfType<GameManager>();
             var userData = gm.GetPlayerData(gameObject.name);
 
-//            if (userData != null) {
-//                for (var i = 0; i < userData.itemsInInventory.Length; i++) {
-//                    if (i > 2) break;
-//
-//                    SetPlayerItems(userData.itemsInInventory[i].id,
-//                        int.Parse(userData.itemsInInventory[i].chargesLeft));
-//                }
-//            }
-            SetPlayerItems("Lighting", 5);
+            if (userData != null) {
+                for (var i = 0; i < userData.itemsInInventory.Length; i++) {
+                    if (int.Parse(userData.itemsInInventory[i].chargesLeft) == 0) continue;
+                    
+                    SetPlayerItems(userData.itemsInInventory[i].id,
+                        int.Parse(userData.itemsInInventory[i].chargesLeft));
+                }
+            }
+//            SetPlayerItems("Lightning", 50);
 
             FindObjectOfType<GameManager>().AddPlayerTransform(transform);
         }
@@ -122,11 +122,14 @@ namespace CharacterControllers {
             var activeItem = Instantiate(_activeItem, pos, Quaternion.identity);
             var weapon = activeItem.GetComponent<Weapon>();
             weapon.PlayerCasted = gameObject.name;
-            Physics.IgnoreCollision(activeItem.GetComponent<Collider>(), GetComponent<Collider>());
+            var itemCollider = activeItem.GetComponent<Collider>();
+            if (itemCollider != null) {
+                Physics.IgnoreCollision(activeItem.GetComponent<Collider>(), GetComponent<Collider>());
+            }
             activeItem.transform.LookAt(direction);
             weapon.Fire();
             NetworkServer.Spawn(activeItem);
-            Destroy(weapon, 10.0f);
+            Destroy(weapon, 10.0f);         
         }       
         
         [Command]
