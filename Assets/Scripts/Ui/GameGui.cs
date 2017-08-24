@@ -44,7 +44,7 @@ namespace Ui {
             if (_activeItem != null) {
                 _activeItem.color = new Color32(197, 184, 204, 81);
             }
-            _activeItem = uiItem.itemImage.transform.GetComponentInParent<Image>();
+            _activeItem = uiItem.itemCountText.transform.GetComponentInParent<Image>();            
             _activeItem.color = Color.yellow;
             App.AppManager.Instance.EventHub.CreateEvent("ItemChanged", new EventArguments(uiItem.itemName));
         }

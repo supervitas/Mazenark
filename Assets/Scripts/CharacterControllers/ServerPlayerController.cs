@@ -107,7 +107,7 @@ namespace CharacterControllers {
                         int.Parse(userData.itemsInInventory[i].chargesLeft));
                 }
             }
-//            SetPlayerItems("Lightning", 50);
+            SetPlayerItems("Lightning", 50);
 
             FindObjectOfType<GameManager>().AddPlayerTransform(transform);
         }

@@ -8,8 +8,7 @@ namespace Items.Spells {
         
         public override void Fire() {
             RaycastHit hit;
-            Vector3 fwd = gameObject.transform.TransformDirection(Vector3.forward);
-            Debug.DrawRay(gameObject.transform.position, fwd * 50, Color.green);
+            Vector3 fwd = gameObject.transform.TransformDirection(Vector3.forward);            
 
             if (Physics.Raycast(transform.position, fwd, out hit, 25f)) {
                 var go = hit.transform.gameObject;                        
@@ -17,7 +16,7 @@ namespace Items.Spells {
                     go.GetComponent<ServerCharacterController>().TakeDamage(100, 2f, PlayerCasted);                            
                 }
             }
-            Destroy(gameObject, 1.0f);
+            Destroy(gameObject, 1.2f);
         }
     }
 }
