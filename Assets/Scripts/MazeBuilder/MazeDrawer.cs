@@ -12,7 +12,6 @@ namespace MazeBuilder {
         [Header("Biome Cube Generators")]
         public SpawnGenerator SpawnBiomeGenerator;
         public SafehouseGenerator SafehouseBiomeGenerator;
-        public WaterGenerator WaterBiomeGenerator;
         public EarthGenerator EarthBiomeGenerator;
         public FireGenerator FireBiomeGenerator;
         public SteampunkGenerator SteampunkBiomeGenerator;
@@ -43,7 +42,7 @@ namespace MazeBuilder {
 				return SafehouseBiomeGenerator;
 			}
 			if (biome == Biome.Water) {
-				return WaterBiomeGenerator;
+				return NatureGenerator;
 			}
 			if (biome == Biome.Earth) {
 				return EarthBiomeGenerator;
