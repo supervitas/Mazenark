@@ -5,6 +5,8 @@ using UnityEngine.UI;
 namespace Ui {
     public class EventsUi : MonoBehaviour {
         public Canvas CanvasObject;
+
+        public Text text;
         // Use this for initialization
 
         void Start () {
@@ -18,17 +20,18 @@ namespace Ui {
 
         private void OnLevelComplete(object sender, EventArguments args) {
             CanvasObject.enabled = true;
-            Text t = transform.GetChild(0).GetChild(0).GetComponent<Text>();
-            t.text = $"{args.Message} finished game";
-            t.color = Color.green;
+            
+            text.text = $"{args.Message} finished game";
+            text.color = Color.green;
             Invoke(nameof(TurnOffCanvas), 3);
         }
         private void OnPlayerDied(object sender, EventArguments args) {
-            CanvasObject.enabled = true;
-            Text t = transform.GetChild(0).GetChild(0).GetComponent<Text>();
-            t.text = $"{args.Message} died";
-            t.color = Color.red;
-            Invoke(nameof(TurnOffCanvas), 3);
+            if (text) {
+                CanvasObject.enabled = true;
+                text.text = $"{args.Message} died";
+                text.color = Color.red;
+                Invoke(nameof(TurnOffCanvas), 3);
+            }
         }
 
 
