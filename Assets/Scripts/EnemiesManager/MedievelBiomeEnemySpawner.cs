@@ -1,11 +1,11 @@
 ﻿using MazeBuilder;
 
 namespace EnemiesManager {
-    public class WaterBiomeEnemySpawner : AbstractEnemySpawner {
+    public class MedievelBiomeEnemySpawner : AbstractEnemySpawner {
 
         public override void OnStartServer() {  
             base.OnStartServer();
-            InitBiomeEnemies(Biome.Water);        
+            InitBiomeEnemies(Biome.Medievel);        
         }
     }
 }

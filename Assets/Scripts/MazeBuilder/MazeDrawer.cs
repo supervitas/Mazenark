@@ -15,7 +15,7 @@ namespace MazeBuilder {
         public EarthGenerator EarthBiomeGenerator;
         public FireGenerator FireBiomeGenerator;
         public SteampunkGenerator SteampunkBiomeGenerator;
-        public NatureGenerator NatureGenerator;
+        public MedievelGenerator MedievelGenerator;
         #endregion
 
         private void Start() {
@@ -41,8 +41,8 @@ namespace MazeBuilder {
 			if (biome == Biome.Safehouse) {
 				return SafehouseBiomeGenerator;
 			}
-			if (biome == Biome.Water) {
-				return NatureGenerator;
+			if (biome == Biome.Medievel) {
+				return MedievelGenerator;
 			}
 			if (biome == Biome.Earth) {
 				return EarthBiomeGenerator;
@@ -53,9 +53,6 @@ namespace MazeBuilder {
 			if (biome == Biome.Steampunk) {
 				return SteampunkBiomeGenerator;
 			}
-//            if (biome == Biome.Nature) {
-//                return NatureGenerator;
-//            }
 			return EarthBiomeGenerator;
 		}
 

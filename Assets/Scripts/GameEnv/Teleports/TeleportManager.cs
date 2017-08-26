@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using MazeBuilder;
+﻿using MazeBuilder;
 using MazeBuilder.Utility;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -8,8 +7,7 @@ namespace GameEnv.Teleports {
     public class TeleportManager : NetworkBehaviour {
 
         [SerializeField] private GameObject TeleportGo;
-        
-        private readonly List<Teleport> _teleports = new List<Teleport>();
+                
         private readonly Maze _maze = App.AppManager.Instance.MazeInstance.Maze;
         
         public void CreateTeleports(int count = 3) {

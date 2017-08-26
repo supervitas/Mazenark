@@ -1,7 +1,7 @@
 ﻿using MazeBuilder;
 
 namespace EnemiesManager {
-    public class WindBiomeEnemySpawner : AbstractEnemySpawner {
+    public class SteampunkBiomeEnemySpawner : AbstractEnemySpawner {
         public override void OnStartServer() {
             base.OnStartServer();            
             InitBiomeEnemies(Biome.Steampunk);            

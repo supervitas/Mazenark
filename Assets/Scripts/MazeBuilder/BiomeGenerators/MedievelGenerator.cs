@@ -1,9 +1,11 @@
-﻿using MazeBuilder.BiomeGenerators.PlacementRules;
+﻿using App.Eventhub;
+using MazeBuilder.BiomeGenerators.PlacementRules;
 using MazeBuilder.Utility;
+using PlayerLocationManager;
 using UnityEngine;
 
 namespace MazeBuilder.BiomeGenerators {
-    public class NatureGenerator : AbstractBiomeGenerator {
+    public class MedievelGenerator : AbstractBiomeGenerator {
         // should be an array...
         [Header("Biome Placing Rules")]
         [SerializeField]
@@ -12,6 +14,11 @@ namespace MazeBuilder.BiomeGenerators {
         private PlacementRule _innerEdges;
         [SerializeField]
         private PlacementRule _straightWalls;
+	    
+	    [Header("Rain Effect")]
+	    public GameObject Rain;
+
+	    private GameObject _instancedRain;
 
         [Header("Towers")]
         [SerializeField]
@@ -31,6 +38,25 @@ namespace MazeBuilder.BiomeGenerators {
 			_towers.Add(_tower2, typeof(GameObject));
 			_towers.Add(_tower3, typeof(GameObject));
 		}*/
+	    
+	    protected new void Awake() {
+		    base.Awake();
+		    Eventhub.Subscribe("maze:biomeChanged", ToggleBiomeWeather, this);
+		    InstantiateWeather();
+	    }
+	    
+	    private void InstantiateWeather() {
+		    _instancedRain = Instantiate(Rain, Vector3.back, Quaternion.identity);
+		    _instancedRain.GetComponent<EffectsNearPlayer>().StopEffect();
+	    }
+
+	    private void ToggleBiomeWeather(object sender, EventArguments e) {
+		    if (e.BiomeName == "Medieval") {
+			    _instancedRain.GetComponent<EffectsNearPlayer>().StartEffect(e.Transform);
+		    } else {
+			    _instancedRain.GetComponent<EffectsNearPlayer>().StopEffect();
+		    }
+	    }
 
 		public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
             GameObject parent = new GameObject();
