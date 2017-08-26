@@ -147,6 +147,10 @@ namespace Lobby{
 			topPanel.isInGame = false;
         }
 
+        public void CloseMenu() {
+            topPanel.CloseMenu();
+        }
+
         // ----------------- Server management
 
         public void AddLocalPlayer() {

@@ -10,22 +10,29 @@ namespace Lobby
         protected bool isDisplayed = true;
         protected Image panelImage;
 
-        void Start()
-        {
+        public GameObject BackToGameImage;
+
+        void Start() {
             panelImage = GetComponent<Image>();
+            
         }
 
 
-        void Update()
-        {
-            if (!isInGame)
+        void Update() {
+            if (!isInGame) {
+                BackToGameImage.SetActive(false);
                 return;
-
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
+            }
+            if (isDisplayed) {
+                BackToGameImage.SetActive(true);
+            }
+            if (Input.GetKeyDown(KeyCode.Escape)) {
                 ToggleVisibility(!isDisplayed);
             }
+        }
 
+        public void CloseMenu() {
+            ToggleVisibility(false);
         }
 
         public void ToggleVisibility(bool visible)
