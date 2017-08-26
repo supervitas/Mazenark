@@ -128,7 +128,7 @@ namespace Loot {
 			for (var i = 0; i < width; i++) {
 				for (var j = 0; j < height; j++) {
 					
-//					if (Random.Range(0, 101) >= _chanceOfSpawnChest) continue;					
+					if (Random.Range(0, 101) >= _chanceOfSpawnChest) continue;					
 					
 					if (CanSpawnBottom(i, j)) {
 						SpawnChest(_maze[i,j].Position, Quaternion.Euler(0, 90, 0));						

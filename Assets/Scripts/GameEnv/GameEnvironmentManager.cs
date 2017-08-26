@@ -6,12 +6,10 @@ using UnityEngine.Networking;
 
 namespace GameEnv {
     public class GameEnvironmentManager : NetworkBehaviour {
-        public GameObject Safehouse;
-        public GameObject Fog;
+        public GameObject Safehouse;        
 
         private void Start() {
             SpawnSafehouse();
-//            SpawnFog();
             CreateTeleports();
         }
 
@@ -21,11 +19,6 @@ namespace GameEnv {
             return instantiated;
         }
 
-        private void SpawnFog() {
-            ServerSpawn(Fog,
-                Utils.GetDefaultPositionVector(new Coordinate(AppManager.Instance.MazeInstance.Height / 2,
-                    AppManager.Instance.MazeInstance.Width / 2), 0.1f), Quaternion.Euler(-90, 0, 0));
-        }
         private void SpawnSafehouse() {
 //            ServerSpawn(Safehouse, new Vector3(40, 0, 40), Quaternion.identity);
             ServerSpawn(Safehouse,
