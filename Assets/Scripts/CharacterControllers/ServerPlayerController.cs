@@ -32,8 +32,7 @@ namespace CharacterControllers {
         }
         
         public override void TakeDamage(int amount, float timeOfDeath = 2f, string whoCasted = "Enemy") {
-            if (!isServer) return;
-            return;
+            if (!isServer) return;            
             if (whoCasted == "Enemy") {
                 FindObjectOfType<GameManager>().EnemyKilledPlayer(gameObject.name);
             }
@@ -107,7 +106,6 @@ namespace CharacterControllers {
                         int.Parse(userData.itemsInInventory[i].chargesLeft));
                 }
             }
-            SetPlayerItems("Lightning", 50);
 
             FindObjectOfType<GameManager>().AddPlayerTransform(transform);
         }
