@@ -13,12 +13,26 @@ namespace MazeBuilder.BiomeGenerators {
         [SerializeField]
         private PlacementRule _straightWalls;
 
-        [Header("Biome floors")]
+        [Header("Towers")]
         [SerializeField]
-        private GameObject _floor2;
+        private GameObject _tower1;
+		[SerializeField]
+		private GameObject _tower2;
+		[SerializeField]
+		private GameObject _tower3;
+		[SerializeField]
+		private float _chanceToSpawnTower;
+		private CollectionRandom _towers = null;
+		private System.Random random = new System.Random();
 
+		/*public NatureGenerator() : base() {
+			_towers = new CollectionRandom();
+			_towers.Add(_tower1, typeof(GameObject));
+			_towers.Add(_tower2, typeof(GameObject));
+			_towers.Add(_tower3, typeof(GameObject));
+		}*/
 
-        public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
+		public override void CreateWall(Biome biome, Coordinate coordinate, Maze maze) {
             GameObject parent = new GameObject();
 
             foreach (Edge edge in Edge.Edges) {
@@ -35,8 +49,27 @@ namespace MazeBuilder.BiomeGenerators {
                 }
             }
 
+
+			if (random.NextDouble() < _chanceToSpawnTower)
+				AddTower(parent, coordinate);
+
             parent.name = $"Cube at {coordinate.X}:{coordinate.Y}";
         }
 
-    }
+		private void InitializeTowersCollectionIfNeeded() {
+			if (_towers == null) {
+				_towers = new CollectionRandom();
+				_towers.Add(_tower1, typeof(GameObject));
+				_towers.Add(_tower2, typeof(GameObject));
+				_towers.Add(_tower3, typeof(GameObject));
+			}
+		}
+
+		private void AddTower(GameObject parent, Coordinate coordinate) {
+			InitializeTowersCollectionIfNeeded();
+			var tower = (GameObject) _towers.GetRandom(typeof(GameObject));
+			Instantiate(tower, Utils.GetDefaultPositionVector(coordinate), Quaternion.Euler(-90, random.Next(), 0));
+		}
+
+	}
 }
