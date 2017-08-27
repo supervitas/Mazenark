@@ -21,7 +21,6 @@ namespace PlayerLocationManager {
             CancelInvoke(nameof(CheckBiomeChanged));
         }
 
-
         private void CheckBiomeChanged() {
             if (Target == null) return;
 

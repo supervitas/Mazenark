@@ -5,10 +5,8 @@ namespace PlayerLocationManager {
         private Transform _target;
         private Vector3 _position = new Vector3();
 
-
         public float UpdateTime { get; set; } = 2f;
         public float Y { get; set; } = 0f;
-
 
         public void StartEffect(Transform target) {
 

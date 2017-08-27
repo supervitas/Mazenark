@@ -238,9 +238,11 @@ namespace Controls {
             Agent.isStopped = true;
             AttackTimePassed += Time.deltaTime;
 
-            if (AttackTimePassed > TimeForAttack) {
-
+            if (AttackTimePassed > TimeForAttack - 0.4f) {
                 SetAnimation(_attackAnimation, true);
+            }
+
+            if (AttackTimePassed > TimeForAttack) {                
                 Fire(TargetPosition);
 
                 AttackTimePassed = 0f;
