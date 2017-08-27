@@ -8,7 +8,11 @@ namespace GameEnv.Teleports {
 
         [SerializeField] private GameObject TeleportGo;
                 
-        private readonly Maze _maze = App.AppManager.Instance.MazeInstance.Maze;
+        private Maze _maze;
+
+        private void Start() {
+            _maze = App.AppManager.Instance.MazeInstance.Maze;
+        }
         
         public void CreateTeleports(int count = 3) {
             for (var i = 0; i < count; i++) {

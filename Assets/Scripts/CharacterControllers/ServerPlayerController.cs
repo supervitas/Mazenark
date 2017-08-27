@@ -106,7 +106,6 @@ namespace CharacterControllers {
                         int.Parse(userData.itemsInInventory[i].chargesLeft));
                 }
             }
-
             FindObjectOfType<GameManager>().AddPlayerTransform(transform);
         }
 

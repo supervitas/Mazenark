@@ -162,10 +162,19 @@ namespace Controls {
                 m_isGrounded = false;
             }
         }
+        
+        private bool IsPointerOverUIObject() {
+            var eventDataCurrentPosition = new PointerEventData(EventSystem.current) {
+                position = new Vector2(Input.mousePosition.x, Input.mousePosition.y)
+            };
+            var results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+            return results.Count > 0;
+        }
 
-        private bool CheckAndFire() {
-            if (!Input.GetMouseButton(0) || _activeItem == null || _playerItems[_activeItem.name] <= 0 || 
-                EventSystem.current.IsPointerOverGameObject()) return false;        
+        private bool CheckAndFire() {            
+            if (IsPointerOverUIObject() || !Input.GetMouseButton(0) ||
+                _activeItem == null || _playerItems[_activeItem.name] <= 0) return false;        
             
             m_animator.SetFloat("MoveSpeed", 0);
             m_animator.SetBool("Attack", true);
