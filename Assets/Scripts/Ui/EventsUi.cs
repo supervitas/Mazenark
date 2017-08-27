@@ -19,11 +19,13 @@ namespace Ui {
         }
 
         private void OnLevelComplete(object sender, EventArguments args) {
-            CanvasObject.enabled = true;
-            
-            text.text = $"{args.Message} finished game";
-            text.color = Color.green;
-            Invoke(nameof(TurnOffCanvas), 3);
+            if (text) {
+                CanvasObject.enabled = true;
+
+                text.text = $"{args.Message} finished game";
+                text.color = Color.green;
+                Invoke(nameof(TurnOffCanvas), 3);
+            }
         }
         private void OnPlayerDied(object sender, EventArguments args) {
             if (text) {
