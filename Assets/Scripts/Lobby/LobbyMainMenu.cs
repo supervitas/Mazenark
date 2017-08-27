@@ -167,7 +167,11 @@ namespace Lobby {
             NetworkHttpManager.Instance.GetRequest(NetworkConstants.RoomGetRoom, callback, errorCb);
         }
 
-        void onEndEditIP(string text) {
+		public void OnClickQuitGame() {
+			Application.Quit();
+		}
+
+		void onEndEditIP(string text) {
             if (Input.GetKeyDown(KeyCode.Return))
             {
                 OnClickJoin();

@@ -233,7 +233,10 @@ namespace Controls {
 
         private void TankUpdate() {
             float v = CnInputManager.GetAxis("Vertical");	// w↔s
-            float h = CnInputManager.GetAxis("Horizontal");	// a↔d
+            float h = CnInputManager.GetAxis("Horizontal"); // a↔d
+
+			if (h > -0.15f && h < 0.15f)
+				h = 0f;
 
 			if (v < -0.5f)
 				v = -0.5f;   
