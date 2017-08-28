@@ -19,7 +19,23 @@ namespace GameSystems {
         
         public override void OnStartServer() {
             _playersTransforms.Clear();
-            _statisticsManager = new StatisticSystem(_playersData);            
+            _statisticsManager = new StatisticSystem(_playersData);           
+        }
+
+        private void Start() {
+            if (!AppManager.Instance.IsSinglePlayer) {                
+                InvokeRepeating(nameof(CheckPlayersAndRestart), 0, 6.5f);
+            }
+        }
+
+        private void CheckPlayersAndRestart() {
+            var players = GameObject.FindGameObjectsWithTag("Player");
+            if(players.Length != 0) return;
+            
+            var lobbyManager = FindObjectOfType<LobbyManager>();
+                lobbyManager.StopServer();
+                lobbyManager.StartServer();
+                NetworkHttpManager.Instance.SendRoomUpdate(NetworkConstants.RoomGameEnded);   
         }
 
         public void PlayerCompletedLevel(string playerName) {                       
