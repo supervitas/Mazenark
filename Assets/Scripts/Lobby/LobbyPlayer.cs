@@ -335,8 +335,8 @@ namespace Lobby {
             if (!isServer) return;
 
             Action<string> errorCb = error => {
-                // TargetDropAuth(connectionToClient);                
-                // LobbyManager.SSingleton.KickPlayer(connectionToClient);
+                TargetDropAuth(connectionToClient);                
+                LobbyManager.SSingleton.KickPlayer(connectionToClient);
             };
 
             Action<string> resultCb = data => {
