@@ -3,8 +3,12 @@
 The game about procedure generation maze with biomes, spells, and monsters.
 
 <div align="center">
-  <a href="https://github.com/webpack/webpack">
     <img
       src="https://github.com/vec3h/Mazenark/blob/master/game.gif">
-  </a>
 </div>
+
+# Build available here 
+
+### For OS X http://mazenark.tk/osx
+
+### For Android http://mazenark.tk
